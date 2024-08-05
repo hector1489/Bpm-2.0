@@ -1,68 +1,213 @@
-:root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
-
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
-
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
-}
-
 body {
-  margin: 0;
+  background-color: #e0f7fa;
+}
+
+.container {
+  margin-top: 20px;
+  background-color: #ffffff;
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+}
+
+h2 {
+  font-size: 2rem;
+  color: #343a40;
+}
+
+.table {
+  margin-top: 20px;
+  border-radius: 0.5rem;
+  overflow: hidden;
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th,
+td {
+  vertical-align: middle;
+  text-align: center;
+  padding: 10px;
+}
+
+th {
+  background-color: rgb(9, 133, 250);
+  color: #ffffff;
+  text-align: center;
+}
+
+tr {
+  transition: background-color 0.2s ease;
+}
+
+tr:hover {
+  background-color: #e9ecef;
+}
+
+.form-control {
+  min-width: 150px;
+}
+
+.filter-select {
+  width: 100%;
+}
+
+.prioridad-critica {
+  background-color: red;
+  color: white;
+}
+
+.prioridad-moderada {
+  background-color: yellow;
+  color: black;
+}
+
+.prioridad-leve {
+  background-color: green;
+  color: white;
+}
+
+.btn-blue {
+  background-color: #1F618D;
+  color: white;
+  font-weight: bold;
+}
+
+.btn-blue:hover {
+  background-color: #F39C12;
+  color: white;
+}
+
+.td-foto {
+  width: 100%;
+  height: auto;
+}
+
+.td-foto input {
+  max-width: 160px;
+  margin: 5px;
+}
+
+.indicador {
+  padding: 20px;
+  border-radius: 5px;
+  text-align: center;
+  font-weight: bold;
+  margin-bottom: 20px;
+  color: white;
+  transition: transform 0.2s ease;
+}
+
+.indicador.red {
+  background-color: red;
+}
+
+.indicador.yellow {
+  background-color: yellow;
+  color: black;
+}
+
+.indicador.green {
+  background-color: green;
+}
+
+.indicador:hover {
+  transform: scale(1.1);
+}
+
+.card {
+  margin-bottom: 20px;
+}
+
+.card-header {
+  font-weight: bold;
+}
+
+.summary-card {
+  margin-top: 20px;
+}
+
+.summary-card .card-body {
   display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
+  flex-wrap: wrap;
+  justify-content: space-around;
 }
 
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
+.summary-card .card {
+  flex: 0 0 30%;
+  text-align: center;
+  margin-bottom: 20px;
+  border: 1px solid black;
 }
 
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
-  cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+.summary-card .card h5 {
+  font-size: 2rem;
+  margin: 0;
 }
 
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
+.summary-card .card p {
+  font-size: 1rem;
+  margin: 0;
+}
+
+.bg-dark-green {
+  background-color: #006400;
+  color: white;
+}
+
+.bg-blue {
+  background-color: #0000FF;
+  color: white;
+}
+
+.bg-italian-red {
+  background-color: #CD5C5C;
+  color: white;
+}
+
+.incident-list .incident-item {
+  border: 1px solid #e9ecef;
+  border-radius: 0.5rem;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+.incident-item .badge {
+  font-size: 0.9rem;
+}
+
+.incident-item .fa-pencil-alt {
+  color: #007bff;
+}
+
+.btn-floating {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background-color: #dc3545;
+  color: white;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+}
+
+.icon-text {
+  display: flex;
+  align-items: center;
+}
+
+.icon-text i {
+  font-size: 1.5rem;
+  margin-right: 10px;
+}
+
+.bordered-box {
+  border: 1px solid black;
+  border-radius: 0.5rem;
+  padding: 10px;
+  margin-bottom: 20px;
 }
