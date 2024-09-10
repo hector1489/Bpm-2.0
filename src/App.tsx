@@ -1,7 +1,6 @@
 // src/App.tsx
 import React, { useState } from 'react';
-import AuditForm from './components/AuditForm/AuditForm';
-import AuditList from './components/AuditList/AuditList';
+import Home from './views/Home/Home';
 
 const App: React.FC = () => {
   const [auditItems, setAuditItems] = useState<{ question: string; answer: string }[]>([]);
@@ -12,9 +11,7 @@ const App: React.FC = () => {
 
   return (
     <div>
-      <h1>Auditoría</h1>
-      <AuditForm  />
-      <AuditList items={auditItems} />
+      <Home />
     </div>
   );
 };

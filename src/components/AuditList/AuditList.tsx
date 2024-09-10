@@ -1,4 +1,3 @@
-// src/components/AuditList.tsx
 import React from 'react';
 
 interface AuditItem {
