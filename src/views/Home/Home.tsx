@@ -1,6 +1,12 @@
 import './Home.css'
+import { useNavigate } from 'react-router-dom'
 
 const Home = () => {
+  const navigate = useNavigate()
+
+  const handleGoToAuditoria = () => {
+    navigate('/auditoria')
+  }
 
   return (
     <div className="container">
@@ -22,12 +28,12 @@ const Home = () => {
           <h2 className="text-center">Panel de Control</h2>
           <div className="card-grid mt-4">
             <div className="card animated-text">
-              <a href="auditoria.html">
-                <div className="card-icon">
+         
+                <button className="card-icon" onClick={handleGoToAuditoria}>
                   <i className="fas fa-utensils"></i>
-                </div>
+                </button >
                 <div className="card-title">Auditoría Alimentos</div>
-              </a>
+        
             </div>
             <div className="card animated-text ">
               <a href="FORMATOBASE.html">
