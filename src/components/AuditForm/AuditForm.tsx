@@ -1,4 +1,3 @@
-// src/components/AuditForm.tsx
 import React, { useState } from 'react';
 
 interface FormData {
@@ -21,7 +20,6 @@ const AuditForm: React.FC = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Lógica para enviar los datos de la auditoría
     console.log('Datos del formulario:', formData);
   };
 

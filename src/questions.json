@@ -1,0 +1,211 @@
+[
+  {
+    "module": "infraestructura",
+    "question": [
+      "Separaciones",
+      "Equipos",
+      "Servicios"
+    ]
+  },
+  {
+    "module": "legales",
+    "question": [
+      "Trazabilidad",
+      "Registros",
+      "Correctiva",
+      "Entrenamiento"
+    ]
+  },
+  {
+    "module": "quimicos",
+    "question": [
+      "Almacenamiento",
+      "Rotulacion",
+      "Cantidad"
+    ]
+  },
+  {
+    "module": "Agua",
+    "question": "Agua"
+  },
+  {
+    "module": "superficies",
+    "question": [
+      "Utensilios",
+      "Higiene-tablas",
+      "Desinfeccion-equipos",
+      "Desengrasado-equipos",
+      "Desincrustacion-maquinas",
+      "Limpieza-mesas",
+      "Higiene-programa",
+      "Alarma-Sanitaria",
+      "cs-registro",
+      "cs-medidas",
+      "Luminometro"
+    ]
+  },
+  {
+    "module": "contaminacion",
+    "question": [
+      "Contaminacion-Utensilios",
+      "Ubicacion-Equipos"
+    ]
+  },
+  {
+    "module": "adulterantes",
+    "question": [
+      "Pulverizadores",
+      "Proteccion-MP",
+      "producto-mp"
+    ]
+  },
+  {
+    "module": "higiene",
+    "question": [
+      "Uniformes",
+      "Cubrepelo",
+      "Lavado-Manos",
+      "Manos-Heridas",
+      "Examenes",
+      "csh-programa"
+    ]
+  },
+  {
+    "module": "plagas",
+    "question": [
+      "Barreras-Fisicas",
+      "Programa-Plagas",
+      "cp-programa",
+      "cp-desechos"
+    ]
+  },
+  {
+    "module": "instalaciones",
+    "question": [
+      "Lavamanos",
+      "Servicios-Higienicos"
+    ]
+  },
+  {
+    "module": "recepcion",
+    "question": [
+      "Registro-Recepcion",
+      "Balanza",
+      "Tiempo-Exposicion",
+      "materias-recepcion",
+      "prima-recepcion"
+    ]
+  },
+  {
+    "module": "almacenamiento",
+    "question": [
+      "Practicas-Higienicas",
+      "Identificacion-Areas",
+      "Receptaculos",
+      "Fifo-Fefo",
+      "Productos-No-Conforme",
+      "Nivel-Piso",
+      "Separacion-Materias",
+      "Entrega-Produccion"
+    ]
+  },
+  {
+    "module": "pre-elaboraciones",
+    "question": [
+      "Descongelacion",
+      "Preelaborados",
+      "Materias-Primas",
+      "Separacion-Productos",
+      "Sanitizado"
+    ]
+  },
+  {
+    "module": "elaboraciones",
+    "question": [
+      "Recepcion-Materias",
+      "Orden-Limpieza",
+      "Productos-Transito",
+      "Pespetan-Temperaturas",
+      "Uso-Equipos-Frio",
+      "Sistema-Extraccion",
+      "Estantes",
+      "Especieros",
+      "Montajes-Rapidos",
+      "Tiempo-Elaboracion-Consumo"
+    ]
+  },
+  {
+    "module": "mantencion",
+    "question": "control-tiempo-temperatura"
+  },
+  {
+    "module": "transporte",
+    "question": [
+      "Traslado-Alimentos",
+      "Observacion-Vehiculo"
+    ]
+  },
+  {
+    "module": "servicio",
+    "question": [
+      "Mantenimiento-Baño-Maria",
+      "Variedad-Autoservicio",
+      "Equipos-Suficientes",
+      "Reposicion-Preparaciones",
+      "Observacion-Vajilla"
+    ]
+  },
+  {
+    "module": "vajilla",
+    "question": [
+      "Desconche",
+      "Procedimiento-Higiene",
+      "Orden-Area"
+    ]
+  },
+  {
+    "module": "control",
+    "question": [
+      "Termometros-Balanzas",
+      "Monitoreo-Controles",
+      "Acciones-Correctivas",
+      "Registro-Contramuestras"
+    ]
+  },
+  {
+    "module": "proteccion",
+    "question": [
+      "Dosificacion",
+      "Productos'",
+      "Basureros",
+      "Retiro-Basura",
+      "Limpieza-Area-Basura",
+      "Manejo-Aceites",
+      "Separacion-Residuos"
+    ]
+  },
+  {
+    "module": "poe-ppt",
+    "question": [
+      "ppt-flujo",
+      "ppt-cuenta",
+      "ppt-almacenamiento",
+      "ppt-distribucion",
+      "ppt-envasado",
+      "ppt-etiqueta"
+    ]
+  },
+  {
+    "module": "documentacion",
+    "question": [
+      "Autorizaciones",
+      "Libro-Inspeccion",
+      "Informes-Microbio",
+      "Informes-Auditoria",
+      "Programa-Charlas",
+      "Reporte-Proveedor",
+      "Existe-programa",
+      "Existe-capacitacion"
+    ]
+  }
+]
