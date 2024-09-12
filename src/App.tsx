@@ -1,12 +1,14 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Home from './views/Home/Home';
+import Auditoria from './views/Auditoria/auditoria';
 
 const App: React.FC = () => {
 
   return (
     <BrowserRouter>
     <Routes>
-      <Route path="/" element={<Home />} />
+      <Route path='/' element={< Home />} />
+      <Route path='/auditoria' element={< Auditoria />} />
     </Routes>
   </BrowserRouter>
   );
