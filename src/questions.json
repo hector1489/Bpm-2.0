@@ -2,45 +2,45 @@
   {
     "module": "infraestructura",
     "question": [
-      "Separaciones",
-      "Equipos",
-      "Servicios"
+      "INF 1. Separaciones de áreas mínimas y condiciones de mantención de esta:",
+      "INF 2. Equipos mínimos de cocción y frío (quemadores, refrigeradores, mantenedores, otros):",
+      "INF 3. Cuenta con servicios básicos (agua potable, desagües, ventilación, luminarias, vestuarios, otros):"
     ]
   },
   {
     "module": "legales",
     "question": [
-      "Trazabilidad",
-      "Registros",
-      "Correctiva",
-      "Entrenamiento"
+      "RL 4. Es factible realizar trazabilidad de producto:",
+      "RL 5. Mantención de registros de control de proceso, 90 días:",
+      "RL 6. Cuenta con registros de mantención correctiva de equipos:",
+      "RL 7. Inducción y entrenamiento al personal, en calidad y medio ambiente (registros e interrogar al personal):"
     ]
   },
   {
     "module": "quimicos",
     "question": [
-      "Almacenamiento",
-      "Rotulacion",
-      "Cantidad"
+      "CQA 8. Almacenamiento de productos químicos según PH, con hojas de seguridad y EPP disponibles:",
+      "CQA 9. Rotulación correcta, indicando nombre producto y área de uso:",
+      "CQA 10. Productos químicos y utensilios de aseo en cantidad y limpieza adecuada:"
     ]
   },
   {
     "module": "Agua",
-    "question": "Agua"
+    "question": "CA 11. Agua potable suministrada por empresa sanitaria u otra fuente autorizada, con registro sanitario (evidencia):"
   },
   {
     "module": "superficies",
     "question": [
-      "Utensilios",
-      "Higiene-tablas",
-      "Desinfeccion-equipos",
-      "Desengrasado-equipos",
-      "Desincrustacion-maquinas",
-      "Limpieza-mesas",
-      "Higiene-programa",
-      "Alarma-Sanitaria",
-      "cs-registro",
-      "cs-medidas",
+      "CS 12. Aplicación de procedimiento de higiene de tablas, cuchillos y mesones:",
+      "CS 13. Limpieza y desinfección de equipos de proceso (máquina universal, juguera, amasadora, otros):",
+      "CS 14. Limpieza y desengrasado de equipos (cocina, horno, freidora, marmita, campana y otros):",
+      "CS 15. Limpieza y desincrustación de máquinas de jugo, baño maría, vitrinas y hervidores (sin sarro):",
+      "CS 16. Higiene de mesas y sillas de comedor:",
+      "TRA CS 17. Aplicacion y eficiencia del programa de higiene, publicado e implementado por áreas (Art. 41, 43, 44, 64, 69):",
+      "CS 18. Aplicación de alarma sanitaria (equipo), durante la auditoría, con frecuencia y responsable definido (si aplica):",
+      "CS 19. Los registros generados son coherentes con lo especificado en el programa (Art. 69):",
+      "CS 20. Se adoptan las medidas necesarias para evitar la contaminación de los equipos después de limpiarse y desinfectarse (Art. 42):",
+      "LUM 21. Toma de muestra y uso de luminómetro:",
       "Luminometro"
     ]
   },

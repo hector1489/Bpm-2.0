@@ -1,88 +1,73 @@
 import { useState } from 'react';
-import questions from '../../questions.json';
+import questions from '../../questionsResponses.json';
+import './AuditForm.css'
 
 interface FormData {
   question: string;
   answer: string;
 }
 
-const sortQuestions = (data: any[]) => {
-  return data
-    .sort((a, b) => a.module.localeCompare(b.module))
-    .map(module => {
-      if (Array.isArray(module.question)) {
-        module.question = module.question.sort((q1: any, q2: any) => {
-          if (typeof q1 === 'object' && typeof q2 === 'object') {
-            return q1.id - q2.id;
-          } else if (typeof q1 === 'string' && typeof q2 === 'string') {
-            return q1.localeCompare(q2);
-          }
-          return 0;
-        });
-      }
-      return module;
-    })
-}
-
 const AuditForm: React.FC = () => {
-  const [formData, setFormData] = useState<FormData>({
-    question: '',
-    answer: ''
-  })
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+  const [formData, setFormData] = useState<FormData[]>([]);
+  
+  const currentQuestion = questions[currentQuestionIndex];
 
-  const sortedQuestions = sortQuestions(questions)
+  const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const updatedFormData = [...formData];
+    updatedFormData[currentQuestionIndex] = {
+      question: currentQuestion.question,
+      answer: e.target.value
+    };
+    setFormData(updatedFormData);
+  };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value
-    })
-  }
+  const handleNext = () => {
+    if (currentQuestionIndex < questions.length - 1) {
+      setCurrentQuestionIndex(currentQuestionIndex + 1);
+    }
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Datos del formulario:', formData)
-  }
+    console.log('Datos del formulario:', formData);
+  };
 
   return (
     <form onSubmit={handleSubmit}>
-      <label>
-        Pregunta:
-        <select
-          name="question"
-          value={formData.question}
-          onChange={handleChange}
-        >
-          <option value="">Seleccione una pregunta</option>
-          {sortedQuestions.map((q: { module: string; question: any }, index: number) => (
-            <optgroup key={index} label={q.module}>
-              {Array.isArray(q.question)
-                ? q.question.map((item: any, i: number) => (
-                  <option key={i} value={typeof item === 'object' ? item.question : item}>
-                    {typeof item === 'object' ? item.question : item}
-                  </option>
-                ))
-                : (
-                  <option value={q.question}>
-                    {q.question}
-                  </option>
-                )}
-            </optgroup>
-          ))}
-        </select>
-      </label>
-      <label>
-        Respuesta:
-        <input
-          type="text"
-          name="answer"
-          value={formData.answer}
-          onChange={handleChange}
-        />
-      </label>
-      <button type="submit">Enviar</button>
+      <div>
+        <label>
+          Pregunta:
+          <div>
+            {currentQuestion ? currentQuestion.question : "No hay más preguntas"}
+          </div>
+        </label>
+        <label>
+          Respuesta:
+          <select
+            name="answer"
+            value={formData[currentQuestionIndex]?.answer || ''}
+            onChange={handleChange}
+          >
+            <option value="">Seleccione una respuesta</option>
+            {currentQuestion?.responses.map((response, index) => (
+              <option key={index} value={response}>
+                {response}
+              </option>
+            ))}
+          </select>
+        </label>
+        <div>
+          <button type="button" onClick={handleNext}>
+            Siguiente
+          </button>
+          <button type="submit">
+            Enviar
+          </button>
+        </div>
+      </div>
     </form>
-  )
-}
+  );
+};
 
-export default AuditForm
+export default AuditForm;

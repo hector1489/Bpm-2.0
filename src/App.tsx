@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Home from './views/Home/Home';
 import Auditoria from './views/Auditoria/auditoria';
+import './App.css'
 
 const App: React.FC = () => {
 

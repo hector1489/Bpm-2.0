@@ -1,0 +1,212 @@
+[
+  {
+    "question": "INF 1. Separaciones de áreas mínimas y condiciones de mantención de esta:",
+    "responses": [
+      "100%: Áreas separadas virtualmente y en buen estado",
+      "75%: Se cuenta con áreas separadas frías y calientes",
+      "50%: Separación pero mantención deficientes",
+      "25%: Con deficiencias de infraestructura (T° ambiental)",
+      "0%: Sin separación, con mantención deficientes"
+    ]
+  },
+  {
+    "question": "INF 2. Equipos mínimos de cocción y frío (quemadores, refrigeradores, mantenedores, otros):",
+    "responses": [
+      "100%: Equipamiento suficiente",
+      "75%: Equipamiento suficiente salvo una preparación no crítica",
+      "50%: Equipamiento deficiente dependiendo del menú",
+      "25%: Adelantan preparación para cumplir con servicio planificado",
+      "0%: El equipamiento es insuficiente para la operación"
+    ]
+  },
+  {
+    "question": "INF 3. Cuenta con servicios básicos (agua potable, desagües, ventilación, luminarias, vestuarios, otros):",
+    "responses": [
+      "100%: Cuenta con todos los servicios básicos",
+      "75%: Cuenta con servicios básicos con detalles en iluminación",
+      "50%: Faltan en el vestuario y/o la iluminación",
+      "25%: Existen fallas en la ventilación y desagües",
+      "0%: Sin agua potable y/o alcantarillado adecuados"
+    ]
+  },
+  {
+    "question": "RL 4. Es factible realizar trazabilidad de producto:",
+    "responses": [
+      "100%: Se dispone de toda la información requerida",
+      "75%: Falla en el orden/Disposición de la información",
+      "50%: Falla en la recepción de materias primas",
+      "25%: Controles de proceso incompletos",
+      "0%: La información requerida está ausente"
+    ]
+  },
+  {
+    "question": "RL 5. Mantención de registros de control de proceso, 90 días:",
+    "responses": [
+      "100%: Al día y continuos",
+      "75%: Al día, falta firma de los registros",
+      "50%: Discontinuos (no aplican fin de sem. o turno noche)",
+      "25%: Con mucha discontinuidad",
+      "0%: No existen controles de proceso"
+    ]
+  },
+  {
+    "question": "RL 6. Cuenta con registros de mantención correctiva de equipos:",
+    "responses": [
+      "100%: Cuenta con registros",
+      "75%: Falta mejorar el orden de la información",
+      "50%: Algunas mantenciones no documentadas",
+      "25%: Uno que otro registro de mantención",
+      "0%: Mantenciones, pero sin registros"
+    ]
+  },
+  {
+    "question": "RL 7. Inducción y entrenamiento al personal, en calidad y medio ambiente (registros e interrogar al personal):",
+    "responses": [
+      "100%: Charlas al día, el personal se verifica capacitado",
+      "75%: Charlas al día, pero falta interiorizar en el personal",
+      "50%: Charlas de calidad atrasados",
+      "25%: Charlas atrasadas, personal no responde",
+      "0%: No está implementado programa de charlas"
+    ]
+  },
+  {
+    "question": "CQA 8. Almacenamiento de productos químicos según PH, con hojas de seguridad y EPP disponibles:",
+    "responses": [
+      "100%: Orden s/PH, hojas seguridad y EPP",
+      "75%: Cumple EPP y orden s/PH",
+      "50%: Cumple EPP",
+      "25%: Sólo hojas seguridad o PH",
+      "0%: No cumple ninguno"
+    ]
+  },
+  {
+    "question": "CQA 9. Rotulación correcta, indicando nombre producto y área de uso:",
+    "responses": [
+      "100%: Todo rotulado y correcto",
+      "75%: Falta rótulo en alguna botella",
+      "50%: Botellas rotuladas, con errores",
+      "25%: Rótulo en algunas botellas",
+      "0%: Sin rótulo alguno"
+    ]
+  },
+  {
+    "question": "CQA 10. Productos químicos y utensilios de aseo en cantidad y limpieza adecuada:",
+    "responses": [
+      "100%: Todo ok",
+      "75%: Químicos ok y utensilios sucios",
+      "50%: Utensilios sucios y químicos insufic.",
+      "25%: Algunos rotos/desgast. y sucios",
+      "0%: No cumple cant. ni limpieza"
+    ]
+  },
+  {
+    "question": "CA 11. Agua potable suministrada por empresa sanitaria u otra fuente autorizada, con registro sanitario (evidencia):",
+    "responses": [
+      "100%: Todo respaldado y ok",
+      "75%: Hay respaldo/ NC con NCh409/1 (minería)",
+      "50%: Conoce fuente pero no tiene respaldo",
+      "25%: No se conoce y no hay respaldo",
+      "0%: Agua pozo sin respaldo"
+    ]
+  },
+  {
+    "question": "CS 12. Aplicación de procedimiento de higiene de tablas, cuchillos y mesones:",
+    "responses": [
+      "100%: Aplica con frecuencia y correctamente",
+      "75%: Aplica frecuentemente pero con errores",
+      "50%: Procedimiento correcto pero no frecuente",
+      "25%: Aplica con errores y no es frecuente",
+      "0%: No se evidencia aplicación en la auditoría"
+    ]
+  },
+  {
+    "question": "CS 13. Limpieza y desinfección de equipos de proceso (máquina universal, juguera, amasadora, otros):",
+    "responses": [
+      "100%: Todos limpios y desinfectados",
+      "75%: Limpios y desinfectados, con detalles",
+      "50%: Todos limpios sin desinfectar",
+      "25%: Algunos equipos sucios",
+      "0%: Con suciedad acumulada"
+    ]
+  },
+  {
+    "question": "CS 14. Limpieza y desengrasado de equipos (cocina, horno, freidora, marmita, campana y otros):",
+    "responses": [
+      "100%: Todos limpios y desengrasados",
+      "75%: Limpios y desengrasados, con detalles",
+      "50%: Desengrasado insuficiente (bordes)",
+      "25%: Algunos equipos con grasa",
+      "0%: Con grasa acumulada"
+    ]
+  },
+  {
+    "question": "CS 15. Limpieza y desincrustación de máquinas de jugo, baño maría, vitrinas y hervidores (sin sarro):",
+    "responses": [
+      "100%: Todos limpios y desincrustados",
+      "75%: Limpios y desincrustados, con detalles",
+      "50%: Desincrustado insuficiente (bordes)",
+      "25%: Algunos equipos con sarro",
+      "0%: Con sarro acumulado"
+    ]
+  },
+  {
+    "question": "CS 16. Higiene de mesas y sillas de comedor:",
+    "responses": [
+      "100%: Todos limpios",
+      "75%: Limpios con detalles",
+      "50%: Estructuras de mesas y sillas sucias",
+      "25%: Mesas o sillas sucias",
+      "0%: Mesas y sillas sucias"
+    ]
+  },
+  {
+    "question": "TRA CS 17. Aplicacion y eficiencia del programa de higiene, publicado e implementado por áreas (Art. 41, 43, 44, 64, 69):",
+    "responses": [
+      "100%: Aplicado, adaptado, publicado completo",
+      "75%: Aplicado, adaptado, publicado incompleto",
+      "50%: No adaptado y aplicado parcialmente",
+      "25%: No aplicado, no adaptado, pero publicado",
+      "0%: No cumple ningún ítem"
+    ]
+  },
+  {
+    "question": "CS 18. Aplicación de alarma sanitaria (equipo), durante la auditoría, con frecuencia y responsable definido (si aplica):",
+    "responses": [
+      "100%: Sistemática en los manipuladores directos",
+      "75%: Se aplica, pero no frecuentemente",
+      "50%: Se aplica incompleto, pero frecuente",
+      "25%: Incompleto y no frecuente",
+      "0%: No se aplica normativa. No hay dispositivo"
+    ]
+  },
+  {
+    "question": "CS 19. Los registros generados son coherentes con lo especificado en el programa (Art. 69):",
+    "responses": [
+      "100%: Coherentes y verídicos",
+      "0%: No coherentes y reales"
+    ]
+  },
+  {
+    "question": "CS 20. Se adoptan las medidas necesarias para evitar la contaminación de los equipos después de limpiarse y desinfectarse (Art. 42):",
+    "responses": [
+      "100%: Sistemática en los manipuladores directos",
+      "0%: No se aplica normativa. No hay dispositivo"
+    ]
+  },
+  {
+    "question": "LUM 21. Toma de muestra y uso de luminómetro:",
+    "responses": [
+      "100% Nota 7 / Excelente / 0-50 URL / Muy limpio / Sin riesgo ",
+      "83% Nota 6 / Muy bueno / 51-150 URL / Limpio / Sin riesgo ",
+      "83% Nota 6 / Muy bueno / 51-150 URL / Limpio / Sin riesgo ",
+      "83% Nota 6 / Muy bueno / 51-150 URL / Limpio / Sin riesgo ",
+      "69% Nota 5 / Bueno / 151-250 URL / Medianamente sucio / Bajo riesgo / 2.6 ",
+      "69% Nota 5 / Bueno / 151-250 URL / Medianamente sucio / Bajo riesgo / 2.7 ",
+      "55% Nota 4 / Regular / 251-500 URL / Alerta / Riesgo (leve) / 2.8 ",
+      "55% Nota 4 / Regular / 251-500 URL / Alerta / Riesgo (leve) / 2.9 ",
+      "42% Nota 3 / Deficiente / 501-1000 URL / Sucio / Mediano riesgo (grave) / 3 ",
+      "28% Nota 2 / Mala / 1001-5000 URL / Muy sucio / Alto riesgo (muy grave) / 4.1 ",
+      "14% Nota 1 / Muy mala / 5001-10000 URL / Totalmente sucio / Muy alto riesgo (crítico) / 5 "
+    ]
+  }
+]

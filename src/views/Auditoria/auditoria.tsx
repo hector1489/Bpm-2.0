@@ -1,11 +1,21 @@
 import AuditForm from "../../components/AuditForm/AuditForm"
+import { useNavigate } from 'react-router-dom'
+import './auditoria.css'
 
 
 const Auditoria = () => {
+  const navigate = useNavigate()
 
-    return(
-        <AuditForm />
-    )
+  const handleGoToHome = () => {
+    navigate('/')
+  }
+
+  return (
+    <div className="container-auditoria">
+      <AuditForm />
+      <button onClick={handleGoToHome}>volver</button>
+    </div>
+  )
 }
 
 
