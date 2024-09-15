@@ -12,6 +12,7 @@ const AuditForm: React.FC = () => {
   const [formData, setFormData] = useState<FormData[]>([]);
   
   const currentQuestion = questions[currentQuestionIndex];
+  
 
   const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const updatedFormData = [...formData];

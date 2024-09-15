@@ -1,21 +1,6 @@
-import { createContext, ReactNode, useState, Dispatch, SetStateAction, useMemo, useEffect } from "react";
-import questions from '../questions.json';
-
-interface IQuestion {
-  id: number;
-  module: string;
-  question: string | string[];
-}
-
-interface IState {
-  IsHero: Array<IQuestion>;
-}
-
-interface IContextProps {
-  state: IState;
-  setState: Dispatch<SetStateAction<IState>>;
-  removeFromCart: (itemId: number) => void;
-}
+import { createContext, ReactNode, useState, useMemo, useEffect } from "react";
+import questions from '../questionsResponses.json';
+import { IState, IContextProps } from '../interfaces/interfaces';
 
 const AppContext = createContext<IContextProps | undefined>(undefined);
 
@@ -31,6 +16,7 @@ const AppProvider: React.FC<IAppProviderProps> = ({ children }) => {
   useEffect(() => {
     const questionsWithId = questions.map((question, index) => ({
       id: index + 1,
+      answer: "",
       ...question,
     }));
 
@@ -39,22 +25,7 @@ const AppProvider: React.FC<IAppProviderProps> = ({ children }) => {
     });
   }, []);
 
-  const removeFromCart = (itemId: number) => {
-    setState(prevState => ({
-      ...prevState,
-      IsHero: prevState.IsHero.map(item => {
-        if (item.id === itemId) {
-          return {
-            ...item,
-            quantity: 0,
-          };
-        }
-        return item;
-      }),
-    }));
-  };
-
-  const contextValue = useMemo(() => ({ state, setState, removeFromCart }), [state]);
+  const contextValue = useMemo(() => ({ state, setState }), [state]);
 
   return (
     <AppContext.Provider value={contextValue}>
