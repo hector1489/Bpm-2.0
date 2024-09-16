@@ -5,8 +5,8 @@ import './DetailsView.css'
 const DetailsView: React.FC  = () => {
   const navigate = useNavigate()
 
-  const handleGoHome = () => {
-    navigate('/')
+  const handleGoToAuditSummary = () => {
+    navigate('/resumen-auditoria')
   }
 
   return (
@@ -18,7 +18,7 @@ const DetailsView: React.FC  = () => {
         <p>aqui ira la tabla promedios</p>
       </div>
       <div className="detail-button">
-        <button onClick={handleGoHome}>volver</button>
+        <button onClick={handleGoToAuditSummary}>volver</button>
 
       </div>
     </div>
