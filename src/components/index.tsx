@@ -1,2 +1,5 @@
 export { default as AuditForm } from './AuditForm/AuditForm'
 export { default as DetailsTable } from './DetailsTable/DetailsTable'
+export { default as Summary } from './Summary/Summary'
+export { default as AverageModules } from './AverageModules/AverageModules'
+export { default as BPMGraph } from './BPMGraph/BPMGraph'

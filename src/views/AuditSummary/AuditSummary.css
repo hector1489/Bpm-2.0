@@ -1,0 +1,11 @@
+.summary-container {
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.summary-container>div {
+  margin-bottom: 20px;
+}

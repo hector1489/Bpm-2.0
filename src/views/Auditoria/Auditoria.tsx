@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import './auditoria.css'
 
 
-const Auditoria = () => {
+const Auditoria: React.FC  = () => {
   const navigate = useNavigate()
 
 

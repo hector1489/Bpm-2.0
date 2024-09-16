@@ -1,7 +1,5 @@
 import { Dispatch, SetStateAction } from "react";
 
-
-
 export interface IModule {
   id: number;
   module: string;
@@ -17,9 +15,17 @@ export interface IQuestion {
 
 export interface IState {
   IsHero: Array<IQuestion>;
+  auditSheetData: Record<string, any>;
+}
+
+export interface Answer {
+  question: string;
+  answer: string;
 }
 
 export interface IContextProps {
   state: IState;
   setState: Dispatch<SetStateAction<IState>>;
+  addAnswers: (answers: Answer[]) => void;
+  updateAuditSheetData: (data: any) => void;
 }

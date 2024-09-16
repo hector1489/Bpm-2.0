@@ -4,6 +4,7 @@ import './DetailsTable.css'
 
 const DetailsTable: React.FC = () => {
   const context = useContext(AppContext)
+  
 
   if (!context) {
     return <div>Error: Context is not available.</div>
@@ -12,6 +13,7 @@ const DetailsTable: React.FC = () => {
   const { state } = context
 
   return (
+    
     <table className="details-table">
       <thead>
         <tr>
@@ -30,6 +32,7 @@ const DetailsTable: React.FC = () => {
         ))}
       </tbody>
     </table>
+    
   )
 }
 

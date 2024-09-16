@@ -1,50 +1,47 @@
-import { useState } from 'react'
-import questions from '../../questionsResponses.json'
+import { useState, useContext } from 'react'
+import { AppContext } from '../../context/GlobalState'
 import './AuditForm.css'
-
-interface FormData {
-  question: string;
-  answer: string;
-}
+import { Answer } from '../../interfaces/interfaces'
 
 const AuditForm: React.FC = () => {
-  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-  const [formData, setFormData] = useState<FormData[]>([]);
-  
-  
-  const currentQuestion = questions[currentQuestionIndex];
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0)
+  const [formData, setFormData] = useState<Answer[]>([])
+  const context = useContext(AppContext)
 
-  
-  
+  if (!context) {
+    return <div>Error: El contexto no está disponible.</div>
+  }
+
+  const { state, addAnswers } = context;
+  const currentQuestion = state.IsHero[currentQuestionIndex];
 
   const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const updatedFormData = [...formData];
     updatedFormData[currentQuestionIndex] = {
-      question: currentQuestion.question,
+      question: currentQuestion?.question || '',
       answer: e.target.value
     };
     setFormData(updatedFormData);
-  };
+  }
 
   const handleNext = () => {
-    if (currentQuestionIndex < questions.length - 1) {
+    if (currentQuestionIndex < state.IsHero.length - 1) {
       setCurrentQuestionIndex(currentQuestionIndex + 1);
     }
-  };
+  }
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Datos del formulario:', formData);
-  };
+    addAnswers(formData);
+    console.log('Respuestas guardadas:', formData);
+  }
 
   return (
     <form onSubmit={handleSubmit}>
       <div>
         <label>
           Pregunta:
-          <div>
-            {currentQuestion ? currentQuestion.question : "No hay más preguntas"}
-          </div>
+          <div>{currentQuestion ? currentQuestion.question : "No hay más preguntas"}</div>
         </label>
         <label>
           Respuesta:
@@ -54,24 +51,30 @@ const AuditForm: React.FC = () => {
             onChange={handleChange}
           >
             <option value="">Seleccione una respuesta</option>
-            {currentQuestion?.responses.map((response, index) => (
-              <option key={index} value={response}>
-                {response}
+            {Array.isArray(currentQuestion?.responses) ? (
+              currentQuestion.responses.map((response: string, index: number) => (
+                <option key={index} value={response}>
+                  {response}
+                </option>
+              ))
+            ) : (
+              <option value={currentQuestion?.responses || ''}>
+                {currentQuestion?.responses || 'No hay respuestas'}
               </option>
-            ))}
+            )}
           </select>
         </label>
         <div>
-          <button type="button" onClick={handleNext}>
-            Siguiente
-          </button>
-          <button type="submit">
-            Enviar
-          </button>
+          {currentQuestionIndex < state.IsHero.length - 1 && (
+            <button type="button" onClick={handleNext}>
+              Siguiente
+            </button>
+          )}
+          <button type="submit">Enviar</button>
         </div>
       </div>
     </form>
-  );
-};
+  )
+}
 
-export default AuditForm;
+export default AuditForm
