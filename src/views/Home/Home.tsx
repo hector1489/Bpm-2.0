@@ -4,8 +4,8 @@ import { useNavigate } from 'react-router-dom'
 const Home: React.FC  = () => {
   const navigate = useNavigate()
 
-  const handleGoToAuditoria = () => {
-    navigate('/auditoria')
+  const handleGoToAuditFormView = () => {
+    navigate('/formulario-auditoria')
   }
 
   return (
@@ -28,7 +28,7 @@ const Home: React.FC  = () => {
           <h2 className="text-center">Panel de Control</h2>
           <div className="card-grid mt-4">
 
-            <button className="card" onClick={handleGoToAuditoria}>
+            <button className="card" onClick={handleGoToAuditFormView}>
          
                 <div className="card-icon" >
                   <i className="fas fa-utensils"></i>

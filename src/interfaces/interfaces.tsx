@@ -15,7 +15,7 @@ export interface IQuestion {
 
 export interface IState {
   IsHero: Array<IQuestion>;
-  auditSheetData: Record<string, any>;
+  auditSheetData: any;
 }
 
 export interface Answer {

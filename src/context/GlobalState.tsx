@@ -41,7 +41,7 @@ const AppProvider: React.FC<IAppProviderProps> = ({ children }) => {
   };
 
   // Actualiza los datos del formulario AuditSheet
-  const updateAuditSheetData = (data: any) => {
+  const updateAuditSheetData= (data: any) => {
     setState((prevState) => ({
       ...prevState,
       auditSheetData: { ...prevState.auditSheetData, ...data }

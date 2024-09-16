@@ -1,9 +1,23 @@
-import React, { useState } from 'react';
+import { useState, useContext } from 'react';
 import './AuditSheet.css';
-import { useFormContext } from '../../context/GlobalState';
+import { AppContext } from '../../context/GlobalState';
+import { useNavigate } from 'react-router-dom'
 
 const AuditSheet: React.FC = () => {
-  const { updateAuditSheetData } = useFormContext()!;
+  const context = useContext(AppContext)
+  const navigate = useNavigate()
+
+  const handleGoToAuditoria = () => {
+    navigate('/auditoria')
+  }
+
+
+
+  if (!context) {
+    throw new Error('AppContext must be used within an AppProvider')
+  }
+
+  const { updateAuditSheetData } = context
   const [formValues, setFormValues] = useState({
     nombreEstablecimiento: '',
     numeroAuditoria: '',
@@ -21,32 +35,35 @@ const AuditSheet: React.FC = () => {
 
   const handleSave = () => {
     updateAuditSheetData(formValues);
+    handleGoToAuditoria();
     alert('Datos guardados exitosamente');
   };
 
+
+
   return (
-    <div id="module-ficha" className="module-section active">
+    <div id="module-ficha" className="module-section">
       <h3 className="text-center">Ficha de Auditoría</h3>
 
       <form id="form-ficha">
         <div className="form-group">
           <label htmlFor="nombre-establecimiento">Nombre de Establecimiento:</label>
-          <input 
-            type="text" 
-            className="form-control" 
-            id="nombre-establecimiento" 
-            name="nombreEstablecimiento" 
-            placeholder="Ej: local" 
+          <input
+            type="text"
+            className="form-control"
+            id="nombre-establecimiento"
+            name="nombreEstablecimiento"
+            placeholder="Ej: local"
             value={formValues.nombreEstablecimiento}
             onChange={handleChange}
           />
         </div>
         <div className="form-group">
           <label htmlFor="numero-auditoria">N° de Auditoría:</label>
-          <input 
-            type="text" 
-            className="form-control" 
-            id="numero-auditoria" 
+          <input
+            type="text"
+            className="form-control"
+            id="numero-auditoria"
             name="numeroAuditoria"
             value={formValues.numeroAuditoria}
             onChange={handleChange}
@@ -54,10 +71,10 @@ const AuditSheet: React.FC = () => {
         </div>
         <div className="form-group">
           <label htmlFor="gerente-establecimiento">Gerente de Establecimiento:</label>
-          <input 
-            type="text" 
-            className="form-control" 
-            id="gerente-establecimiento" 
+          <input
+            type="text"
+            className="form-control"
+            id="gerente-establecimiento"
             name="gerenteEstablecimiento"
             value={formValues.gerenteEstablecimiento}
             onChange={handleChange}
@@ -65,10 +82,10 @@ const AuditSheet: React.FC = () => {
         </div>
         <div className="form-group">
           <label htmlFor="administrador-establecimiento">Administrador de Establecimiento:</label>
-          <input 
-            type="text" 
-            className="form-control" 
-            id="administrador-establecimiento" 
+          <input
+            type="text"
+            className="form-control"
+            id="administrador-establecimiento"
             name="administradorEstablecimiento"
             value={formValues.administradorEstablecimiento}
             onChange={handleChange}
@@ -76,9 +93,9 @@ const AuditSheet: React.FC = () => {
         </div>
         <div className="form-group">
           <label htmlFor="supervisor-establecimiento">Responsable del Problema:</label>
-          <select 
-            className="form-control" 
-            id="supervisor-establecimiento" 
+          <select
+            className="form-control"
+            id="supervisor-establecimiento"
             name="supervisorEstablecimiento"
             value={formValues.supervisorEstablecimiento}
             onChange={handleChange}
@@ -98,10 +115,10 @@ const AuditSheet: React.FC = () => {
         </div>
         <div className="form-group">
           <label htmlFor="auditor-externo">Email:</label>
-          <input 
-            type="email" 
-            className="form-control" 
-            id="auditor-externo" 
+          <input
+            type="email"
+            className="form-control"
+            id="auditor-externo"
             name="auditorExterno"
             value={formValues.auditorExterno}
             onChange={handleChange}
@@ -109,10 +126,10 @@ const AuditSheet: React.FC = () => {
         </div>
         <div className="form-group">
           <label htmlFor="fecha-auditoria">Fecha:</label>
-          <input 
-            type="date" 
-            className="form-control" 
-            id="fecha-auditoria" 
+          <input
+            type="date"
+            className="form-control"
+            id="fecha-auditoria"
             name="fechaAuditoria"
             value={formValues.fechaAuditoria}
             onChange={handleChange}
@@ -121,7 +138,7 @@ const AuditSheet: React.FC = () => {
 
         <div className="form-actions">
           <button type="button" className="btn btn-form btn-green" onClick={handleSave}>
-            <i className="fa-solid fa-save"></i> Guardar
+            <i className="fa-solid fa-save"></i> Guardar y avanzar
           </button>
         </div>
       </form>
