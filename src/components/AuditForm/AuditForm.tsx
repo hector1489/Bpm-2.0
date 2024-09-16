@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import questions from '../../questionsResponses.json';
+import { useState } from 'react'
+import questions from '../../questionsResponses.json'
 import './AuditForm.css'
 
 interface FormData {
@@ -11,7 +11,10 @@ const AuditForm: React.FC = () => {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [formData, setFormData] = useState<FormData[]>([]);
   
+  
   const currentQuestion = questions[currentQuestionIndex];
+
+  
   
 
   const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
