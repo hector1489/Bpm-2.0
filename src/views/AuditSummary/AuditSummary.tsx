@@ -1,5 +1,6 @@
 import { useNavigate } from 'react-router-dom'
 import './AuditSummary.css'
+import { AverageModules, Summary } from '../../components'
 
 
 const AuditSummary: React.FC  = () => {
@@ -9,13 +10,18 @@ const AuditSummary: React.FC  = () => {
   const handleGoToDetails = () => {
     navigate('/resumen-detalle')
   }
+  
+  const handleGoToHome = () => {
+    navigate('/')
+  }
 
   return (
     <div className="summary-container">
-      <p>resumen</p>
+      <Summary />
       <p>auditoria bpm</p>
-      <p>tabla promedios</p>
+      <AverageModules />
       <button onClick={handleGoToDetails}>detalle</button>
+      <button onClick={handleGoToHome}>Home</button>
     </div>
   )
 }

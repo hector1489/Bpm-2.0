@@ -1,0 +1,92 @@
+.ficha-resumen-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 20px;
+}
+
+.ficha-resumen-table {
+  flex: 1;
+}
+
+.ficha-resumen-table table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.ficha-resumen-table th,
+.ficha-resumen-table td {
+  padding: 12px;
+  border: 1px solid #ddd;
+  text-align: left;
+}
+
+.ficha-resumen-table th {
+  background-color: #f2f2f2;
+  font-weight: bold;
+}
+
+.resumen-span {
+  display: block;
+  width: 100%;
+}
+
+.puntaje-ponderado {
+  flex: 1;
+  text-align: center;
+}
+
+.puntaje-promedio {
+  font-size: 1.2rem;
+  font-weight: bold;
+  padding: 10px;
+  background-color: #007BFF;
+  color: white;
+  border-radius: 5px;
+}
+
+.indicadores {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.indicador {
+  padding: 10px;
+  border-radius: 5px;
+  text-align: center;
+  font-weight: bold;
+}
+
+.indicador.cumple {
+  background-color: #28a745;
+  color: white;
+}
+
+.indicador.alerta {
+  background-color: #ffc107;
+  color: black;
+}
+
+.indicador.critico {
+  background-color: #dc3545;
+  color: white;
+}
+
+@media (min-width: 768px) {
+  .ficha-resumen-container {
+    flex-direction: row;
+    justify-content: space-between;
+  }
+
+  .ficha-resumen-table {
+    width: 60%;
+  }
+
+  .puntaje-ponderado {
+    width: 35%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+}
