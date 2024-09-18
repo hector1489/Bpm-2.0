@@ -40,7 +40,6 @@ const AuditForm: React.FC = () => {
     e.preventDefault();
     addAnswers(formData);
     handleGoToAuditSummary();
-    console.log('Respuestas guardadas:', formData);
   }
 
   return (

@@ -13,19 +13,32 @@ export interface IQuestion {
   answer?: string;
 }
 
-export interface IState {
-  IsHero: Array<IQuestion>;
-  auditSheetData: any;
-}
-
 export interface Answer {
   question: string;
   answer: string;
 }
 
+export interface IState {
+  IsHero: Array<IQuestion>;
+  auditSheetData: any;
+}
+
+
+
 export interface IContextProps {
   state: IState;
   setState: Dispatch<SetStateAction<IState>>;
   addAnswers: (answers: Answer[]) => void;
-  updateAuditSheetData: (data: any) => void;
+  updateAuditSheetData: (data: IAuditSheetData) => void;
+}
+
+interface IAuditSheetData {
+  nombreEstablecimiento: string;
+  numeroAuditoria: string;
+  gerenteEstablecimiento: string;
+  administradorEstablecimiento: string;
+  supervisorEstablecimiento: string;
+  auditorExterno: string;
+  fechaAuditoria: string;
+  lum?: string;
 }

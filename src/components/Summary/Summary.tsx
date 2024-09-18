@@ -1,58 +1,76 @@
-import './Summary.css'
+import { useContext } from 'react';
+import './Summary.css';
+import { AppContext } from '../../context/GlobalState';
 
 const Summary: React.FC = () => {
+  const context = useContext(AppContext);
+
+  if (!context) {
+    throw new Error('AppContext must be used within an AppProvider');
+  }
+
+  const { auditSheetData } = context.state;
 
   return (
     <div className="ficha-resumen-container">
+
       <div className="ficha-resumen-table">
         <table>
           <thead>
             <tr>
-              <th>Nombre de Establecimiento:</th>
+              <th>Nombre del Establecimiento:</th>
               <td>
-                <span id="resumen-nombre-establecimiento" className="resumen-span"></span>
+                <span id="resumen-nombre-establecimiento" className="resumen-span">
+                  {auditSheetData.nombreEstablecimiento || 'N/A'}
+                </span>
               </td>
             </tr>
             <tr>
-              <th>N° de Auditoría:</th>
+              <th>Noumero de Auditoria:</th>
               <td>
-                <span id="resumen-numero-auditoria" className="resumen-span"></span>
+                <span id="resumen-nombre-establecimiento" className="resumen-span">
+                  {auditSheetData.numeroAuditoria || 'N/A'}
+                </span>
               </td>
             </tr>
             <tr>
-              <th>P° de Luminometría:</th>
+              <th>Gerente del Establecimiento:</th>
               <td>
-                <span id="resumen-lum" className="resumen-span"></span>
+                <span id="resumen-nombre-establecimiento" className="resumen-span">
+                  {auditSheetData.gerenteEstablecimiento || 'N/A'}
+                </span>
               </td>
             </tr>
             <tr>
-              <th>Gerente de Establecimiento:</th>
+              <th>Administrador del Establecimiento:</th>
               <td>
-                <span id="resumen-gerente-establecimiento" className="resumen-span"></span>
-              </td>
-            </tr>
-            <tr>
-              <th>Administrador de Establecimiento:</th>
-              <td>
-                <span id="resumen-administrador-establecimiento" className="resumen-span"></span>
+                <span id="resumen-nombre-establecimiento" className="resumen-span">
+                  {auditSheetData.administradorEstablecimiento || 'N/A'}
+                </span>
               </td>
             </tr>
             <tr>
               <th>Supervisor del Establecimiento:</th>
               <td>
-                <span id="resumen-supervisor-establecimiento" className="resumen-span"></span>
+                <span id="resumen-nombre-establecimiento" className="resumen-span">
+                  {auditSheetData.supervisorEstablecimiento || 'N/A'}
+                </span>
               </td>
             </tr>
             <tr>
               <th>Auditor Externo:</th>
               <td>
-                <span id="resumen-auditor-externo" className="resumen-span"></span>
+                <span id="resumen-nombre-establecimiento" className="resumen-span">
+                  {auditSheetData.auditorExterno || 'N/A'}
+                </span>
               </td>
             </tr>
             <tr>
               <th>Fecha:</th>
               <td>
-                <span id="resumen-fecha-auditoria" className="resumen-span"></span>
+                <span id="resumen-nombre-establecimiento" className="resumen-span">
+                  {auditSheetData.fechaAuditoria || 'N/A'}
+                </span>
               </td>
             </tr>
           </thead>
@@ -75,8 +93,11 @@ const Summary: React.FC = () => {
           </div>
         </div>
       </div>
-    </div>
-  )
-}
 
-export default Summary
+
+
+    </div>
+  );
+};
+
+export default Summary;
