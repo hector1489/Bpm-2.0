@@ -1,5 +1,6 @@
 import './Home.css'
 import { useNavigate } from 'react-router-dom'
+import logoFungi from '../../assets/img/logoFungily.png'
 
 const Home: React.FC  = () => {
   const navigate = useNavigate()
@@ -10,6 +11,9 @@ const Home: React.FC  = () => {
 
   return (
     <div className="container">
+      <div className="logo-fungi">
+        <img src={logoFungi} alt="logo" />
+      </div>
 
       <div className="left-icons">
         <div className="icon">
