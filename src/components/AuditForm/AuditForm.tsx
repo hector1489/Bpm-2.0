@@ -1,17 +1,17 @@
-import { useState, useContext } from 'react'
-import { AppContext } from '../../context/GlobalState'
-import './AuditForm.css'
-import { Answer } from '../../interfaces/interfaces'
-import { useNavigate } from 'react-router-dom'
+import { useState, useContext } from 'react';
+import { AppContext } from '../../context/GlobalState';
+import './AuditForm.css';
+import { Answer } from '../../interfaces/interfaces';
+import { useNavigate } from 'react-router-dom';
 
 const AuditForm: React.FC = () => {
-  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0)
-  const [formData, setFormData] = useState<Answer[]>([])
-  const context = useContext(AppContext)
-  const navigate = useNavigate()
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+  const [formData, setFormData] = useState<Answer[]>([]);
+  const context = useContext(AppContext);
+  const navigate = useNavigate();
 
   if (!context) {
-    return <div>Error: El contexto no está disponible.</div>
+    return <div>Error: El contexto no está disponible.</div>;
   }
 
   const { state, addAnswers } = context;
@@ -21,33 +21,33 @@ const AuditForm: React.FC = () => {
     const updatedFormData = [...formData];
     updatedFormData[currentQuestionIndex] = {
       question: currentQuestion?.question || '',
-      answer: e.target.value
+      answer: e.target.value,
     };
     setFormData(updatedFormData);
-  }
+  };
 
   const handleNext = () => {
     if (currentQuestionIndex < state.IsHero.length - 1) {
       setCurrentQuestionIndex(currentQuestionIndex + 1);
     }
-  }
+  };
 
   const handleGoToAuditSummary = () => {
-    navigate('/resumen-auditoria')
-  }
+    navigate('/resumen-auditoria');
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     addAnswers(formData);
     handleGoToAuditSummary();
-  }
+  };
 
   return (
     <form onSubmit={handleSubmit}>
       <div>
         <label>
           Pregunta:
-          <div>{currentQuestion ? currentQuestion.question : "No hay más preguntas"}</div>
+          <div>{currentQuestion ? currentQuestion.question : 'No hay más preguntas'}</div>
         </label>
         <label>
           Respuesta:
@@ -80,7 +80,7 @@ const AuditForm: React.FC = () => {
         </div>
       </div>
     </form>
-  )
-}
+  );
+};
 
-export default AuditForm
+export default AuditForm;

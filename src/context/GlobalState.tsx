@@ -39,6 +39,7 @@ const AppProvider: React.FC<IAppProviderProps> = ({ children }) => {
         auditSheetData: prevState.auditSheetData
       }));
     }
+    
   }, [state.IsHero.length])
 
   useEffect(() => {
@@ -68,7 +69,7 @@ const AppProvider: React.FC<IAppProviderProps> = ({ children }) => {
     () => ({ state, setState, addAnswers, updateAuditSheetData }),
     [state]
   )
-
+  
   return (
     <AppContext.Provider value={contextValue}>
       {children}
