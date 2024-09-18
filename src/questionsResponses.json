@@ -208,5 +208,776 @@
       "28% Nota 2 / Mala / 1001-5000 URL / Muy sucio / Alto riesgo (muy grave) / 4.1 ",
       "14% Nota 1 / Muy mala / 5001-10000 URL / Totalmente sucio / Muy alto riesgo (crítico) / 5 "
     ]
+  },
+  {
+    "question": "CC 22. Separación de utensilios por área, y separación alimentos (cocido - crudo - sucio, otros):",
+    "responses": [
+      "100%: Cumple con todo",
+      "75%: Separa alimentos y manejo de utensilios con observaciones",
+      "50%: Algunos alimentos separados y buen manejo de utensilios",
+      "25%: No separa alimentos, y buen manejo utensilios",
+      "0%: Cruce de alimentos y utensilios"
+    ]
+  },
+  {
+    "question": "CC 23. Ubicación de equipos y mobiliarios se mantienen correctamente (basureros, mesones, lavadero sanitizado):",
+    "responses": [
+      "100%: Ubicación correcta",
+      "75%: Ubicación dada por área disponible",
+      "50%: Un equipo o mobiliario mal ubicado",
+      "25%: Algunos equipos o mobiliarios mal ubicados",
+      "0%: Equipos - mobiliarios mal ubicados"
+    ]
+  },
+  {
+    "question": "CSA 24. Pulverizadores de productos químicos separados de las materias primas-preparaciones en producción (Art. 50, 51):",
+    "responses": [
+      "100%: Ubicación correcta, separados de alimentos",
+      "75%: Separados de alimentos, pero en lugar inadecuado",
+      "50%: Separados de alimentos, pero no hay lugar definido",
+      "25%: Desordenados, pero separados de alimentos",
+      "0%: Junto a alimentos"
+    ]
+  },
+  {
+    "question": "CSA 25. Protección de materias primas, producto terminado y utensilios:",
+    "responses": [
+      "100%: Todo protegido (use criterio en postres)",
+      "75%: Alguna MP desprotegida",
+      "50%: MP mal protegidas",
+      "25%: Producto terminado mal protegido",
+      "0%: MP y PT desprotegidos"
+    ]
+  },
+  {
+    "question": "CSA 26. Consultar al personal por metodo de proteccion, previa a la aplicacion del control de plagas",
+    "responses": [
+      "100%: Todo protegido",
+      "75%: Alguna instalcion desprotegida",
+      "50%: Instalaciones mal protegidas",
+      "25%: Producto terminado mal protegido",
+      "0%: Instalaciones desprotegidas"
+    ]
+  },
+  {
+    "question": "CSH 27. Uniforme completo de todos, limpio y en buen estado - Sin accesorios adicionales (reloj, joyas, celular, otros) (Art.56):",
+    "responses": [
+      "100%: Uniforme completo y sin joyas, incluye ADM",
+      "75%: Uniforme y/o joyas en alguna persona",
+      "50%: Uniformes sucios y/o algunos con joyas",
+      "25%: Alguien sin uniforme completo",
+      "0%: Sin uniformes o con joyas en general"
+    ]
+  },
+  {
+    "question": "CSH 28. Cubre-pelo (gorro o cofia), mascarilla y guantes usados correctamente (Art.56):",
+    "responses": [
+      "100%: Cubrepelo, mascarilla sobre nariz y guantes ok",
+      "75%: Cubrepelo con observaciones",
+      "50%: Cubrepelo y mascarilla con observ., guantes ok",
+      "25%: Cubrepelo ok, mascarilla y guantes con observaciones",
+      "0%: Cubrepelo, mascarilla y guantes con observaciones"
+    ]
+  },
+  {
+    "question": "TRA CSH 29. Lavado y sanitizado correcto de manos y uñas:",
+    "responses": [
+      "100%: Doble ciclo,frecuente",
+      "75%: Ciclo único,frecuente",
+      "50%: Ciclo único,frecuencia insuficiente",
+      "25%: Ciclo único, y sin frecuencia",
+      "0%: No hay lavado de manos"
+    ]
+  },
+  {
+    "question": "CSH 30. Manos sin heridas desprotegidas, uñas cortas y sin esmalte:",
+    "responses": [
+      "100%: Todos sin heridas ni uñas largas ni esmalte",
+      "75%: Una persona con uñas largas y/o esmalte (ADM)",
+      "50%: Uñas largas y/o esmalte en algunas personas",
+      "25%: Manos con uñas largas y/o esmalte",
+      "0%: Manos con heridas desprotegidas y uñas largas"
+    ]
+  },
+  {
+    "question": "TRA CSH 31. Exámenes de todos los manipuladores, ecónomos y administradores. Ausencia de malestares o infecciones (Art. 52, 53):",
+    "responses": [
+      "100%: Al día, incluído Adm, ecónomo y choferes",
+      "75%: Todos al día excepto Admin., ecónomo o chofer",
+      "50%: Alguno con exámen vencido",
+      "25%: Algunos con exámenes vencidos",
+      "0%: No cuentan con exámenes"
+    ]
+  },
+  {
+    "question": "CSH 32. Existe un programa de higiene del personal y sus registros correspondientes. (Art. 55, 56, 60, 69)",
+    "responses": [
+      "100%: Existe programa",
+      "0%: No se encuentra programa"
+    ]
+  },
+  {
+    "question": "CP 33. Barreras físicas para ingreso de vectores y/o plagas (puertas, ventanas, grietas, desagües, otros):",
+    "responses": [
+      "100%: Cuenta con barreras y sin grietas",
+      "75%: Barreras ok, con alguna grieta u orificio",
+      "50%: Alguna ventana o puerta sin barrera",
+      "25%: Ventana o puerta se mantiene abierta/sin barrera",
+      "0%: Ventanas o puertas sin barrera, con grietas y hoyos"
+    ]
+  },
+  {
+    "question": "CP 34. Revisar programa y evaluar eficacia y eficiencia (certificados 3 meses atrás e inspección visual) (Art. 47, 69):",
+    "responses": [
+      "100%: Cero presencia y certificados al día",
+      "75%: Cero presencia, falta un certificado",
+      "50%: Cero presencia, falta evidencia de varios certificados",
+      "25%: Presencia de vectores en alguna área",
+      "0%: Hay presencia - no cuentan con registros"
+    ]
+  },
+  {
+    "question": "CP 35. La empresa a cargo del programa de aplicación de agentes químicos o biológicos para el control de plagas cuenta con Autorización sanitaria. (Art. 48):",
+    "responses": [
+      "100%: Programa de aplicacion de quimicos",
+      "0%: No cuenta con programa"
+    ]
+  },
+  {
+    "question": "CP 36. Los desechos se disponen de forma de impedir el acceso y proliferación de plagas. (Art. 40):",
+    "responses": [
+      "100%: Desechos se disponen en forma adecuada",
+      "0%: No se dispone con desechos que impiden proliferación de plagas."
+    ]
+  },
+  {
+    "question": "CIS 37. Lavamanos suficientes en áreas de manipulación, limpios, dispensador de papel y señalética publicada:",
+    "responses": [
+      "100%: Lavam. uso exclusivo, papel, jabón y señalética ok",
+      "75%: Lavado, papel, jabón y señalética, limpios y ok",
+      "50%: Lavado, papel, jabón y señalética, con obs",
+      "25%: Lavado, sin papel o jabón, señalética ok",
+      "0%: Lavado, sin papel, sin jabón ni señalética"
+    ]
+  },
+  {
+    "question": "CIS 38. Servicios higiénicos y sala vestuario, en buenas condiciones, limpios, con agua caliente, jabón y papel:",
+    "responses": [
+      "100%: Baño ok, jabón sanitizante ok",
+      "75%: Baños ok, sin agua caliente o sin jabón sanitizante",
+      "50%: Baños sucios y/o sin agua caliente",
+      "25%: Hongos, mala mantención infraestructura",
+      "0%: Baño con conexión área proceso, sin agua caliente, unisex"
+    ]
+  },
+  {
+    "question": "REC 39. Verificar registro recepción materias primas, inventario, ordenes de compra y guías de despacho (Art. 61, 69) :",
+    "responses": [
+      "100%: Cumple los 4 puntos",
+      "75%: Falta registro de algunos prod. para trazabilidad",
+      "50%: Documentos incompletos y/o desordenados",
+      "25%: Cumple todo menos registro de RMP",
+      "0%: No es posible la trazabilidad"
+    ]
+  },
+  {
+    "question": "REC 40. Balanza en buen estado, limpia y utilizada frecuentemente:",
+    "responses": [
+      "100%: Cumple los 3 puntos",
+      "75%: No se utiliza frecuentemente",
+      "50%: Se utiliza balanza sucia",
+      "25%: Balanzas sucia y mal ubicada",
+      "0%: No hay balanza o mal estado y sucia"
+    ]
+  },
+  {
+    "question": "REC 41. Verificar tiempo de exposición de materias primas a Tª adecuada:",
+    "responses": [
+      "100%: No hay exposición a ambiente, en la RMP",
+      "75%: Se pierde cadena de frío por algunos minutos",
+      "50%: Algunos expuestos a T° ambiente",
+      "25%: Se pierde cadena de frío por lapso mayor (ej: 1 hora)",
+      "0%: Se RMP y se mantiene al ambiente"
+    ]
+  },
+  {
+    "question": "REC 42. Las materias primas utilizadas provienen de establecimientos autorizados y debidamente rotuladas y/o identificadas. (Art. 61, 96)",
+    "responses": [
+      "100%: Hay materias primas autorizadas",
+      "0%: No existen"
+    ]
+  },
+  {
+    "question": "REC 43. Se cuenta con las especificaciones escritas para cada materia prima (condiciones de almacenamiento, duración, uso, etc.)",
+    "responses": [
+      "100%: Cuenta con especificaciones técnicas",
+      "0%: No cuentan con especificaciones técnicas"
+    ]
+  },
+  {
+    "question": "ALM 44. Verificar prácticas higiénicas en el trasvasije de envases - Evitar contacto directo entre diferentes tipos de carne (Art.62):",
+    "responses": [
+      "100%: Cumple prácticas y no hay contacto",
+      "75%: Alguna mala práctica pero no hay contacto",
+      "50%: Malas prácticas al trasvasijar",
+      "25%: Contacto en algunos tipos de productos",
+      "0%: Malas prácticas y contacto con alimentos"
+    ]
+  },
+  {
+    "question": "ALM 45. Identificación de áreas y estantes, por familias de productos:",
+    "responses": [
+      "100%: Estantes rotulados, productos c/rótulo completo",
+      "75%: Estantes con obs y productos c/rótulo completo",
+      "50%: Estantes con obs y productos c/rótulo incompleto",
+      "25%: Estantes ok y productos s/rótulo",
+      "0%: Estantes y productos s/ rótulo"
+    ]
+  },
+  {
+    "question": "ALM 46. Receptáculos (bandejas) suficientes, limpios y ordenados:",
+    "responses": [
+      "100%: Suficiente, ordenados y limpios",
+      "75%: Insuficientes, ordenados y limpios",
+      "50%: Insuficientes y sucios",
+      "25%: Sucios",
+      "0%: Insuficientes, desordenados y sucios"
+    ]
+  },
+  {
+    "question": "ALM 47. Cumplimiento del sistema FIFO o FEFO, según corresponda:",
+    "responses": [
+      "100%: Ordenados sin productos vencidos",
+      "75%: Algunos desordenados sin productos vencidos",
+      "50%: Desordenados sin productos vencidos",
+      "25%: Un producto de bajo riesgo vencido",
+      "0%: Evidencia de 1 prod de alto riesgo vencido"
+    ]
+  },
+  {
+    "question": "ALM 48. Productos No Conforme, manejo correcto (art. 105 DS977):",
+    "responses": [
+      "100%: Separación física, identif, a espera del retiro",
+      "75%: Separación virtual, ident, a espera del retiro",
+      "50%: No separados, identif, a espera del retiro",
+      "25%: Separado, sin identif, a espera del retiro",
+      "0%: No separado ni identificado"
+    ]
+  },
+  {
+    "question": "ALM 49. Mantención de productos sobre nivel de piso:",
+    "responses": [
+      "100%: Todo sobre nivel del piso",
+      "75%: Un prod no alim. a nivel de piso",
+      "50%: Algunos prod no alim. a nivel de piso",
+      "25%: Prod alim. bajo riesgo (bebida) a nivel de piso",
+      "0%: Prod alim. a nivel de piso"
+    ]
+  },
+  {
+    "question": "ALM 50. Separación materias primas, desechables, productos químicos:",
+    "responses": [
+      "100%: Separación con barrera: MP - desechable - producto químico",
+      "75%: Separación virtual MP - desechable - producto químico",
+      "50%: MP mezclado con desechable",
+      "25%: Desechable junto a químico",
+      "0%: MP junto a producto químico"
+    ]
+  },
+  {
+    "question": "ALM 51. Verificar entrega correcta a la producción (verificación de cantidad, calidad y disponibilidad):",
+    "responses": [
+      "100%: Se verifica calidad organ, orden canasta y cant",
+      "75%: Verifica sólo cantidad y calidad organ",
+      "50%: Verifica todo, pero sólo algunos productos",
+      "25%: No verifica orden de canastas",
+      "0%: No hay entrega formal, no verifica"
+    ]
+  },
+  {
+    "question": "TRA PRE 52. Verificar descongelación en equipos de refrigeración, en agua corriendo sólo en caso de emergencias:",
+    "responses": [
+      "100%: Cumple el procedimiento",
+      "75%: En agua circulante como proced habitual",
+      "50%: En eq frío pero, mal ubicado o desprotegido",
+      "25%: Agua circulante sin protección",
+      "0%: A T° amb, agua estancada o caliente"
+    ]
+  },
+  {
+    "question": "PRE 53. Pre-elaborados en refrigeración, en envases originales sellados y apilados correctamente:",
+    "responses": [
+      "100%: Refrigerados, sellados y bien apilados",
+      "75%: Refrigerados, sellados mal apilados",
+      "50%: Refrigerados mal sellados",
+      "25%: Productos abiertos en envase original",
+      "0%: No refrigerados"
+    ]
+  },
+  {
+    "question": "PRE 54. Materias primas ya procesadas en recipientes o envases lavables y tapadas:",
+    "responses": [
+      "100%: MP protegidas",
+      "75%: MP con protección deficiente",
+      "50%: MP sin protección",
+      "25%: MP sin protección en envase inadecuado",
+      "0%: MP sin protección y contenedor sucio"
+    ]
+  },
+  {
+    "question": "PRE 55. Se separan productos por tipo y/o riesgo de contaminación:",
+    "responses": [
+      "100%: Separan físicamente por tipo de MP",
+      "75%: Separación virtual por tipo de MP",
+      "50%: Existe cruce en productos no críticos",
+      "25%: Existe cruce entre productos críticos",
+      "0%: MP no se separan por tipo y/o riesgo"
+    ]
+  },
+  {
+    "question": "PRE 56. Sanitizado con concentración y tiempo correctos. Verificar registro si aplica:",
+    "responses": [
+      "100%: Cumple concentración y tiempo, en lavadero limpio",
+      "75%: Cumple concentración y tiempo, en lavadero sucio",
+      "50%: Cumple sólo en algunos productos",
+      "25%: No se cumple concentración ni tiempo",
+      "0%: No sanitizan ningún producto"
+    ]
+  },
+  {
+    "question": "EL 57. Recepción y mantención de materias primas en envases limpios y protegidos:",
+    "responses": [
+      "100%: RMP en contenedor limpio y protegidos",
+      "75%: Contenedor limpio, algún producto mal protegido",
+      "50%: Contenedor limpio pero 1 producto desprotegido",
+      "25%: Contenedor limpio, varios productos desprotegidos",
+      "0%: Contenedores sucios y productos desprotegidos"
+    ]
+  },
+  {
+    "question": "ELB 58. Orden, limpieza y T° correcta en todos los equipos de frío. Termómetro interno:",
+    "responses": [
+      "100%: Cumple los 4 puntos",
+      "75%: Cumple todo menos orden",
+      "50%: T° inadecuada y limpieza con acción correctiva",
+      "25%: T° inadecuada y limpieza sin acción correctiva",
+      "0%: Falta termómetro, control de T°"
+    ]
+  },
+  {
+    "question": "ELB 59. Productos en tránsito y/o producto terminado, correctamente rotulado según tiempos definidos:",
+    "responses": [
+      "100%: Está rotulado y cumple con la tabla",
+      "75%: Algunos productos NC con la tabla",
+      "50%: Algunos productos críticos NC con la tabla",
+      "25%: Productos rotulados pero NC con tabla",
+      "0%: Productos sin rotulación"
+    ]
+  },
+  {
+    "question": "TRA ELB 60. Respetan las T° y los tiempos correctos de cocción y enfriamiento (fríos y calientes):",
+    "responses": [
+      "100%: Cumple, controla in situ y registra al momento",
+      "75%: Cumple, controla y registra in situ, algunos productos",
+      "50%: Cumple, controla in situ pero no se registra",
+      "25%: Uso de termómetro sólo ocasional",
+      "0%: Sin termómetro disponible"
+    ]
+  },
+  {
+    "question": "ELB 61. Uso correcto de equipos de frío, elaboración y mantención:",
+    "responses": [
+      "100%: Se utiliza el equipo para el fin definido",
+      "75%: Mala práctica puntual (ejm: golpear o mojar equipo)",
+      "50%: Sobre-exigencia de equipos (ejm: congelador)",
+      "25%: No se utiliza el equipo para fin definido",
+      "0%: Equipo en mal estado, por mal uso"
+    ]
+  },
+  {
+    "question": "ELB 62. Sistema de extracción e inyección de aire, en correcto funcionamiento, limpio y con registro de limpieza de ducto:",
+    "responses": [
+      "100%: Sistema eficiente, limpio y con registro",
+      "75%: Sistema eficiente, limpieza con obs, y registro",
+      "50%: Sistema funciona, ineficiente y sucio",
+      "25%: Sistema no funciona, s/filtro, pero limpio",
+      "0%: No cuenta con sistema"
+    ]
+  },
+  {
+    "question": "ELB 63. Estantes sin óxido, sin sobrecarga y ordenados (materias primas y especies - desechables - utensilios):",
+    "responses": [
+      "100%: Cumple todo",
+      "75%: Estantes con sobrecarga, ordenados",
+      "50%: Estantes desordenados",
+      "25%: Estantes ordenados con óxido",
+      "0%: No cumple"
+    ]
+  },
+  {
+    "question": "ELB 64. Especieros limpios, rotulados, tapados y ordenados. Envases de material lavable:",
+    "responses": [
+      "100%: Cumple 5 puntos",
+      "75%: Cumple todo menos orden",
+      "50%: Cumple, pero sin rotulación",
+      "25%: Cumple sin tapa y/o sucios",
+      "0%: No cumple ninguno"
+    ]
+  },
+  {
+    "question": "ELB 65. Montajes rápidos, por lote de producto y mice and place completa (mantención cadena frío):",
+    "responses": [
+      "100%: Montajes rápidos",
+      "75%: Montaje en ambiente con T° altas",
+      "50%: Montaje con manipulación lenta",
+      "25%: Mice and place insuficiente",
+      "0%: Montaje en grandes cantidades, exp a T° ambiente"
+    ]
+  },
+  {
+    "question": "TRA ELB 66. Tiempo entre elaboración y consumo:",
+    "responses": [
+      "100%: Elaboran durante el día (cocina tradicional)",
+      "75%: Adelantan muchas preparaciones no críticas",
+      "50%: Adelantan alguna preparación no crítica con mucho tiempo",
+      "25%: Se adelantan preparaciones críticas",
+      "0%: Se utilizan preparaciones calientes de servicio anterior"
+    ]
+  },
+  {
+    "question": "TRA MA 67. Control de tiempo y Tº del equipo, al inicio y término de la mantención en frío o caliente:",
+    "responses": [
+      "100%: Se aplica mantención en equipo adecuado",
+      "75%: Se aplica técnica alternativa pero con observaciones",
+      "50%: Aplica técnica pero en equipo no adecuado",
+      "25%: Aplica técnica sólo a algunos productos",
+      "0%: No aplican baño maría o técnica alternativo autorizado"
+    ]
+  },
+  {
+    "question": "TRA TPO 68. Traslado de alimentos cumpliendo; protección, rotulación, estiba y registros al inicio y término:",
+    "responses": [
+      "100%: Todo protegido, rotulado y con control de T°",
+      "75%: Todo protegido, rótulos incompletos y control de T°",
+      "50%: Todo protegido, sin rótulo y con control de T°",
+      "25%: Todo protegido, sin rótulo, sin control de T°",
+      "0%: Protegido parcial, sin rótulo, sin control de T°"
+    ]
+  },
+  {
+    "question": "TPO 69. Vehículo cerrado, limpio y en correctas condiciones. Con autorización sanitaria:",
+    "responses": [
+      "100%: Vehículo cerrado, limpio, refrigerado, con resolución",
+      "75%: Vehículo cerrado, limpieza deficiente, refrigerado, con resolución",
+      "50%: Vehículo cerrado, limpio, refrigeración deficiente, con resolución",
+      "25%: Vehículo cerrado, limpieza y refrigeración deficiente, sin resolución",
+      "0%: Vehículo cerrado, sucio, refrigeración deficiente, sin resolución"
+    ]
+  },
+  {
+    "question": "SER 70. Verificar mantención en baño maría caliente o mantenedor eléctrico:",
+    "responses": [
+      "100%: Aplica técnica en equipo adecuado en cada servicio",
+      "75%: Técnica alternativa con observaciones (ej. Budineras sobre baño maría)",
+      "50%: Se usa equipo como mantenedor de pre-servicio",
+      "25%: Se aplica técnica solo en servicio principal",
+      "0%: No se aplica técnica"
+    ]
+  },
+  {
+    "question": "SER 71. Variedad de alternativas instaladas en línea autoservicio, según menú (fondos, ensaladas y postres, otros):",
+    "responses": [
+      "100%: Se cumple con menú",
+      "75%: Una variedad repetida o parecida (repollo, mix)",
+      "50%: Algunas modificaciones justificadas (ej. No llega proveedor)",
+      "25%: Algunas modificaciones sin justificación",
+      "0%: No se cumple con menú"
+    ]
+  },
+  {
+    "question": "TRA SER 72. Equipos suficientes para la correcta mantención de productos calientes y fríos:",
+    "responses": [
+      "100%: Disponibilidad suficiente",
+      "75%: Equipos compartidos ordenados (postres, ensaladas)",
+      "50%: Equipos compartidos sin orden (postres, ensaladas)",
+      "25%: Equipos funcionando incorrectamente",
+      "0%: Sin equipos disponibles"
+    ]
+  },
+  {
+    "question": "SER 73. Reposición continua de las preparaciones frías y calientes:",
+    "responses": [
+      "100%: Se cumple durante todo el servicio",
+      "75%: Tiempos de espera cortos",
+      "50%: Reposición lenta (disponibilidad personal)",
+      "25%: Reposición lenta por programación",
+      "0%: No se cumple con reposición"
+    ]
+  },
+  {
+    "question": "SER 74. Vajilla, bandejas y cubiertos en cantidad correcta, limpios y secos:",
+    "responses": [
+      "100%: Se cumple con cantidad, limpios y secos",
+      "75%: Stock insuficiente, limpios y secos",
+      "50%: Stock insuficiente, limpios",
+      "25%: Stock insuficiente, secos pero con algunos residuos",
+      "0%: Stock insuficiente, utensilios sucios, no se cumple"
+    ]
+  },
+  {
+    "question": "LVA 75. Desconche de ollas y vajilla limpio, ordenado, separado lo limpio de lo sucio. No hay contaminación cruzada:",
+    "responses": [
+      "100%: Elimina todo resto de alimentos y separa percolados",
+      "75%: Elimina algunos residuos de alimentos y separa líquidos percolados",
+      "50%: Elimina algo de resto de alimentos, no separa líquidos percolados",
+      "25%: Elimina poco del resto de alimentos, no separa líquidos percolados",
+      "0%: Mal realizado, no separa líquidos percolados"
+    ]
+  },
+  {
+    "question": "LVA 76. Procedimiento de higiene de vajilla y utensilios, en tres etapas (lavado, enjuague, sanitizado) - Disposición de agua caliente:",
+    "responses": [
+      "100%: Cumple con los 3 pasos y hay agua caliente",
+      "75%: Lavado ok, sanitización ok, sin agua caliente",
+      "50%: Lavado ok, sin sanitización, con agua caliente",
+      "25%: Lavado ok, sin sanitización, sin agua caliente",
+      "0%: Lavado con observaciones, sin sanitización, sin agua caliente"
+    ]
+  },
+  {
+    "question": "LVA 77. Orden general del área:",
+    "responses": [
+      "100%: Áreas separadas (sucio/limpio), señaléticas y ordenadas",
+      "75%: Áreas separadas y ordenadas",
+      "50%: Áreas separadas, desordenadas",
+      "25%: No hay separación, pero ordenadas",
+      "0%: No existe separación, muy desordenadas"
+    ]
+  },
+  {
+    "question": "QQ 78. Termómetros y balanzas suficientes, en correcto estado y limpios:",
+    "responses": [
+      "100%: Cumple buen estado y limpieza",
+      "75%: Cumple buen estado, limpios pero insuficientes",
+      "50%: Buen estado, limpios, sin solución desinfectante",
+      "25%: Buen estado, sucios",
+      "0%: Termómetros no operativos, sucios, insuficientes, en casilleros"
+    ]
+  },
+  {
+    "question": "QQ 79. Verificar monitoreo de controles de proceso y verificación por la supervisión (en degustación debe revisar planillas):",
+    "responses": [
+      "100%: Al día, revisados y firmados",
+      "75%: Al día, registros sin firma",
+      "50%: Mal llenados (incompletos), sin revisar (firma)",
+      "25%: Registros de tiempo/T° deficientes",
+      "0%: Sin mayor control evidente"
+    ]
+  },
+  {
+    "question": "QQ 80. Verificar aplicación y verificación (firmas) de acciones correctivas en registros de días anteriores:",
+    "responses": [
+      "100%: Aplican y verifican acciones correctivas",
+      "75%: Realizan acciones correctivas, algunas sin verificar",
+      "50%: Realizan acciones correctivas, sin verificar",
+      "25%: Pocas acciones correctivas, sin verificar",
+      "0%: Sin acciones correctivas, pese a desviaciones"
+    ]
+  },
+  {
+    "question": "QQ 81. Verificar registro y toma de contramuestras, considerar menú y gramaje (100 a 200 gramos):",
+    "responses": [
+      "100%: Contramuestras y registros al día",
+      "75%: Contramuestras y registros ok, insuficiente gramaje",
+      "50%: Contramuestras y registros solo del servicio principal",
+      "25%: Sin contramuestras de ayer, registros discontinuos",
+      "0%: Sin contramuestras, sin registros al día"
+    ]
+  },
+  {
+    "question": "PPT 82. El flujo del personal, vehículos y de materias primas en las distintas etapas del proceso, es ordenado y conocido por todos los que participan en la elaboración, para evitar contaminación cruzada. (Art. 63)",
+    "responses": [
+      "100%: Existen flujos",
+      "0%: No existen flujos"
+    ]
+  },
+  {
+    "question": "PPT 83. Se cuenta con procedimientos escritos de los procesos (Formulación del producto, flujos de operación, procesos productivos). (Art. 3, 11, 63, 66, 69, 132)",
+    "responses": [
+      "100%: Existen procedimientos de procesos",
+      "0%: No existen procedimientos de procesos"
+    ]
+  },
+  {
+    "question": "PPT 84. Los productos se almacenan en condiciones que eviten su deterioro y contaminación (envases, temperatura, humedad, etc.). (Art.11, 67)",
+    "responses": [
+      "100%: Productos se almacenan en buenas condiciones",
+      "0%: No se almacenan productos en buenas condiciones"
+    ]
+  },
+  {
+    "question": "PPT 85. La distribución de los productos terminados se realiza en vehículos autorizados, limpios y en buen estado. (Art. 11, 68)",
+    "responses": [
+      "100%: Dist. P.T. en veh. autorizados",
+      "0%: Dist. P.T. no se realiza en veh. autorizados"
+    ]
+  },
+  {
+    "question": "PPT 86. Para envasar los productos se utilizan materiales adecuados, los cuales son mantenidos en condiciones que eviten su contaminación. (Art. 11, 123)",
+    "responses": [
+      "100%: Se utilizan materiales adecuados",
+      "0%: No se utilizan mat. adecuados"
+    ]
+  },
+  {
+    "question": "PPT 87. Los productos se etiquetan de acuerdo a las exigencias reglamentarias. (Art. 107 al 121)",
+    "responses": [
+      "100%: Rotulación art. 107",
+      "0%: No se rotulan según art. 107"
+    ]
+  },
+  {
+    "question": "MA 88. Dosificación correcta de detergentes y sanitizantes:",
+    "responses": [
+      "100%: Se evidencia dosificación automática, vasos dosificadores, el persona conoce las diluciones.",
+      "75%: Con dosificación manual, Automática no operativa.",
+      "50%: Dosificación manual con control deficiente de diluciones.",
+      "25%: Fallas en las dilución de productos químicos.",
+      "0%: Dosificaciones incorrectas (sin medición)."
+    ]
+  },
+  {
+    "question": "MA 89. Productos químicos autorizados por la empresa, verificar cumplimiento del 100% del listado y programa:",
+    "responses": [
+      "100%: Programa de productos completo, ausencia de No Autorizados",
+      "75%: No más de uno no autorizado.",
+      "50%: Más de un producto no autorizado, Ausente un producto del programa.",
+      "25%: Falla en algunos de los productos desinfectantes (yodo, cloro, jabón)",
+      "0%: Sin Productos desinfectantes."
+    ]
+  },
+  {
+    "question": "MA 90. Basureros limpios y sanitizados, con pedal, tapa y bolsa:",
+    "responses": [
+      "100%: Cumple requerimientos.",
+      "75%: Uso de basureros sin pedal",
+      "50%: Se trabaja con basureros en ocasiones sin tapa o levantada.",
+      "25%: Basureros sin sanitizar",
+      "0%: Se maneja basureros sucios, No desinfectados, sin bolsa."
+    ]
+  },
+  {
+    "question": "MA 91. Frecuencia de retiro de basura de las áreas (75% de la capacidad del contenedor):",
+    "responses": [
+      "100%: No llegan al 75% de capacidad",
+      "75%: Sobrepasa el 75% pero no al 100%",
+      "50%: Alguno llega al 100% capacidad",
+      "25%: Varios se observan al 100% capacidad",
+      "0%: No hay retiro de basura."
+    ]
+  },
+  {
+    "question": "MA 92. Limpieza y sanitización de la sala o área destinada a la basura(sala,caseta):",
+    "responses": [
+      "100%: Cumple Aseo - Desinfección de superficies - Control de olores.",
+      "75%: Cumple aseo, falla en el control de olores",
+      "50%: Aseo con detalles en pisos y/o desagües",
+      "25%: Falla en la frecuencia del aseo general",
+      "0%: No se evidencian actividades de aseo y desinfección en el área."
+    ]
+  },
+  {
+    "question": "MA 93. Aceites usados, son correctamente envasados, rotulados. Ausencia de grasa en los desagües:",
+    "responses": [
+      "100%: Cumple requerimiento.",
+      "75%: Falla en la rotulación de los envases",
+      "50%: Desagües sucios, o disposición de aceite en bolsas.",
+      "25%: Cumple en forma esporádica, cuando el aceite es poco se dispone en desagüe.",
+      "0%: No cumple manejo de aceite según procedimiento."
+    ]
+  },
+  {
+    "question": "MA 94. Separación de residuos sólidos y grasa durante desconche de vajilla y ollas:",
+    "responses": [
+      "100%: Se cumple separación de residuos, colador de uso exclusivo.",
+      "75%: Se cumple, pero con utensilios con cierto grado de deterioro (coladores)",
+      "50%: Se usan rejillas de desagüe para realizar la separación de residuos.",
+      "25%: Se observa poco o regular la separación de residuos.",
+      "0%: Los residuos se van directo al desagüe sin separación."
+    ]
+  },
+  {
+    "question": "DOC 95. Autorizaciones Sanitarias (casino y verduras crudas):",
+    "responses": [
+      "100%: Ambas resoluciones publicadas y al día",
+      "75%: Ambas resoluciones pero no publicadas",
+      "50%: Resolución casino, no evidencia res. verd. crudas",
+      "25%: Sólo res. casino o con razon social no corresp.",
+      "0%: No tiene resoluciones"
+    ]
+  },
+  {
+    "question": "DOC 96. Libro de inspección SEREMI Salud o Archivador con actas dejadas por la autoridad:",
+    "responses": [
+      "100%: Libro timbrado por SEREMI",
+      "75%: Libro timbrado pero mal ubicado (cuesta ubicarlo)",
+      "50%: Libro timbrado pero sucio o rayado",
+      "25%: Libro roto o dañado",
+      "0%: No cuenta con libro"
+    ]
+  },
+  {
+    "question": "DOC 97. Informes de muestreo microbiológico/luminometría. Planes de acción, charlas al personal si corresponde:",
+    "responses": [
+      "100%: Inf microb y lum ok, planes cerrados ok, charlas ok",
+      "75%: Inf microb y lum ok, alguna acción pendiente, charla ok",
+      "50%: Inf microb y lum ok, alguna acción pendiente, sin charla",
+      "25%: Inf microb y lum ok, pero sin plan acción",
+      "0%: Sin informes ni plan acción"
+    ]
+  },
+  {
+    "question": "TRA DOC 98. Informes de auditoría sanitaria, plan de acción, verificación de cumplimiento, por Administrador:",
+    "responses": [
+      "100%: Inf ok, plan cerrado ok, verif por Adm y JOP",
+      "75%: Inf ok, alguna acción pendiente, verif por Adm ó JOP",
+      "50%: Inf ok, alguna acción pendiente, sin verif por Adm",
+      "25%: Inf ok, sin plan de acción, sin verif",
+      "0%: No hay informe, no hay plan"
+    ]
+  },
+  {
+    "question": "TRA DOC 99. Registros del cumplimiento al 100% del programa de charlas en Calidad y Medio Ambiente:",
+    "responses": [
+      "100%: Charlas al día, el personal se verifica capacitado",
+      "75%: Charlas al día, pero falta interiorizar en el personal",
+      "50%: Charlas de calidad atrasados",
+      "25%: Charlas atrasadas, personal no responde",
+      "0%: No está implementado programa de charlas"
+    ]
+  },
+  {
+    "question": "DOC 100. Reporte de proveedor productos químicos:",
+    "responses": [
+      "100%: Rep ok, plan cerrado ok, verif por Adm",
+      "75%: Rep ok, alguna acción pendiente, verif por Adm",
+      "50%: Rep ok, alguna acción pendiente, sin verif por Adm",
+      "25%: Rep ok, sin plan de acción, sin verif",
+      "0%: No hay reporte, no hay plan"
+    ]
+  },
+  {
+    "question": "CAP 101. Existe un programa escrito y con sus registros correspondientes de capacitación del personal en materia de manipulación higiénica de los alimentos e higiene personal. (Art. 52, 69)",
+    "responses": [
+      "100%: Existe un programa escrito",
+      "0%: No existe programa"
+    ]
+  },
+  {
+    "question": "CAP 102. Existe un programa escrito de capacitación del personal de aseo en técnicas de limpieza y sus registros correspondientes. (Art. 41, 69)",
+    "responses": [
+      "100%: Existe un programa escrito",
+      "0%: No existe programa"
+    ]
   }
 ]
