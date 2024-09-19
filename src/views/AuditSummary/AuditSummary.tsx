@@ -15,6 +15,14 @@ const AuditSummary: React.FC = () => {
     navigate('/')
   }
 
+  const handleGoToLuminometry = () => {
+    navigate('/luminometria')
+  }
+
+  const handleGoToETA = () => {
+    navigate('/seremi')
+  }
+
   return (
     <div className="summary-container">
       <h3>Resumen</h3>
@@ -25,8 +33,8 @@ const AuditSummary: React.FC = () => {
       <AverageModules />
       <div className="buttons-summary">
       <button onClick={handleGoToDetails}>detalle</button>
-      <button>Luminometria</button>
-      <button>ETA</button>
+      <button onClick={handleGoToLuminometry}>Luminometria</button>
+      <button onClick={handleGoToETA}>ETA</button>
       <button>KPI</button>
       <button onClick={handleGoToHome}>Home</button>
       </div>

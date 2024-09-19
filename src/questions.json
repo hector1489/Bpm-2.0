@@ -17,7 +17,7 @@
     ]
   },
   {
-    "module": "quimicos",
+    "module": "poes-control-productos",
     "question": [
       "CQA 8. Almacenamiento de productos químicos según PH, con hojas de seguridad y EPP disponibles:",
       "CQA 9. Rotulación correcta, indicando nombre producto y área de uso:",
@@ -29,7 +29,7 @@
     "question": "CA 11. Agua potable suministrada por empresa sanitaria u otra fuente autorizada, con registro sanitario (evidencia):"
   },
   {
-    "module": "superficies",
+    "module": "poes-superficies",
     "question": [
       "CS 12. Aplicación de procedimiento de higiene de tablas, cuchillos y mesones:",
       "CS 13. Limpieza y desinfección de equipos de proceso (máquina universal, juguera, amasadora, otros):",
@@ -45,14 +45,14 @@
     ]
   },
   {
-    "module": "contaminacion",
+    "module": "contaminacion-cruzada",
     "question": [
       "CC 22. Separación de utensilios por área, y separación alimentos (cocido - crudo - sucio, otros):",
       "CC 23. Ubicación de equipos y mobiliarios se mantienen correctamente (basureros, mesones, lavadero sanitizado):"
     ]
   },
   {
-    "module": "adulterantes",
+    "module": "poes-sustancias-adulterantes",
     "question": [
       "CSA 24. Pulverizadores de productos químicos separados de las materias primas-preparaciones en producción (Art. 50, 51):",
       "CSA 25. Protección de materias primas, producto terminado y utensilios:",
@@ -60,7 +60,7 @@
     ]
   },
   {
-    "module": "higiene",
+    "module": "poes-higiene-empleados",
     "question": [
       "CSH 27. Uniforme completo de todos, limpio y en buen estado - Sin accesorios adicionales (reloj, joyas, celular, otros) (Art.56):",
       "CSH 28. Cubre-pelo (gorro o cofia), mascarilla y guantes usados correctamente (Art.56):",
@@ -71,7 +71,7 @@
     ]
   },
   {
-    "module": "plagas",
+    "module": "poes-control-plagas",
     "question": [
       "CP 33. Barreras físicas para ingreso de vectores y/o plagas (puertas, ventanas, grietas, desagües, otros):",
       "CP 34. Revisar programa y evaluar eficacia y eficiencia (certificados 3 meses atrás e inspección visual) (Art. 47, 69):",
@@ -80,14 +80,14 @@
     ]
   },
   {
-    "module": "instalaciones",
+    "module": "poes-instalaciones",
     "question": [
       "CIS 37. Lavamanos suficientes en áreas de manipulación, limpios, dispensador de papel y señalética publicada:",
       "CIS 38. Servicios higiénicos y sala vestuario, en buenas condiciones, limpios, con agua caliente, jabón y papel:"
     ]
   },
   {
-    "module": "recepcion",
+    "module": "poe-recepcion",
     "question": [
       "REC 39. Verificar registro recepción materias primas, inventario, ordenes de compra y guías de despacho (Art. 61, 69) :",
       "REC 40. Balanza en buen estado, limpia y utilizada frecuentemente:",
@@ -97,7 +97,7 @@
     ]
   },
   {
-    "module": "almacenamiento",
+    "module": "poe-almacenamiento",
     "question": [
       "ALM 44. Verificar prácticas higiénicas en el trasvasije de envases - Evitar contacto directo entre diferentes tipos de carne (Art.62):",
       "ALM 45. Identificación de áreas y estantes, por familias de productos:",
@@ -110,7 +110,7 @@
     ]
   },
   {
-    "module": "pre-elaboraciones",
+    "module": "poe-preelaboraciones",
     "question": [
       "TRA PRE 52. Verificar descongelación en equipos de refrigeración, en agua corriendo sólo en caso de emergencias:",
       "PRE 53. Pre-elaborados en refrigeración, en envases originales sellados y apilados correctamente:",
@@ -120,7 +120,7 @@
     ]
   },
   {
-    "module": "elaboraciones",
+    "module": "poe-elaboracion",
     "question": [
       "EL 57. Recepción y mantención de materias primas en envases limpios y protegidos:",
       "ELB 58. Orden, limpieza y T° correcta en todos los equipos de frío. Termómetro interno:",
@@ -135,18 +135,18 @@
     ]
   },
   {
-    "module": "mantencion",
+    "module": "poe-mantencion",
     "question": "TRA MA 67. Control de tiempo y Tº del equipo, al inicio y término de la mantención en frío o caliente:"
   },
   {
-    "module": "transporte",
+    "module": "poe-transporte",
     "question": [
       "TRA TPO 68. Traslado de alimentos cumpliendo; protección, rotulación, estiba y registros al inicio y término:",
       "TPO 69. Vehículo cerrado, limpio y en correctas condiciones. Con autorización sanitaria:"
     ]
   },
   {
-    "module": "servicio",
+    "module": "poe-servicio",
     "question": [
       "SER 70. Verificar mantención en baño maría caliente o mantenedor eléctrico:",
       "SER 71. Variedad de alternativas instaladas en línea autoservicio, según menú (fondos, ensaladas y postres, otros):",
@@ -156,7 +156,7 @@
     ]
   },
   {
-    "module": "vajilla",
+    "module": "poe-lavado-ollas-vajilla",
     "question": [
       "LVA 75. Desconche de ollas y vajilla limpio, ordenado, separado lo limpio de lo sucio. No hay contaminación cruzada:",
       "LVA 76. Procedimiento de higiene de vajilla y utensilios, en tres etapas (lavado, enjuague, sanitizado) - Disposición de agua caliente:",
@@ -164,7 +164,7 @@
     ]
   },
   {
-    "module": "control",
+    "module": "poe-control-calidad",
     "question": [
       "QQ 78. Termómetros y balanzas suficientes, en correcto estado y limpios:",
       "QQ 79. Verificar monitoreo de controles de proceso y verificación por la supervisión (en degustación debe revisar planillas):",
@@ -173,20 +173,20 @@
     ]
   },
   {
-    "module": "proteccion",
+    "module": "poe-ppt",
     "question": [
       "PPT 82. El flujo del personal, vehículos y de materias primas en las distintas etapas del proceso, es ordenado y conocido por todos los que participan en la elaboración, para evitar contaminación cruzada. (Art. 63)",
       "PPT 83. Se cuenta con procedimientos escritos de los procesos (Formulación del producto, flujos de operación, procesos productivos). (Art. 3, 11, 63, 66, 69, 132)",
       "PPT 84. Los productos se almacenan en condiciones que eviten su deterioro y contaminación (envases, temperatura, humedad, etc.). (Art.11, 67)",
       "PPT 85. La distribución de los productos terminados se realiza en vehículos autorizados, limpios y en buen estado. (Art. 11, 68)",
       "PPT 86. Para envasar los productos se utilizan materiales adecuados, los cuales son mantenidos en condiciones que eviten su contaminación. (Art. 11, 123)",
-      "PPT 87. Los productos se etiquetan de acuerdo a las exigencias reglamentarias. (Art. 107 al 121)",
-      "MA 88. Dosificación correcta de detergentes y sanitizantes:"
+      "PPT 87. Los productos se etiquetan de acuerdo a las exigencias reglamentarias. (Art. 107 al 121)"
     ]
   },
   {
-    "module": "poe-ppt",
+    "module": "MA",
     "question": [
+      "MA 88. Dosificación correcta de detergentes y sanitizantes:",
       "MA 89. Productos químicos autorizados por la empresa, verificar cumplimiento del 100% del listado y programa:",
       "MA 90. Basureros limpios y sanitizados, con pedal, tapa y bolsa:",
       "MA 91. Frecuencia de retiro de basura de las áreas (75% de la capacidad del contenedor):",
@@ -196,14 +196,19 @@
     ]
   },
   {
-    "module": "documentacion",
+    "module": "doc",
     "question": [
       "DOC 95. Autorizaciones Sanitarias (casino y verduras crudas):",
       "DOC 96. Libro de inspección SEREMI Salud o Archivador con actas dejadas por la autoridad:",
       "DOC 97. Informes de muestreo microbiológico/luminometría. Planes de acción, charlas al personal si corresponde:",
       "TRA DOC 98. Informes de auditoría sanitaria, plan de acción, verificación de cumplimiento, por Administrador:",
       "TRA DOC 99. Registros del cumplimiento al 100% del programa de charlas en Calidad y Medio Ambiente:",
-      "DOC 100. Reporte de proveedor productos químicos:",
+      "DOC 100. Reporte de proveedor productos químicos:"
+    ]
+  },
+  {
+    "module": "cap",
+    "question": [
       "CAP 101. Existe un programa escrito y con sus registros correspondientes de capacitación del personal en materia de manipulación higiénica de los alimentos e higiene personal. (Art. 52, 69)",
       "CAP 102. Existe un programa escrito de capacitación del personal de aseo en técnicas de limpieza y sus registros correspondientes. (Art. 41, 69)"
     ]

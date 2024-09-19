@@ -1,8 +1,9 @@
 import DetailsTable from '../../components/DetailsTable/DetailsTable'
 import { useNavigate } from 'react-router-dom'
 import './DetailsView.css'
+import { AverageTable } from '../../components'
 
-const DetailsView: React.FC  = () => {
+const DetailsView: React.FC = () => {
   const navigate = useNavigate()
 
   const handleGoToAuditSummary = () => {
@@ -12,10 +13,10 @@ const DetailsView: React.FC  = () => {
   return (
     <div className="detail-container">
       <div>
-      <DetailsTable />
+        <DetailsTable />
       </div>
       <div>
-        <p>aqui ira la tabla promedios</p>
+        <AverageTable />
       </div>
       <div className="detail-button">
         <button onClick={handleGoToAuditSummary}>volver</button>
