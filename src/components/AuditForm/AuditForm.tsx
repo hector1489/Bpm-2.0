@@ -41,10 +41,23 @@ const AuditForm: React.FC = () => {
   }
 
   const handleNext = () => {
+    // Verifica si hay una respuesta seleccionada, si no, guarda la primera opción por defecto
     if (currentQuestionIndex < state.IsHero.length - 1) {
+      const updatedFormData = [...formData];
+      const selectedAnswer = updatedFormData[currentQuestionIndex]?.answer;
+
+      if (!selectedAnswer) {
+        const defaultAnswer = currentQuestion?.responses?.[0] || '';
+        updatedFormData[currentQuestionIndex] = {
+          question: currentQuestion?.question || '',
+          answer: defaultAnswer,
+        };
+      }
+
+      setFormData(updatedFormData);
       setCurrentQuestionIndex(currentQuestionIndex + 1);
     }
-  }
+  };
 
   const handleGoToAuditSummary = () => {
     navigate('/resumen-auditoria');

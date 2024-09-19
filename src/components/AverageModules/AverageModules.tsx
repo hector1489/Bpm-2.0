@@ -1,25 +1,27 @@
 import './Average.css'
+import { useContext } from 'react'
+import { AppContext } from '../../context/GlobalState'
 
-interface EvaluationItem {
-  aspect: string;
-  weight: string;
-  gradeId: string;
-  scoreId: string;
-}
+const AverageModules: React.FC = () => {
+  const context = useContext(AppContext)
 
-const evaluationData: EvaluationItem[] = [
-  { aspect: 'INFRAESTRUCTURA Y REQUERIMIENTOS LEGALES', weight: '4%', gradeId: 'nota-infraestructura', scoreId: 'puntaje-infraestructura' },
-  { aspect: 'PROCEDIMIENTOS OP. DE SANITIZACION', weight: '25%', gradeId: 'nota-poes', scoreId: 'puntaje-poes' },
-  { aspect: 'PROCEDIMIENTOS OP. DEL PROCESO', weight: '25%', gradeId: 'nota-poe', scoreId: 'puntaje-poe' },
-  { aspect: 'MANEJO AMBIENTAL', weight: '4%', gradeId: 'nota-ma', scoreId: 'puntaje-ma' },
-  { aspect: 'DOCUMENTACION', weight: '10%', gradeId: 'nota-doc', scoreId: 'puntaje-doc' },
-  { aspect: 'TRAZADORES DE POSIBLE BROTE ETA', weight: '21%', gradeId: 'nota-traz', scoreId: 'puntaje-traz' },
-  { aspect: 'LUMINOMETRIA', weight: '10%', gradeId: 'nota-lum', scoreId: 'puntaje-lum' },
-];
+  if (!context) {
+    return <div>Error: Context is not available.</div>;
+  }
 
+  const { state } = context
 
-const AverageModules: React.FC  = () => {
+  const calculatePercentage = (moduleId: number): number => {
+    const moduleQuestions = state.IsHero.filter(question => {
+      
+      return question.id === moduleId;
+    });
 
+    const totalQuestions = moduleQuestions.length;
+    const answeredQuestions = moduleQuestions.filter(question => question.answer !== '').length;
+
+    return totalQuestions > 0 ? (answeredQuestions / totalQuestions) * 100 : 0;
+  }
 
   return (
     <div className="audit-summary">
@@ -28,40 +30,33 @@ const AverageModules: React.FC  = () => {
           <thead>
             <tr>
               <th>N°</th>
-              <th>ASPECTOS EVALUADOS</th>
-              <th>PONDERACIÓN (%)</th>
-              <th>NOTA POR ITEM</th>
-              <th>PUNTAJE POR ITEM</th>
+              <th>MODULO</th>
+              <th>PORCENTAJE (%)</th>
             </tr>
           </thead>
           <tbody id="audit-table-body">
-            {evaluationData.map((item, index) => (
-              <tr key={index}>
+            {state.modules.map((module, index) => (
+              <tr key={module.id}>
                 <td>{index + 1}</td>
-                <td>{item.aspect}</td>
-                <td>{item.weight}</td>
-                <td>
-                  <span className="nota-item" id={item.gradeId}>
-                    0%
-                  </span>
-                </td>
-                <td>
-                  <span id={item.scoreId}>0%</span>
-                </td>
+                <td>{module.module}</td>
+                <td>{calculatePercentage(module.id).toFixed(2)}%</td>
               </tr>
             ))}
           </tbody>
           <tfoot>
             <tr>
-              <td colSpan={4}>PROMEDIO FINAL PONDERADO</td>
+              <td colSpan={2}>PROMEDIO FINAL PONDERADO</td>
               <td>
-                <span id="promedio-ponderado">0%</span>
+                {(
+                  state.modules.reduce((acc, module) => acc + calculatePercentage(module.id), 0) / state.modules.length
+                ).toFixed(2)}%
               </td>
             </tr>
           </tfoot>
         </table>
       </div>
     </div>
-  );
+  )
 }
+
 export default AverageModules
