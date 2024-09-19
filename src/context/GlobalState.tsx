@@ -1,8 +1,17 @@
 import { createContext, ReactNode, useState, useMemo, useEffect } from "react"
+import modulesData from '../questions.json'
 import questions from '../questionsResponses.json'
-import { IState, IContextProps, Answer } from '../interfaces/interfaces'
+import { IState, IContextProps, Answer, IModule } from '../interfaces/interfaces'
 
-const AppContext = createContext<IContextProps | undefined>(undefined)
+const transformModules = (modulesData: any[]): IModule[] => {
+  return modulesData.map((moduleData, index) => ({
+    id: index + 1,
+    module: moduleData.module,
+    question: moduleData.question
+  }));
+}
+
+const AppContext = createContext<IContextProps | undefined>(undefined);
 
 interface IAppProviderProps {
   children: ReactNode;
@@ -18,12 +27,11 @@ const loadStateFromLocalStorage = (): IState | null => {
 }
 
 const AppProvider: React.FC<IAppProviderProps> = ({ children }) => {
-  const initialState: IState = {
+  const [state, setState] = useState<IState>(loadStateFromLocalStorage() || {
     IsHero: [],
-    auditSheetData: {}
-  }
-
-  const [state, setState] = useState<IState>(loadStateFromLocalStorage() || initialState)
+    auditSheetData: {},
+    modules: transformModules(modulesData) // Usa la función de transformación aquí
+  });
 
   useEffect(() => {
     if (!state.IsHero.length) {
@@ -33,18 +41,16 @@ const AppProvider: React.FC<IAppProviderProps> = ({ children }) => {
         ...question,
       }));
 
-      setState((prevState) => ({
+      setState(prevState => ({
         ...prevState,
-        IsHero: questionsWithId,
-        auditSheetData: prevState.auditSheetData
+        IsHero: questionsWithId
       }));
     }
-    
-  }, [state.IsHero.length])
+  }, [state.IsHero.length]);
 
   useEffect(() => {
     saveStateToLocalStorage(state);
-  }, [state])
+  }, [state]);
 
   const addAnswers = (answers: Answer[]) => {
     const updatedQuestions = state.IsHero.map((question, index) => ({
@@ -52,14 +58,14 @@ const AppProvider: React.FC<IAppProviderProps> = ({ children }) => {
       answer: answers[index]?.answer || question.answer
     }));
 
-    setState((prevState) => ({
+    setState(prevState => ({
       ...prevState,
       IsHero: updatedQuestions,
     }));
   }
 
   const updateAuditSheetData = (data: any) => {
-    setState((prevState) => ({
+    setState(prevState => ({
       ...prevState,
       auditSheetData: { ...prevState.auditSheetData, ...data }
     }));
@@ -68,13 +74,13 @@ const AppProvider: React.FC<IAppProviderProps> = ({ children }) => {
   const contextValue = useMemo(
     () => ({ state, setState, addAnswers, updateAuditSheetData }),
     [state]
-  )
-  
+  );
+
   return (
     <AppContext.Provider value={contextValue}>
       {children}
     </AppContext.Provider>
-  )
+  );
 }
 
 export { AppProvider, AppContext }

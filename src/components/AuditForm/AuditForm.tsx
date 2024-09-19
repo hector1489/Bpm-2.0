@@ -1,21 +1,35 @@
-import { useState, useContext } from 'react';
-import { AppContext } from '../../context/GlobalState';
-import './AuditForm.css';
-import { Answer } from '../../interfaces/interfaces';
-import { useNavigate } from 'react-router-dom';
+import { useState, useContext } from 'react'
+import { AppContext } from '../../context/GlobalState'
+import './AuditForm.css'
+import { Answer } from '../../interfaces/interfaces'
+import { useNavigate } from 'react-router-dom'
 
 const AuditForm: React.FC = () => {
-  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-  const [formData, setFormData] = useState<Answer[]>([]);
-  const context = useContext(AppContext);
-  const navigate = useNavigate();
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0)
+  const [formData, setFormData] = useState<Answer[]>([])
+  const context = useContext(AppContext)
+  const navigate = useNavigate()
 
   if (!context) {
-    return <div>Error: El contexto no está disponible.</div>;
+    return <div>Error: El contexto no está disponible.</div>
   }
 
-  const { state, addAnswers } = context;
-  const currentQuestion = state.IsHero[currentQuestionIndex];
+  const { state, addAnswers } = context
+  const currentQuestion = state.IsHero[currentQuestionIndex]
+
+  const questionText = Array.isArray(currentQuestion?.question)
+    ? currentQuestion.question.join(' ')
+    : currentQuestion?.question || '';
+
+  const currentModule = state.modules?.find(module => {
+    if (!module.question) {
+      return false;
+    }
+
+    const moduleQuestions = Array.isArray(module.question) ? module.question : [module.question];
+
+    return moduleQuestions.some(q => questionText.includes(q));
+  })
 
   const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const updatedFormData = [...formData];
@@ -24,27 +38,30 @@ const AuditForm: React.FC = () => {
       answer: e.target.value,
     };
     setFormData(updatedFormData);
-  };
+  }
 
   const handleNext = () => {
     if (currentQuestionIndex < state.IsHero.length - 1) {
       setCurrentQuestionIndex(currentQuestionIndex + 1);
     }
-  };
+  }
 
   const handleGoToAuditSummary = () => {
     navigate('/resumen-auditoria');
-  };
+  }
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     addAnswers(formData);
     handleGoToAuditSummary();
-  };
+  }
 
   return (
     <form onSubmit={handleSubmit}>
       <div>
+        {currentModule && (
+          <h3>{currentModule.module}</h3>
+        )}
         <label>
           Pregunta:
           <div>{currentQuestion ? currentQuestion.question : 'No hay más preguntas'}</div>
@@ -81,6 +98,6 @@ const AuditForm: React.FC = () => {
       </div>
     </form>
   );
-};
+}
 
-export default AuditForm;
+export default AuditForm

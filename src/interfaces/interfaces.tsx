@@ -21,6 +21,7 @@ export interface Answer {
 export interface IState {
   IsHero: Array<IQuestion>;
   auditSheetData: any;
+  modules: IModule[];
 }
 
 
