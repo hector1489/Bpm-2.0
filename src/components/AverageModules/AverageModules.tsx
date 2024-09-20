@@ -12,16 +12,32 @@ const AverageModules: React.FC = () => {
   const { state } = context
 
   const calculatePercentage = (moduleId: number): number => {
-    const moduleQuestions = state.IsHero.filter(question => {
-      
-      return question.id === moduleId;
-    });
-
-    const totalQuestions = moduleQuestions.length;
-    const answeredQuestions = moduleQuestions.filter(question => question.answer !== '').length;
-
-    return totalQuestions > 0 ? (answeredQuestions / totalQuestions) * 100 : 0;
-  }
+    try {
+      const moduleQuestions = state.IsHero.filter(question => question.id === moduleId);
+  
+      const totalQuestions = moduleQuestions.length;
+  
+      if (totalQuestions === 0) {
+        return 100;
+      }
+  
+      const totalPercentage = moduleQuestions.reduce((acc, question) => {
+        if (question.answer && typeof question.answer === 'string') {
+          const match = question.answer.match(/(\d+)%/);
+          const percentage = match ? parseInt(match[1], 10) : 0;
+          return acc + percentage;
+        } else {
+          return acc;
+        }
+      }, 0);
+  
+      return totalPercentage / totalQuestions;
+    } catch (error) {
+      console.error('Error calculating percentage for module:', moduleId, error);
+      return 100;
+    }
+  };
+  
 
   return (
     <div className="audit-summary">
