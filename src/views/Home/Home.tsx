@@ -9,6 +9,10 @@ const Home: React.FC  = () => {
     navigate('/formulario-auditoria')
   }
 
+  const handleGoToControlDesviaciones = () => {
+    navigate('/desviaciones')
+  }
+
   return (
     <div className="container">
       <div className="logo-fungi">
@@ -40,13 +44,11 @@ const Home: React.FC  = () => {
                 <div className="card-title">Auditoría Alimentos</div>
         
             </button>
-            <button className="card">
-              <a href="FORMATOBASE.html">
+            <button className="card" onClick={handleGoToControlDesviaciones}>
                 <div className="card-icon">
                   <i className="fas fa-exclamation-circle"></i>
                 </div>
                 <div className="card-title">Control Desviaciones</div>
-              </a>
             </button>
             <button className="card">
               <a href="construccion.html">

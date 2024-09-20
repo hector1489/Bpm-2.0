@@ -47,7 +47,7 @@ const ETA: React.FC = () => {
   }));
 
 
-  const handleGoToAuditSummary= () => {
+  const handleGoToAuditSummary = () => {
     navigate('/resumen-auditoria')
   }
 
@@ -56,14 +56,15 @@ const ETA: React.FC = () => {
   }
 
   return (
-    <>
+    <div className="eta-container">
+      <h3>Resumen ETA</h3>
       <ETAGraph moduleData={moduleData} />
       <ETATable />
-      <div className="buttons-eta">
+      <div className="buttons-luminometry">
         <button onClick={handleGoToAuditSummary}>volver</button>
         <button onClick={handleGoToHome}>Home</button>
       </div>
-    </>
+    </div>
   )
 }
 

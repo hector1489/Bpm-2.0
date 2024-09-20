@@ -46,7 +46,7 @@ const Luminometry: React.FC = () => {
     percentage: calculatePercentage(module.id),
   }));
 
-  const handleGoToAuditSummary= () => {
+  const handleGoToAuditSummary = () => {
     navigate('/resumen-auditoria')
   }
 
@@ -55,7 +55,8 @@ const Luminometry: React.FC = () => {
   }
 
   return (
-    <>
+    <div className="lum-container">
+      <h3>Resumen Luminometria</h3>
       <LUMGraph moduleData={moduleData} />
       <div className="table-responsive">
         <table className="table table-bordered text-center table-sm">
@@ -182,7 +183,7 @@ const Luminometry: React.FC = () => {
         <button onClick={handleGoToAuditSummary}>volver</button>
         <button onClick={handleGoToHome}>Home</button>
       </div>
-    </>
+    </div>
   )
 }
 
