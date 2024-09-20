@@ -1,11 +1,17 @@
 import { useNavigate } from 'react-router-dom'
 import './AuditSummary.css'
-import { AverageModules, Summary } from '../../components'
+import { AverageModules, BPMGraph, Summary } from '../../components'
 
 
 const AuditSummary: React.FC = () => {
   const navigate = useNavigate()
 
+  const moduleData = [
+    { moduleName: 'Módulo 1', percentage: 85 },
+    { moduleName: 'Módulo 2', percentage: 75 },
+    { moduleName: 'Módulo 3', percentage: 90 },
+    { moduleName: 'Módulo 4', percentage: 65 },
+  ];
 
   const handleGoToDetails = () => {
     navigate('/resumen-detalle')
@@ -27,9 +33,7 @@ const AuditSummary: React.FC = () => {
     <div className="summary-container">
       <h3>Resumen</h3>
       <Summary />
-      <div>
-        <p>aqui va auditoria bpm graph</p>
-      </div>
+      <BPMGraph moduleData={moduleData} />
       <AverageModules />
       <div className="buttons-summary">
       <button onClick={handleGoToDetails}>detalle</button>
