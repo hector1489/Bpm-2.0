@@ -23,7 +23,6 @@ const DetailsTable: React.FC = () => {
       </thead>
       <tbody>
         {state.IsHero.map((question) => {
-          // Encuentra el módulo que contiene la pregunta actual
           const currentModule = state.modules.find(module => {
             if (!module.question) {
               return false;

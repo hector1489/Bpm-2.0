@@ -30,7 +30,7 @@ const AppProvider: React.FC<IAppProviderProps> = ({ children }) => {
   const [state, setState] = useState<IState>(loadStateFromLocalStorage() || {
     IsHero: [],
     auditSheetData: {},
-    modules: transformModules(modulesData) // Usa la función de transformación aquí
+    modules: transformModules(modulesData)
   });
 
   useEffect(() => {

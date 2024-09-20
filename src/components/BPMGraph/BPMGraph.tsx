@@ -10,31 +10,31 @@ const BPMGraph: React.FC<BPMGraphProps> = ({ moduleData }) => {
   const percentages = moduleData.map((module) => module.percentage);
 
   return (
-    <>
-    <h3>Gráfico de Promedios en 3D</h3>
-    <Plot
-      data={[
-        {
-          type: 'bar',
-          x: moduleNames,
-          y: percentages,
-          marker: {
-            color: 'rgba(75, 192, 192, 0.6)',
+    <div className="bpm-graph-container">
+      <h3>Gráfico de Promedios en 3D BPM</h3>
+      <Plot
+        data={[
+          {
+            type: 'bar',
+            x: moduleNames,
+            y: percentages,
+            marker: {
+              color: 'rgba(75, 192, 192, 0.6)',
+            },
           },
-        },
-      ]}
-      layout={{
-        title: 'Promedio de Respuestas por Módulo',
-        scene: {
-          xaxis: { title: 'Módulos' },
-          yaxis: { title: 'Porcentaje (%)' },
-        },
-        autosize: true,
-        width: 800,
-        height: 600,
-      }}
-    />
-  </>
+        ]}
+        layout={{
+          title: 'Promedio de Respuestas por Módulo',
+          scene: {
+            xaxis: { title: 'Módulos' },
+            yaxis: { title: 'Porcentaje (%)' },
+          },
+          autosize: true,
+          width: 800,
+          height: 600,
+        }}
+      />
+    </div>
   )
 }
 

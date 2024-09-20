@@ -1,9 +1,50 @@
 import { LUMGraph } from '../../components/index'
 import { useNavigate } from 'react-router-dom'
+import { useContext } from 'react'
+import { AppContext } from '../../context/GlobalState'
 import './Luminometry.css'
 
 const Luminometry: React.FC = () => {
   const navigate = useNavigate()
+  const context = useContext(AppContext);
+
+  if (!context) {
+    return <div>Error: Context is not available.</div>;
+  }
+
+  const { state } = context;
+
+
+  const calculatePercentage = (moduleId: number): number => {
+    try {
+      const moduleQuestions = state.IsHero.filter(question => question.id === moduleId);
+      const totalQuestions = moduleQuestions.length;
+
+      if (totalQuestions === 0) {
+        return 100;
+      }
+
+      const totalPercentage = moduleQuestions.reduce((acc, question) => {
+        if (question.answer && typeof question.answer === 'string') {
+          const match = question.answer.match(/(\d+)%/);
+          const percentage = match ? parseInt(match[1], 10) : 0;
+          return acc + percentage;
+        } else {
+          return acc;
+        }
+      }, 0);
+
+      return totalPercentage / totalQuestions;
+    } catch (error) {
+      console.error('Error calculating percentage for module:', moduleId, error);
+      return 100;
+    }
+  };
+
+  const moduleData = state.modules.map((module) => ({
+    moduleName: module.module,
+    percentage: calculatePercentage(module.id),
+  }));
 
   const handleGoToAuditSummary= () => {
     navigate('/resumen-auditoria')
@@ -15,7 +56,7 @@ const Luminometry: React.FC = () => {
 
   return (
     <>
-      <LUMGraph />
+      <LUMGraph moduleData={moduleData} />
       <div className="table-responsive">
         <table className="table table-bordered text-center table-sm">
           <thead className="table-light">
