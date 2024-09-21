@@ -1,7 +1,7 @@
-import { createContext, ReactNode, useState, useMemo, useEffect } from "react"
-import modulesData from '../questions.json'
-import questions from '../questionsResponses.json'
-import { IState, IContextProps, Answer, IModule } from '../interfaces/interfaces'
+import { createContext, ReactNode, useState, useMemo, useEffect } from "react";
+import modulesData from '../questions.json';
+import questions from '../questionsResponses.json';
+import { IState, IContextProps, Answer, IModule, Desviacion } from '../interfaces/interfaces';
 
 const transformModules = (modulesData: any[]): IModule[] => {
   return modulesData.map((moduleData, index) => ({
@@ -9,7 +9,7 @@ const transformModules = (modulesData: any[]): IModule[] => {
     module: moduleData.module,
     question: moduleData.question
   }));
-}
+};
 
 const AppContext = createContext<IContextProps | undefined>(undefined);
 
@@ -30,7 +30,8 @@ const AppProvider: React.FC<IAppProviderProps> = ({ children }) => {
   const [state, setState] = useState<IState>(loadStateFromLocalStorage() || {
     IsHero: [],
     auditSheetData: {},
-    modules: transformModules(modulesData)
+    modules: transformModules(modulesData),
+    desviaciones: []
   });
 
   useEffect(() => {
@@ -71,8 +72,15 @@ const AppProvider: React.FC<IAppProviderProps> = ({ children }) => {
     }));
   }
 
+  const addDesviacion = (data: Desviacion) => {
+    setState(prevState => ({
+      ...prevState,
+      desviaciones: [...(prevState.desviaciones || []), data]
+    }));
+  };
+  
   const contextValue = useMemo(
-    () => ({ state, setState, addAnswers, updateAuditSheetData }),
+    () => ({ state, setState, addAnswers, updateAuditSheetData, addDesviacion }),
     [state]
   );
 
@@ -83,4 +91,4 @@ const AppProvider: React.FC<IAppProviderProps> = ({ children }) => {
   );
 }
 
-export { AppProvider, AppContext }
+export { AppProvider, AppContext };
