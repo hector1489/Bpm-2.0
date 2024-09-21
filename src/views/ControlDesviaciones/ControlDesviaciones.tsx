@@ -11,7 +11,7 @@ const ControlDesviaciones: React.FC = () => {
 
   return (
     <div className="control-desviaciones-container">
-      <p>ControlDesviaciones</p>
+      <h3>Control De Desviaciones</h3>
       <DesviacionesTable />
       <div className="buttons-desviaciones">
         <button onClick={handleGoToHome}>volver</button>
