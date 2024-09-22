@@ -24,7 +24,7 @@ const AuditSheet: React.FC = () => {
     gerenteEstablecimiento: '',
     administradorEstablecimiento: '',
     supervisorEstablecimiento: '',
-    auditorExterno: '',
+    auditorEmail: '',
     fechaAuditoria: ''
   });
 
@@ -114,13 +114,13 @@ const AuditSheet: React.FC = () => {
           </select>
         </div>
         <div className="form-group">
-          <label htmlFor="auditor-externo">Email:</label>
+          <label htmlFor="auditor-email">Email:</label>
           <input
             type="email"
             className="form-control"
-            id="auditor-externo"
-            name="auditorExterno"
-            value={formValues.auditorExterno}
+            id="auditor-email"
+            name="auditorEmail"
+            value={formValues.auditorEmail}
             onChange={handleChange}
           />
         </div>

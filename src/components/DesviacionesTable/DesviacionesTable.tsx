@@ -6,13 +6,25 @@ interface ISelectedRow {
   numeroRequerimiento: number;
   pregunta: string;
   respuesta: string;
+  fecha: string;
+  email: string;
+  nombreEstablecimiento: string;
 }
 
-const DEFAULT_ANSWER = "Sin respuesta"
+const DEFAULT_ANSWER = "Sin respuesta";
 
 const extractPercentage = (answer: string): number => {
   const match = answer.match(/^(\d+)%/);
   return match ? parseInt(match[1], 10) : 100;
+}
+
+const getCurrentDate = (): string => {
+  const today = new Date();
+  const dd = String(today.getDate()).padStart(2, '0');
+  const mm = String(today.getMonth() + 1).padStart(2, '0');
+  const yyyy = today.getFullYear();
+  
+  return `${dd}/${mm}/${yyyy}`;
 }
 
 const DesviacionesTable: React.FC = () => {
@@ -22,18 +34,25 @@ const DesviacionesTable: React.FC = () => {
     return <div>Error: Context is not available.</div>;
   }
 
-  const { state, addDesviacion } = context
-  const [selectedRows, setSelectedRows] = useState<ISelectedRow[]>([])
+  const { state, addDesviacion } = context;
+
+  const [selectedRows, setSelectedRows] = useState<ISelectedRow[]>([]);
 
   const addAllRows = useCallback(() => {
+    const email = state.auditSheetData.auditorEmail;
+    const nombreEstablecimiento = state.auditSheetData.nombreEstablecimiento;
+
     const rowsToAdd = state.IsHero
       .filter((hero) => extractPercentage(hero.answer ?? DEFAULT_ANSWER) < 100)
       .map((hero) => ({
         numeroRequerimiento: hero.id,
         pregunta: hero.question,
         respuesta: hero.answer ?? DEFAULT_ANSWER,
+        fecha: getCurrentDate(),
+        email: email,
+        nombreEstablecimiento: nombreEstablecimiento,
       }));
-      
+
     setSelectedRows(rowsToAdd);
   }, [state])
 
@@ -62,6 +81,9 @@ const DesviacionesTable: React.FC = () => {
             <th>N° DE REQUERIMIENTO</th>
             <th>PREGUNTAS AUDITADAS</th>
             <th>CRITERIO</th>
+            <th>FECHA DE INGRESO</th>
+            <th>EMAIL</th>
+            <th>NOMBRE DEL ESTABLECIMIENTO</th>
             <th>ELIMINAR FILA</th>
           </tr>
         </thead>
@@ -71,6 +93,9 @@ const DesviacionesTable: React.FC = () => {
               <td>{row.numeroRequerimiento}</td>
               <td>{row.pregunta}</td>
               <td>{row.respuesta}</td>
+              <td>{row.fecha}</td>
+              <td>{row.email}</td>
+              <td>{row.nombreEstablecimiento}</td>
               <td>
                 <button onClick={() => removeRow(index)}>Eliminar</button>
               </td>
@@ -79,8 +104,8 @@ const DesviacionesTable: React.FC = () => {
         </tbody>
       </table>
       <div className="buttons-desviaciones">
-      <button onClick={saveDesviaciones}>Guardar Desviaciones</button>
-      <button onClick={addAllRows}>Agregar todas las desviaciones</button>
+        <button onClick={saveDesviaciones}>Guardar Desviaciones</button>
+        <button onClick={addAllRows}>Agregar todas las desviaciones</button>
       </div>
     </div>
   )

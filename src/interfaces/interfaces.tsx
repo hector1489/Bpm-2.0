@@ -39,7 +39,7 @@ interface IAuditSheetData {
   gerenteEstablecimiento: string;
   administradorEstablecimiento: string;
   supervisorEstablecimiento: string;
-  auditorExterno: string;
+  auditorEmail: string;
   fechaAuditoria: string;
   lum?: string;
 }
