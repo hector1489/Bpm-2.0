@@ -1,43 +1,33 @@
 import './Average.css'
-import { useContext } from 'react'
+import { useContext, useMemo } from 'react'
 import { AppContext } from '../../context/GlobalState'
 
 const AverageModules: React.FC = () => {
-  const context = useContext(AppContext)
+  const { state } = useContext(AppContext) || {};
 
-  if (!context) {
+  if (!state) {
     return <div>Error: Context is not available.</div>;
   }
 
-  const { state } = context
-
   const calculatePercentage = (moduleId: number): number => {
-    try {
-      const moduleQuestions = state.IsHero.filter(question => question.id === moduleId);
-  
-      const totalQuestions = moduleQuestions.length;
-  
-      if (totalQuestions === 0) {
-        return 100;
-      }
-  
-      const totalPercentage = moduleQuestions.reduce((acc, question) => {
-        if (question.answer && typeof question.answer === 'string') {
-          const match = question.answer.match(/(\d+)%/);
-          const percentage = match ? parseInt(match[1], 10) : 0;
-          return acc + percentage;
-        } else {
-          return acc;
-        }
-      }, 0);
-  
-      return totalPercentage / totalQuestions;
-    } catch (error) {
-      console.error('Error calculating percentage for module:', moduleId, error);
-      return 100;
-    }
-  };
-  
+    const moduleQuestions = state.IsHero.filter(question => question.id === moduleId);
+    const totalQuestions = moduleQuestions.length;
+
+    if (totalQuestions === 0) return 100;
+
+    const totalPercentage = moduleQuestions.reduce((acc, question) => {
+      const match = typeof question.answer === 'string' ? question.answer.match(/(\d+)%/) : null;
+      const percentage = match ? parseInt(match[1], 10) : 0;
+      return acc + percentage;
+    }, 0);
+
+    return totalPercentage / totalQuestions;
+  }
+
+  const finalAverage = useMemo(() => {
+    const totalPercentage = state.modules.reduce((acc, module) => acc + calculatePercentage(module.id), 0);
+    return (totalPercentage / state.modules.length).toFixed(2);
+  }, [state.modules])
 
   return (
     <div className="audit-summary">
@@ -62,11 +52,7 @@ const AverageModules: React.FC = () => {
           <tfoot>
             <tr>
               <td colSpan={2}>PROMEDIO FINAL PONDERADO</td>
-              <td>
-                {(
-                  state.modules.reduce((acc, module) => acc + calculatePercentage(module.id), 0) / state.modules.length
-                ).toFixed(2)}%
-              </td>
+              <td>{finalAverage}%</td>
             </tr>
           </tfoot>
         </table>

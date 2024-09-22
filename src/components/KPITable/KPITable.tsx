@@ -2,6 +2,7 @@ import './KPITable.css'
 
 const KPITable: React.FC = () => {
 
+
   return (
     <div className="kpi-table-container">
       <table id="kpiTable" className="table table-bordered text-center table-sm">

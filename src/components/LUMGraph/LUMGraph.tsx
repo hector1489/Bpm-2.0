@@ -1,18 +1,38 @@
 import './LUMGraph.css'
 import Plot from 'react-plotly.js'
+import { useContext } from 'react'
+import { AppContext } from '../../context/GlobalState'
 
 interface BPMGraphProps {
   moduleData: { moduleName: string, percentage: number }[];
 }
 
-const LUMGraph: React.FC<BPMGraphProps> = ({ moduleData }) => {
-  const lumModules = ['poes-superficies'];
+const LUMGraph: React.FC<BPMGraphProps> = () => {
+  const context = useContext(AppContext);
 
+  if (!context) {
+    return <div>Error: Context is not available.</div>;
+  }
 
-  const lumData = moduleData.filter((module) => lumModules.includes(module.moduleName));
+  const { state } = context;
+  const lumQuestion= ['LUM 21. Toma de muestra y uso de luminómetro:'];
 
-  const moduleNames = lumData.map((module) => module.moduleName);
-  const percentages = lumData.map((module) => module.percentage);
+  const etaData = state.IsHero
+    .filter((question) => lumQuestion.includes(question.question))
+    .map((question) => {
+      const answer = question.answer ?? '';
+      const percentageMatch = answer.match(/^\d+/);
+      const percentage = percentageMatch ? parseInt(percentageMatch[0]) : 0;
+
+      return {
+        question: question.question,
+        shortQuestion: 'LUM 21',
+        percentage: percentage,
+      };
+    });
+
+  const questionNames = etaData.map((data) => data.shortQuestion);
+  const percentages = etaData.map((data) => data.percentage);
 
   return (
     <div className="lum-graph-container">
@@ -21,7 +41,7 @@ const LUMGraph: React.FC<BPMGraphProps> = ({ moduleData }) => {
         data={[
           {
             type: 'bar',
-            x: moduleNames,
+            x: questionNames,
             y: percentages,
             marker: {
               color: 'rgba(75, 192, 192, 0.6)',
@@ -29,18 +49,16 @@ const LUMGraph: React.FC<BPMGraphProps> = ({ moduleData }) => {
           },
         ]}
         layout={{
-          title: 'Promedio de Respuestas para LUM',
-          scene: {
-            xaxis: { title: 'Módulos' },
-            yaxis: { title: 'Porcentaje (%)' },
-          },
+          title: 'Promedio de Respuestas para LUM 21',
+          xaxis: { title: 'Pregunta' },
+          yaxis: { title: 'Porcentaje (%)', range: [0, 100] },
           autosize: true,
           width: 800,
           height: 600,
         }}
       />
     </div>
-  );
+  )
 }
 
-export default LUMGraph;
+export default LUMGraph

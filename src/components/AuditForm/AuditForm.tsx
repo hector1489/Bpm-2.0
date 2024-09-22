@@ -5,17 +5,17 @@ import { Answer } from '../../interfaces/interfaces'
 import { useNavigate } from 'react-router-dom'
 
 const AuditForm: React.FC = () => {
-  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0)
-  const [formData, setFormData] = useState<Answer[]>([])
-  const context = useContext(AppContext)
-  const navigate = useNavigate()
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+  const [formData, setFormData] = useState<Answer[]>([]);
+  const context = useContext(AppContext);
+  const navigate = useNavigate();
 
   if (!context) {
-    return <div>Error: El contexto no está disponible.</div>
+    return <div>Error: El contexto no está disponible.</div>;
   }
 
-  const { state, addAnswers } = context
-  const currentQuestion = state.IsHero[currentQuestionIndex]
+  const { state, addAnswers } = context;
+  const currentQuestion = state.IsHero[currentQuestionIndex];
 
   const questionText = Array.isArray(currentQuestion?.question)
     ? currentQuestion.question.join(' ')
@@ -29,7 +29,7 @@ const AuditForm: React.FC = () => {
     const moduleQuestions = Array.isArray(module.question) ? module.question : [module.question];
 
     return moduleQuestions.some(q => questionText.includes(q));
-  })
+  });
 
   const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const updatedFormData = [...formData];
@@ -38,39 +38,31 @@ const AuditForm: React.FC = () => {
       answer: e.target.value,
     };
     setFormData(updatedFormData);
-  }
+  };
 
   const handleNext = () => {
-    // Verifica si hay una respuesta seleccionada, si no, guarda la primera opción por defecto
+    const updatedFormData = [...formData];
+    const selectedAnswer = updatedFormData[currentQuestionIndex]?.answer;
+
+    if (!selectedAnswer) {
+      const defaultAnswer = currentQuestion?.responses?.[0] || '';
+      updatedFormData[currentQuestionIndex] = {
+        question: currentQuestion?.question || '',
+        answer: defaultAnswer,
+      };
+    }
+
     if (currentQuestionIndex < state.IsHero.length - 1) {
-      const updatedFormData = [...formData];
-      const selectedAnswer = updatedFormData[currentQuestionIndex]?.answer;
-
-      if (!selectedAnswer) {
-        const defaultAnswer = currentQuestion?.responses?.[0] || '';
-        updatedFormData[currentQuestionIndex] = {
-          question: currentQuestion?.question || '',
-          answer: defaultAnswer,
-        };
-      }
-
       setFormData(updatedFormData);
       setCurrentQuestionIndex(currentQuestionIndex + 1);
+    } else {
+      addAnswers(updatedFormData);
+      navigate('/resumen-auditoria');
     }
   };
 
-  const handleGoToAuditSummary = () => {
-    navigate('/resumen-auditoria');
-  }
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    addAnswers(formData);
-    handleGoToAuditSummary();
-  }
-
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={(e) => e.preventDefault()}>
       <div>
         {currentModule && (
           <h3>{currentModule.module}</h3>
@@ -101,16 +93,13 @@ const AuditForm: React.FC = () => {
           </select>
         </label>
         <div>
-          {currentQuestionIndex < state.IsHero.length - 1 && (
-            <button type="button" onClick={handleNext}>
-              Siguiente
-            </button>
-          )}
-          <button type="submit">Enviar</button>
+          <button type="button" onClick={handleNext}>
+            {currentQuestionIndex < state.IsHero.length - 1 ? 'Siguiente' : 'Enviar'}
+          </button>
         </div>
       </div>
     </form>
-  );
+  )
 }
 
 export default AuditForm

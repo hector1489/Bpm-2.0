@@ -1,6 +1,6 @@
-import { useContext } from 'react';
-import './Summary.css';
-import { AppContext } from '../../context/GlobalState';
+import { useContext, useMemo } from 'react'
+import './Summary.css'
+import { AppContext } from '../../context/GlobalState'
 
 const Summary: React.FC = () => {
   const context = useContext(AppContext);
@@ -9,11 +9,31 @@ const Summary: React.FC = () => {
     throw new Error('AppContext must be used within an AppProvider');
   }
 
-  const { auditSheetData } = context.state;
+  const { state } = context;
+  const { auditSheetData, modules, IsHero } = state;
+
+  const calculatePercentage = (moduleId: number): number => {
+    const moduleQuestions = IsHero.filter(question => question.id === moduleId);
+    const totalQuestions = moduleQuestions.length;
+
+    if (totalQuestions === 0) return 100;
+
+    const totalPercentage = moduleQuestions.reduce((acc, question) => {
+      const match = typeof question.answer === 'string' ? question.answer.match(/(\d+)%/) : null;
+      const percentage = match ? parseInt(match[1], 10) : 0;
+      return acc + percentage;
+    }, 0);
+
+    return totalPercentage / totalQuestions;
+  };
+
+  const finalAverage = useMemo(() => {
+    const totalPercentage = modules.reduce((acc, module) => acc + calculatePercentage(module.id), 0);
+    return (totalPercentage / modules.length).toFixed(2);
+  }, [modules, IsHero]);
 
   return (
     <div className="ficha-resumen-container">
-
       <div className="ficha-resumen-table">
         <table>
           <thead>
@@ -26,7 +46,7 @@ const Summary: React.FC = () => {
               </td>
             </tr>
             <tr>
-              <th>Noumero de Auditoria:</th>
+              <th>Número de Auditoría:</th>
               <td>
                 <span id="resumen-nombre-establecimiento" className="resumen-span">
                   {auditSheetData.numeroAuditoria || 'N/A'}
@@ -79,7 +99,7 @@ const Summary: React.FC = () => {
 
       <div className="puntaje-ponderado">
         <h4 className="puntaje-promedio">
-          Promedio General: <span id="promedio-general">0%</span>
+          Promedio General: <span id="promedio-general">{finalAverage}%</span>
         </h4>
         <div className="indicadores">
           <div className="indicador cumple">
@@ -93,11 +113,8 @@ const Summary: React.FC = () => {
           </div>
         </div>
       </div>
-
-
-
     </div>
-  );
-};
+  )
+}
 
-export default Summary;
+export default Summary
