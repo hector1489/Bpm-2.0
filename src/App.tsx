@@ -1,6 +1,6 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import './App.css'
-import { Auditoria, Home, AuditSummary, DetailsView, AuditFormView, Luminometry, ETA, KPI, ControlDesviaciones } from './views/index'
+import { Auditoria, Home, AuditSummary, DetailsView, AuditFormView, Luminometry, ETA, KPI, ControlDesviaciones, DocumentacionView } from './views/index'
 
 const App: React.FC = () => {
 
@@ -16,6 +16,7 @@ const App: React.FC = () => {
       <Route path='/seremi' element={< ETA />} />
       <Route path='/kpi' element={< KPI />} />
       <Route path='/desviaciones' element={< ControlDesviaciones />} />
+      <Route path='/documentacion' element={< DocumentacionView />} />
     </Routes>
   </BrowserRouter>
   );

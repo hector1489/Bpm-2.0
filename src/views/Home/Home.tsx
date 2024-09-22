@@ -13,6 +13,10 @@ const Home: React.FC  = () => {
     navigate('/desviaciones')
   }
 
+  const handleGoToDocumentacionView = () => {
+    navigate('/documentacion')
+  }
+
   return (
     <div className="container">
       <div className="logo-fungi">
@@ -58,13 +62,11 @@ const Home: React.FC  = () => {
                 <div className="card-title">Auditoría Aseo</div>
               </a>
             </button>
-            <button className="card">
-              <a href="documentacion.html">
+            <button className="card" onClick={handleGoToDocumentacionView}>
                 <div className="card-icon">
                   <i className="fas fa-file-alt"></i>
                 </div>
                 <div className="card-title">Documentación</div>
-              </a>
             </button>
             <button className="card">
               <a href="resumeneje.html">
