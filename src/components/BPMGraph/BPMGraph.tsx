@@ -6,27 +6,60 @@ interface BPMGraphProps {
 }
 
 const BPMGraph: React.FC<BPMGraphProps> = ({ moduleData }) => {
-  const moduleNames = moduleData.map((module) => module.moduleName);
-  const percentages = moduleData.map((module) => module.percentage);
+  const bpmModules = ['infraestructura', 'legales']
+  const poesModules = [
+    'poes-control-productos', 'Agua', 'poes-superficies', 'contaminacion-cruzada',
+    'poes-sustancias-adulterantes', 'poes-higiene-empleados', 'poes-control-plagas', 'poes-instalaciones'
+  ]
+  const poeModules = [
+    'poe-recepcion', 'poe-almacenamiento', 'poe-preelaboraciones', 'poe-elaboracion', 'poe-mantencion',
+    'poe-transporte', 'poe-servicio', 'poe-lavado-ollas-vajilla', 'poe-control-calidad', 'poe-ppt'
+  ]
+  const maModules = ['MA'];
+  const docModules = ['doc'];
+  const lumModules = ['poes-superficies'];
+  const traModules = [
+    'poes-higiene-empleados', 'poe-preelaboraciones', 'poe-elaboracion',
+    'poe-mantencion', 'poe-transporte', 'poe-servicio', 'doc'
+  ]
+
+  const calcularPromedioGrupo = (modulos: string[]) => {
+    const modulosDelGrupo = moduleData.filter((mod) => modulos.includes(mod.moduleName));
+    const total = modulosDelGrupo.reduce((acc, curr) => acc + curr.percentage, 0);
+    return modulosDelGrupo.length > 0 ? total / modulosDelGrupo.length : 0;
+  }
+
+  const groupedData = [
+    { groupName: 'BPM', average: calcularPromedioGrupo(bpmModules) },
+    { groupName: 'POES', average: calcularPromedioGrupo(poesModules) },
+    { groupName: 'POE', average: calcularPromedioGrupo(poeModules) },
+    { groupName: 'MA', average: calcularPromedioGrupo(maModules) },
+    { groupName: 'DOC', average: calcularPromedioGrupo(docModules) },
+    { groupName: 'LUM', average: calcularPromedioGrupo(lumModules) },
+    { groupName: 'TRA', average: calcularPromedioGrupo(traModules) },
+  ]
+
+  const groupNames = groupedData.map((group) => group.groupName)
+  const groupAverages = groupedData.map((group) => group.average)
 
   return (
     <div className="bpm-graph-container">
-      <h3>Gráfico de Promedios en 3D BPM</h3>
+      <h3>Gráfico de Promedios por Grupo en 3D BPM</h3>
       <Plot
         data={[
           {
             type: 'bar',
-            x: moduleNames,
-            y: percentages,
+            x: groupNames,
+            y: groupAverages,
             marker: {
               color: 'rgba(75, 192, 192, 0.6)',
             },
           },
         ]}
         layout={{
-          title: 'Promedio de Respuestas por Módulo',
+          title: 'Promedio de Respuestas por Grupo',
           scene: {
-            xaxis: { title: 'Módulos' },
+            xaxis: { title: 'Grupos' },
             yaxis: { title: 'Porcentaje (%)' },
           },
           autosize: true,

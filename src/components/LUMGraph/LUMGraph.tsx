@@ -5,9 +5,14 @@ interface BPMGraphProps {
   moduleData: { moduleName: string, percentage: number }[];
 }
 
-const LUMraph: React.FC<BPMGraphProps> = ({ moduleData }) => {
-  const moduleNames = moduleData.map((module) => module.moduleName);
-  const percentages = moduleData.map((module) => module.percentage);
+const LUMGraph: React.FC<BPMGraphProps> = ({ moduleData }) => {
+  const lumModules = ['poes-superficies'];
+
+
+  const lumData = moduleData.filter((module) => lumModules.includes(module.moduleName));
+
+  const moduleNames = lumData.map((module) => module.moduleName);
+  const percentages = lumData.map((module) => module.percentage);
 
   return (
     <div className="lum-graph-container">
@@ -24,7 +29,7 @@ const LUMraph: React.FC<BPMGraphProps> = ({ moduleData }) => {
           },
         ]}
         layout={{
-          title: 'Promedio de Respuestas por Módulo',
+          title: 'Promedio de Respuestas para LUM',
           scene: {
             xaxis: { title: 'Módulos' },
             yaxis: { title: 'Porcentaje (%)' },
@@ -35,6 +40,7 @@ const LUMraph: React.FC<BPMGraphProps> = ({ moduleData }) => {
         }}
       />
     </div>
-  )
+  );
 }
-export default LUMraph
+
+export default LUMGraph;
