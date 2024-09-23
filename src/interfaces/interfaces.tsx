@@ -18,11 +18,17 @@ export interface Answer {
   answer: string;
 }
 
+export interface IPhoto {
+  question: string;
+  photoUrl: string;
+}
+
 export interface IState {
   IsHero: Array<IQuestion>;
   auditSheetData: any;
   modules: IModule[];
   desviaciones?: Desviacion[];
+  photos: IPhoto[];
 }
 
 export interface IContextProps {
@@ -31,6 +37,7 @@ export interface IContextProps {
   addAnswers: (answers: Answer[]) => void;
   updateAuditSheetData: (data: IAuditSheetData) => void;
   addDesviacion: (data: Desviacion) => void;
+  addPhoto: (question: string, photoUrl: string) => void;
 }
 
 interface IAuditSheetData {

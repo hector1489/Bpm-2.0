@@ -31,7 +31,8 @@ const AppProvider: React.FC<IAppProviderProps> = ({ children }) => {
     IsHero: [],
     auditSheetData: {},
     modules: transformModules(modulesData),
-    desviaciones: []
+    desviaciones: [],
+    photos: []
   });
 
   useEffect(() => {
@@ -78,9 +79,23 @@ const AppProvider: React.FC<IAppProviderProps> = ({ children }) => {
       desviaciones: [...(prevState.desviaciones || []), data]
     }));
   };
+
+  const addPhoto = (question: string, photoUrl: string) => {
+
+    if (!Array.isArray(state.photos)) {
+      state.photos = [];
+    }
+  
+    const updatedPhotos = [...state.photos, { question, photoUrl }];
+    setState(prevState => ({
+      ...prevState,
+      photos: updatedPhotos,
+    }));
+  };
+
   
   const contextValue = useMemo(
-    () => ({ state, setState, addAnswers, updateAuditSheetData, addDesviacion }),
+    () => ({ state, setState, addAnswers, updateAuditSheetData, addDesviacion, addPhoto }),
     [state]
   );
 

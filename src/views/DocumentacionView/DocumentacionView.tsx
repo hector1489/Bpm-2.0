@@ -52,25 +52,17 @@ const DocumentacionView: React.FC = () => {
   return (
     <div className="documentacion-container">
       <h3>Documentación</h3>
-      <div className="documentacion-graficos">
-        <div className="documentacion-grafico">
-          <BPMGraph moduleData={moduleData} />
-        </div>
-        <div className="documentacion-grafico">
-          <LUMGraph moduleData={moduleData} />
-        </div>
-        <div className="documentacion-grafico">
-          <ETAGraph moduleData={moduleData} />
-        </div>
-      </div>
-      <div className="documentacion-tablas">
-        <div className="documentacion-table">
-          <ETATable />
-        </div>
-        <div className="documentacion-table">
-          <DetailsTable />
-        </div>
-      </div>
+
+      <BPMGraph moduleData={moduleData} />
+
+      <LUMGraph moduleData={moduleData} />
+
+      <ETAGraph moduleData={moduleData} />
+
+      <ETATable />
+
+      <DetailsTable />
+
       <div className="buttons-summary">
         <button onClick={handleGoToHome}>Home</button>
       </div>
