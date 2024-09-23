@@ -91,6 +91,7 @@ const AppProvider: React.FC<IAppProviderProps> = ({ children }) => {
       ...prevState,
       photos: updatedPhotos,
     }));
+    console.log("Fotos actualizadas:", updatedPhotos);
   };
 
   

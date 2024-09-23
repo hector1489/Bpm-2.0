@@ -1,8 +1,8 @@
 import './Home.css'
 import { useNavigate } from 'react-router-dom'
-import logoFungi from '../../assets/img/logoFungily.png'
+import logoFungi from '../../assets/img/logo.jpg'
 
-const Home: React.FC  = () => {
+const Home: React.FC = () => {
   const navigate = useNavigate()
 
   const handleGoToAuditFormView = () => {
@@ -15,6 +15,14 @@ const Home: React.FC  = () => {
 
   const handleGoToDocumentacionView = () => {
     navigate('/documentacion')
+  }
+
+  const handleGoToEvidenciaFotografica = () => {
+    navigate('/evidencia-fotografica')
+  }
+
+  const handleGoToAnalisis = () => {
+    navigate('/analisis')
   }
 
   return (
@@ -36,68 +44,64 @@ const Home: React.FC  = () => {
       </div>
 
       <div className="container">
-        
-          <h2 className="text-center">Panel de Control</h2>
-          <div className="card-grid mt-4">
 
-            <button className="card" onClick={handleGoToAuditFormView}>
-         
-                <div className="card-icon" >
-                  <i className="fas fa-utensils"></i>
-                </div >
-                <div className="card-title">Auditoría Alimentos</div>
-        
-            </button>
-            <button className="card" onClick={handleGoToControlDesviaciones}>
-                <div className="card-icon">
-                  <i className="fas fa-exclamation-circle"></i>
-                </div>
-                <div className="card-title">Control Desviaciones</div>
-            </button>
-            <button className="card">
-              <a href="construccion.html">
-                <div className="card-icon">
-                  <i className="fas fa-broom"></i>
-                </div>
-                <div className="card-title">Auditoría Aseo</div>
-              </a>
-            </button>
-            <button className="card" onClick={handleGoToDocumentacionView}>
-                <div className="card-icon">
-                  <i className="fas fa-file-alt"></i>
-                </div>
-                <div className="card-title">Documentación</div>
-            </button>
-            <button className="card">
-              <a href="resumeneje.html">
-                <div className="card-icon">
-                  <i className="fas fa-chart-line"></i>
-                </div>
-                <div className="card-title">Análisis</div>
-              </a>
-            </button>
-            <button className="card">
-              <div className="card-icon">
-                <i className="fas fa-shield-alt"></i>
-              </div>
-              <div className="card-title">Seguridad</div>
-            </button>
-            <button className="card">
-              <a href="capture.html">
-                <div className="card-icon">
-                  <i className="fas fa-images"></i>
-                </div>
-                <div className="card-title"> Panel de Incidencias Fotografica</div>
-              </a>
-            </button>
-            <button className="card">
-              <div className="card-icon">
-                <i className="fas fa-wifi"></i>
-              </div>
-              <div className="card-title">Conectividad</div>
-            </button>
+        <h2 className="text-center">Panel de Control</h2>
+        <div className="card-grid mt-4">
 
-          </div>
+          <button className="card" onClick={handleGoToAuditFormView}>
+
+            <div className="card-icon" >
+              <i className="fas fa-utensils"></i>
+            </div >
+            <div className="card-title">Auditoría Alimentos</div>
+
+          </button>
+          <button className="card" onClick={handleGoToControlDesviaciones}>
+            <div className="card-icon">
+              <i className="fas fa-exclamation-circle"></i>
+            </div>
+            <div className="card-title">Control Desviaciones</div>
+          </button>
+          <button className="card">
+            <a href="construccion.html">
+              <div className="card-icon">
+                <i className="fas fa-broom"></i>
+              </div>
+              <div className="card-title">Auditoría Aseo</div>
+            </a>
+          </button>
+          <button className="card" onClick={handleGoToDocumentacionView}>
+            <div className="card-icon">
+              <i className="fas fa-file-alt"></i>
+            </div>
+            <div className="card-title">Documentación</div>
+          </button>
+          <button className="card" onClick={handleGoToAnalisis}>
+            <div className="card-icon">
+              <i className="fas fa-chart-line"></i>
+            </div>
+            <div className="card-title">Análisis</div>
+          </button>
+          <button className="card">
+            <div className="card-icon">
+              <i className="fas fa-shield-alt"></i>
+            </div>
+            <div className="card-title">Seguridad</div>
+          </button>
+          <button className="card" onClick={handleGoToEvidenciaFotografica}>
+            <div className="card-icon">
+              <i className="fas fa-images"></i>
+            </div>
+            <div className="card-title"> Panel de Incidencias Fotograficas</div>
+          </button>
+          <button className="card">
+            <div className="card-icon">
+              <i className="fas fa-wifi"></i>
+            </div>
+            <div className="card-title">Conectividad</div>
+          </button>
+
+        </div>
       </div>
     </div>
 

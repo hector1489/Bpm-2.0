@@ -1,8 +1,8 @@
-import { useState, useContext, useRef } from 'react';
-import { AppContext } from '../../context/GlobalState';
-import './AuditForm.css';
-import { Answer } from '../../interfaces/interfaces';
-import { useNavigate } from 'react-router-dom';
+import { useState, useContext, useRef } from 'react'
+import { AppContext } from '../../context/GlobalState'
+import './AuditForm.css'
+import { Answer } from '../../interfaces/interfaces'
+import { useNavigate } from 'react-router-dom'
 
 const AuditForm: React.FC = () => {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
@@ -62,9 +62,12 @@ const AuditForm: React.FC = () => {
       const stream = await navigator.mediaDevices.getUserMedia(constraints);
       if (videoRef.current) {
         videoRef.current.srcObject = stream;
+        videoRef.current.onloadedmetadata = () => {
+          videoRef.current!.play();
+        };
       }
   
-      capturePhoto(stream);
+      setTimeout(() => capturePhoto(stream), 1000);
     } catch (err) {
       console.error("Error al acceder a la cámara: ", err);
       alert("No se pudo acceder a la cámara.");
@@ -80,11 +83,12 @@ const AuditForm: React.FC = () => {
       if (context) {
         canvas.width = video.videoWidth;
         canvas.height = video.videoHeight;
+
         context.drawImage(video, 0, 0, canvas.width, canvas.height);
         const photoUrl = canvas.toDataURL('image/png');
   
+        console.log("Captura exitosa:", currentQuestion?.question, photoUrl);
         addPhoto(currentQuestion?.question || '', photoUrl);
-        
         setPhotoTaken(true);
       }
     }
@@ -143,7 +147,7 @@ const AuditForm: React.FC = () => {
         {photoTaken && <p>Foto tomada, puede avanzar a la siguiente pregunta.</p>}
       </div>
     </form>
-  );
+  )
 }
 
-export default AuditForm;
+export default AuditForm
