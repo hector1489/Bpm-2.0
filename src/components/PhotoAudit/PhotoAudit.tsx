@@ -9,6 +9,8 @@ const PhotoAudit: React.FC<PhotoGalleryProps> = ({ photos }) => {
 
 
   return (
+    <div className="photo-audit-container">
+      <h4>Capturas</h4>
     <div className="photo-gallery">
       {photos.length === 0 ? (
         <p>No hay fotos capturadas.</p>
@@ -20,6 +22,7 @@ const PhotoAudit: React.FC<PhotoGalleryProps> = ({ photos }) => {
           </div>
         ))
       )}
+    </div>
     </div>
   );
 }

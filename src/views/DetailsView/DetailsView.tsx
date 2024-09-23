@@ -25,7 +25,6 @@ const DetailsView: React.FC = () => {
         <DetailsTable />
       </div>
       <div>
-        <h4>Fotos Capturadas</h4>
         <PhotoAudit photos={state.photos} />
       </div>
       <div>
