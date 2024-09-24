@@ -16,6 +16,12 @@ const KPIGraph: React.FC<BPMGraphProps> = ({ moduleData }) => {
   ];
   const Documentos = ['doc'];
 
+  const getColorByPercentage = (percentage: number) => {
+    if (percentage >= 90) return 'green';
+    if (percentage >= 75) return 'yellow';
+    return 'red';
+  }
+
   const filterByModules = (modules: string[]) =>
     moduleData.filter((module) => modules.includes(module.moduleName));
 
@@ -36,6 +42,8 @@ const KPIGraph: React.FC<BPMGraphProps> = ({ moduleData }) => {
   const moduleNames = ['Transporte', 'Servicios', 'Documentos', 'Promedio General'];
   const percentages = [transporteAvg, serviciosAvg, documentosAvg, promedioGeneral];
 
+  const barColors = percentages.map((percentage) => getColorByPercentage(percentage));
+
   return (
     <div className="kpi-graph-container">
       <h4>Gráfico de Promedios en 3D KPI</h4>
@@ -46,7 +54,7 @@ const KPIGraph: React.FC<BPMGraphProps> = ({ moduleData }) => {
             x: moduleNames,
             y: percentages,
             marker: {
-              color: 'rgba(75, 192, 192, 0.6)',
+              color: barColors,
             },
           },
         ]}

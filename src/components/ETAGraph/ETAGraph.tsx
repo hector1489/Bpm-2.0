@@ -34,6 +34,12 @@ const ETAGraph: React.FC<BPMGraphProps> = () => {
     'CAP 102. Existe un programa escrito de capacitación del personal de aseo en técnicas de limpieza y sus registros correspondientes. (Art. 41, 69)'
   ];
 
+  const getColorByPercentage = (percentage: number) => {
+    if (percentage >= 90) return 'green';
+    if (percentage >= 75) return 'yellow';
+    return 'red';
+  }
+
   const etaData = state.IsHero
     .filter((question) => questionsEta.includes(question.question))
     .map((question) => {
@@ -53,6 +59,8 @@ const ETAGraph: React.FC<BPMGraphProps> = () => {
   const questionNames = etaData.map((data) => data.shortQuestion);
   const percentages = etaData.map((data) => data.percentage);
 
+  const barColors = percentages.map((percentage) => getColorByPercentage(percentage));
+
   return (
     <div className="eta-graph-container">
       <h4>Gráfico de Promedios en 3D ETA</h4>
@@ -63,7 +71,7 @@ const ETAGraph: React.FC<BPMGraphProps> = () => {
             x: questionNames,
             y: percentages,
             marker: {
-              color: 'rgba(75, 192, 192, 0.6)',
+              color: barColors, // Use dynamic colors for each bar
             },
           },
         ]}

@@ -17,6 +17,12 @@ const LUMGraph: React.FC<BPMGraphProps> = () => {
   const { state } = context;
   const lumQuestion= ['LUM 21. Toma de muestra y uso de luminómetro:'];
 
+  const getColorByPercentage = (percentage: number) => {
+    if (percentage >= 90) return 'green';
+    if (percentage >= 75) return 'yellow';
+    return 'red';
+  }
+
   const etaData = state.IsHero
     .filter((question) => lumQuestion.includes(question.question))
     .map((question) => {
@@ -34,6 +40,8 @@ const LUMGraph: React.FC<BPMGraphProps> = () => {
   const questionNames = etaData.map((data) => data.shortQuestion);
   const percentages = etaData.map((data) => data.percentage);
 
+  const barColors = percentages.map((percentage) => getColorByPercentage(percentage));
+
   return (
     <div className="lum-graph-container">
       <h4>Gráfico de Promedios en 3D LUM</h4>
@@ -44,7 +52,7 @@ const LUMGraph: React.FC<BPMGraphProps> = () => {
             x: questionNames,
             y: percentages,
             marker: {
-              color: 'rgba(75, 192, 192, 0.6)',
+              color: barColors,
             },
           },
         ]}

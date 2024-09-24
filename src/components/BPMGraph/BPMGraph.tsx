@@ -29,6 +29,12 @@ const BPMGraph: React.FC<BPMGraphProps> = ({ moduleData }) => {
     return modulosDelGrupo.length > 0 ? total / modulosDelGrupo.length : 0;
   }
 
+  const getColorByPercentage = (percentage: number) => {
+    if (percentage >= 90) return 'green';
+    if (percentage >= 75) return 'yellow';
+    return 'red';
+  }
+
   const groupedData = [
     { groupName: 'BPM', average: calcularPromedioGrupo(bpmModules) },
     { groupName: 'POES', average: calcularPromedioGrupo(poesModules) },
@@ -41,6 +47,7 @@ const BPMGraph: React.FC<BPMGraphProps> = ({ moduleData }) => {
 
   const groupNames = groupedData.map((group) => group.groupName)
   const groupAverages = groupedData.map((group) => group.average)
+  const barColors = groupAverages.map((avg) => getColorByPercentage(avg))
 
   return (
     <div className="bpm-graph-container">
@@ -52,7 +59,7 @@ const BPMGraph: React.FC<BPMGraphProps> = ({ moduleData }) => {
             x: groupNames,
             y: groupAverages,
             marker: {
-              color: 'rgba(75, 192, 192, 0.6)',
+              color: barColors,
             },
           },
         ]}
