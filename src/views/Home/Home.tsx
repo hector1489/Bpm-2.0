@@ -1,29 +1,47 @@
 import './Home.css'
 import { useNavigate } from 'react-router-dom'
+import { useContext } from 'react'
 import logoFungi from '../../assets/img/logo.jpg'
+import { AppContext } from '../../context/GlobalState'
 
 const Home: React.FC = () => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
+  const context = useContext(AppContext);
+
+  if (!context) {
+    return <div>Error: Context is not available.</div>;
+  }
+
+  const { setState } = context;
+
+  const handleLogout = () => {
+    setState((prevState) => ({
+      ...prevState,
+      isAuthenticated: false,
+    }));
+
+    navigate('/login');
+  };
 
   const handleGoToAuditFormView = () => {
-    navigate('/formulario-auditoria')
-  }
+    navigate('/formulario-auditoria');
+  };
 
   const handleGoToControlDesviaciones = () => {
-    navigate('/desviaciones')
-  }
+    navigate('/desviaciones');
+  };
 
   const handleGoToDocumentacionView = () => {
-    navigate('/documentacion')
-  } 
+    navigate('/documentacion');
+  };
 
   const handleGoToEvidenciaFotografica = () => {
-    navigate('/evidencia-fotografica')
-  }
+    navigate('/evidencia-fotografica');
+  };
 
   const handleGoToAnalisis = () => {
-    navigate('/analisis')
-  }
+    navigate('/analisis');
+  };
 
   return (
     <div className="container">
@@ -38,23 +56,20 @@ const Home: React.FC = () => {
         <div className="icon">
           <i className="fas fa-cogs"></i>
         </div>
-        <div className="icon logout">
+        {/* Botón de Logout */}
+        <div className="icon logout" onClick={handleLogout}>
           <i className="fas fa-sign-out-alt"></i>
         </div>
       </div>
 
       <div className="container">
-
         <h2 className="text-center">Panel de Control</h2>
         <div className="card-grid mt-4">
-
           <button className="card" onClick={handleGoToAuditFormView}>
-
-            <div className="card-icon" >
+            <div className="card-icon">
               <i className="fas fa-utensils"></i>
-            </div >
+            </div>
             <div className="card-title">Auditoría Alimentos</div>
-
           </button>
           <button className="card" onClick={handleGoToControlDesviaciones}>
             <div className="card-icon">
@@ -92,7 +107,7 @@ const Home: React.FC = () => {
             <div className="card-icon">
               <i className="fas fa-images"></i>
             </div>
-            <div className="card-title"> Panel de Incidencias Fotograficas</div>
+            <div className="card-title">Panel de Incidencias Fotograficas</div>
           </button>
           <button className="card">
             <div className="card-icon">
@@ -100,14 +115,10 @@ const Home: React.FC = () => {
             </div>
             <div className="card-title">Conectividad</div>
           </button>
-
         </div>
       </div>
     </div>
-
   )
 }
 
 export default Home
-
-
