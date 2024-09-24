@@ -54,6 +54,18 @@ const Luminometry: React.FC = () => {
     navigate('/')
   }
 
+  const handleGoToDetails = () => {
+    navigate('/resumen-detalle');
+  }
+
+  const handleGoToETA = () => {
+    navigate('/seremi');
+  }
+
+  const handleGoToKPI = () => {
+    navigate('/kpi');
+  }
+
   return (
     <div className="lum-container">
       <h3>Resumen Luminometria</h3>
@@ -181,6 +193,9 @@ const Luminometry: React.FC = () => {
       </div>
       <div className="buttons-luminometry">
         <button onClick={handleGoToAuditSummary}>volver</button>
+        <button onClick={handleGoToDetails}>detalle</button>
+        <button onClick={handleGoToETA}>ETA</button>
+        <button onClick={handleGoToKPI}>KPI</button>
         <button onClick={handleGoToHome}>Home</button>
       </div>
     </div>

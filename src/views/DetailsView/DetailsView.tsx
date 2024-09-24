@@ -18,6 +18,23 @@ const DetailsView: React.FC = () => {
     navigate('/resumen-auditoria');
   };
 
+  const handleGoToHome = () => {
+    navigate('/');
+  };
+
+  const handleGoToLuminometry = () => {
+    navigate('/luminometria');
+  };
+
+  const handleGoToETA = () => {
+    navigate('/seremi');
+  };
+
+  const handleGoToKPI = () => {
+    navigate('/kpi');
+  };
+
+
   return (
     <div className="detail-container">
       <h3>Detalle</h3>
@@ -32,6 +49,10 @@ const DetailsView: React.FC = () => {
       </div>
       <div className="detail-button">
         <button onClick={handleGoToAuditSummary}>Volver</button>
+        <button onClick={handleGoToLuminometry}>Luminometria</button>
+        <button onClick={handleGoToETA}>ETA</button>
+        <button onClick={handleGoToKPI}>KPI</button>
+        <button onClick={handleGoToHome}>Home</button>
       </div>
     </div>
   );

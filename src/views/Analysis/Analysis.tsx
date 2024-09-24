@@ -2,7 +2,9 @@ import './Analysis.css'
 import { useNavigate } from 'react-router-dom'
 import { useContext } from 'react'
 import { AppContext } from '../../context/GlobalState'
-import { KPIGraph } from '../../components'
+import { BPMGraph, ETAGraph, KPIGraph, LUMGraph } from '../../components'
+import jsPDF from 'jspdf'
+import html2canvas from 'html2canvas'
 
 const Analysis: React.FC = () => {
   const navigate = useNavigate()
@@ -13,7 +15,6 @@ const Analysis: React.FC = () => {
   }
 
   const { state } = context
-
 
   const calculatePercentage = (moduleId: number): number => {
     try {
@@ -50,12 +51,54 @@ const Analysis: React.FC = () => {
     navigate('/')
   }
 
+  const handleDownloadPDF = () => {
+    const graphs = [
+      { id: 'kpi-graph', title: 'KPI Graph' },
+      { id: 'bpm-graph', title: 'BPM Graph' },
+      { id: 'lum-graph', title: 'LUM Graph' },
+      { id: 'eta-graph', title: 'ETA Graph' }
+    ]
+
+    const pdf = new jsPDF('p', 'mm', 'a4');
+    
+    const promises = graphs.map((graph, index) => {
+      const element = document.getElementById(graph.id) as HTMLElement;
+      return html2canvas(element).then(canvas => {
+        const imgData = canvas.toDataURL('image/png');
+        const imgWidth = 210;
+        const imgHeight = (canvas.height * imgWidth) / canvas.width;
+        
+        if (index > 0) {
+          pdf.addPage();
+        }
+        pdf.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight);
+      });
+    });
+
+    Promise.all(promises).then(() => {
+      pdf.save('graphs-analysis.pdf');
+    });
+  }
+
   return (
     <div className="analysis-container">
       <h3>Analisis</h3>
-      <KPIGraph moduleData={moduleData} />
+      <div id="kpi-graph">
+        <KPIGraph moduleData={moduleData} />
+      </div>
+      <div id="bpm-graph">
+        <BPMGraph moduleData={moduleData} />
+      </div>
+      <div id="lum-graph">
+        <LUMGraph moduleData={moduleData} />
+      </div>
+      <div id="eta-graph">
+        <ETAGraph moduleData={moduleData} />
+      </div>
+
       <div className="buttons-luminometry">
         <button onClick={handleGoToHome}>Home</button>
+        <button onClick={handleDownloadPDF}>Download PDF</button>
       </div>
     </div>
   )

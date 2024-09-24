@@ -38,6 +38,7 @@ export interface IContextProps {
   updateAuditSheetData: (data: IAuditSheetData) => void;
   addDesviacion: (data: Desviacion) => void;
   addPhoto: (question: string, photoUrl: string) => void;
+  removePhoto: (photoUrl: string) => void;
 }
 
 interface IAuditSheetData {

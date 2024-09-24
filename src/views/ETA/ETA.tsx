@@ -39,12 +39,12 @@ const ETA: React.FC = () => {
       console.error('Error calculating percentage for module:', moduleId, error);
       return 100;
     }
-  };
+  }
 
   const moduleData = state.modules.map((module) => ({
     moduleName: module.module,
     percentage: calculatePercentage(module.id),
-  }));
+  }))
 
 
   const handleGoToAuditSummary = () => {
@@ -55,6 +55,18 @@ const ETA: React.FC = () => {
     navigate('/')
   }
 
+  const handleGoToDetails = () => {
+    navigate('/resumen-detalle');
+  }
+
+  const handleGoToLuminometry = () => {
+    navigate('/luminometria');
+  }
+
+  const handleGoToKPI = () => {
+    navigate('/kpi');
+  }
+
   return (
     <div className="eta-container">
       <h3>Resumen ETA</h3>
@@ -62,6 +74,9 @@ const ETA: React.FC = () => {
       <ETATable />
       <div className="buttons-luminometry">
         <button onClick={handleGoToAuditSummary}>volver</button>
+        <button onClick={handleGoToDetails}>detalle</button>
+        <button onClick={handleGoToLuminometry}>Luminometria</button>
+        <button onClick={handleGoToKPI}>KPI</button>
         <button onClick={handleGoToHome}>Home</button>
       </div>
     </div>

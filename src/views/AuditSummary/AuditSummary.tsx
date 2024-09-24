@@ -1,8 +1,8 @@
-import { useNavigate } from 'react-router-dom';
-import './AuditSummary.css';
-import {AverageModules , BPMGraph, Summary} from '../../components/index';
-import { useContext } from 'react';
-import { AppContext } from '../../context/GlobalState';
+import { useNavigate } from 'react-router-dom'
+import './AuditSummary.css'
+import { AverageModules, BPMGraph, Summary } from '../../components/index'
+import { useContext } from 'react'
+import { AppContext } from '../../context/GlobalState'
 
 const AuditSummary: React.FC = () => {
   const navigate = useNavigate();
@@ -38,32 +38,32 @@ const AuditSummary: React.FC = () => {
       console.error('Error calculating percentage for module:', moduleId, error);
       return 100;
     }
-  };
+  }
 
   const moduleData = state.modules.map((module) => ({
     moduleName: module.module,
     percentage: calculatePercentage(module.id),
-  }));
+  }))
 
   const handleGoToDetails = () => {
     navigate('/resumen-detalle');
-  };
+  }
 
   const handleGoToHome = () => {
     navigate('/');
-  };
+  }
 
   const handleGoToLuminometry = () => {
     navigate('/luminometria');
-  };
+  }
 
   const handleGoToETA = () => {
     navigate('/seremi');
-  };
+  }
 
   const handleGoToKPI = () => {
     navigate('/kpi');
-  };
+  }
 
   return (
     <div className="summary-container">
@@ -79,7 +79,7 @@ const AuditSummary: React.FC = () => {
         <button onClick={handleGoToHome}>Home</button>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default AuditSummary;
+export default AuditSummary

@@ -54,6 +54,18 @@ const KPI: React.FC = () => {
     navigate('/')
   }
 
+  const handleGoToDetails = () => {
+    navigate('/resumen-detalle');
+  }
+
+  const handleGoToLuminometry = () => {
+    navigate('/luminometria');
+  }
+
+  const handleGoToETA = () => {
+    navigate('/seremi');
+  }
+
   return (
     <div className="kpi-container">
       <h3>Resumen KPI</h3>
@@ -61,6 +73,9 @@ const KPI: React.FC = () => {
       <KPITable />
       <div className="buttons-luminometry">
         <button onClick={handleGoToAuditSummary}>volver</button>
+        <button onClick={handleGoToDetails}>detalle</button>
+        <button onClick={handleGoToLuminometry}>Luminometria</button>
+        <button onClick={handleGoToETA}>ETA</button>
         <button onClick={handleGoToHome}>Home</button>
       </div>
     </div>

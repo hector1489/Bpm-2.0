@@ -94,9 +94,18 @@ const AppProvider: React.FC<IAppProviderProps> = ({ children }) => {
     console.log("Fotos actualizadas:", updatedPhotos);
   };
 
+  const removePhoto = (photoUrl: string) => {
+    const updatedPhotos = state.photos.filter(photo => photo.photoUrl !== photoUrl);
+  
+    setState(prevState => ({
+      ...prevState,
+      photos: updatedPhotos,
+    }));
+  };
+
   
   const contextValue = useMemo(
-    () => ({ state, setState, addAnswers, updateAuditSheetData, addDesviacion, addPhoto }),
+    () => ({ state, setState, addAnswers, updateAuditSheetData, addDesviacion, addPhoto, removePhoto }),
     [state]
   );
 

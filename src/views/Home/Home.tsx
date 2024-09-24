@@ -15,7 +15,7 @@ const Home: React.FC = () => {
 
   const handleGoToDocumentacionView = () => {
     navigate('/documentacion')
-  }
+  } 
 
   const handleGoToEvidenciaFotografica = () => {
     navigate('/evidencia-fotografica')
