@@ -11,13 +11,21 @@ const AuditSheet: React.FC = () => {
     navigate('/auditoria')
   }
 
-
-
   if (!context) {
     throw new Error('AppContext must be used within an AppProvider')
   }
 
   const { updateAuditSheetData } = context
+
+  // Obtener la fecha actual y formatearla
+  const getCurrentDate = () => {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, '0');
+    const day = String(today.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  };
+
   const [formValues, setFormValues] = useState({
     nombreEstablecimiento: '',
     numeroAuditoria: '',
@@ -25,7 +33,7 @@ const AuditSheet: React.FC = () => {
     administradorEstablecimiento: '',
     supervisorEstablecimiento: '',
     auditorEmail: '',
-    fechaAuditoria: ''
+    fechaAuditoria: getCurrentDate() // Inicializar con la fecha actual
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -38,8 +46,6 @@ const AuditSheet: React.FC = () => {
     handleGoToAuditoria();
     alert('Datos guardados exitosamente');
   };
-
-
 
   return (
     <div id="module-ficha" className="module-section">
