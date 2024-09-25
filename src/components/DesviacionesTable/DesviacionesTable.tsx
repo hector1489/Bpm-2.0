@@ -10,6 +10,7 @@ interface ISelectedRow {
   auditor: string;
   email: string;
   nombreEstablecimiento: string;
+  responsableDelProblema: string;
 }
 
 const DEFAULT_ANSWER = "Sin respuesta";
@@ -43,6 +44,7 @@ const DesviacionesTable: React.FC = () => {
     const email = state.auditSheetData.auditorEmail;
     const auditor = state.userName || '';
     const nombreEstablecimiento = state.auditSheetData.nombreEstablecimiento;
+    const responsableDelProblema = state.auditSheetData.supervisorEstablecimiento;
 
     const rowsToAdd = state.IsHero
       .filter((hero) => extractPercentage(hero.answer ?? DEFAULT_ANSWER) < 100)
@@ -54,6 +56,7 @@ const DesviacionesTable: React.FC = () => {
         auditor: auditor,
         email: email,
         nombreEstablecimiento: nombreEstablecimiento,
+        responsableDelProblema
       }));
 
     setSelectedRows(rowsToAdd);
@@ -76,6 +79,23 @@ const DesviacionesTable: React.FC = () => {
     []
   )
 
+  const getColorByPercentage = (percentage: number) => {
+    if (percentage >= 90) return 'green';
+    if (percentage >= 75) return 'yellow';
+    return 'red';
+  }
+
+  const renderCriticidadCircle = (answer: string) => {
+    const percentage = extractPercentage(answer);
+    const color = getColorByPercentage(percentage);
+    return (
+      <span 
+        className="criticidad-circle" 
+        style={{ backgroundColor: color }} 
+      />
+    );
+  }
+
   return (
     <div className="desviaciones-tabla-container">
       <table id="tabla-desviaciones">
@@ -88,6 +108,8 @@ const DesviacionesTable: React.FC = () => {
             <th>AUDITOR</th>
             <th>EMAIL</th>
             <th>NOMBRE DEL ESTABLECIMIENTO</th>
+            <th>CRITICIDAD</th>
+            <th>RESPONSABLE</th>
             <th>ELIMINAR FILA</th>
           </tr>
         </thead>
@@ -101,6 +123,8 @@ const DesviacionesTable: React.FC = () => {
               <td>{row.auditor}</td>
               <td>{row.email}</td>
               <td>{row.nombreEstablecimiento}</td>
+              <td>{renderCriticidadCircle(row.respuesta)}</td>
+              <td>{row.responsableDelProblema}</td>
               <td>
                 <button onClick={() => removeRow(index)}>Eliminar</button>
               </td>
@@ -116,4 +140,4 @@ const DesviacionesTable: React.FC = () => {
   )
 }
 
-export default DesviacionesTable
+export default DesviacionesTable;

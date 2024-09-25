@@ -33,7 +33,7 @@ const AuditSheet: React.FC = () => {
     administradorEstablecimiento: '',
     supervisorEstablecimiento: '',
     auditorEmail: '',
-    fechaAuditoria: getCurrentDate() // Inicializar con la fecha actual
+    fechaAuditoria: getCurrentDate()
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {

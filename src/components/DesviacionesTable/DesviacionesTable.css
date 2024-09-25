@@ -88,3 +88,10 @@
 #tabla-desviaciones tbody td:last-child button:hover {
   background-color: #ff0000;
 }
+
+.criticidad-circle {
+  display: inline-block;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+}
