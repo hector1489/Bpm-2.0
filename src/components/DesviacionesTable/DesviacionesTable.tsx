@@ -7,6 +7,7 @@ interface ISelectedRow {
   pregunta: string;
   respuesta: string;
   fecha: string;
+  auditor: string;
   email: string;
   nombreEstablecimiento: string;
 }
@@ -40,6 +41,7 @@ const DesviacionesTable: React.FC = () => {
 
   const addAllRows = useCallback(() => {
     const email = state.auditSheetData.auditorEmail;
+    const auditor = state.userName || '';
     const nombreEstablecimiento = state.auditSheetData.nombreEstablecimiento;
 
     const rowsToAdd = state.IsHero
@@ -49,6 +51,7 @@ const DesviacionesTable: React.FC = () => {
         pregunta: hero.question,
         respuesta: hero.answer ?? DEFAULT_ANSWER,
         fecha: getCurrentDate(),
+        auditor: auditor,
         email: email,
         nombreEstablecimiento: nombreEstablecimiento,
       }));
@@ -82,6 +85,7 @@ const DesviacionesTable: React.FC = () => {
             <th>PREGUNTAS AUDITADAS</th>
             <th>CRITERIO</th>
             <th>FECHA DE INGRESO</th>
+            <th>AUDITOR</th>
             <th>EMAIL</th>
             <th>NOMBRE DEL ESTABLECIMIENTO</th>
             <th>ELIMINAR FILA</th>
@@ -94,6 +98,7 @@ const DesviacionesTable: React.FC = () => {
               <td>{row.pregunta}</td>
               <td>{row.respuesta}</td>
               <td>{row.fecha}</td>
+              <td>{row.auditor}</td>
               <td>{row.email}</td>
               <td>{row.nombreEstablecimiento}</td>
               <td>

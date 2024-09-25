@@ -27,17 +27,17 @@ const LoginForm: React.FC = () => {
     const isAuthenticated = name === 'admin' && password === 'admin';
 
     if (isAuthenticated) {
-
       setState((prevState) => ({
         ...prevState,
         isAuthenticated: true,
+        userName: name,
       }));
 
       navigate('/');
     } else {
       setErrorMessage('Nombre de usuario o contraseña incorrectos.');
     }
-  }
+  };
 
   return (
     <div className="login-container">

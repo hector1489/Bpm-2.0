@@ -32,7 +32,8 @@ const AppProvider: React.FC<IAppProviderProps> = ({ children }) => {
     auditSheetData: {},
     modules: transformModules(modulesData),
     desviaciones: [],
-    photos: []
+    photos: [],
+    userName: '', 
   });
 
   useEffect(() => {

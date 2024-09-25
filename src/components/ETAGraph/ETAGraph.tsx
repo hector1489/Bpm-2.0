@@ -71,7 +71,7 @@ const ETAGraph: React.FC<BPMGraphProps> = () => {
             x: questionNames,
             y: percentages,
             marker: {
-              color: barColors, // Use dynamic colors for each bar
+              color: barColors,
             },
           },
         ]}

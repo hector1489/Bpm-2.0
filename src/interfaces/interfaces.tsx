@@ -29,6 +29,7 @@ export interface IState {
   modules: IModule[];
   desviaciones?: Desviacion[];
   photos: IPhoto[];
+  userName?: string; 
 }
 
 export interface IContextProps {
