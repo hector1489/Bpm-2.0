@@ -3,6 +3,8 @@ import { useState, useContext } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { AppContext } from '../../context/GlobalState'
 
+const loginUrl = 'https://bpm-backend.onrender.com/login'
+
 const LoginForm: React.FC = () => {
   const context = useContext(AppContext);
   const navigate = useNavigate();
@@ -16,7 +18,7 @@ const LoginForm: React.FC = () => {
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (!name || !password) {
@@ -24,18 +26,36 @@ const LoginForm: React.FC = () => {
       return;
     }
 
-    const isAuthenticated = name === 'admin' && password === 'admin';
+    try {
+      const response = await fetch(loginUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          username: name,
+          password: password,
+        }),
+      });
 
-    if (isAuthenticated) {
-      setState((prevState) => ({
-        ...prevState,
-        isAuthenticated: true,
-        userName: name,
-      }));
+      const data = await response.json();
 
-      navigate('/');
-    } else {
-      setErrorMessage('Nombre de usuario o contraseña incorrectos.');
+      if (response.ok) {
+        // Si la autenticación fue exitosa
+        setState((prevState) => ({
+          ...prevState,
+          isAuthenticated: true,
+          userName: name,
+        }));
+
+        navigate('/');
+      } else {
+        // Si el backend devuelve un error
+        setErrorMessage(data.message || 'Nombre de usuario o contraseña incorrectos.');
+      }
+    } catch (error) {
+      console.error('Error en la solicitud de inicio de sesión:', error);
+      setErrorMessage('Ocurrió un error al intentar iniciar sesión.');
     }
   };
 
