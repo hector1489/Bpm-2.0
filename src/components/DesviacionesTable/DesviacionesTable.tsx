@@ -1,6 +1,8 @@
 import './DesviacionesTable.css'
 import { useContext, useState, useEffect, useCallback } from 'react'
 import { AppContext } from '../../context/GlobalState'
+import { obtenerTodasLasAccionesDesdeAPI } from '../../utils/apiUtils'
+import { extractPercentage, getCurrentDate, estados, calculateSolutionDate } from '../../utils/utils';
 
 interface ISelectedRow {
   numeroRequerimiento: number;
@@ -15,60 +17,10 @@ interface ISelectedRow {
   solucionProgramada?: string;
   accionesCorrectivas?: string;
   estado?: string;
+  photoUrl: string;
 }
 
 const DEFAULT_ANSWER = "Sin respuesta";
-
-// Función para obtener datos desde la API
-async function obtenerTodasLasAccionesDesdeAPI() {
-  try {
-    const response = await fetch('https://bpm-backend.onrender.com/accion-correctivas');
-    if (!response.ok) {
-      throw new Error('Error al obtener datos de la API');
-    }
-    const data = await response.json();
-    return data; // Retornamos los datos obtenidos
-  } catch (error) {
-    console.error('Error:', error);
-    return [];
-  }
-}
-
-const extractPercentage = (answer: string): number => {
-  const match = answer.match(/^(\d+)%/);
-  return match ? parseInt(match[1], 10) : 100;
-}
-
-const getCurrentDate = (): string => {
-  const today = new Date();
-  const dd = String(today.getDate()).padStart(2, '0');
-  const mm = String(today.getMonth() + 1).padStart(2, '0');
-  const yyyy = today.getFullYear();
-
-  return `${dd}/${mm}/${yyyy}`;
-}
-
-const estados = ['Abierto', 'En Progreso', 'Cerrado'];
-
-const calculateSolutionDate = (criticidad: string): string => {
-  const today = new Date();
-  let daysToAdd = 0;
-
-  if (criticidad === 'green') {
-    daysToAdd = 45;
-  } else if (criticidad === 'yellow') {
-    daysToAdd = 30;
-  } else if (criticidad === 'red') {
-    daysToAdd = 15;
-  }
-
-  const solutionDate = new Date(today.setDate(today.getDate() + daysToAdd));
-  const dd = String(solutionDate.getDate()).padStart(2, '0');
-  const mm = String(solutionDate.getMonth() + 1).padStart(2, '0');
-  const yyyy = solutionDate.getFullYear();
-
-  return `${dd}/${mm}/${yyyy}`;
-}
 
 const DesviacionesTable: React.FC = () => {
   const context = useContext(AppContext);
@@ -82,11 +34,10 @@ const DesviacionesTable: React.FC = () => {
   const [selectedRows, setSelectedRows] = useState<ISelectedRow[]>([]);
   const [accionesCorrectivas, setAccionesCorrectivas] = useState<any[]>([]);
 
-  // Llamar a la API para obtener las acciones correctivas al montar el componente
   useEffect(() => {
     const fetchAccionesCorrectivas = async () => {
       const acciones = await obtenerTodasLasAccionesDesdeAPI();
-      setAccionesCorrectivas(acciones); // Actualizar el estado con los datos obtenidos
+      setAccionesCorrectivas(acciones);
     };
     fetchAccionesCorrectivas();
   }, []);
@@ -96,12 +47,15 @@ const DesviacionesTable: React.FC = () => {
     const auditor = state.userName || '';
     const nombreEstablecimiento = state.auditSheetData.nombreEstablecimiento;
     const responsableDelProblema = state.auditSheetData.supervisorEstablecimiento;
+    const photos = state.photos;
 
     const rowsToAdd = state.IsHero
       .filter((hero) => extractPercentage(hero.answer ?? DEFAULT_ANSWER) < 100)
       .map((hero) => {
         const criticidadColor = getColorByPercentage(extractPercentage(hero.answer ?? DEFAULT_ANSWER));
         const solucionProgramada = calculateSolutionDate(criticidadColor);
+        const photo = photos.find(photo => photo.question === hero.question);
+
         return {
           numeroRequerimiento: hero.id,
           pregunta: hero.question,
@@ -113,7 +67,8 @@ const DesviacionesTable: React.FC = () => {
           responsableDelProblema: responsableDelProblema,
           solucionProgramada,
           accionesCorrectivas: '',
-          estado: 'Abierto'
+          estado: 'Abierto',
+          photoUrl: photo ? photo.photoUrl : null || 'N/A'
         };
       });
 
@@ -186,17 +141,18 @@ const DesviacionesTable: React.FC = () => {
             <th>N° DE REQUERIMIENTO</th>
             <th>PREGUNTAS AUDITADAS</th>
             <th>CRITERIO</th>
-            <th>FECHA DE INGRESO</th>
-            <th>AUDITOR</th>
-            <th>EMAIL</th>
+            <th>RESPONSABLE</th>
             <th>NOMBRE DEL ESTABLECIMIENTO</th>
             <th>CRITICIDAD</th>
             <th>ACCIONES CORRECTIVAS</th>
-            <th>RESPONSABLE</th>
-            <th>FECHA DE RECEPCION</th>
+            <th>FECHA DE INGRESO</th>
             <th>SOLUCION PROGRAMADA</th>
             <th>ESTADO</th>
+            <th>FECHA DE RECEPCION</th>
             <th>CONTACTO CLIENTE</th>
+            <th>EVIDENCIA FOTOGRAFICA</th>
+            <th>AUDITOR</th>
+            <th>EMAIL</th>
             <th>ELIMINAR FILA</th>
           </tr>
         </thead>
@@ -206,9 +162,7 @@ const DesviacionesTable: React.FC = () => {
               <td>{row.numeroRequerimiento}</td>
               <td>{row.pregunta}</td>
               <td>{row.respuesta}</td>
-              <td>{row.fecha}</td>
-              <td>{row.auditor}</td>
-              <td>{row.email}</td>
+              <td>{row.responsableDelProblema}</td>
               <td>{row.nombreEstablecimiento}</td>
               <td>{renderCriticidadCircle(row.respuesta)}</td>
               <td>
@@ -222,7 +176,6 @@ const DesviacionesTable: React.FC = () => {
                   ))}
                 </select>
               </td>
-              <td>{row.responsableDelProblema}</td>
               <td>{row.fecha}</td>
               <td>{row.solucionProgramada}</td>
               <td>
@@ -235,6 +188,7 @@ const DesviacionesTable: React.FC = () => {
                   ))}
                 </select>
               </td>
+              <td>{row.fecha}</td>
               <td>
                 <input
                   type="text"
@@ -242,6 +196,19 @@ const DesviacionesTable: React.FC = () => {
                   onChange={(e) => handleClientContactChange(index, e.target.value)}
                 />
               </td>
+              <td>
+                {row.photoUrl ? (
+                  <img
+                    src={row.photoUrl}
+                    alt={`Evidencia de ${row.pregunta}`}
+                    style={{ width: '50px', height: 'auto' }}
+                  />
+                ) : (
+                  'N/A'
+                )}
+              </td>
+              <td>{row.auditor}</td>
+              <td>{row.email}</td>
               <td>
                 <button onClick={() => removeRow(index)}>Eliminar</button>
               </td>

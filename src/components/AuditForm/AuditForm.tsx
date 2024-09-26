@@ -87,7 +87,6 @@ const AuditForm: React.FC = () => {
         context.drawImage(video, 0, 0, canvas.width, canvas.height);
         const photoUrl = canvas.toDataURL('image/png');
   
-        console.log("Captura exitosa:", currentQuestion?.question, photoUrl);
         addPhoto(currentQuestion?.question || '', photoUrl);
         setPhotoTaken(true);
       }
