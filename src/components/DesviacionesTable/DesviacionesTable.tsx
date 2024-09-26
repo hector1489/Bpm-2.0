@@ -68,7 +68,7 @@ const DesviacionesTable: React.FC = () => {
           solucionProgramada,
           accionesCorrectivas: '',
           estado: 'Abierto',
-          photoUrl: photo ? photo.photoUrl : null || 'N/A'
+          photoUrl: photo ? (photo.photoUrl || 'N/A') : 'N/A'
         };
       });
 
