@@ -5,6 +5,6 @@ import react from '@vitejs/plugin-react-swc'
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react()],
-   base: "/Bpm-2.0"
+   base: process.env.NODE_ENV === 'production' ? '/Bpm-2.0/' : '/'
 })
  

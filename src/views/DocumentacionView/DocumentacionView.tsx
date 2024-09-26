@@ -1,14 +1,12 @@
-import { DetailsTable, ETAGraph, ETATable } from '../../components'
-import { useNavigate } from 'react-router-dom'
-import { useContext } from 'react'
-import { AppContext } from '../../context/GlobalState'
-import jsPDF from 'jspdf'
-import html2canvas from 'html2canvas'
-import './DocumentacionView.css'
+import { useNavigate } from 'react-router-dom';
+import { useContext, useState } from 'react';
+import { AppContext } from '../../context/GlobalState';
+import './DocumentacionView.css';
 
 const DocumentacionView: React.FC = () => {
   const navigate = useNavigate();
   const context = useContext(AppContext);
+  const [menuVisible, setMenuVisible] = useState(false);
 
   if (!context) {
     return <div>Error: Context is not available.</div>;
@@ -16,100 +14,56 @@ const DocumentacionView: React.FC = () => {
 
   const { state } = context;
 
-  const calculatePercentage = (moduleId: number): number => {
-    try {
-      const moduleQuestions = state.IsHero.filter(question => question.id === moduleId);
-      const totalQuestions = moduleQuestions.length;
-
-      if (totalQuestions === 0) {
-        return 100;
-      }
-
-      const totalPercentage = moduleQuestions.reduce((acc, question) => {
-        if (question.answer && typeof question.answer === 'string') {
-          const match = question.answer.match(/(\d+)%/);
-          const percentage = match ? parseInt(match[1], 10) : 0;
-          return acc + percentage;
-        } else {
-          return acc;
-        }
-      }, 0);
-
-      return totalPercentage / totalQuestions;
-    } catch (error) {
-      console.error('Error calculating percentage for module:', moduleId, error);
-      return 100;
-    }
-  }
-
-  const moduleData = state.modules.map((module) => ({
-    moduleName: module.module,
-    percentage: calculatePercentage(module.id),
-  }))
+  const numeroAuditoria = state.auditSheetData.numeroAuditoria
 
   const handleGoToHome = () => {
     navigate('/');
-  }
+  };
 
-  const handleDownloadPDF = async () => {
-    const doc = new jsPDF('p', 'mm', 'a4');
+  const toggleMenu = () => {
+    setMenuVisible(!menuVisible);
+  };
 
-    const graphElement = document.getElementById('etagrap-container');
-    if (graphElement) {
-      const canvas = await html2canvas(graphElement);
-      const graphImgData = canvas.toDataURL('image/png');
-      const imgWidth = 190;
-      const imgHeight = (canvas.height * imgWidth) / canvas.width;
-      doc.addImage(graphImgData, 'PNG', 10, 10, imgWidth, imgHeight);
-    }
+  const goToRoute1 = () => {
+    navigate('/resumen-auditoria');
+  };
 
-    doc.addPage();
+  const goToRoute2 = () => {
+    navigate('/analisis');
+  };
 
-    const etaTableElement = document.getElementById('etatable-container');
-    if (etaTableElement) {
-      const canvas = await html2canvas(etaTableElement);
-      const tableImgData = canvas.toDataURL('image/png');
-      const imgWidth = 190;
-      const imgHeight = (canvas.height * imgWidth) / canvas.width;
-      doc.addImage(tableImgData, 'PNG', 10, 10, imgWidth, imgHeight);
-    }
-
-    doc.addPage();
-
-    const detailsTableElement = document.getElementById('detailstable-container');
-    if (detailsTableElement) {
-      const canvas = await html2canvas(detailsTableElement);
-      const detailsImgData = canvas.toDataURL('image/png');
-      const imgWidth = 190;
-      const imgHeight = (canvas.height * imgWidth) / canvas.width;
-      doc.addImage(detailsImgData, 'PNG', 10, 10, imgWidth, imgHeight);
-    }
-
-    doc.save('documentacion.pdf');
-  }
 
   return (
     <div className="documentacion-container">
       <h3>Documentación</h3>
 
-      <div id="etagrap-container">
-        <ETAGraph moduleData={moduleData} />
-      </div>
+      <div className="doc-last-audit">
+        <h4>Ultima Auditoria : {numeroAuditoria}</h4>
+        <button className="card" onClick={toggleMenu}>
+          <div className="card-icon">
+            <i className="fa-solid fa-suitcase"></i>
+          </div>
+        </button>
 
-      <div id="etatable-container">
-        <ETATable />
-      </div>
-
-      <div id="detailstable-container">
-        <DetailsTable />
+        {menuVisible && (
+          <div className="dropdown-menu">
+            <button onClick={goToRoute1}>
+              <i className="fa-solid fa-file"></i>
+              Resumen Ejecutivo
+            </button>
+            <button onClick={goToRoute2}>
+            <i className="fa-solid fa-file"></i>
+              Informe Ejecutivo
+            </button>
+          </div>
+        )}
       </div>
 
       <div className="buttons-summary">
         <button onClick={handleGoToHome}>Home</button>
-        <button onClick={handleDownloadPDF}>Descargar en PDF</button>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default DocumentacionView
+export default DocumentacionView;

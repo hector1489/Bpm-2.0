@@ -80,6 +80,10 @@ const Analysis: React.FC = () => {
     });
   }
 
+  const handleGoToDoc = () => {
+    navigate('/documentacion');
+  }
+
   return (
     <div className="analysis-container">
       <h3>Analisis</h3>
@@ -99,6 +103,7 @@ const Analysis: React.FC = () => {
       <div className="buttons-luminometry">
         <button onClick={handleGoToHome}>Home</button>
         <button onClick={handleDownloadPDF}>Download PDF</button>
+        <button onClick={handleGoToDoc}>Volver</button>
       </div>
     </div>
   )

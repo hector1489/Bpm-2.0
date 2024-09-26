@@ -47,7 +47,7 @@ const AuditForm: React.FC = () => {
       setPhotoTaken(false);
     } else {
       addAnswers(updatedFormData);
-      navigate('/resumen-auditoria');
+      navigate('/');
     }
   };
 

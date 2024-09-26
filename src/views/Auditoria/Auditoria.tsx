@@ -11,16 +11,11 @@ const Auditoria: React.FC  = () => {
     navigate('/')
   }
 
-  const handleGoToAuditSummary = () => {
-    navigate('/resumen-auditoria')
-  }
-
   return (
     <div className="container-auditoria">
       <AuditForm />
       <div>
-      <button onClick={handleGoToHome}>volver</button>
-      <button onClick={handleGoToAuditSummary}>Resumen</button>
+      <button onClick={handleGoToHome}>Home</button>
       </div>
     </div>
   )

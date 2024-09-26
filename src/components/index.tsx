@@ -13,3 +13,4 @@ export { default as DesviacionesTable } from './DesviacionesTable/DesviacionesTa
 export { default as PhotoAudit } from './PhotoAudit/PhotoAudit'
 export { default as LoginForm } from './LoginForm/LoginForm'
 export { default as IncidentSummary } from './InciddentSummary/IncidentSummary'
+export { default as LastAudit } from './LastAudit/LastAudit'

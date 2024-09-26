@@ -65,6 +65,10 @@ const AuditSummary: React.FC = () => {
     navigate('/kpi');
   }
 
+  const handleGoToDoc = () => {
+    navigate('/documentacion');
+  }
+
   return (
     <div className="summary-container">
       <h3>Resumen</h3>
@@ -77,6 +81,7 @@ const AuditSummary: React.FC = () => {
         <button onClick={handleGoToETA}>ETA</button>
         <button onClick={handleGoToKPI}>KPI</button>
         <button onClick={handleGoToHome}>Home</button>
+        <button onClick={handleGoToDoc}>Volver</button>
       </div>
     </div>
   )
