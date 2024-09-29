@@ -33,7 +33,8 @@ const AppProvider: React.FC<IAppProviderProps> = ({ children }) => {
     modules: transformModules(modulesData),
     desviaciones: [],
     photos: [],
-    userName: '', 
+    userName: '',
+    authToken: null,
   });
 
   useEffect(() => {

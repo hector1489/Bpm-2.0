@@ -1,11 +1,10 @@
-import { useNavigate } from 'react-router-dom'
-import './AuditSummary.css'
-import { AverageModules, BPMGraph, Summary } from '../../components/index'
-import { useContext, useCallback } from 'react'
-import { AppContext } from '../../context/GlobalState'
-import { extractPercentage, getCurrentDate, calculateSolutionDate, getColorByPercentage } from '../../utils/utils'
-import { enviarDatosAuditoria } from '../../utils/apiUtils'
-
+import { useNavigate } from 'react-router-dom';
+import './AuditSummary.css';
+import { AverageModules, BPMGraph, Summary } from '../../components/index';
+import { useContext, useCallback } from 'react';
+import { AppContext } from '../../context/GlobalState';
+import { extractPercentage, getCurrentDate, calculateSolutionDate, getColorByPercentage } from '../../utils/utils';
+import { enviarDatosAuditoria } from '../../utils/apiUtils';
 
 const DEFAULT_ANSWER = "Sin respuesta";
 
@@ -57,14 +56,14 @@ const AuditSummary: React.FC = () => {
     const nombreEstablecimiento = state.auditSheetData.nombreEstablecimiento;
     const responsableDelProblema = state.auditSheetData.supervisorEstablecimiento;
     const photos = state.photos;
-
+  
     const desviaciones = state.IsHero
       .filter((hero) => extractPercentage(hero.answer ?? DEFAULT_ANSWER) < 100)
       .map((hero) => {
         const criticidadColor = getColorByPercentage(extractPercentage(hero.answer ?? DEFAULT_ANSWER));
         const solucionProgramada = calculateSolutionDate(criticidadColor);
         const photo = photos.find(photo => photo.question === hero.question);
-
+  
         return {
           numeroRequerimiento: hero.id,
           pregunta: hero.question,
@@ -80,10 +79,16 @@ const AuditSummary: React.FC = () => {
           photoUrl: photo ? (photo.photoUrl || 'N/A') : 'N/A'
         };
       });
-
+  
+    const authToken = state.authToken;
+  
+    if (!authToken) {
+      console.error('No se puede enviar desviaciones: el token de autenticación es null.');
+      return;
+    }
   
     try {
-      const result = await enviarDatosAuditoria(desviaciones);
+      const result = await enviarDatosAuditoria(desviaciones, authToken);
       console.log('Incidencias enviadas exitosamente:', result);
     } catch (error) {
       console.error('Error al enviar las incidencias:', error);
@@ -105,7 +110,7 @@ const AuditSummary: React.FC = () => {
         <button onClick={handleGoToHome}>Home</button>
       </div>
     </div>
-  )
+  );
 }
 
-export default AuditSummary
+export default AuditSummary;

@@ -39,18 +39,17 @@ const LoginForm: React.FC = () => {
       });
 
       const data = await response.json();
-
+      console.log(data);
       if (response.ok) {
-        // Si la autenticación fue exitosa
         setState((prevState) => ({
           ...prevState,
           isAuthenticated: true,
           userName: name,
+          authToken: data.token,
         }));
 
         navigate('/');
       } else {
-        // Si el backend devuelve un error
         setErrorMessage(data.message || 'Nombre de usuario o contraseña incorrectos.');
       }
     } catch (error) {
