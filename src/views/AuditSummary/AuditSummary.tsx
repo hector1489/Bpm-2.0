@@ -1,8 +1,13 @@
 import { useNavigate } from 'react-router-dom'
 import './AuditSummary.css'
 import { AverageModules, BPMGraph, Summary } from '../../components/index'
-import { useContext } from 'react'
+import { useContext, useCallback } from 'react'
 import { AppContext } from '../../context/GlobalState'
+import { extractPercentage, getCurrentDate, calculateSolutionDate, getColorByPercentage } from '../../utils/utils'
+import { enviarDatosAuditoria } from '../../utils/apiUtils'
+
+
+const DEFAULT_ANSWER = "Sin respuesta";
 
 const AuditSummary: React.FC = () => {
   const navigate = useNavigate();
@@ -43,12 +48,51 @@ const AuditSummary: React.FC = () => {
   const moduleData = state.modules.map((module) => ({
     moduleName: module.module,
     percentage: calculatePercentage(module.id),
-  }))
+  }));
+
+  // Función para recolectar desviaciones y enviarlas al backend
+  const handleSendIncidencias = useCallback(async () => {
+    const email = state.auditSheetData.auditorEmail;
+    const auditor = state.userName || '';
+    const nombreEstablecimiento = state.auditSheetData.nombreEstablecimiento;
+    const responsableDelProblema = state.auditSheetData.supervisorEstablecimiento;
+    const photos = state.photos;
+
+    const desviaciones = state.IsHero
+      .filter((hero) => extractPercentage(hero.answer ?? DEFAULT_ANSWER) < 100)
+      .map((hero) => {
+        const criticidadColor = getColorByPercentage(extractPercentage(hero.answer ?? DEFAULT_ANSWER));
+        const solucionProgramada = calculateSolutionDate(criticidadColor);
+        const photo = photos.find(photo => photo.question === hero.question);
+
+        return {
+          numeroRequerimiento: hero.id,
+          pregunta: hero.question,
+          respuesta: hero.answer ?? DEFAULT_ANSWER,
+          fecha: getCurrentDate(),
+          auditor,
+          email,
+          nombreEstablecimiento,
+          responsableDelProblema,
+          solucionProgramada,
+          accionesCorrectivas: '',
+          estado: 'Abierto',
+          photoUrl: photo ? (photo.photoUrl || 'N/A') : 'N/A'
+        };
+      });
+
+  
+    try {
+      const result = await enviarDatosAuditoria(desviaciones);
+      console.log('Incidencias enviadas exitosamente:', result);
+    } catch (error) {
+      console.error('Error al enviar las incidencias:', error);
+    }
+  }, [state]);
 
   const handleGoToHome = () => {
     navigate('/');
   }
-
 
   return (
     <div className="summary-container">
@@ -57,7 +101,7 @@ const AuditSummary: React.FC = () => {
       <BPMGraph moduleData={moduleData} />
       <AverageModules />
       <div className="buttons-summary">
-        <button>Enviar Incidencias</button>
+        <button onClick={handleSendIncidencias}>Enviar Incidencias</button>
         <button onClick={handleGoToHome}>Home</button>
       </div>
     </div>
