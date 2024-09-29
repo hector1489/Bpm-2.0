@@ -49,9 +49,6 @@ const AuditSummary: React.FC = () => {
     navigate('/');
   }
 
-  const handleGoToDoc = () => {
-    navigate('/documentacion');
-  }
 
   return (
     <div className="summary-container">
@@ -62,7 +59,6 @@ const AuditSummary: React.FC = () => {
       <div className="buttons-summary">
         <button>Enviar Incidencias</button>
         <button onClick={handleGoToHome}>Home</button>
-        <button onClick={handleGoToDoc}>Volver</button>
       </div>
     </div>
   )

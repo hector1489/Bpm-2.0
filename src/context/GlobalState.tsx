@@ -103,7 +103,7 @@ const AppProvider: React.FC<IAppProviderProps> = ({ children }) => {
       photos: updatedPhotos,
     }));
   };
-
+  
   
   const contextValue = useMemo(
     () => ({ state, setState, addAnswers, updateAuditSheetData, addDesviacion, addPhoto, removePhoto }),
