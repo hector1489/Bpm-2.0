@@ -17,7 +17,6 @@ const AuditSheet: React.FC = () => {
 
   const { updateAuditSheetData } = context
 
-  // Obtener la fecha actual y formatearla
   const getCurrentDate = () => {
     const today = new Date();
     const year = today.getFullYear();

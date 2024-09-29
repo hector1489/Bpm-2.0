@@ -17,14 +17,14 @@ export const obtenerTodasLasAccionesDesdeAPI = async () => {
 };
 
 // Función para enviar datos de auditoría al backend
-export const enviarDatosAuditoria = async (auditData: any) => {
+export const enviarDatosAuditoria = async (desviaciones: any) => {
   try {
     const response = await fetch(`${BASE_URL}/send-data`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(auditData),
+      body: JSON.stringify(desviaciones),
     });
 
     if (!response.ok) {
