@@ -50,9 +50,8 @@ const AuditSummary: React.FC = () => {
   }));
 
   const handleSendIncidencias = useCallback(async () => {
-    const { auditSheetData, userName, IsHero, photos, authToken } = state;
+    const { auditSheetData, IsHero, photos, authToken } = state;
     const email = auditSheetData.auditorEmail;
-    const auditor = userName || '';
     const nombreEstablecimiento = auditSheetData.nombreEstablecimiento;
     const responsableDelProblema = auditSheetData.supervisorEstablecimiento;
   
@@ -61,20 +60,21 @@ const AuditSummary: React.FC = () => {
       return;
     }
   
-    // Filtrar y mapear las preguntas que tienen desviaciones (porcentaje < 100%)
     const desviaciones = IsHero
       .filter((hero) => extractPercentage(hero.answer ?? DEFAULT_ANSWER) < 100)
       .map((hero) => {
         const criticidadColor = getColorByPercentage(extractPercentage(hero.answer ?? DEFAULT_ANSWER));
         const solucionProgramada = calculateSolutionDate(criticidadColor);
         const photo = photos.find(photo => photo.question === hero.question);
+        const numeroAuditoria = state.auditSheetData.numeroAuditoria
+        const auditor = state.userName
   
         return {
-          numeroRequerimiento: hero.id,
+          numeroRequerimiento: numeroAuditoria,
           pregunta: hero.question,
           respuesta: hero.answer ?? DEFAULT_ANSWER,
           fecha: getCurrentDate(),
-          auditor,
+          auditor: auditor,
           email,
           nombreEstablecimiento,
           responsableDelProblema,
