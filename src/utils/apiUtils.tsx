@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { getCurrentDate } from './utils';
 
 const BASE_URL = 'https://bpm-backend.onrender.com';
 
@@ -19,29 +20,37 @@ export const obtenerTodasLasAccionesDesdeAPI = async (authToken: string) => {
 
 // Función para enviar datos de auditoría al backend
 export const enviarDatosAuditoria = async (desviaciones: any, authToken: string) => {
-
-  const datosConFormatoCorrecto = desviaciones.map((desviacion: any) => {
+  const desviacionData= desviaciones.map((desviacion: any) => {
     return {
       numeroRequerimiento: desviacion.numeroRequerimiento || '',
-      pregunta: desviacion.pregunta || '',
-      respuesta: desviacion.respuesta || 'Sin respuesta',
-      fecha: desviacion.fecha || '',
-      auditor: desviacion.auditor || '',
-      email: desviacion.email || '',
-      nombreEstablecimiento: desviacion.nombreEstablecimiento || '',
-      responsableDelProblema: desviacion.responsableDelProblema || '',
-      solucionProgramada: desviacion.solucionProgramada || '',
-      accionesCorrectivas: desviacion.accionesCorrectivas || '',
+      preguntasAuditadas: desviacion.pregunta || '',
+      desviacionOCriterio: desviacion.respuesta || '',
+      tipoDeAccion: desviacion.tipoDeAccion || '',
+      responsableProblema: desviacion.responsableDelProblema || '',
+      local: desviacion.local || '',
+      criticidad: desviacion.criticidad || '',
+      accionesCorrectivas: desviacion.accionesCorrectivas || '' || 'N/A',
+      fechaRecepcion: getCurrentDate() || desviacion.fechaRecepcionSolicitud || '',
+      fechaSolucion: desviacion.fechaSolucionProgramada || '',
       estado: desviacion.estado || 'Abierto',
-      photoUrl: desviacion.photoUrl || 'N/A'
+      fechaCambio: desviacion.fechaCambioEstado || '',
+      contactoClientes: desviacion.contactoClientes || '',
+      evidenciaFotografica: desviacion.evidenciaFotografica || '',
+      detalleFoto: desviacion.detalleFoto || '',
+      auditor: desviacion.auditor || '',
+      correo: desviacion.email || '',
+      fechaModificacion: desviacion.fechaUltimaModificacion || '',
+      authToken: authToken || '',
     };
   });
 
+  console.log('Datos enviados al backend:', desviacionData);
+
   try {
-    const response = await axios.post(`${BASE_URL}/send-data`, datosConFormatoCorrecto, {
+    const response = await axios.post(`${BASE_URL}/send-data`, desviacionData, {
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${authToken}`
+        'Authorization': `Bearer ${authToken}`,
       },
     });
     return response.data;

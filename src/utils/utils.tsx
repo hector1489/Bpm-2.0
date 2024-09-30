@@ -10,7 +10,8 @@ export const getCurrentDate = (): string => {
   const yyyy = today.getFullYear();
 
   return `${dd}/${mm}/${yyyy}`;
-}
+};
+
 
 export const estados = ['Abierto', 'En Progreso', 'Cerrado'];
 

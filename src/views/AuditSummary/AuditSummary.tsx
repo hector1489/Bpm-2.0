@@ -49,15 +49,20 @@ const AuditSummary: React.FC = () => {
     percentage: calculatePercentage(module.id),
   }));
 
-  // Función para recolectar desviaciones y enviarlas al backend
   const handleSendIncidencias = useCallback(async () => {
-    const email = state.auditSheetData.auditorEmail;
-    const auditor = state.userName || '';
-    const nombreEstablecimiento = state.auditSheetData.nombreEstablecimiento;
-    const responsableDelProblema = state.auditSheetData.supervisorEstablecimiento;
-    const photos = state.photos;
+    const { auditSheetData, userName, IsHero, photos, authToken } = state;
+    const email = auditSheetData.auditorEmail;
+    const auditor = userName || '';
+    const nombreEstablecimiento = auditSheetData.nombreEstablecimiento;
+    const responsableDelProblema = auditSheetData.supervisorEstablecimiento;
   
-    const desviaciones = state.IsHero
+    if (!authToken) {
+      console.error('No se puede enviar desviaciones: el token de autenticación es null.');
+      return;
+    }
+  
+    // Filtrar y mapear las preguntas que tienen desviaciones (porcentaje < 100%)
+    const desviaciones = IsHero
       .filter((hero) => extractPercentage(hero.answer ?? DEFAULT_ANSWER) < 100)
       .map((hero) => {
         const criticidadColor = getColorByPercentage(extractPercentage(hero.answer ?? DEFAULT_ANSWER));
@@ -76,16 +81,9 @@ const AuditSummary: React.FC = () => {
           solucionProgramada,
           accionesCorrectivas: '',
           estado: 'Abierto',
-          photoUrl: photo ? (photo.photoUrl || 'N/A') : 'N/A'
+          photoUrl: photo ? photo.photoUrl || 'N/A' : 'N/A'
         };
       });
-  
-    const authToken = state.authToken;
-  
-    if (!authToken) {
-      console.error('No se puede enviar desviaciones: el token de autenticación es null.');
-      return;
-    }
   
     try {
       const result = await enviarDatosAuditoria(desviaciones, authToken);
@@ -94,7 +92,8 @@ const AuditSummary: React.FC = () => {
       console.error('Error al enviar las incidencias:', error);
     }
   }, [state]);
-
+  
+  
   const handleGoToHome = () => {
     navigate('/');
   }
