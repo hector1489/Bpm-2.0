@@ -75,3 +75,41 @@ export const cargarDesviacionesDesdeBackend = async (authToken: string) => {
     return null;
   }
 };
+
+// Función para cargar desviaciones por auditor
+export const cargarDatosPorAuditor = async (auditor: string, authToken: string) => {
+
+  if (!auditor) {
+    console.error('Nombre del auditor no especificado.');
+    return;
+  }
+
+  if (!authToken) {
+    console.error('Token de autenticación no disponible.');
+    return;
+  }
+
+  try {
+    const response = await axios.get(`${BASE_URL}/desviaciones/auditor/${auditor}`, {
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${authToken}`,
+      },
+    });
+
+    const datos = response.data;
+
+    if (datos && datos.length > 0) {
+      return datos;
+    } else {
+      alert('No se encontraron desviaciones en la base de datos para el auditor especificado.');
+      return [];
+    }
+  } catch (error) {
+    console.error('Error al recuperar las desviaciones:', error);
+    alert('Ocurrió un error al recuperar las desviaciones.');
+    return [];
+  }
+};
+
+
