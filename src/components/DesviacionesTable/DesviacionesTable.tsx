@@ -1,26 +1,46 @@
-import './DesviacionesTable.css'
-import { useContext, useState, useEffect, useCallback } from 'react'
-import { AppContext } from '../../context/GlobalState'
-import { obtenerTodasLasAccionesDesdeAPI } from '../../utils/apiUtils'
-import { extractPercentage, getCurrentDate, estados, calculateSolutionDate } from '../../utils/utils';
-
-interface ISelectedRow {
-  numeroRequerimiento: number;
-  pregunta: string;
-  respuesta: string;
-  fecha: string;
-  auditor: string;
-  email: string;
-  nombreEstablecimiento: string;
-  responsableDelProblema: string;
-  contactoCliente?: string;
-  solucionProgramada?: string;
-  accionesCorrectivas?: string;
-  estado?: string;
-  photoUrl: string;
-}
+import './DesviacionesTable.css';
+import { useContext, useState, useEffect } from 'react';
+import { AppContext } from '../../context/GlobalState';
+import { cargarDesviacionesDesdeBackend } from '../../utils/apiUtils';
 
 const DEFAULT_ANSWER = "Sin respuesta";
+
+interface Desviacion {
+  numeroRequerimiento: string;
+  preguntasAuditadas: string;
+  desviacionOCriterio: string;
+  responsableProblema: string;
+  local: string;
+  criticidad: string;
+  accionesCorrectivas: string;
+  fechaRecepcion: string;
+  fechaSolucion: string;
+  estado: string;
+  fechaCambio: string;
+  contactoClientes: string;
+  evidenciaFotografica: string;
+  auditor: string;
+  correo: string;
+}
+
+interface DesviacionResponse {
+  numero_requerimiento: string;
+  preguntas_auditadas: string;
+  desviacion_o_criterio: string;
+  responsable_problema: string;
+  local: string;
+  criticidad: string;
+  acciones_correctivas: string;
+  fecha_recepcion_solicitud: string;
+  fecha_solucion_programada: string;
+  estado: string;
+  fecha_cambio_estado: string;
+  contacto_clientes: string;
+  evidencia_fotografica: string;
+  auditor: string;
+  correo: string;
+}
+
 
 const DesviacionesTable: React.FC = () => {
   const context = useContext(AppContext);
@@ -29,112 +49,73 @@ const DesviacionesTable: React.FC = () => {
     return <div>Error: Context is not available.</div>;
   }
 
-  const { state, addDesviacion } = context;
+  const { state } = context;
+  const [desviaciones, setDesviaciones] = useState<Desviacion[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
 
-  const [selectedRows, setSelectedRows] = useState<ISelectedRow[]>([]);
-  const [accionesCorrectivas, setAccionesCorrectivas] = useState<any[]>([]);
+  const fetchDesviaciones = async () => {
+    const authToken = state.authToken;
+    setLoading(true);
+  
+    try {
+      if (authToken) {
+        const data: DesviacionResponse[] = await cargarDesviacionesDesdeBackend(authToken);
+        if (data) {
+          console.log(data);
+          const mappedData = data.map((item: DesviacionResponse) => ({
+            numeroRequerimiento: item.numero_requerimiento,
+            preguntasAuditadas: item.preguntas_auditadas,
+            desviacionOCriterio: item.desviacion_o_criterio,
+            responsableProblema: item.responsable_problema,
+            local: item.local,
+            criticidad: item.criticidad,
+            accionesCorrectivas: item.acciones_correctivas,
+            fechaRecepcion: item.fecha_recepcion_solicitud,
+            fechaSolucion: item.fecha_solucion_programada,
+            estado: item.estado,
+            fechaCambio: item.fecha_cambio_estado,
+            contactoClientes: item.contacto_clientes,
+            evidenciaFotografica: item.evidencia_fotografica,
+            auditor: item.auditor,
+            correo: item.correo,
+          }));
+          setDesviaciones(mappedData);
+        }
+      } else {
+        console.error('No se pudo obtener el token de autenticación.');
+        setError('Token de autenticación no disponible.');
+      }
+    } catch (error) {
+      console.error('Error al cargar las desviaciones:', error);
+      setError('No se pudieron cargar las desviaciones.');
+    } finally {
+      setLoading(false);
+    }
+  };
+  
+  
 
   useEffect(() => {
-    const fetchAccionesCorrectivas = async () => {
-      const acciones = await obtenerTodasLasAccionesDesdeAPI();
-      setAccionesCorrectivas(acciones);
-    };
-    fetchAccionesCorrectivas();
+    fetchDesviaciones();
   }, []);
 
-  const addAllRows = useCallback(() => {
-    const email = state.auditSheetData.auditorEmail;
-    const auditor = state.userName || '';
-    const nombreEstablecimiento = state.auditSheetData.nombreEstablecimiento;
-    const responsableDelProblema = state.auditSheetData.supervisorEstablecimiento;
-    const photos = state.photos;
+  const eliminarFila = (index: number) => {
+    const confirmDelete = window.confirm("¿Estás seguro de que deseas eliminar esta fila?");
+    if (confirmDelete) {
+      setDesviaciones((prevDesviaciones) => prevDesviaciones.filter((_, i) => i !== index));
+    }
+  };
 
-    const rowsToAdd = state.IsHero
-      .filter((hero) => extractPercentage(hero.answer ?? DEFAULT_ANSWER) < 100)
-      .map((hero) => {
-        const criticidadColor = getColorByPercentage(extractPercentage(hero.answer ?? DEFAULT_ANSWER));
-        const solucionProgramada = calculateSolutionDate(criticidadColor);
-        const photo = photos.find(photo => photo.question === hero.question);
-
-        return {
-          numeroRequerimiento: hero.id,
-          pregunta: hero.question,
-          respuesta: hero.answer ?? DEFAULT_ANSWER,
-          fecha: getCurrentDate(),
-          auditor: auditor,
-          email: email,
-          nombreEstablecimiento: nombreEstablecimiento,
-          responsableDelProblema: responsableDelProblema,
-          solucionProgramada,
-          accionesCorrectivas: '',
-          estado: 'Abierto',
-          photoUrl: photo ? (photo.photoUrl || 'N/A') : 'N/A'
-        };
-      });
-
-    setSelectedRows(rowsToAdd);
-  }, [state])
-
-  const saveDesviaciones = useCallback(() => {
-    selectedRows.forEach(row => {
-      addDesviacion({
-        ...row,
-        numeroRequerimiento: row.numeroRequerimiento.toString(),
-      });
-    });
-    setSelectedRows([]);
-  }, [selectedRows, addDesviacion])
-
-  const removeRow = useCallback(
-    (index: number) => {
-      setSelectedRows((prevRows) => prevRows.filter((_, i) => i !== index));
-    },
-    []
-  )
-
-  const getColorByPercentage = (percentage: number) => {
-    if (percentage >= 90) return 'green';
-    if (percentage >= 75) return 'yellow';
-    return 'red';
-  }
-
-  const renderCriticidadCircle = (answer: string) => {
-    const percentage = extractPercentage(answer);
-    const color = getColorByPercentage(percentage);
-    return (
-      <span
-        className="criticidad-circle"
-        style={{ backgroundColor: color }}
-      />
-    );
-  }
-
-  const handleClientContactChange = (index: number, value: string) => {
-    setSelectedRows(prevRows => prevRows.map((row, i) =>
-      i === index ? { ...row, contactoCliente: value } : row
-    ));
-  }
-
-  const handleAccionesChange = (index: number, value: string) => {
-    setSelectedRows(prevRows => prevRows.map((row, i) =>
-      i === index ? { ...row, accionesCorrectivas: value } : row
-    ));
-  }
-
-  const handleEstadoChange = (index: number, value: string) => {
-    setSelectedRows(prevRows => prevRows.map((row, i) =>
-      i === index ? { ...row, estado: value } : row
-    ));
-  }
-
-  const obtenerAccionesPorPregunta = (preguntaSeleccionada: string): string[] => {
-    const normalizedPregunta = preguntaSeleccionada.trim().toLowerCase();
-    const question = accionesCorrectivas.find(q => q.question && q.question.trim().toLowerCase() === normalizedPregunta);
-    return question ? question.action : [];
-  }
+  const agregarDesviacion = () => {
+    console.log('Agregar desviación');
+  };
 
   return (
     <div className="desviaciones-tabla-container">
+      {loading && <p>Cargando desviaciones...</p>}
+      {error && <p className="error">{error}</p>}
+
       <table id="tabla-desviaciones">
         <thead>
           <tr>
@@ -157,72 +138,42 @@ const DesviacionesTable: React.FC = () => {
           </tr>
         </thead>
         <tbody>
-          {selectedRows.map((row, index) => (
-            <tr key={row.numeroRequerimiento}>
-              <td>{row.numeroRequerimiento}</td>
-              <td>{row.pregunta}</td>
-              <td>{row.respuesta}</td>
-              <td>{row.responsableDelProblema}</td>
-              <td>{row.nombreEstablecimiento}</td>
-              <td>{renderCriticidadCircle(row.respuesta)}</td>
-              <td>
-                <select
-                  value={row.accionesCorrectivas || ''}
-                  onChange={(e) => handleAccionesChange(index, e.target.value)}
-                >
-                  <option value="">Seleccionar acción</option>
-                  {obtenerAccionesPorPregunta(row.pregunta).map((accion, i) => (
-                    <option key={i} value={accion}>{accion}</option>
-                  ))}
-                </select>
-              </td>
-              <td>{row.fecha}</td>
-              <td>{row.solucionProgramada}</td>
-              <td>
-                <select
-                  value={row.estado || 'Abierto'}
-                  onChange={(e) => handleEstadoChange(index, e.target.value)}
-                >
-                  {estados.map((estado, i) => (
-                    <option key={i} value={estado}>{estado}</option>
-                  ))}
-                </select>
-              </td>
-              <td>{row.fecha}</td>
-              <td>
-                <input
-                  type="text"
-                  value={row.contactoCliente || ''}
-                  onChange={(e) => handleClientContactChange(index, e.target.value)}
-                />
-              </td>
-              <td>
-                {row.photoUrl ? (
-                  <img
-                    src={row.photoUrl}
-                    alt={`Evidencia de ${row.pregunta}`}
-                    style={{ width: '50px', height: 'auto' }}
-                  />
-                ) : (
-                  'N/A'
-                )}
-              </td>
-              <td>{row.auditor}</td>
-              <td>{row.email}</td>
-              <td>
-                <button onClick={() => removeRow(index)}>Eliminar</button>
-              </td>
+          {desviaciones.length > 0 ? (
+            desviaciones.map((desviacion, index) => (
+              <tr key={index}>
+                <td>{desviacion.numeroRequerimiento || DEFAULT_ANSWER}</td>
+                <td>{desviacion.preguntasAuditadas || DEFAULT_ANSWER}</td>
+                <td>{desviacion.desviacionOCriterio || DEFAULT_ANSWER}</td>
+                <td>{desviacion.responsableProblema || DEFAULT_ANSWER}</td>
+                <td>{desviacion.local || DEFAULT_ANSWER}</td>
+                <td>{desviacion.criticidad || DEFAULT_ANSWER}</td>
+                <td>{desviacion.accionesCorrectivas || DEFAULT_ANSWER}</td>
+                <td>{desviacion.fechaRecepcion || DEFAULT_ANSWER}</td>
+                <td>{desviacion.fechaSolucion || DEFAULT_ANSWER}</td>
+                <td>{desviacion.estado || DEFAULT_ANSWER}</td>
+                <td>{desviacion.fechaCambio || DEFAULT_ANSWER}</td>
+                <td>{desviacion.contactoClientes || DEFAULT_ANSWER}</td>
+                <td>{desviacion.evidenciaFotografica || DEFAULT_ANSWER}</td>
+                <td>{desviacion.auditor || DEFAULT_ANSWER}</td>
+                <td>{desviacion.correo || DEFAULT_ANSWER}</td>
+                <td>
+                  <button onClick={() => eliminarFila(index)}>Eliminar</button>
+                </td>
+              </tr>
+            ))
+          ) : (
+            <tr>
+              <td colSpan={16}>No hay desviaciones disponibles.</td>
             </tr>
-          ))}
+          )}
         </tbody>
       </table>
 
       <div className="btn-group">
-        <button onClick={addAllRows}>Agregar desviaciones</button>
-        <button onClick={saveDesviaciones}>Guardar</button>
+        <button onClick={agregarDesviacion}>Agregar desviaciones</button>
       </div>
     </div>
   );
-}
+};
 
 export default DesviacionesTable;
