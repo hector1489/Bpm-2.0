@@ -44,11 +44,11 @@ const DocumentacionView: React.FC = () => {
   };
 
   const goToRoute1 = () => {
-    navigate('/resumen-auditoria');
+    navigate('/informe-ejecutivo');
   };
 
   const goToRoute2 = () => {
-    navigate('/analisis');
+    navigate('/resumen-ejecutivo');
   };
 
   const goToControlDesviaciones = () => {
@@ -73,11 +73,11 @@ const DocumentacionView: React.FC = () => {
               <i className="fa-solid fa-file"></i>
               Editar Desviaciones
             </button>
-            <button onClick={goToRoute1}>
+            <button onClick={goToRoute2}>
               <i className="fa-solid fa-file"></i>
               Resumen Ejecutivo
             </button>
-            <button onClick={goToRoute2}>
+            <button onClick={goToRoute1}>
               <i className="fa-solid fa-file"></i>
               Informe Ejecutivo
             </button>
@@ -89,7 +89,7 @@ const DocumentacionView: React.FC = () => {
         <div>Cargando desviaciones...</div>
       ) : (
         <div className="desviaciones">
-          <h4>Desviaciones del Auditor:</h4>
+          <h4>Desviaciones del Auditor : </h4>
           {desviaciones.length > 0 ? (
             <div className="desviaciones-cards">
               {desviaciones.map((desviacion, index) => (

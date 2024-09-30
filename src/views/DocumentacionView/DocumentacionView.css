@@ -61,12 +61,13 @@ h3 {
 }
 
 .desviaciones {
+  text-align: center;
   margin-top: 20px;
 }
 
 .desviaciones-cards {
   display: flex;
-  flex-direction: column;
+  text-align: center;
   justify-content: center;
   align-items: center;
   gap: 20px;

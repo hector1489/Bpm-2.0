@@ -11,3 +11,5 @@ export { default as DocumentacionView } from './DocumentacionView/DocumentacionV
 export { default as PhotoEvidence } from './PhotoEvidence/PhotoEvidence.tsx'
 export { default as Analisis } from './Analysis/Analysis.tsx'
 export { default as DefaultView } from './DeafultView/DefaultView.tsx'
+export { default as InformeEjecutivo } from './InformeEjecutivo/InformeEjecutivo.tsx'
+export { default as ResumenEjecutivo } from './ResumenEjecutivo/ResumenEjecutivo.tsx'
