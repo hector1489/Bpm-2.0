@@ -10,3 +10,4 @@ export { default as ControlDesviaciones } from './ControlDesviaciones/ControlDes
 export { default as DocumentacionView } from './DocumentacionView/DocumentacionView.tsx'
 export { default as PhotoEvidence } from './PhotoEvidence/PhotoEvidence.tsx'
 export { default as Analisis } from './Analysis/Analysis.tsx'
+export { default as DefaultView } from './DeafultView/DefaultView.tsx'

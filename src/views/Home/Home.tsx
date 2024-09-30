@@ -43,6 +43,10 @@ const Home: React.FC = () => {
     navigate('/analisis');
   };
 
+  const handleGoToDeafult = () => {
+    navigate('/default');
+  }
+
   return (
     <div className="container">
       <div className="logo-fungi">
@@ -56,7 +60,6 @@ const Home: React.FC = () => {
         <div className="icon">
           <i className="fas fa-cogs"></i>
         </div>
-        {/* Botón de Logout */}
         <div className="icon logout" onClick={handleLogout}>
           <i className="fas fa-sign-out-alt"></i>
         </div>
@@ -75,15 +78,7 @@ const Home: React.FC = () => {
             <div className="card-icon">
               <i className="fas fa-exclamation-circle"></i>
             </div>
-            <div className="card-title">Control Desviaciones</div>
-          </button>
-          <button className="card">
-            <a href="construccion.html">
-              <div className="card-icon">
-                <i className="fas fa-broom"></i>
-              </div>
-              <div className="card-title">Auditoría Aseo</div>
-            </a>
+            <div className="card-title">Control de Desviaciones</div>
           </button>
           <button className="card" onClick={handleGoToDocumentacionView}>
             <div className="card-icon">
@@ -91,13 +86,20 @@ const Home: React.FC = () => {
             </div>
             <div className="card-title">Documentación</div>
           </button>
+          <button className="card" onClick={handleGoToDeafult}>
+              <div className="card-icon">
+                <i className="fas fa-broom"></i>
+              </div>
+              <div className="card-title">Auditoría Aseo</div>
+          </button>
+         
           <button className="card" onClick={handleGoToAnalisis}>
             <div className="card-icon">
               <i className="fas fa-chart-line"></i>
             </div>
             <div className="card-title">Análisis</div>
           </button>
-          <button className="card">
+          <button className="card" onClick={handleGoToDeafult}>
             <div className="card-icon">
               <i className="fas fa-shield-alt"></i>
             </div>
@@ -109,7 +111,7 @@ const Home: React.FC = () => {
             </div>
             <div className="card-title">Panel de Incidencias Fotograficas</div>
           </button>
-          <button className="card">
+          <button className="card" onClick={handleGoToDeafult}>
             <div className="card-icon">
               <i className="fas fa-wifi"></i>
             </div>

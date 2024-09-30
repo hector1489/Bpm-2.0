@@ -15,7 +15,8 @@ import {
   ControlDesviaciones,
   DocumentacionView,
   PhotoEvidence,
-  Analisis
+  Analisis,
+  DefaultView
 } from './views/index';
 
 
@@ -44,6 +45,7 @@ const App: React.FC = () => {
           <Route path='/documentacion' element={<DocumentacionView />} />
           <Route path='/evidencia-fotografica' element={<PhotoEvidence />} />
           <Route path='/analisis' element={<Analisis />} />
+          <Route path='/default' element={<DefaultView />} />
         </Routes>
       )}
     </BrowserRouter>
