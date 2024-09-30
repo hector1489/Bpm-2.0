@@ -4,7 +4,6 @@ import './AuditForm.css'
 import { Answer } from '../../interfaces/interfaces'
 import { useNavigate } from 'react-router-dom'
 import { extractPercentage, getCurrentDate, calculateSolutionDate, getColorByPercentage } from '../../utils/utils';
-import { enviarDatosAuditoria } from '../../utils/apiUtils'
 
 interface IAuditData {
   numeroRequerimiento: number;
@@ -68,7 +67,6 @@ const AuditForm: React.FC = () => {
     } else {
       addAnswers(updatedFormData);
       collectAuditData();
-      enviarDatos();
       navigate('/resumen-auditoria');
     }
   };
@@ -160,14 +158,6 @@ const AuditForm: React.FC = () => {
     setAuditData(newAuditData);
   }, [state]);
 
-  const enviarDatos = async () => {
-    try {
-      await enviarDatosAuditoria(auditData);
-      console.log('Datos enviados correctamente');
-    } catch (error) {
-      console.error('Error al enviar los datos:', error);
-    }
-  };
 
   return (
     <form onSubmit={(e) => e.preventDefault()}>
