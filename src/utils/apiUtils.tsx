@@ -49,8 +49,6 @@ export const enviarDatosAuditoria = async (desviaciones: any, authToken: string)
     };
   });
 
-  console.log('Datos enviados al backend:', desviacionData);
-
   try {
     const response = await axios.post(`${BASE_URL}/send-data`, desviacionData, {
       headers: {
@@ -58,7 +56,6 @@ export const enviarDatosAuditoria = async (desviaciones: any, authToken: string)
         'Authorization': `Bearer ${authToken}`,
       },
     });
-    console.log(response.data)
     return response.data;
   } catch (error) {
     console.error('Error en el envío de datos al backend:', error);
