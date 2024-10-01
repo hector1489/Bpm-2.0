@@ -26,26 +26,26 @@ export const enviarDatosAuditoria = async (desviaciones: any, authToken: string)
   const desviacionData= desviaciones.map((desviacion: any) => {
     console.log(desviacion);
     return {
-      numeroRequerimiento: desviacion.numeroRequerimiento || '',
-      preguntasAuditadas: desviacion.pregunta || '',
-      desviacionOCriterio: desviacion.respuesta || '',
-      tipoDeAccion: desviacion.tipoDeAccion || '',
-      responsableProblema: desviacion.responsableDelProblema || '',
-      local: desviacion.local || '',
-      criticidad: desviacion.criticidad || '',
-      accionesCorrectivas: desviacion.accionesCorrectivas || '' || 'N/A',
-      fechaRecepcion: getCurrentDate() || desviacion.fechaRecepcionSolicitud || '',
-      fechaSolucion: desviacion.fechaSolucionProgramada || '',
-      estado: desviacion.estado || 'Abierto',
-      fechaCambio: desviacion.fechaCambioEstado || '',
-      contactoClientes: desviacion.contactoClientes || '',
-      evidenciaFotografica: desviacion.evidenciaFotografica || '',
-      detalleFoto: desviacion.detalleFoto || '',
-      auditor: desviacion.auditor || '',
-      correo: desviacion.email || correo || '',
-      fechaModificacion: desviacion.fechaUltimaModificacion || '',
-      authToken: authToken || '',
-      isNew: !('data-id' in desviacion)
+    numeroRequerimiento: desviacion.numeroRequerimiento || '',
+    preguntasAuditadas: desviacion.pregunta || '',
+    desviacionOCriterio: desviacion.respuesta || '',
+    tipoDeAccion: desviacion.tipoDeAccion || '',
+    responsableProblema: desviacion.responsableDelProblema || '',
+    local: desviacion.local || '',
+    criticidad: desviacion.criticidad || '',
+    accionesCorrectivas: desviacion.accionesCorrectivas || '' ,
+    fechaRecepcion: desviacion.fechaRecepcionSolicitud || getCurrentDate() || null,
+    fechaSolucion: desviacion.fechaSolucionProgramada || null,
+    estado: desviacion.estado || 'Abierto',
+    fechaCambio: desviacion.fechaCambioEstado || null,
+    contactoClientes: desviacion.contactoClientes || '',
+    evidenciaFotografica: desviacion.evidenciaFotografica || '',
+    detalleFoto: desviacion.detalleFoto || '',
+    auditor: desviacion.auditor || '',
+    correo: desviacion.email || correo || '',
+    fechaModificacion: desviacion.fechaUltimaModificacion || null,
+    authToken: authToken || '',
+    isNew: !('data-id' in desviacion)
     };
   });
 
@@ -58,6 +58,7 @@ export const enviarDatosAuditoria = async (desviaciones: any, authToken: string)
         'Authorization': `Bearer ${authToken}`,
       },
     });
+    console.log(response.data)
     return response.data;
   } catch (error) {
     console.error('Error en el envío de datos al backend:', error);
