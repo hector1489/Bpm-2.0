@@ -4,7 +4,7 @@ import { AverageModules, BPMGraph, Summary } from '../../components/index';
 import { useContext, useCallback } from 'react';
 import { AppContext } from '../../context/GlobalState';
 import { extractPercentage, getCurrentDate, calculateSolutionDate, getColorByPercentage } from '../../utils/utils';
-import { enviarDatosAuditoria } from '../../utils/apiUtils';
+import { enviarDatosAuditoria,  crearDetalleTabla  } from '../../utils/apiUtils';
 
 const DEFAULT_ANSWER = "Sin respuesta";
 
@@ -51,7 +51,7 @@ const AuditSummary: React.FC = () => {
 
   const handleSendIncidencias = useCallback(async () => {
     const { auditSheetData, IsHero, photos, authToken } = state;
-    const email = auditSheetData.auditorEmail;
+   // const email = auditSheetData.auditorEmail;
     const nombreEstablecimiento = auditSheetData.nombreEstablecimiento;
     const responsableDelProblema = auditSheetData.supervisorEstablecimiento;
   
@@ -68,6 +68,7 @@ const AuditSummary: React.FC = () => {
         const photo = photos.find(photo => photo.question === hero.question);
         const numeroAuditoria = state.auditSheetData.numeroAuditoria
         const auditor = state.userName
+        const correo = 'bbpmauditorias@gmail.com'
   
         return {
           numeroRequerimiento: numeroAuditoria,
@@ -75,7 +76,7 @@ const AuditSummary: React.FC = () => {
           respuesta: hero.answer ?? DEFAULT_ANSWER,
           fecha: getCurrentDate(),
           auditor: auditor,
-          email,
+          correo,
           nombreEstablecimiento,
           responsableDelProblema,
           solucionProgramada,
@@ -92,6 +93,44 @@ const AuditSummary: React.FC = () => {
       console.error('Error al enviar las incidencias:', error);
     }
   }, [state]);
+
+  
+
+  const handleSendDetails = async () => {
+    const authToken = state.authToken || 'defaultAuthToken';
+    for (const question of state.IsHero) {
+
+      const currentModule = state.modules.find(module => {
+        if (!module.question) {
+          return false;
+        }
+  
+        const moduleQuestions = Array.isArray(module.question) ? module.question : [module.question];
+        const questionText = Array.isArray(question.question) ? question.question.join(' ') : question.question;
+  
+        return moduleQuestions.some(q => questionText.includes(q));
+      });
+  
+      if (!currentModule) {
+        console.error('No se encontró el módulo actual.');
+        continue;
+      }
+  
+      const detalle = {
+        columna1: String(question.id) || 'Default ID',
+        columna2: currentModule.module || 'Unknown Module',
+        columna3: question.question,
+        columna4: question.answer ?? DEFAULT_ANSWER,
+      };
+  
+      try {
+        const nuevoDetalle = await crearDetalleTabla(detalle.columna1, detalle.columna2, detalle.columna3, detalle.columna4, authToken);
+        console.log('Detalle creado:', nuevoDetalle);
+      } catch (error) {
+        console.error('Error al enviar el detalle:', error);
+      }
+    }
+  };
   
   
   const handleGoToHome = () => {
@@ -117,6 +156,7 @@ const AuditSummary: React.FC = () => {
       <AverageModules />
       <div className="buttons-summary">
         <button onClick={handleSendIncidencias}>Enviar Incidencias</button>
+        <button onClick={handleSendDetails}>Enviar Detalle</button>
         <button onClick={handleGoToDetails}>detalle</button>
         <button onClick={handleGoToLuminometry}>Luminometria</button>
         <button onClick={handleGoToETA}>ETA</button>

@@ -20,7 +20,11 @@ export const obtenerTodasLasAccionesDesdeAPI = async (authToken: string) => {
 
 // Función para enviar datos de auditoría al backend
 export const enviarDatosAuditoria = async (desviaciones: any, authToken: string) => {
+  const correo = 'bbpmauditorias@gmail.com'
+
+
   const desviacionData= desviaciones.map((desviacion: any) => {
+    console.log(desviacion);
     return {
       numeroRequerimiento: desviacion.numeroRequerimiento || '',
       preguntasAuditadas: desviacion.pregunta || '',
@@ -38,9 +42,10 @@ export const enviarDatosAuditoria = async (desviaciones: any, authToken: string)
       evidenciaFotografica: desviacion.evidenciaFotografica || '',
       detalleFoto: desviacion.detalleFoto || '',
       auditor: desviacion.auditor || '',
-      correo: desviacion.email || '',
+      correo: desviacion.email || correo || '',
       fechaModificacion: desviacion.fechaUltimaModificacion || '',
       authToken: authToken || '',
+      isNew: !('data-id' in desviacion)
     };
   });
 
@@ -111,5 +116,91 @@ export const cargarDatosPorAuditor = async (auditor: string, authToken: string) 
     return [];
   }
 };
+
+
+// Función para crear un nuevo detalle de la tabla
+export const crearDetalleTabla = async (
+  columna1: string,
+  columna2: string,
+  columna3: string,
+  columna4: string,
+  authToken: string
+) => {
+  console.log('Parametros de entrada para crearDetalleTabla:', {
+    columna1,
+    columna2,
+    columna3,
+    columna4,
+    authToken,
+  });
+
+  if (!authToken) {
+    console.error('Error: authToken is missing.');
+    throw new Error('Authentication token is required.');
+  }
+
+  if (!columna1 || !columna2 || !columna3 || !columna4) {
+    console.error('Error: Missing required parameters.');
+    throw new Error('All parameters are required.');
+  }
+
+  try {
+    const url = `${BASE_URL}/tabla-details`;
+    console.log('Enviando solicitud POST a:', url);
+
+    const response = await axios.post(url, {
+      columna1,
+      columna2,
+      columna3,
+      columna4,
+    }, {
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${authToken}`,
+      },
+    });
+
+    console.log('Nuevo detalle creado:', response.data);
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      console.error('Error al crear el detalle de la tabla:', error.message);
+      if (error.response) {
+        console.error('Respuesta del error:', error.response.data);
+        console.error('Código de estado del error:', error.response.status);
+      } else {
+        console.error('Error de red o timeout:', error.message);
+      }
+    } else {
+      console.error('Error inesperado:', error);
+    }
+    
+    throw error;
+  }
+};
+
+
+
+
+// Función para obtener todos los detalles de la tabla
+export const obtenerDetallesTabla = async (authToken: string) => {
+  try {
+    const response = await axios.get(`${BASE_URL}/tabla-details`, {
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${authToken}`,
+      },
+    });
+    
+    console.log('Detalles de la tabla recuperados:', response.data);
+    return response.data;
+  } catch (error) {
+    console.error('Error al obtener los detalles de la tabla:', error);
+    throw error;
+  }
+};
+
+
+
 
 
