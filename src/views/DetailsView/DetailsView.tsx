@@ -2,12 +2,12 @@ import { useContext } from 'react';
 import { AppContext } from '../../context/GlobalState';
 import { useNavigate } from 'react-router-dom';
 import './DetailsView.css';
-import { AverageTable, PhotoAudit,DetailsTable  } from '../../components';
+import { AverageTable, PhotoAudit, DetailsTable } from '../../components';
 
 const DetailsView: React.FC = () => {
   const navigate = useNavigate();
   const context = useContext(AppContext);
-  
+
   if (!context) {
     throw new Error('DetailsView debe ser utilizado dentro de un AppProvider');
   }
@@ -52,7 +52,9 @@ const DetailsView: React.FC = () => {
         <button onClick={handleGoToLuminometry}>Luminometria</button>
         <button onClick={handleGoToETA}>ETA</button>
         <button onClick={handleGoToKPI}>KPI</button>
-        <button onClick={handleGoToHome}>Home</button>
+        <button onClick={handleGoToHome}>
+          <i className="fa-solid fa-house-chimney"></i>
+        </button>
       </div>
     </div>
   );

@@ -1,6 +1,6 @@
 import { BPMGraph, ETAGraph, KPIGraph, LUMGraph } from '../../components';
 import './ResumenEjecutivo.css';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 interface Module {
   id: number;
@@ -16,6 +16,9 @@ function createModuleData(module: Module): { moduleName: string; percentage: num
 
 const ResumenEjecutivo: React.FC = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+
+  const { id, numero_requerimiento } = location.state || {};
 
   const modules: Module[] = [
     { id: 1, module: 'Módulo 1' },
@@ -33,6 +36,8 @@ const ResumenEjecutivo: React.FC = () => {
   return (
     <div className="ResumenEjecutivo-container">
       <p>Resumen Ejecutivo</p>
+      {id && <p>ID: {id}</p>}
+      {numero_requerimiento && <p>Auditoria : {numero_requerimiento}</p>}
       <div id="kpi-graph">
         <KPIGraph moduleData={moduleData} />
       </div>

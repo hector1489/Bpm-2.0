@@ -76,7 +76,9 @@ const KPI: React.FC = () => {
         <button onClick={handleGoToDetails}>detalle</button>
         <button onClick={handleGoToLuminometry}>Luminometria</button>
         <button onClick={handleGoToETA}>ETA</button>
-        <button onClick={handleGoToHome}>Home</button>
+        <button onClick={handleGoToHome}>
+          <i className="fa-solid fa-house-chimney"></i>
+        </button>
       </div>
     </div>
   )

@@ -53,12 +53,12 @@ const AuditSummary: React.FC = () => {
     const { auditSheetData, IsHero, photos, authToken } = state;
     const nombreEstablecimiento = auditSheetData.nombreEstablecimiento;
     const responsableDelProblema = auditSheetData.supervisorEstablecimiento;
-  
+
     if (!authToken) {
       console.error('No se puede enviar desviaciones: el token de autenticación es null.');
       return;
     }
-  
+
     const desviaciones = IsHero
       .filter((hero) => extractPercentage(hero.answer ?? DEFAULT_ANSWER) < 100)
       .map((hero) => {
@@ -68,7 +68,7 @@ const AuditSummary: React.FC = () => {
         const numeroAuditoria = state.auditSheetData.numeroAuditoria
         const auditor = state.userName
         const email = state.auditSheetData.auditorEmail
-  
+
         return {
           numeroRequerimiento: numeroAuditoria,
           pregunta: hero.question,
@@ -84,7 +84,7 @@ const AuditSummary: React.FC = () => {
           email
         };
       });
-  
+
     try {
       const result = await enviarDatosAuditoria(desviaciones, authToken);
       console.log('Incidencias enviadas exitosamente:', result);
@@ -93,7 +93,7 @@ const AuditSummary: React.FC = () => {
     }
   }, [state]);
 
-  
+
   const handleGoToHome = () => {
     navigate('/');
   }
@@ -120,7 +120,9 @@ const AuditSummary: React.FC = () => {
         <button onClick={handleGoToDetails}>detalle</button>
         <button onClick={handleGoToLuminometry}>Luminometria</button>
         <button onClick={handleGoToETA}>ETA</button>
-        <button onClick={handleGoToHome}>Home</button>
+        <button onClick={handleGoToHome}>
+          <i className="fa-solid fa-house-chimney"></i>
+        </button>
       </div>
     </div>
   )

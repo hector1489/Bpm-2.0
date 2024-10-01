@@ -7,9 +7,9 @@ import './DocumentacionView.css';
 const DocumentacionView: React.FC = () => {
   const navigate = useNavigate();
   const context = useContext(AppContext);
-  const [menuVisible, setMenuVisible] = useState(false);
-  const [desviaciones, setDesviaciones] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [desviaciones, setDesviaciones] = useState<any[]>([]);
+  const [visibleMenuIndex, setVisibleMenuIndex] = useState<number | null>(null); // Manejar el índice del menú visible
 
   if (!context) {
     return <div>Error: Context is not available.</div>;
@@ -39,16 +39,20 @@ const DocumentacionView: React.FC = () => {
     navigate('/');
   };
 
-  const toggleMenu = () => {
-    setMenuVisible(!menuVisible);
+  const toggleMenu = (index: number) => {
+    setVisibleMenuIndex(visibleMenuIndex === index ? null : index); // Alternar el índice del menú visible
   };
 
-  const goToRoute1 = () => {
-    navigate('/informe-ejecutivo');
+  const goToRoute1 = (id: number, numeroRequerimiento: string) => {
+    navigate('/informe-ejecutivo', {
+      state: { id, numero_requerimiento: numeroRequerimiento },
+    });
   };
 
-  const goToRoute2 = () => {
-    navigate('/resumen-ejecutivo');
+  const goToRoute2 = (id: number, numeroRequerimiento: string) => {
+    navigate('/resumen-ejecutivo', {
+      state: {id, numero_requerimiento: numeroRequerimiento},
+    });
   };
 
   const goToControlDesviaciones = () => {
@@ -61,43 +65,38 @@ const DocumentacionView: React.FC = () => {
 
       <div className="doc-last-audit">
         <h4>Última Auditoria : {numeroAuditoria}</h4>
-        <button className="card" onClick={toggleMenu}>
-          <div className="card-icon">
-            <i className="fa-solid fa-suitcase"></i>
-          </div>
-        </button>
-
-        {menuVisible && (
-          <div className="dropdown-menu">
-            <button onClick={goToControlDesviaciones}>
-              <i className="fa-solid fa-file"></i>
-              Editar Desviaciones
-            </button>
-            <button onClick={goToRoute2}>
-              <i className="fa-solid fa-file"></i>
-              Resumen Ejecutivo
-            </button>
-            <button onClick={goToRoute1}>
-              <i className="fa-solid fa-file"></i>
-              Informe Ejecutivo
-            </button>
-          </div>
-        )}
       </div>
 
       {loading ? (
         <div>Cargando desviaciones...</div>
       ) : (
         <div className="desviaciones">
-          <h4>Desviaciones del Auditor : </h4>
           {desviaciones.length > 0 ? (
             <div className="desviaciones-cards">
               {desviaciones.map((desviacion, index) => (
-                <div className="card" key={index} onClick={toggleMenu}>
+                <div className="card" key={index} onClick={() => toggleMenu(index)}>
                   <h5>Requerimiento {desviacion.numero_requerimiento}</h5>
                   <div className="card-icon">
                     <i className="fa-solid fa-suitcase"></i>
                   </div>
+
+                  {/* Mostrar el menú desplegable solo para la tarjeta seleccionada */}
+                  {visibleMenuIndex === index && (
+                    <div className="dropdown-menu">
+                      <button onClick={goToControlDesviaciones}>
+                        <i className="fa-solid fa-file"></i>
+                        Editar Desviaciones
+                      </button>
+                      <button onClick={() => goToRoute2(desviacion.id, desviacion.numero_requerimiento)}>
+                        <i className="fa-solid fa-file"></i>
+                        Resumen Ejecutivo
+                      </button>
+                      <button onClick={() => goToRoute1(desviacion.id, desviacion.numero_requerimiento)}>
+                        <i className="fa-solid fa-file"></i>
+                        Informe Ejecutivo
+                      </button>
+                    </div>
+                  )}
                 </div>
               ))}
             </div>
@@ -108,7 +107,9 @@ const DocumentacionView: React.FC = () => {
       )}
 
       <div className="buttons-summary">
-        <button onClick={handleGoToHome}>Home</button>
+        <button onClick={handleGoToHome}>
+          <i className="fa-solid fa-house-chimney"></i>
+        </button>
       </div>
     </div>
   );

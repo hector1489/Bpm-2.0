@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import './auditoria.css'
 
 
-const Auditoria: React.FC  = () => {
+const Auditoria: React.FC = () => {
   const navigate = useNavigate()
 
 
@@ -15,7 +15,9 @@ const Auditoria: React.FC  = () => {
     <div className="container-auditoria">
       <AuditForm />
       <div>
-      <button onClick={handleGoToHome}>Home</button>
+        <button onClick={handleGoToHome}>
+          <i className="fa-solid fa-house-chimney"></i>
+        </button>
       </div>
     </div>
   )

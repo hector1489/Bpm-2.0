@@ -77,7 +77,9 @@ const ETA: React.FC = () => {
         <button onClick={handleGoToDetails}>detalle</button>
         <button onClick={handleGoToLuminometry}>Luminometria</button>
         <button onClick={handleGoToKPI}>KPI</button>
-        <button onClick={handleGoToHome}>Home</button>
+        <button onClick={handleGoToHome}>
+          <i className="fa-solid fa-house-chimney"></i>
+        </button>
       </div>
     </div>
   )

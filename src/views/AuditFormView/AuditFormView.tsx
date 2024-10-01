@@ -13,7 +13,9 @@ const AuditFormView: React.FC = () => {
     <div className="auditoria-formulario-container">
       <AuditSheet />
       <div className="buttons-summary">
-        <button onClick={handleGoToHome}>Home</button>
+        <button onClick={handleGoToHome}>
+          <i className="fa-solid fa-house-chimney"></i>
+        </button>
       </div>
     </div>
   )
