@@ -55,8 +55,10 @@ const DocumentacionView: React.FC = () => {
     });
   };
 
-  const goToControlDesviaciones = () => {
-    navigate('/desviaciones');
+  const goToControlDesviaciones = (id: number, numeroRequerimiento: string) => {
+    navigate('/desviaciones', {
+      state: {id, numero_requerimiento: numeroRequerimiento},
+    });
   };
 
   return (
@@ -83,7 +85,7 @@ const DocumentacionView: React.FC = () => {
                   {/* Mostrar el menú desplegable solo para la tarjeta seleccionada */}
                   {visibleMenuIndex === index && (
                     <div className="dropdown-menu">
-                      <button onClick={goToControlDesviaciones}>
+                      <button onClick={() => goToControlDesviaciones(desviacion.id, desviacion.numero_requerimiento)}>
                         <i className="fa-solid fa-file"></i>
                         Editar Desviaciones
                       </button>

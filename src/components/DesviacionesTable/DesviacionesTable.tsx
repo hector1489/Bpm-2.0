@@ -1,7 +1,8 @@
-import './DesviacionesTable.css';
-import { useContext, useState, useEffect } from 'react';
-import { AppContext } from '../../context/GlobalState';
-import { cargarDesviacionesDesdeBackend, desviacionDelete } from '../../utils/apiUtils';
+import './DesviacionesTable.css'
+import { useContext, useState, useEffect } from 'react'
+import { useLocation } from 'react-router-dom'
+import { AppContext } from '../../context/GlobalState'
+import { cargarDesviacionesDesdeBackend, desviacionDelete } from '../../utils/apiUtils'
 
 const DEFAULT_ANSWER = "Sin respuesta";
 
@@ -43,14 +44,15 @@ interface DesviacionResponse {
   correo: string;
 }
 
-
 const DesviacionesTable: React.FC = () => {
   const context = useContext(AppContext);
+  const location = useLocation();
 
   if (!context) {
     return <div>Error: Context is not available.</div>;
   }
 
+  const { id, numero_requerimiento } = location.state || {};
   const { state } = context;
   const [desviaciones, setDesviaciones] = useState<Desviacion[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
@@ -59,12 +61,11 @@ const DesviacionesTable: React.FC = () => {
   const fetchDesviaciones = async () => {
     const authToken = state.authToken;
     setLoading(true);
-  
+
     try {
       if (authToken) {
         const data: DesviacionResponse[] = await cargarDesviacionesDesdeBackend(authToken);
         if (data) {
-          console.log(data);
           const mappedData = data.map((item: DesviacionResponse) => ({
             id: item.id,
             numeroRequerimiento: item.numero_requerimiento,
@@ -83,7 +84,15 @@ const DesviacionesTable: React.FC = () => {
             auditor: item.auditor,
             correo: item.correo,
           }));
-          setDesviaciones(mappedData);
+
+          const filteredData = mappedData.filter(desviacion => {
+            const isAuditorMatch = desviacion.auditor === state.userName;
+            const isRequirementMatch = numero_requerimiento ? desviacion.numeroRequerimiento === numero_requerimiento : true;
+
+            return isAuditorMatch && isRequirementMatch;
+          });
+
+          setDesviaciones(filteredData);
         }
       } else {
         console.error('No se pudo obtener el token de autenticación.');
@@ -96,8 +105,6 @@ const DesviacionesTable: React.FC = () => {
       setLoading(false);
     }
   };
-  
-  
 
   useEffect(() => {
     fetchDesviaciones();
@@ -110,7 +117,7 @@ const DesviacionesTable: React.FC = () => {
       if (authToken) {
         try {
           await desviacionDelete(id, authToken);
-          setDesviaciones((prevDesviaciones) => prevDesviaciones.filter((desviacion) => desviacion.id !== id));
+          setDesviaciones(prevDesviaciones => prevDesviaciones.filter(desviacion => desviacion.id !== id));
         } catch (error) {
           console.error('Error eliminando la desviación:', error);
         }
@@ -122,9 +129,10 @@ const DesviacionesTable: React.FC = () => {
     console.log('Agregar desviación');
   };
 
-
   return (
     <div className="desviaciones-tabla-container">
+      {id && <p>ID: {id}</p>}
+      {numero_requerimiento && <p>Auditoria : {numero_requerimiento}</p>}
       {loading && <p>Cargando desviaciones...</p>}
       {error && <p className="error">{error}</p>}
 
@@ -152,7 +160,7 @@ const DesviacionesTable: React.FC = () => {
         </thead>
         <tbody>
           {desviaciones.length > 0 ? (
-            desviaciones.map((desviacion, index) => (    
+            desviaciones.map((desviacion, index) => (
               <tr key={index}>
                 <td>{desviacion.id || DEFAULT_ANSWER}</td>
                 <td>{desviacion.numeroRequerimiento || DEFAULT_ANSWER}</td>
