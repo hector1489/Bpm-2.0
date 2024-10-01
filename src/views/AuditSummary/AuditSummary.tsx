@@ -67,6 +67,7 @@ const AuditSummary: React.FC = () => {
         const photo = photos.find(photo => photo.question === hero.question);
         const numeroAuditoria = state.auditSheetData.numeroAuditoria
         const auditor = state.userName
+        const email = state.auditSheetData.auditorEmail
   
         return {
           numeroRequerimiento: numeroAuditoria,
@@ -79,7 +80,8 @@ const AuditSummary: React.FC = () => {
           solucionProgramada,
           accionesCorrectivas: '',
           estado: 'Abierto',
-          photoUrl: photo ? photo.photoUrl || '' : ''
+          photoUrl: photo ? photo.photoUrl || '' : '',
+          email
         };
       });
   

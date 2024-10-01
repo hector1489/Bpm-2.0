@@ -24,7 +24,6 @@ export const enviarDatosAuditoria = async (desviaciones: any, authToken: string)
 
 
   const desviacionData= desviaciones.map((desviacion: any) => {
-    console.log(desviacion);
     return {
     numeroRequerimiento: desviacion.numeroRequerimiento || '',
     preguntasAuditadas: desviacion.pregunta || '',
@@ -158,7 +157,6 @@ export const crearDetalleTabla = async (
       },
     });
 
-    console.log('Nuevo detalle creado:', response.data);
     return response.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
@@ -199,6 +197,26 @@ export const obtenerDetallesTabla = async (authToken: string) => {
 };
 
 
+// Función para eliminar la fila
+export const desviacionDelete = async (id: number, authToken: string) => {
+  try {
+    const response = await axios.delete(`${BASE_URL}/desviacionesDelete/${id}`, {
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${authToken}`,
+      },
+    });
 
+    if (response.status === 200) {
+      console.log('Desviación eliminada con éxito');
+      return true;
+    } else {
+      throw new Error('Error al eliminar la desviación');
+    }
+  } catch (error) {
+    console.error('Error al eliminar la desviación:', error);
+    throw error;
+  }
+};
 
 

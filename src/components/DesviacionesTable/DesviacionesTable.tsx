@@ -1,11 +1,12 @@
 import './DesviacionesTable.css';
 import { useContext, useState, useEffect } from 'react';
 import { AppContext } from '../../context/GlobalState';
-import { cargarDesviacionesDesdeBackend } from '../../utils/apiUtils';
+import { cargarDesviacionesDesdeBackend, desviacionDelete } from '../../utils/apiUtils';
 
 const DEFAULT_ANSWER = "Sin respuesta";
 
 interface Desviacion {
+  id: number;
   numeroRequerimiento: string;
   preguntasAuditadas: string;
   desviacionOCriterio: string;
@@ -24,6 +25,7 @@ interface Desviacion {
 }
 
 interface DesviacionResponse {
+  id: number;
   numero_requerimiento: string;
   preguntas_auditadas: string;
   desviacion_o_criterio: string;
@@ -64,6 +66,7 @@ const DesviacionesTable: React.FC = () => {
         if (data) {
           console.log(data);
           const mappedData = data.map((item: DesviacionResponse) => ({
+            id: item.id,
             numeroRequerimiento: item.numero_requerimiento,
             preguntasAuditadas: item.preguntas_auditadas,
             desviacionOCriterio: item.desviacion_o_criterio,
@@ -100,16 +103,25 @@ const DesviacionesTable: React.FC = () => {
     fetchDesviaciones();
   }, []);
 
-  const eliminarFila = (index: number) => {
+  const eliminarFila = async (id: number) => {
     const confirmDelete = window.confirm("¿Estás seguro de que deseas eliminar esta fila?");
     if (confirmDelete) {
-      setDesviaciones((prevDesviaciones) => prevDesviaciones.filter((_, i) => i !== index));
+      const authToken = state.authToken;
+      if (authToken) {
+        try {
+          await desviacionDelete(id, authToken);
+          setDesviaciones((prevDesviaciones) => prevDesviaciones.filter((desviacion) => desviacion.id !== id));
+        } catch (error) {
+          console.error('Error eliminando la desviación:', error);
+        }
+      }
     }
   };
 
   const agregarDesviacion = () => {
     console.log('Agregar desviación');
   };
+
 
   return (
     <div className="desviaciones-tabla-container">
@@ -119,6 +131,7 @@ const DesviacionesTable: React.FC = () => {
       <table id="tabla-desviaciones">
         <thead>
           <tr>
+            <th>ID</th>
             <th>N° DE REQUERIMIENTO</th>
             <th>PREGUNTAS AUDITADAS</th>
             <th>CRITERIO</th>
@@ -139,8 +152,9 @@ const DesviacionesTable: React.FC = () => {
         </thead>
         <tbody>
           {desviaciones.length > 0 ? (
-            desviaciones.map((desviacion, index) => (
+            desviaciones.map((desviacion, index) => (    
               <tr key={index}>
+                <td>{desviacion.id || DEFAULT_ANSWER}</td>
                 <td>{desviacion.numeroRequerimiento || DEFAULT_ANSWER}</td>
                 <td>{desviacion.preguntasAuditadas || DEFAULT_ANSWER}</td>
                 <td>{desviacion.desviacionOCriterio || DEFAULT_ANSWER}</td>
@@ -157,7 +171,7 @@ const DesviacionesTable: React.FC = () => {
                 <td>{desviacion.auditor || DEFAULT_ANSWER}</td>
                 <td>{desviacion.correo || DEFAULT_ANSWER}</td>
                 <td>
-                  <button onClick={() => eliminarFila(index)}>Eliminar</button>
+                  <button onClick={() => eliminarFila(desviacion.id)}>Eliminar</button>
                 </td>
               </tr>
             ))
