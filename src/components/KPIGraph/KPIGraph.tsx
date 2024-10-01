@@ -2,7 +2,7 @@ import './KPIGraph.css'
 import Plot from 'react-plotly.js'
 
 interface BPMGraphProps {
-  moduleData: { moduleName: string, percentage: number }[];
+  moduleData: { moduleName: string, percentage: number | null }[];
 }
 
 const KPIGraph: React.FC<BPMGraphProps> = ({ moduleData }) => {
@@ -25,8 +25,10 @@ const KPIGraph: React.FC<BPMGraphProps> = ({ moduleData }) => {
   const filterByModules = (modules: string[]) =>
     moduleData.filter((module) => modules.includes(module.moduleName));
 
-  const calculateAverage = (data: { moduleName: string, percentage: number }[]) =>
-    data.reduce((acc, module) => acc + module.percentage, 0) / data.length || 0;
+  const calculateAverage = (data: { moduleName: string, percentage: number | null }[]) => {
+    const total = data.reduce((acc, module) => acc + (module.percentage ?? 100), 0);
+    return data.length > 0 ? total / data.length : 100;
+  }
 
   const transporteData = filterByModules(Transporte);
   const serviciosData = filterByModules(Servicios);

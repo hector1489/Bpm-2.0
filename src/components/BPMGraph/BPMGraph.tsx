@@ -2,7 +2,7 @@ import './BPMGraph.css'
 import Plot from 'react-plotly.js'
 
 interface BPMGraphProps {
-  moduleData: { moduleName: string, percentage: number }[];
+  moduleData: { moduleName: string, percentage: number | null }[];
 }
 
 const BPMGraph: React.FC<BPMGraphProps> = ({ moduleData }) => {
@@ -25,8 +25,8 @@ const BPMGraph: React.FC<BPMGraphProps> = ({ moduleData }) => {
 
   const calcularPromedioGrupo = (modulos: string[]) => {
     const modulosDelGrupo = moduleData.filter((mod) => modulos.includes(mod.moduleName));
-    const total = modulosDelGrupo.reduce((acc, curr) => acc + curr.percentage, 0);
-    return modulosDelGrupo.length > 0 ? total / modulosDelGrupo.length : 0;
+    const total = modulosDelGrupo.reduce((acc, curr) => acc + (curr.percentage ?? 100), 0);
+    return modulosDelGrupo.length > 0 ? total / modulosDelGrupo.length : 100;
   }
 
   const getColorByPercentage = (percentage: number) => {
@@ -78,4 +78,4 @@ const BPMGraph: React.FC<BPMGraphProps> = ({ moduleData }) => {
   )
 }
 
-export default BPMGraph
+export default BPMGraph;

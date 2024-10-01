@@ -27,6 +27,7 @@ const ResumenEjecutivo: React.FC = () => {
     { id: 4, module: 'Módulo 4' },
   ];
 
+
   const moduleData = modules.map(createModuleData);
 
   const handleGoDoc = () => {
