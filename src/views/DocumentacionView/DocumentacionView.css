@@ -38,13 +38,16 @@ h3 {
 }
 
 .dropdown-menu {
+  display: block;
   position: absolute;
   background-color: white;
   border: 1px solid #ccc;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   padding: 10px;
   z-index: 1000;
+  margin-top: 5px;
 }
+
 
 .dropdown-menu button {
   display: block;

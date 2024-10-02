@@ -1,4 +1,5 @@
 @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css');
+@import url('https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css');
 
 
 
@@ -25,14 +26,6 @@
   .logo.react {
     animation: logo-spin infinite 20s linear;
   }
-}
-
-/* Card component styling */
-.card {
-  padding: 2em;
-  background: #fff;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  border-radius: 10px;
 }
 
 /* Subtle text styling */

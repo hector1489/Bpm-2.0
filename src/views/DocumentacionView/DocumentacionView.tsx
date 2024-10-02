@@ -9,7 +9,7 @@ const DocumentacionView: React.FC = () => {
   const context = useContext(AppContext);
   const [loading, setLoading] = useState(true);
   const [desviaciones, setDesviaciones] = useState<any[]>([]);
-  const [visibleMenuIndex, setVisibleMenuIndex] = useState<number | null>(null); // Manejar el índice del menú visible
+  const [visibleMenuIndex, setVisibleMenuIndex] = useState<number | null>(null);
 
   if (!context) {
     return <div>Error: Context is not available.</div>;
@@ -40,7 +40,7 @@ const DocumentacionView: React.FC = () => {
   };
 
   const toggleMenu = (index: number) => {
-    setVisibleMenuIndex(visibleMenuIndex === index ? null : index); // Alternar el índice del menú visible
+    setVisibleMenuIndex(visibleMenuIndex === index ? null : index);
   };
 
   const goToRoute1 = (id: number, numeroRequerimiento: string) => {
@@ -51,13 +51,13 @@ const DocumentacionView: React.FC = () => {
 
   const goToRoute2 = (id: number, numeroRequerimiento: string) => {
     navigate('/resumen-ejecutivo', {
-      state: {id, numero_requerimiento: numeroRequerimiento},
+      state: { id, numero_requerimiento: numeroRequerimiento },
     });
   };
 
   const goToControlDesviaciones = (id: number, numeroRequerimiento: string) => {
     navigate('/desviaciones', {
-      state: {id, numero_requerimiento: numeroRequerimiento},
+      state: { id, numero_requerimiento: numeroRequerimiento },
     });
   };
 
@@ -82,7 +82,6 @@ const DocumentacionView: React.FC = () => {
                     <i className="fa-solid fa-suitcase"></i>
                   </div>
 
-                  {/* Mostrar el menú desplegable solo para la tarjeta seleccionada */}
                   {visibleMenuIndex === index && (
                     <div className="dropdown-menu">
                       <button onClick={() => goToControlDesviaciones(desviacion.id, desviacion.numero_requerimiento)}>
