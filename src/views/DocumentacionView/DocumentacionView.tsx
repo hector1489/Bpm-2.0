@@ -56,7 +56,7 @@ const DocumentacionView: React.FC = () => {
   };
 
   const goToControlDesviaciones = (id: number, numeroRequerimiento: string) => {
-    navigate('/desviaciones', {
+    navigate('/doc-desviaciones', {
       state: { id, numero_requerimiento: numeroRequerimiento },
     });
   };

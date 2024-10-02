@@ -18,7 +18,8 @@ import {
   Analisis,
   DefaultView,
   InformeEjecutivo,
-  ResumenEjecutivo
+  ResumenEjecutivo,
+  DocDesviacionesTable
 } from './views/index';
 
 
@@ -50,6 +51,7 @@ const App: React.FC = () => {
           <Route path='/default' element={<DefaultView />} />
           <Route path='/informe-ejecutivo' element={<InformeEjecutivo />} />
           <Route path='/resumen-ejecutivo' element={<ResumenEjecutivo />} />
+          <Route path='/doc-desviaciones' element={<DocDesviacionesTable />} />
         </Routes>
       )}
     </BrowserRouter>
