@@ -1,7 +1,10 @@
 import { createContext, ReactNode, useState, useMemo, useEffect } from "react";
+import {
+  cargarDatosPorAuditor,
+} from '../utils/apiUtils';
 import modulesData from '../questions.json';
 import questions from '../questionsResponses.json';
-import { IState, IContextProps, Answer, IModule, Desviacion } from '../interfaces/interfaces';
+import { IState, Answer, IModule, Desviacion } from '../interfaces/interfaces';
 
 const transformModules = (modulesData: any[]): IModule[] => {
   return modulesData.map((moduleData, index) => ({
@@ -11,7 +14,18 @@ const transformModules = (modulesData: any[]): IModule[] => {
   }));
 };
 
-const AppContext = createContext<IContextProps | undefined>(undefined);
+interface IAppContext {
+  state: IState;
+  setState: React.Dispatch<React.SetStateAction<IState>>;
+  addAnswers: (answers: Answer[]) => void;
+  updateAuditSheetData: (data: any) => void;
+  addDesviacion: (data: Desviacion) => void;
+  addPhoto: (question: string, photoUrl: string) => void;
+  removePhoto: (photoUrl: string) => void;
+  cargarDesviacionesPorAuditor: (auditor: string, authToken: string) => Promise<void>;
+}
+
+const AppContext = createContext<IAppContext | undefined>(undefined);
 
 interface IAppProviderProps {
   children: ReactNode;
@@ -83,7 +97,6 @@ const AppProvider: React.FC<IAppProviderProps> = ({ children }) => {
   };
 
   const addPhoto = (question: string, photoUrl: string) => {
-
     if (!Array.isArray(state.photos)) {
       state.photos = [];
     }
@@ -104,10 +117,35 @@ const AppProvider: React.FC<IAppProviderProps> = ({ children }) => {
       photos: updatedPhotos,
     }));
   };
-  
-  
+
+  const cargarDesviacionesPorAuditor = async (auditor: string, authToken: string) => {
+    if (!authToken) {
+      console.error('Token de autenticación no disponible.');
+      return;
+    }
+
+    try {
+      const desviaciones = await cargarDatosPorAuditor(auditor, authToken);
+      setState(prevState => ({
+        ...prevState,
+        desviaciones: desviaciones,
+      }));
+    } catch (error) {
+      console.error('Error al cargar desviaciones por auditor:', error);
+    }
+  };
+
   const contextValue = useMemo(
-    () => ({ state, setState, addAnswers, updateAuditSheetData, addDesviacion, addPhoto, removePhoto }),
+    () => ({
+      state,
+      setState,
+      addAnswers,
+      updateAuditSheetData,
+      addDesviacion,
+      addPhoto,
+      removePhoto,
+      cargarDesviacionesPorAuditor
+    }),
     [state]
   );
 

@@ -13,9 +13,13 @@ const ControlDesviaciones: React.FC = () => {
 
   return (
     <div className="control-desviaciones-container">
-      <h3>Control De Desviaciones</h3>
-      <IncidentSummary />
-      <DesviacionesTable />
+      <h3 className='m-4'>Control De Desviaciones</h3>
+      <div>
+        <IncidentSummary />
+      </div>
+      <div className='control-desviaciones-table'>
+        <DesviacionesTable />
+      </div>
       <div className="buttons-desviaciones">
         <button onClick={handleGoToHome}>
           <i className="fa-solid fa-house-chimney"></i>

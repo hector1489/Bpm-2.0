@@ -110,6 +110,7 @@ const DesviacionesTable: React.FC = () => {
     fetchDesviaciones();
   }, []);
 
+
   const eliminarFila = async (id: number) => {
     const confirmDelete = window.confirm("¿Estás seguro de que deseas eliminar esta fila?");
     if (confirmDelete) {

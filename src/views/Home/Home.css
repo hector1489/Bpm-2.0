@@ -54,6 +54,7 @@
   align-items: center;
   justify-content: center;
   width: 100%;
+  padding: 20px;
 }
 
 /* Card Grid */
@@ -168,5 +169,9 @@
 @media (max-width: 767px) {
   .logo-fungi img {
     width: 100px;
+  }
+
+  .card-none {
+    display: none;
   }
 }

@@ -117,9 +117,15 @@ const AuditSummary: React.FC = () => {
       <AverageModules />
       <div className="buttons-summary">
         <button onClick={handleSendIncidencias}>Enviar Incidencias</button>
-        <button onClick={handleGoToDetails}>detalle</button>
-        <button onClick={handleGoToLuminometry}>Luminometria</button>
-        <button onClick={handleGoToETA}>ETA</button>
+        <button onClick={handleGoToDetails} title='Detalle'>
+        <i className="fa-solid fa-circle-info"></i>
+        </button>
+        <button onClick={handleGoToLuminometry} title='Luminometria'>
+        <i className="fa-regular fa-lightbulb"></i>
+        </button>
+        <button onClick={handleGoToETA} title='ETA'>
+        <i className="fa-solid fa-e"></i>
+        </button>
         <button onClick={handleGoToHome}>
           <i className="fa-solid fa-house-chimney"></i>
         </button>

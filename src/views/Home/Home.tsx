@@ -74,13 +74,13 @@ const Home: React.FC = () => {
             </div>
             <div className="card-title">Auditoría Alimentos</div>
           </button>
-          <button className="card" onClick={handleGoToControlDesviaciones}>
+          <button className="card card-none" onClick={handleGoToControlDesviaciones}>
             <div className="card-icon">
               <i className="fas fa-exclamation-circle"></i>
             </div>
             <div className="card-title">Control de Desviaciones</div>
           </button>
-          <button className="card" onClick={handleGoToDocumentacionView}>
+          <button className="card card-none" onClick={handleGoToDocumentacionView}>
             <div className="card-icon">
               <i className="fas fa-file-alt"></i>
             </div>
@@ -93,7 +93,7 @@ const Home: React.FC = () => {
               <div className="card-title">Auditoría Aseo</div>
           </button>
          
-          <button className="card" onClick={handleGoToAnalisis}>
+          <button className="card card-none" onClick={handleGoToAnalisis}>
             <div className="card-icon">
               <i className="fas fa-chart-line"></i>
             </div>
@@ -105,7 +105,7 @@ const Home: React.FC = () => {
             </div>
             <div className="card-title">Seguridad</div>
           </button>
-          <button className="card" onClick={handleGoToEvidenciaFotografica}>
+          <button className="card card-none" onClick={handleGoToEvidenciaFotografica}>
             <div className="card-icon">
               <i className="fas fa-images"></i>
             </div>

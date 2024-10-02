@@ -10,3 +10,9 @@
 .summary-container>div {
   margin-bottom: 20px;
 }
+
+.buttons-summary {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}

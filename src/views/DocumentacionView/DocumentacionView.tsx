@@ -63,7 +63,7 @@ const DocumentacionView: React.FC = () => {
 
   return (
     <div className="documentacion-container">
-      <h3>Documentación</h3>
+      <h3 className='fw-bold'>Documentación</h3>
 
       <div className="doc-last-audit">
         <h4>Última Auditoria : {numeroAuditoria}</h4>
@@ -77,7 +77,7 @@ const DocumentacionView: React.FC = () => {
             <div className="desviaciones-cards">
               {desviaciones.map((desviacion, index) => (
                 <div className="card" key={index} onClick={() => toggleMenu(index)}>
-                  <h5>Requerimiento {desviacion.numero_requerimiento}</h5>
+                  <p>Requerimiento {desviacion.numero_requerimiento}</p>
                   <div className="card-icon">
                     <i className="fa-solid fa-suitcase"></i>
                   </div>

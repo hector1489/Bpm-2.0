@@ -6,3 +6,8 @@
   align-items: center;
   padding: 20px;
 }
+
+.control-desviaciones-table {
+  width: 100%;
+  margin-top: 20px;
+}

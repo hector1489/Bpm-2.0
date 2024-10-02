@@ -1,5 +1,6 @@
 import { useState, useContext } from 'react';
 import './AuditSheet.css';
+import logoFungi from '../../assets/img/logo.jpg'
 import { AppContext } from '../../context/GlobalState';
 import { useNavigate } from 'react-router-dom'
 
@@ -35,19 +36,31 @@ const AuditSheet: React.FC = () => {
     fechaAuditoria: getCurrentDate()
   });
 
+  const [auditCount, setAuditCount] = useState(1);
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormValues(prevValues => ({ ...prevValues, [name]: value }));
   };
 
   const handleSave = () => {
+    const currentAuditNumber = auditCount;
     updateAuditSheetData(formValues);
+    const updatedFormValues = {
+      ...formValues,
+      numeroAuditoria: currentAuditNumber.toString()
+    };
+    updateAuditSheetData(updatedFormValues);
     handleGoToAuditoria();
     alert('Datos guardados exitosamente');
+    setAuditCount(prevCount => prevCount + 1);
   };
 
   return (
     <div id="module-ficha" className="module-section">
+      <div className="logo-fungi">
+        <img src={logoFungi} alt="logo" />
+      </div>
       <h3 className="text-center">Ficha de Auditoría</h3>
 
       <form id="form-ficha">
@@ -70,7 +83,7 @@ const AuditSheet: React.FC = () => {
             className="form-control"
             id="numero-auditoria"
             name="numeroAuditoria"
-            value={formValues.numeroAuditoria}
+            value={auditCount.toString()} 
             onChange={handleChange}
           />
         </div>

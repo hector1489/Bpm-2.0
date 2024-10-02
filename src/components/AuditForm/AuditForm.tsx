@@ -1,5 +1,6 @@
 import { useState, useContext, useRef } from 'react'
 import { AppContext } from '../../context/GlobalState'
+import logoFungi from '../../assets/img/logo.jpg'
 import './AuditForm.css'
 import { Answer } from '../../interfaces/interfaces'
 import { useNavigate } from 'react-router-dom'
@@ -108,6 +109,9 @@ const AuditForm: React.FC = () => {
 
   return (
     <form onSubmit={(e) => e.preventDefault()}>
+      <div className="logo-fungi">
+        <img src={logoFungi} alt="logo" />
+      </div>
       <div>
         <label>
           Pregunta:
@@ -141,7 +145,7 @@ const AuditForm: React.FC = () => {
           <button type="button" onClick={openCamera} className="camera-button">
             <i className="fa-solid fa-camera-retro"></i>
           </button>
-          <video ref={videoRef} autoPlay playsInline ></video>
+          <video ref={videoRef} autoPlay playsInline style={{ display: 'none' }}></video>
           <canvas ref={canvasRef} style={{ display: 'none' }}></canvas>
         </div>
         {photoTaken && <p>Foto tomada, puede avanzar a la siguiente pregunta.</p>}

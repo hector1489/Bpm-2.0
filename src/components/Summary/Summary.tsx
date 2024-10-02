@@ -78,10 +78,10 @@ const Summary: React.FC = () => {
               </td>
             </tr>
             <tr>
-              <th>Auditor Externo:</th>
+              <th>Auditor Email:</th>
               <td>
                 <span id="resumen-nombre-establecimiento" className="resumen-span">
-                  {auditSheetData.auditorExterno || 'N/A'}
+                  {auditSheetData.auditorEmail || 'N/A'}
                 </span>
               </td>
             </tr>
