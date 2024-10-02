@@ -2,6 +2,7 @@ import { DesviacionesTable, IncidentSummary } from '../../components'
 import { useNavigate } from 'react-router-dom'
 import './ControlDesviaciones.css'
 
+
 const ControlDesviaciones: React.FC = () => {
   const navigate = useNavigate()
 

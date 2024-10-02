@@ -1,8 +1,52 @@
 .incident-summary-container {
   width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
   padding: 20px;
-  font-family: 'Arial', sans-serif;
+  background-color: #f9f9f9;
 }
+
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-gap: 20px;
+  margin-bottom: 20px;
+}
+
+.resumen-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  grid-gap: 15px;
+}
+
+.bordered-box {
+  border: 1px solid black;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.summary-card .card {
+  flex: 0 0 30%;
+  text-align: center;
+  margin-bottom: 20px;
+  border: 1px solid black;
+}
+
+.card-header {
+  font-weight: bold;
+}
+
+.card-title {
+  font-size: 2rem;
+}
+
+.card-body p {
+  font-size: 1.1rem;
+}
+
+.text-white {
+  color: white;
+}
+
+
+
+
