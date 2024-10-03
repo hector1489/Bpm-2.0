@@ -42,6 +42,13 @@ const IncidentSummary: React.FC = () => {
     critico: 0,
   });
 
+  const [StatusCountsEstados, setStatusCountsEstados] =  useState({
+    abierto: 0,
+    enProgreso: 0,
+    cerrado: 0
+  });
+
+
   const fetchDesviaciones = async () => {
     const authToken = state.authToken;
     setLoading(true);
@@ -50,37 +57,19 @@ const IncidentSummary: React.FC = () => {
       if (authToken) {
         const data: DesviacionResponse[] = await cargarDesviacionesDesdeBackend(authToken);
         if (data) {
-          const mappedData = data.map((item: DesviacionResponse) => ({
-            id: item.id,
-            numero_requerimiento: item.numero_requerimiento,
-            preguntas_auditadas: item.preguntas_auditadas,
-            desviacion_o_criterio: item.desviacion_o_criterio,
-            responsable_problema: item.responsable_problema,
-            local: item.local,
-            criticidad: item.criticidad,
-            acciones_correctivas: item.acciones_correctivas,
-            fecha_recepcion_solicitud: item.fecha_recepcion_solicitud,
-            fecha_solucion_programada: item.fecha_solucion_programada,
-            estado: item.estado,
-            fecha_cambio_estado: item.fecha_cambio_estado,
-            contacto_clientes: item.contacto_clientes,
-            evidencia_fotografica: item.evidencia_fotografica,
-            auditor: item.auditor,
-            correo: item.correo,
-          }));
-          setDesviaciones(mappedData);
+          setDesviaciones(data);
 
-           const responsableCountData: Record<string, number> = data.reduce((acc: Record<string, number>, item: DesviacionResponse) => {
+          // Contar responsables
+          const responsableCountData = data.reduce((acc: Record<string, number>, item: DesviacionResponse) => {
             const responsable = item.responsable_problema;
             if (responsable) {
               acc[responsable] = (acc[responsable] || 0) + 1;
             }
             return acc;
-          }, {});
-
+          }, {} as Record<string, number>);
           setResponsableCount(responsableCountData);
 
-          // Count incident statuses
+          // Contar incidentes por criticidad
           const statusCountsData = data.reduce((acc, item) => {
             const criticidadLower = item.criticidad.toLowerCase();
             if (criticidadLower === 'leve') acc.leve++;
@@ -88,10 +77,21 @@ const IncidentSummary: React.FC = () => {
             else if (criticidadLower === 'critico') acc.critico++;
             return acc;
           }, { leve: 0, moderado: 0, critico: 0 });
-
           setStatusCounts(statusCountsData);
-          setDesviaciones(data);
 
+          //Contar estados
+          const statusEstadosData = data.reduce((acc, item) => {
+            const estadosLower= item.estado.toLowerCase();
+            if (estadosLower === 'abierto') acc.abierto++;
+            else if (estadosLower === 'en progreso') acc.enProgreso++;
+            else if (estadosLower === 'cerrado') acc.cerrado++;
+            return acc;
+          }, { abierto: 0, enProgreso: 0, cerrado: 0 });
+          setStatusCountsEstados(statusEstadosData);
+
+        } else {
+          console.error('No se recibieron datos de desviaciones.');
+          setError('No se pudieron cargar las desviaciones.');
         }
       } else {
         console.error('No se pudo obtener el token de autenticación.');
@@ -104,7 +104,6 @@ const IncidentSummary: React.FC = () => {
       setLoading(false);
     }
   };
-
 
   useEffect(() => {
     fetchDesviaciones();
@@ -140,9 +139,9 @@ const IncidentSummary: React.FC = () => {
             </div>
 
             <div className="card-body text-center">
-              <p><i className="fas fa-exclamation text-warning"></i> <span id="estadoAbierto">{statusCounts.leve}</span> Abiertos</p>
-              <p><i className="fas fa-check text-success"></i> <span id="fueraDePlazo-Head">{statusCounts.moderado}</span> En Progreso</p>
-              <p><i className="fas fa-times-circle text-danger"></i>  <span id="estadoCerrado">{statusCounts.critico}</span> Cerrados</p>
+              <p><i className="fas fa-exclamation text-warning"></i> <span id="estadoAbierto">{StatusCountsEstados.abierto}</span> Abiertos</p>
+              <p><i className="fas fa-check text-success"></i> <span id="fueraDePlazo-Head">{StatusCountsEstados.enProgreso}</span> En Progreso</p>
+              <p><i className="fas fa-times-circle text-danger"></i>  <span id="estadoCerrado">{StatusCountsEstados.cerrado}</span> Cerrados</p>
             </div>
 
           </div>
@@ -156,7 +155,7 @@ const IncidentSummary: React.FC = () => {
 
           <div className="card-body">
 
-          <table className="table table-hover">
+            <table className="table table-hover">
               <tbody>
                 {Object.entries(responsableCount).map(([responsable, count], index) => (
                   <tr key={index}>
@@ -181,42 +180,42 @@ const IncidentSummary: React.FC = () => {
 
           <div className="card bg-success text-white bordered-box">
             <div className="card-body">
-              <h5><span id="criticidadLeve">0</span></h5>
+              <h5><span id="criticidadLeve">{statusCounts.leve}</span></h5>
               <p>Leve</p>
             </div>
           </div>
 
           <div className="card bg-warning text-white bordered-box">
             <div className="card-body">
-              <h5><span id="criticidadModerado">0</span></h5>
+              <h5><span id="criticidadModerado">{statusCounts.moderado}</span></h5>
               <p>Moderado</p>
             </div>
           </div>
 
           <div className="card bg-danger text-white bordered-box">
             <div className="card-body">
-              <h5><span id="criticidadCritico">0</span></h5>
+              <h5><span id="criticidadCritico">{statusCounts.critico}</span></h5>
               <p>Crítico</p>
             </div>
           </div>
 
           <div className="card bg-warning text-white bordered-box">
             <div className="card-body">
-              <h5><span id="estadoAbierto">{statusCounts.leve}</span></h5>
+              <h5><span id="estadoAbierto">{StatusCountsEstados.abierto}</span></h5>
               <p>Abierta</p>
             </div>
           </div>
 
           <div className="card bg-info text-white bordered-box">
             <div className="card-body">
-              <h5><span id="fueraDePlazo-Head">{statusCounts.moderado}</span></h5>
+              <h5><span id="estadoAbierto">{StatusCountsEstados.enProgreso}</span></h5>
               <p>En Progreso</p>
             </div>
           </div>
 
           <div className="card bg-success text-white bordered-box">
             <div className="card-body">
-              <h5><span id="estadoCerrado">{statusCounts.critico}</span></h5>
+            <span id="estadoAbierto">{StatusCountsEstados.cerrado}</span>
               <p>Cerrada</p>
             </div>
           </div>
