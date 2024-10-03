@@ -20,7 +20,8 @@ import {
   InformeEjecutivo,
   ResumenEjecutivo,
   DocDesviacionesTable,
-  RegisterView
+  RegisterView,
+  DownloadSummary
 } from './views/index';
 
 
@@ -54,6 +55,7 @@ const App: React.FC = () => {
           <Route path='/resumen-ejecutivo' element={<ResumenEjecutivo />} />
           <Route path='/doc-desviaciones' element={<DocDesviacionesTable />} />
           <Route path='/register' element={<RegisterView />} />
+          <Route path='/resumen-descarga' element={<DownloadSummary />} />
         </Routes>
       )}
     </BrowserRouter>

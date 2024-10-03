@@ -61,12 +61,26 @@ const DocumentacionView: React.FC = () => {
     });
   };
 
+  const handleGoDownloadSummary = () => {
+    navigate('/resumen-descarga');
+  };
+
   return (
     <div className="documentacion-container">
       <h3 className='fw-bold'>Documentación</h3>
 
       <div className="doc-last-audit">
         <h4>Última Auditoria : {numeroAuditoria}</h4>
+        <div className="doc-last-audit-buttons">
+          <button onClick={handleGoDownloadSummary}>
+            <i className="fa-solid fa-download p-2"></i>
+            Resumen
+          </button>
+          <button>
+            <i className="fa-solid fa-download p-2"></i>
+            Informe
+          </button>
+        </div>
       </div>
 
       {loading ? (

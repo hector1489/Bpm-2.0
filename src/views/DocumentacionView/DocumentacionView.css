@@ -85,6 +85,10 @@ h3 {
   align-items: center;
 }
 
+.doc-last-audit-buttons {
+  display: flex;
+  gap: 10px;
+}
 
 /* Responsive adjustments */
 @media (max-width: 768px) {
