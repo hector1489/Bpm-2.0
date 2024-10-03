@@ -38,6 +38,8 @@ const ResumenForm: React.FC = () => {
     },
   ];
 
+  
+
   const getAnswerForQuestion = (question: string) => {
     const foundQuestion = state.IsHero.find(q => q.question.startsWith(question));
     return foundQuestion ? foundQuestion.answer : 'Sin respuesta';
