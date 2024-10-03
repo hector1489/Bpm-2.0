@@ -1,12 +1,113 @@
-import React from 'react';
+import { cargarDesviacionesDesdeBackend } from '../../utils/apiUtils';
+import { useContext, useState, useEffect } from 'react'
+import { AppContext } from '../../context/GlobalState'
 import './IncidentSummary.css';
 
+interface DesviacionResponse {
+  id: number;
+  numero_requerimiento: string;
+  preguntas_auditadas: string;
+  desviacion_o_criterio: string;
+  responsable_problema: string;
+  local: string;
+  criticidad: string;
+  acciones_correctivas: string;
+  fecha_recepcion_solicitud: string;
+  fecha_solucion_programada: string;
+  estado: string;
+  fecha_cambio_estado: string;
+  contacto_clientes: string;
+  evidencia_fotografica: string;
+  auditor: string;
+  correo: string;
+}
+
+
+
 const IncidentSummary: React.FC = () => {
+  const context = useContext(AppContext);
+
+  if (!context) {
+    return <div>Error: Context is not available.</div>;
+  }
+
+
+  const { state } = context;
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+  const [desviaciones, setDesviaciones] = useState<DesviacionResponse[] | null>(null);
+  const [responsableCount, setResponsableCount] = useState<Record<string, number>>({});
+
+  const fetchDesviaciones = async () => {
+    const authToken = state.authToken;
+    setLoading(true);
+
+    try {
+      if (authToken) {
+        const data: DesviacionResponse[] = await cargarDesviacionesDesdeBackend(authToken);
+        if (data) {
+          console.log('Data recibida:', data);
+          const mappedData = data.map((item: DesviacionResponse) => ({
+            id: item.id,
+            numero_requerimiento: item.numero_requerimiento,
+            preguntas_auditadas: item.preguntas_auditadas,
+            desviacion_o_criterio: item.desviacion_o_criterio,
+            responsable_problema: item.responsable_problema,
+            local: item.local,
+            criticidad: item.criticidad,
+            acciones_correctivas: item.acciones_correctivas,
+            fecha_recepcion_solicitud: item.fecha_recepcion_solicitud,
+            fecha_solucion_programada: item.fecha_solucion_programada,
+            estado: item.estado,
+            fecha_cambio_estado: item.fecha_cambio_estado,
+            contacto_clientes: item.contacto_clientes,
+            evidencia_fotografica: item.evidencia_fotografica,
+            auditor: item.auditor,
+            correo: item.correo,
+          }));
+          setDesviaciones(mappedData);
+
+           // Agrupar y contar desviaciones por responsable
+           const responsableCountData: Record<string, number> = data.reduce((acc: Record<string, number>, item: DesviacionResponse) => {
+            const responsable = item.responsable_problema;
+            if (responsable) {
+              acc[responsable] = (acc[responsable] || 0) + 1;
+            }
+            return acc;
+          }, {});
+
+          setResponsableCount(responsableCountData);
+
+          console.log('Responsables y sus desviaciones:', responsableCountData);
+
+        }
+      } else {
+        console.error('No se pudo obtener el token de autenticación.');
+        setError('Token de autenticación no disponible.');
+      }
+    } catch (error) {
+      console.error('Error al cargar las desviaciones:', error);
+      setError('No se pudieron cargar las desviaciones.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+
+  useEffect(() => {
+    fetchDesviaciones();
+  }, []);
+
+  const totalIncidencias = desviaciones ? desviaciones.length : 0;
+
+
   return (
     <div className="incident-summary-container">
-
+      {loading && <p>Cargando desviaciones...</p>}
+      {error && <p className="error">{error}</p>}
       <div className="grid-container">
         <div className="summary-cards">
+
           <div className="summary-card animate__fadeInUp bordered-box total-incidencias">
 
             <div className="card-header bg-primary text-white text-center">
@@ -14,7 +115,7 @@ const IncidentSummary: React.FC = () => {
             </div>
 
             <div className="card-body">
-              <h5 className="card-title text-center"><span id="totalIncidencias">0</span></h5>
+              <h5 className="card-title text-center"><span id="totalIncidencias">{totalIncidencias}</span></h5>
             </div>
 
           </div>
@@ -42,54 +143,17 @@ const IncidentSummary: React.FC = () => {
 
           <div className="card-body">
 
-            <table className="table table-hover">
+          <table className="table table-hover">
               <tbody>
-                <tr>
-                  <td><i className="fas fa-user text-primary"></i>1-Gerente De Contrato</td>
-                  <td>1</td>
-                </tr>
-                <tr>
-                  <td><i className="fas fa-user text-secondary"></i>2-Administrador</td>
-                  <td>0</td>
-                </tr>
-                <tr>
-                  <td><i className="fas fa-user text-success"></i>3-Supervisor De Mantencion</td>
-                  <td>0</td>
-                </tr>
-                <tr>
-                  <td><i className="fas fa-user text-danger"></i>4-Supervisor De Casino</td>
-                  <td>1</td>
-                </tr>
-                <tr>
-                  <td><i className="fas fa-user text-warning"></i>5-Spervisor De Aseo</td>
-                  <td>0</td>
-                </tr>
-                <tr>
-                  <td><i className="fas fa-user text-warning"></i>6-Coordinador De Calidad</td>
-                  <td>0</td>
-                </tr>
-                <tr>
-                  <td><i className="fas fa-user text-warning"></i>7-Asesor SSO</td>
-                  <td>0</td>
-                </tr>
-                <tr>
-                  <td><i className="fas fa-user text-warning"></i>8-Asesor Medio Ambiente</td>
-                  <td>0</td>
-                </tr>
-                <tr>
-                  <td><i className="fas fa-user text-warning"></i>9-Jefe RH</td>
-                  <td>0</td>
-                </tr>
-                <tr>
-                  <td><i className="fas fa-user text-warning"></i>10-Bodeguero</td>
-                  <td>0</td>
-                </tr>
-                <tr>
-                  <td><i className="fas fa-user text-warning"></i>11-Chef</td>
-                  <td>0</td>
-                </tr>
+                {Object.entries(responsableCount).map(([responsable, count], index) => (
+                  <tr key={index}>
+                    <td><i className="fas fa-user text-primary"></i> {responsable}</td>
+                    <td>{count}</td>
+                  </tr>
+                ))}
               </tbody>
             </table>
+
           </div>
         </div>
       </div>
