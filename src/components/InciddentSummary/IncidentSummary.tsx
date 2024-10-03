@@ -22,8 +22,6 @@ interface DesviacionResponse {
   correo: string;
 }
 
-
-
 const IncidentSummary: React.FC = () => {
   const context = useContext(AppContext);
 
@@ -37,6 +35,12 @@ const IncidentSummary: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [desviaciones, setDesviaciones] = useState<DesviacionResponse[] | null>(null);
   const [responsableCount, setResponsableCount] = useState<Record<string, number>>({});
+
+  const [statusCounts, setStatusCounts] = useState({
+    leve: 0,
+    moderado: 0,
+    critico: 0,
+  });
 
   const fetchDesviaciones = async () => {
     const authToken = state.authToken;
@@ -66,7 +70,6 @@ const IncidentSummary: React.FC = () => {
           }));
           setDesviaciones(mappedData);
 
-           // Agrupar y contar desviaciones por responsable
            const responsableCountData: Record<string, number> = data.reduce((acc: Record<string, number>, item: DesviacionResponse) => {
             const responsable = item.responsable_problema;
             if (responsable) {
@@ -77,7 +80,17 @@ const IncidentSummary: React.FC = () => {
 
           setResponsableCount(responsableCountData);
 
-          console.log('Responsables y sus desviaciones:', responsableCountData);
+          // Count incident statuses
+          const statusCountsData = data.reduce((acc, item) => {
+            const criticidadLower = item.criticidad.toLowerCase();
+            if (criticidadLower === 'leve') acc.leve++;
+            else if (criticidadLower === 'moderado') acc.moderado++;
+            else if (criticidadLower === 'critico') acc.critico++;
+            return acc;
+          }, { leve: 0, moderado: 0, critico: 0 });
+
+          setStatusCounts(statusCountsData);
+          setDesviaciones(data);
 
         }
       } else {
@@ -127,9 +140,9 @@ const IncidentSummary: React.FC = () => {
             </div>
 
             <div className="card-body text-center">
-              <p><i className="fas fa-exclamation text-warning"></i> <span id="estadoAbierto">0</span> Abiertos</p>
-              <p><i className="fas fa-check text-success"></i> <span id="estadoCerrado">0</span> Cerrados</p>
-              <p><i className="fas fa-times-circle text-danger"></i> <span id="fueraDePlazo-Head">0</span> Fuera de Plazo</p>
+              <p><i className="fas fa-exclamation text-warning"></i> <span id="estadoAbierto">{statusCounts.leve}</span> Abiertos</p>
+              <p><i className="fas fa-check text-success"></i> <span id="fueraDePlazo-Head">{statusCounts.moderado}</span> En Progreso</p>
+              <p><i className="fas fa-times-circle text-danger"></i>  <span id="estadoCerrado">{statusCounts.critico}</span> Cerrados</p>
             </div>
 
           </div>
@@ -189,14 +202,21 @@ const IncidentSummary: React.FC = () => {
 
           <div className="card bg-warning text-white bordered-box">
             <div className="card-body">
-              <h5><span id="cardEstadoAbierto">0</span></h5>
+              <h5><span id="estadoAbierto">{statusCounts.leve}</span></h5>
               <p>Abierta</p>
+            </div>
+          </div>
+
+          <div className="card bg-info text-white bordered-box">
+            <div className="card-body">
+              <h5><span id="fueraDePlazo-Head">{statusCounts.moderado}</span></h5>
+              <p>En Progreso</p>
             </div>
           </div>
 
           <div className="card bg-success text-white bordered-box">
             <div className="card-body">
-              <h5><span id="cardEstadoCerrado">0</span></h5>
+              <h5><span id="estadoCerrado">{statusCounts.critico}</span></h5>
               <p>Cerrada</p>
             </div>
           </div>
@@ -205,13 +225,6 @@ const IncidentSummary: React.FC = () => {
             <div className="card-body">
               <h5><span id="fueraDePlazo">0</span></h5>
               <p>Fuera de plazo</p>
-            </div>
-          </div>
-
-          <div className="card bg-info text-white bordered-box">
-            <div className="card-body">
-              <h5><span id="cardNumeroAuditoria">0</span></h5>
-              <p>Número de Auditoria</p>
             </div>
           </div>
 
