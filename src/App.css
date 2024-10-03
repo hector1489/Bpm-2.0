@@ -9,6 +9,35 @@
   box-sizing: border-box;
 }
 
+.btn-green {
+  background-color: #28a745;
+  color: white;
+}
+
+.btn-green:hover {
+  background-color: green;
+}
+
+.btn-red {
+  background-color: #dc3545;
+  color: white;
+}
+
+.btn-red:hover {
+  background-color: red;
+}
+
+.btn-blue {
+  background-color: #2D1C7D;
+  color: white;
+  font-weight: bold;
+
+}
+
+.btn-blue:hover {
+  background-color: rgb(6, 6, 51);
+  color: white;
+}
 
 /* Keyframe for spinning animation */
 @keyframes logo-spin {
