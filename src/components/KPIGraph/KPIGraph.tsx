@@ -1,8 +1,14 @@
-import './KPIGraph.css'
-import Plot from 'react-plotly.js'
+import Highcharts from 'highcharts';
+import Highcharts3D from 'highcharts/highcharts-3d';
+import HighchartsReact from 'highcharts-react-official';
+import './KPIGraph.css';
 
 interface BPMGraphProps {
   moduleData: { moduleName: string, percentage: number | null }[];
+}
+
+if (typeof Highcharts === 'object') {
+  Highcharts3D(Highcharts);
 }
 
 const KPIGraph: React.FC<BPMGraphProps> = ({ moduleData }) => {
@@ -20,7 +26,7 @@ const KPIGraph: React.FC<BPMGraphProps> = ({ moduleData }) => {
     if (percentage >= 90) return 'green';
     if (percentage >= 75) return 'yellow';
     return 'red';
-  }
+  };
 
   const filterByModules = (modules: string[]) =>
     moduleData.filter((module) => modules.includes(module.moduleName));
@@ -28,7 +34,7 @@ const KPIGraph: React.FC<BPMGraphProps> = ({ moduleData }) => {
   const calculateAverage = (data: { moduleName: string, percentage: number | null }[]) => {
     const total = data.reduce((acc, module) => acc + (module.percentage ?? 100), 0);
     return data.length > 0 ? total / data.length : 100;
-  }
+  };
 
   const transporteData = filterByModules(Transporte);
   const serviciosData = filterByModules(Servicios);
@@ -38,45 +44,60 @@ const KPIGraph: React.FC<BPMGraphProps> = ({ moduleData }) => {
   const serviciosAvg = calculateAverage(serviciosData);
   const documentosAvg = calculateAverage(documentosData);
 
-  const promedioGeneral =
-    (transporteAvg + serviciosAvg + documentosAvg) / 3;
+  const promedioGeneral = (transporteAvg + serviciosAvg + documentosAvg) / 3;
 
   const moduleNames = ['Transporte', 'Servicios', 'Documentos', 'Promedio General'];
   const percentages = [transporteAvg, serviciosAvg, documentosAvg, promedioGeneral];
 
   const barColors = percentages.map((percentage) => getColorByPercentage(percentage));
 
+  const chartOptions = {
+    chart: {
+      type: 'bar',
+      renderTo: 'container',
+      options3d: {
+        enabled: true,
+        alpha: 15,
+        beta: 15,
+        depth: 50,
+        viewDistance: 25,
+      },
+    },
+    title: {
+      text: 'Promedio de Respuestas por Módulo en 3D KPI',
+    },
+    xAxis: {
+      categories: moduleNames,
+      title: {
+        text: 'Módulos',
+      },
+    },
+    yAxis: {
+      title: {
+        text: 'Porcentaje (%)',
+      },
+    },
+    series: [
+      {
+        name: 'Promedio',
+        data: percentages,
+        colorByPoint: true,
+        colors: barColors,
+      },
+    ],
+    plotOptions: {
+      bar: {
+        depth: 25,
+      },
+    },
+  };
+
   return (
     <div className="kpi-graph-container">
-      <h4>Gráfico de Promedios en 3D KPI</h4>
-      <Plot
-        data={[
-          {
-            type: 'scatter3d',
-            mode: 'markers',
-            x: moduleNames,
-            y: percentages,
-            z: [1, 2, 3, 4], // This represents depth for the 3D chart
-            marker: {
-              size: 12,
-              color: barColors,
-            },
-          },
-        ]}
-        layout={{
-          title: 'Promedio de Respuestas por Módulo en 3D',
-          scene: {
-            xaxis: { title: 'Módulos' },
-            yaxis: { title: 'Porcentaje (%)' },
-            zaxis: { title: 'Profundidad' },
-          },
-          autosize: true,
-          width: 800,
-          height: 600,
-        }}
-      />
+      <h3>Gráfico de Promedios por Módulo en 3D KPI</h3>
+      <HighchartsReact highcharts={Highcharts} options={chartOptions} />
     </div>
-  )
-}
+  );
+};
 
 export default KPIGraph;

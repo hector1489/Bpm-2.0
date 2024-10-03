@@ -1,14 +1,15 @@
-import './ETAGraph.css'
-import Plot from 'react-plotly.js'
-import { useContext } from 'react'
-import { AppContext } from '../../context/GlobalState'
+import Highcharts from 'highcharts';
+import HighchartsReact from 'highcharts-react-official';
+import Highcharts3D from 'highcharts/highcharts-3d';
+import './ETAGraph.css';
+import { useContext } from 'react';
+import { AppContext } from '../../context/GlobalState';
 
-interface BPMGraphProps {
-  moduleData: { moduleName: string, percentage: number }[];
-}
+// Inicializar Highcharts 3D
+Highcharts3D(Highcharts);
 
-const ETAGraph: React.FC<BPMGraphProps> = () => {
-  const context = useContext(AppContext)
+const ETAGraph: React.FC = () => {
+  const context = useContext(AppContext);
 
   if (!context) {
     return <div>Error al cargar el contexto</div>;
@@ -38,7 +39,7 @@ const ETAGraph: React.FC<BPMGraphProps> = () => {
     if (percentage >= 90) return 'green';
     if (percentage >= 75) return 'yellow';
     return 'red';
-  }
+  };
 
   const etaData = state.IsHero
     .filter((question) => questionsEta.includes(question.question))
@@ -58,36 +59,53 @@ const ETAGraph: React.FC<BPMGraphProps> = () => {
 
   const questionNames = etaData.map((data) => data.shortQuestion);
   const percentages = etaData.map((data) => data.percentage);
-
   const barColors = percentages.map((percentage) => getColorByPercentage(percentage));
+
+  const chartOptions = {
+    chart: {
+      type: 'column',
+      options3d: {
+        enabled: true,
+        alpha: 10,
+        beta: 25,
+        depth: 70
+      },
+    },
+    title: {
+      text: 'Promedio de Respuestas por Pregunta ETA (3D)',
+    },
+    xAxis: {
+      categories: questionNames,
+      title: {
+        text: 'Preguntas',
+      },
+    },
+    yAxis: {
+      title: {
+        text: 'Porcentaje (%)',
+      },
+    },
+    series: [
+      {
+        name: 'Porcentaje',
+        data: percentages,
+        colorByPoint: true,
+        colors: barColors,
+      },
+    ],
+    plotOptions: {
+      column: {
+        depth: 25,
+      },
+    },
+  };
 
   return (
     <div className="eta-graph-container">
-      <h4>Gráfico de Promedios en 3D ETA</h4>
-      <Plot
-        data={[
-          {
-            type: 'bar',
-            x: questionNames,
-            y: percentages,
-            marker: {
-              color: barColors,
-            },
-          },
-        ]}
-        layout={{
-          title: 'Promedio de Respuestas por Pregunta ETA',
-          scene: {
-            xaxis: { title: 'Preguntas' },
-            yaxis: { title: 'Porcentaje (%)' },
-          },
-          autosize: true,
-          width: 800,
-          height: 600,
-        }}
-      />
+      <h4>Gráfico de Promedios en ETA 3D</h4>
+      <HighchartsReact highcharts={Highcharts} options={chartOptions} />
     </div>
-  )
-}
-export default ETAGraph
+  );
+};
 
+export default ETAGraph;
