@@ -1,3 +1,37 @@
+
+export const estados = ['Abierto', 'En Progreso', 'Cerrado'];
+export const criticidad = [
+  { valor: 'Leve', clase: 'prioridad-leve', dias: 45 },
+  { valor: 'Moderado', clase: 'prioridad-moderada', dias: 30 },
+  { valor: 'Crítico', clase: 'prioridad-critica', dias: 15 }
+];
+
+export const crearSelectEstado = (): HTMLSelectElement => {
+  const select = document.createElement('select');
+
+  estados.forEach(estado => {
+    const option = document.createElement('option');
+    option.value = estado;
+    option.textContent = estado;
+    select.appendChild(option);
+  });
+
+  return select;
+};
+
+export const crearSelectCriticidad = (): HTMLSelectElement => {
+  const select = document.createElement('select');
+
+  criticidad.forEach(criticidad => {
+    const option = document.createElement('option');
+    option.value = criticidad.valor;
+    option.textContent = criticidad.valor;
+    select.appendChild(option);
+  });
+
+  return select;
+}
+
 export const extractPercentage = (answer: string): number => {
   const match = answer.match(/^(\d+)%/);
   return match ? parseInt(match[1], 10) : 100;
@@ -11,9 +45,6 @@ export const getCurrentDate = (): string => {
 
   return `${dd}/${mm}/${yyyy}`;
 };
-
-
-export const estados = ['Abierto', 'En Progreso', 'Cerrado'];
 
 export const calculateSolutionDate = (criticidad: string): string => {
   const today = new Date();

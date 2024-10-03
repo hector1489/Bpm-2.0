@@ -126,7 +126,9 @@ const DesviacionesTable: React.FC = () => {
     }
   };
 
- 
+  const handleEditTable = () => {
+     console.log('editar tabla');
+  }
 
   return (
     <div className="desviaciones-tabla-container">
@@ -134,6 +136,8 @@ const DesviacionesTable: React.FC = () => {
       {numero_requerimiento && <p>Auditoria : {numero_requerimiento}</p>}
       {loading && <p>Cargando desviaciones...</p>}
       {error && <p className="error">{error}</p>}
+
+      <button onClick={handleEditTable}>Editar Desviaciones</button>
 
       <table id="tabla-desviaciones">
         <thead>

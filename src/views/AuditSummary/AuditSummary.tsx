@@ -86,6 +86,7 @@ const AuditSummary: React.FC = () => {
       });
 
     try {
+      console.log(desviaciones);
       const result = await enviarDatosAuditoria(desviaciones, authToken);
       console.log('Incidencias enviadas exitosamente:', result);
     } catch (error) {
