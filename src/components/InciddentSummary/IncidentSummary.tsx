@@ -46,7 +46,6 @@ const IncidentSummary: React.FC = () => {
       if (authToken) {
         const data: DesviacionResponse[] = await cargarDesviacionesDesdeBackend(authToken);
         if (data) {
-          console.log('Data recibida:', data);
           const mappedData = data.map((item: DesviacionResponse) => ({
             id: item.id,
             numero_requerimiento: item.numero_requerimiento,
@@ -99,6 +98,7 @@ const IncidentSummary: React.FC = () => {
   }, []);
 
   const totalIncidencias = desviaciones ? desviaciones.length : 0;
+
 
 
   return (

@@ -43,6 +43,10 @@ const Home: React.FC = () => {
     navigate('/analisis');
   };
 
+  const handleGoToRegister = () => {
+    navigate('/register');
+  }
+
   const handleGoToDeafult = () => {
     navigate('/default');
   }
@@ -99,11 +103,11 @@ const Home: React.FC = () => {
             </div>
             <div className="card-title">Análisis</div>
           </button>
-          <button className="card" onClick={handleGoToDeafult}>
+          <button className="card" onClick={handleGoToRegister}>
             <div className="card-icon">
               <i className="fas fa-shield-alt"></i>
             </div>
-            <div className="card-title">Seguridad</div>
+            <div className="card-title"> Registro y Seguridad</div>
           </button>
           <button className="card card-none" onClick={handleGoToEvidenciaFotografica}>
             <div className="card-icon">

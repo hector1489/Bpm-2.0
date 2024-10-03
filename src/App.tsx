@@ -19,7 +19,8 @@ import {
   DefaultView,
   InformeEjecutivo,
   ResumenEjecutivo,
-  DocDesviacionesTable
+  DocDesviacionesTable,
+  RegisterView
 } from './views/index';
 
 
@@ -52,6 +53,7 @@ const App: React.FC = () => {
           <Route path='/informe-ejecutivo' element={<InformeEjecutivo />} />
           <Route path='/resumen-ejecutivo' element={<ResumenEjecutivo />} />
           <Route path='/doc-desviaciones' element={<DocDesviacionesTable />} />
+          <Route path='/register' element={<RegisterView />} />
         </Routes>
       )}
     </BrowserRouter>
