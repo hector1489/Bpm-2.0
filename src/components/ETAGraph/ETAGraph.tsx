@@ -5,12 +5,15 @@ import './ETAGraph.css';
 import { useContext } from 'react';
 import { AppContext } from '../../context/GlobalState';
 
-// Inicializar Highcharts 3D
 Highcharts3D(Highcharts);
 
-const ETAGraph: React.FC = () => {
-  const context = useContext(AppContext);
+interface ETAGraphProps {
+  moduleData: { moduleName: string; percentage: number }[];
+}
 
+const ETAGraph: React.FC<ETAGraphProps> = ({ moduleData }) => {
+  const context = useContext(AppContext);
+  console.log(moduleData);
   if (!context) {
     return <div>Error al cargar el contexto</div>;
   }
@@ -32,7 +35,7 @@ const ETAGraph: React.FC = () => {
     'PPT 86. Para envasar los productos se utilizan materiales adecuados, los cuales son mantenidos en condiciones que eviten su contaminación. (Art. 11, 123)',
     'PPT 87. Los productos se etiquetan de acuerdo a las exigencias reglamentarias. (Art. 107 al 121)',
     'CAP 101. Existe un programa escrito y con sus registros correspondientes de capacitación del personal en materia de manipulación higiénica de los alimentos e higiene personal. (Art. 52, 69)',
-    'CAP 102. Existe un programa escrito de capacitación del personal de aseo en técnicas de limpieza y sus registros correspondientes. (Art. 41, 69)'
+    'CAP 102. Existe un programa escrito de capacitación del personal de aseo en técnicas de limpieza y sus registros correspondientes. (Art. 41, 69)',
   ];
 
   const getColorByPercentage = (percentage: number) => {
@@ -41,25 +44,26 @@ const ETAGraph: React.FC = () => {
     return 'red';
   };
 
+
   const etaData = state.IsHero
     .filter((question) => questionsEta.includes(question.question))
     .map((question) => {
       const answer = question.answer ?? '';
       const percentageMatch = answer.match(/^\d+/);
-      const percentage = percentageMatch ? parseInt(percentageMatch[0]) : 0;
+      const percentage = percentageMatch ? parseInt(percentageMatch[0], 10) : 0;
 
       const shortQuestionName = question.question.split('.')[0] + '.';
 
       return {
         question: question.question,
         shortQuestion: shortQuestionName,
-        percentage: percentage,
+        percentage,
       };
     });
 
   const questionNames = etaData.map((data) => data.shortQuestion);
   const percentages = etaData.map((data) => data.percentage);
-  const barColors = percentages.map((percentage) => getColorByPercentage(percentage));
+  const barColors = percentages.map(getColorByPercentage);
 
   const chartOptions = {
     chart: {
@@ -68,7 +72,7 @@ const ETAGraph: React.FC = () => {
         enabled: true,
         alpha: 10,
         beta: 25,
-        depth: 70
+        depth: 70,
       },
     },
     title: {

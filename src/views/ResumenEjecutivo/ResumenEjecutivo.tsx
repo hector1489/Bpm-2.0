@@ -27,7 +27,6 @@ const ResumenEjecutivo: React.FC = () => {
     { id: 4, module: 'Módulo 4' },
   ];
 
-
   const moduleData = modules.map(createModuleData);
 
   const handleGoDoc = () => {
@@ -49,7 +48,7 @@ const ResumenEjecutivo: React.FC = () => {
         <LUMGraph moduleData={moduleData} />
       </div>
       <div id="eta-graph">
-        <ETAGraph moduleData={moduleData} />
+        <ETAGraph moduleData={moduleData}  />
       </div>
       <button onClick={handleGoDoc}>Volver</button>
     </div>
