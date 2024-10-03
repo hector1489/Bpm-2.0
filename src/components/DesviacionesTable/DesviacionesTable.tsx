@@ -126,9 +126,7 @@ const DesviacionesTable: React.FC = () => {
     }
   };
 
-  const agregarDesviacion = () => {
-    console.log('Agregar desviación');
-  };
+ 
 
   return (
     <div className="desviaciones-tabla-container">
@@ -192,9 +190,6 @@ const DesviacionesTable: React.FC = () => {
         </tbody>
       </table>
 
-      <div className="btn-group">
-        <button onClick={agregarDesviacion}>Agregar desviaciones</button>
-      </div>
     </div>
   );
 };

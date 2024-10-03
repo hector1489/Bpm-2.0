@@ -52,19 +52,23 @@ const KPIGraph: React.FC<BPMGraphProps> = ({ moduleData }) => {
       <Plot
         data={[
           {
-            type: 'bar',
+            type: 'scatter3d',
+            mode: 'markers',
             x: moduleNames,
             y: percentages,
+            z: [1, 2, 3, 4], // This represents depth for the 3D chart
             marker: {
+              size: 12,
               color: barColors,
             },
           },
         ]}
         layout={{
-          title: 'Promedio de Respuestas por Módulo',
+          title: 'Promedio de Respuestas por Módulo en 3D',
           scene: {
             xaxis: { title: 'Módulos' },
             yaxis: { title: 'Porcentaje (%)' },
+            zaxis: { title: 'Profundidad' },
           },
           autosize: true,
           width: 800,
@@ -75,4 +79,4 @@ const KPIGraph: React.FC<BPMGraphProps> = ({ moduleData }) => {
   )
 }
 
-export default KPIGraph
+export default KPIGraph;
