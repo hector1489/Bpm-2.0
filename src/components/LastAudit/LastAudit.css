@@ -1,5 +1,3 @@
-/* LastAudit.css */
-
 .last-audit-container {
   width: 100%;
   display: flex;
@@ -37,9 +35,22 @@
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 }
 
-.last-audit i {
+.last-audit button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  margin-right: 10px;
+}
+
+.last-audit button i {
   color: #007bff;
   font-size: 20px;
+  transition: color 0.3s ease;
+}
+
+.last-audit button:hover i {
+  color: #0056b3;
 }
 
 .last-audit-container h4 {
@@ -49,7 +60,12 @@
   color: #333;
 }
 
-/* Responsivo */
+
+.last-audit span {
+  margin-left: 10px;
+}
+
+
 @media (max-width: 600px) {
   .last-audit {
     font-size: 16px;

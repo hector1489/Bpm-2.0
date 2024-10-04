@@ -42,7 +42,7 @@ const IncidentSummary: React.FC = () => {
     critico: 0,
   });
 
-  const [StatusCountsEstados, setStatusCountsEstados] =  useState({
+  const [StatusCountsEstados, setStatusCountsEstados] = useState({
     abierto: 0,
     enProgreso: 0,
     cerrado: 0
@@ -58,8 +58,10 @@ const IncidentSummary: React.FC = () => {
         const data: DesviacionResponse[] = await cargarDesviacionesDesdeBackend(authToken);
         if (data) {
           setDesviaciones(data);
+          
+          const ultimasDesviaciones = data.slice(-5);
+          setDesviaciones(ultimasDesviaciones);
 
-          // Contar responsables
           const responsableCountData = data.reduce((acc: Record<string, number>, item: DesviacionResponse) => {
             const responsable = item.responsable_problema;
             if (responsable) {
@@ -69,7 +71,6 @@ const IncidentSummary: React.FC = () => {
           }, {} as Record<string, number>);
           setResponsableCount(responsableCountData);
 
-          // Contar incidentes por criticidad
           const statusCountsData = data.reduce((acc, item) => {
             const criticidadLower = item.criticidad.toLowerCase();
             if (criticidadLower === 'leve') acc.leve++;
@@ -79,9 +80,8 @@ const IncidentSummary: React.FC = () => {
           }, { leve: 0, moderado: 0, critico: 0 });
           setStatusCounts(statusCountsData);
 
-          //Contar estados
           const statusEstadosData = data.reduce((acc, item) => {
-            const estadosLower= item.estado.toLowerCase();
+            const estadosLower = item.estado.toLowerCase();
             if (estadosLower === 'abierto') acc.abierto++;
             else if (estadosLower === 'en progreso') acc.enProgreso++;
             else if (estadosLower === 'cerrado') acc.cerrado++;
@@ -215,7 +215,7 @@ const IncidentSummary: React.FC = () => {
 
           <div className="card bg-success text-white bordered-box">
             <div className="card-body">
-            <span id="estadoAbierto">{StatusCountsEstados.cerrado}</span>
+              <span id="estadoAbierto">{StatusCountsEstados.cerrado}</span>
               <p>Cerrada</p>
             </div>
           </div>
