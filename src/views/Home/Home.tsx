@@ -97,7 +97,7 @@ const Home: React.FC = () => {
               <div className="card-title">Auditoría Aseo</div>
           </button>
          
-          <button className="card card-none" onClick={handleGoToAnalisis}>
+          <button className="card" onClick={handleGoToAnalisis}>
             <div className="card-icon">
               <i className="fas fa-chart-line"></i>
             </div>
@@ -115,7 +115,7 @@ const Home: React.FC = () => {
             </div>
             <div className="card-title">Panel de Incidencias Fotograficas</div>
           </button>
-          <button className="card" onClick={handleGoToDeafult}>
+          <button className="card card-none" onClick={handleGoToDeafult}>
             <div className="card-icon">
               <i className="fas fa-wifi"></i>
             </div>
