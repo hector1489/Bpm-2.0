@@ -1,7 +1,6 @@
-import './AverageTable.css'
-import { useContext, useMemo } from 'react'
-import { AppContext } from '../../context/GlobalState'
-
+import './AverageTable.css';
+import { useContext, useMemo } from 'react';
+import { AppContext } from '../../context/GlobalState';
 
 const AverageTable: React.FC = () => {
   const { state } = useContext(AppContext) || {};
@@ -23,7 +22,7 @@ const AverageTable: React.FC = () => {
     }, 0);
 
     return totalPercentage / totalQuestions;
-  }
+  };
 
   const moduleData = state.modules.map((module) => ({
     moduleName: module.module,
@@ -66,8 +65,7 @@ const AverageTable: React.FC = () => {
   const finalAverage = useMemo(() => {
     const totalPercentage = state.modules.reduce((acc, module) => acc + calculatePercentage(module.id), 0);
     return (totalPercentage / state.modules.length).toFixed(2);
-  }, [state.modules])
-
+  }, [state.modules]);
 
   return (
     <div className="average-table">
@@ -87,8 +85,8 @@ const AverageTable: React.FC = () => {
               </tr>
             ))}
           </tbody>
-          <tfoot className='bg-warning'>
-            <tr>
+          <tfoot >
+            <tr className='bg-warning'>
               <td>PROMEDIO FINAL PONDERADO</td>
               <td>{finalAverage}%</td>
             </tr>
@@ -96,9 +94,7 @@ const AverageTable: React.FC = () => {
         </table>
       </div>
     </div>
-  )
-}
+  );
+};
 
-
-export default AverageTable
-
+export default AverageTable;

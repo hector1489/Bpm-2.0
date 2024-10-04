@@ -63,10 +63,6 @@ const ETA: React.FC = () => {
     navigate('/luminometria');
   }
 
-  const handleGoToKPI = () => {
-    navigate('/kpi');
-  }
-
   return (
     <div className="eta-container">
       <h3>Resumen ETA</h3>
@@ -82,7 +78,6 @@ const ETA: React.FC = () => {
         <button className='btn-circle bg-warning' onClick={handleGoToLuminometry} title='Luminometria'>
           <i className="fa-regular fa-lightbulb"></i>
         </button>
-        <button className='btn-circle' onClick={handleGoToKPI}>KPI</button>
         <button className='btn-circle' onClick={handleGoToHome}>
           <i className="fa-solid fa-house-chimney"></i>
         </button>
