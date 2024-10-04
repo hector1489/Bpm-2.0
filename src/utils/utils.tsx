@@ -72,3 +72,15 @@ export const getColorByPercentage = (percentage: number) => {
   if (percentage >= 75) return 'yellow';
   return 'red';
 }
+
+export const getColorByPercentageLum = (percentage: number) => {
+  if (percentage >= 90) {
+    return 'bg-light-green';
+  } else if (percentage >= 70) {
+    return 'bg-yellow';
+  } else if (percentage >= 50) {
+    return 'bg-red';
+  } else {
+    return 'bg-danger';
+  }
+}

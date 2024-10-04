@@ -29,6 +29,7 @@ const AverageTable: React.FC = () => {
     percentage: calculatePercentage(module.id),
   }));
 
+  // Define your module groups
   const bpmModules = ['infraestructura', 'legales'];
   const poesModules = [
     'poes-control-productos', 'Agua', 'poes-superficies', 'contaminacion-cruzada',
@@ -67,6 +68,13 @@ const AverageTable: React.FC = () => {
     return (totalPercentage / state.modules.length).toFixed(2);
   }, [state.modules]);
 
+  const getRowClass = (average: number) => {
+    if (average >= 90) return 'bg-success-light';
+    if (average >= 75) return 'bg-warning-light';
+    if (average >= 50) return 'bg-info-light';
+    return 'bg-danger-light';
+  };
+
   return (
     <div className="average-table">
       <div className="table-responsive">
@@ -79,13 +87,13 @@ const AverageTable: React.FC = () => {
           </thead>
           <tbody id="average-table-body">
             {groupedData.map((group) => (
-              <tr key={group.groupName} className="group-row">
+              <tr key={group.groupName} className={getRowClass(parseFloat(group.average))}>
                 <td>{group.groupName}</td>
                 <td>{group.average}%</td>
               </tr>
             ))}
           </tbody>
-          <tfoot >
+          <tfoot>
             <tr className='bg-warning'>
               <td>PROMEDIO FINAL PONDERADO</td>
               <td>{finalAverage}%</td>

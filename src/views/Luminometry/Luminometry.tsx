@@ -3,32 +3,35 @@ import { useNavigate } from 'react-router-dom'
 import { useContext } from 'react'
 import { AppContext } from '../../context/GlobalState'
 import './Luminometry.css'
+import { getColorByPercentageLum } from '../../utils/utils'
 
 const Luminometry: React.FC = () => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const context = useContext(AppContext);
 
   if (!context) {
     return <div>Error: Context is not available.</div>;
   }
 
+  const handleGoToAuditSummary = () => navigate('/resumen-auditoria');
+  const handleGoToHome = () => navigate('/');
+  const handleGoToDetails = () => navigate('/resumen-detalle');
+  const handleGoToETA = () => navigate('/seremi');
 
-  const handleGoToAuditSummary = () => {
-    navigate('/resumen-auditoria')
-  }
-
-  const handleGoToHome = () => {
-    navigate('/')
-  }
-
-  const handleGoToDetails = () => {
-    navigate('/resumen-detalle');
-  }
-
-  const handleGoToETA = () => {
-    navigate('/seremi');
-  }
-
+  // Define your table data
+  const tableData = [
+    { url: "0-50", measurement: "I ≤ 2.2", percentage: "100%", note: 7, evaluation: "EXCELENTE", cleanliness: "MUY LIMPIO", riskClassification: "SIN RIESGO" },
+    { url: "51-150", measurement: "2.3", percentage: "83%", note: 6, evaluation: "MUY BUENO", cleanliness: "LIMPIO", riskClassification: "SIN RIESGO" },
+    { url: "51-150", measurement: "2.4", percentage: "83%", note: 6, evaluation: "MUY BUENO", cleanliness: "LIMPIO", riskClassification: "SIN RIESGO" },
+    { url: "51-150", measurement: "2.5", percentage: "83%", note: 6, evaluation: "MUY BUENO", cleanliness: "LIMPIO", riskClassification: "SIN RIESGO" },
+    { url: "151-250", measurement: "2.6", percentage: "69%", note: 5, evaluation: "BUENO", cleanliness: "MEDIANAMENTE SUCIO", riskClassification: "BAJO RIESGO" },
+    { url: "151-250", measurement: "2.7", percentage: "69%", note: 5, evaluation: "BUENO", cleanliness: "MEDIANAMENTE SUCIO", riskClassification: "BAJO RIESGO" },
+    { url: "251-500", measurement: "2.8", percentage: "55%", note: 4, evaluation: "REGULAR", cleanliness: "ALERTA", riskClassification: "RIESGO (LEVE)" },
+    { url: "251-500", measurement: "2.9", percentage: "55%", note: 4, evaluation: "REGULAR", cleanliness: "ALERTA", riskClassification: "RIESGO (LEVE)" },
+    { url: "501-1000", measurement: "3 ≤ l ≤ 4", percentage: "42%", note: 3, evaluation: "DEFICIENTE", cleanliness: "SUCIO", riskClassification: "MEDIANO RIESGO (GRAVE)" },
+    { url: "1001-5000", measurement: "4.1 ≤ l ≤ 4.9", percentage: "28%", note: 2, evaluation: "MALA", cleanliness: "MUY SUCIO", riskClassification: "ALTO RIESGO (MUY GRAVE)" },
+    { url: "5001-10000", measurement: "5 ≤ l", percentage: "14%", note: 1, evaluation: "MUY MALA", cleanliness: "TOTALMENTE SUCIO", riskClassification: "MUY ALTO RIESGO (CRÍTICO)" },
+  ];
 
   return (
     <div className="lum-container">
@@ -48,116 +51,23 @@ const Luminometry: React.FC = () => {
             </tr>
           </thead>
           <tbody>
-            {/* Filas Verdes */}
-            <tr className="bg-light-green">
-              <td>0-50</td>
-              <td>I ≤ 2.2</td>
-              <td>100%</td>
-              <td>7</td>
-              <td>EXCELENTE</td>
-              <td>MUY LIMPIO</td>
-              <td>SIN RIESGO</td>
-            </tr>
-            <tr className="bg-light-green">
-              <td>51-150</td>
-              <td>2.3</td>
-              <td>83%</td>
-              <td>6</td>
-              <td>MUY BUENO</td>
-              <td>LIMPIO</td>
-              <td>SIN RIESGO</td>
-            </tr>
-            <tr className="bg-light-green">
-              <td>51-150</td>
-              <td>2.4</td>
-              <td>83%</td>
-              <td>6</td>
-              <td>MUY BUENO</td>
-              <td>LIMPIO</td>
-              <td>SIN RIESGO</td>
-            </tr>
-            <tr className="bg-light-green">
-              <td>51-150</td>
-              <td>2.5</td>
-              <td>83%</td>
-              <td>6</td>
-              <td>MUY BUENO</td>
-              <td>LIMPIO</td>
-              <td>SIN RIESGO</td>
-            </tr>
-
-            {/* Filas Amarillas */}
-            <tr className="bg-yellow">
-              <td>151-250</td>
-              <td>2.6</td>
-              <td>69%</td>
-              <td>5</td>
-              <td>BUENO</td>
-              <td>MEDIANAMENTE SUCIO</td>
-              <td>BAJO RIESGO</td>
-            </tr>
-            <tr className="bg-yellow">
-              <td>151-250</td>
-              <td>2.7</td>
-              <td>69%</td>
-              <td>5</td>
-              <td>BUENO</td>
-              <td>MEDIANAMENTE SUCIO</td>
-              <td>BAJO RIESGO</td>
-            </tr>
-            <tr className="bg-yellow">
-              <td>251-500</td>
-              <td>2.8</td>
-              <td>55%</td>
-              <td>4</td>
-              <td>REGULAR</td>
-              <td>ALERTA</td>
-              <td>RIESGO (LEVE)</td>
-            </tr>
-            <tr className="bg-yellow">
-              <td>251-500</td>
-              <td>2.9</td>
-              <td>55%</td>
-              <td>4</td>
-              <td>REGULAR</td>
-              <td>ALERTA</td>
-              <td>RIESGO (LEVE)</td>
-            </tr>
-
-            {/* Filas Rojas */}
-            <tr className="bg-red">
-              <td>501-1000</td>
-              <td>3 ≤ l ≤ 4</td>
-              <td>42%</td>
-              <td>3</td>
-              <td>DEFICIENTE</td>
-              <td>SUCIO</td>
-              <td>MEDIANO RIESGO (GRAVE)</td>
-            </tr>
-            <tr className="bg-red">
-              <td>1001-5000</td>
-              <td>4.1 ≤ l ≤ 4.9</td>
-              <td>28%</td>
-              <td>2</td>
-              <td>MALA</td>
-              <td>MUY SUCIO</td>
-              <td>ALTO RIESGO (MUY GRAVE)</td>
-            </tr>
-            <tr className="bg-red">
-              <td>5001-10000</td>
-              <td>5 ≤ l</td>
-              <td>14%</td>
-              <td>1</td>
-              <td>MUY MALA</td>
-              <td>TOTALMENTE SUCIO</td>
-              <td>MUY ALTO RIESGO (CRÍTICO)</td>
-            </tr>
+            {tableData.map((row, index) => (
+              <tr key={index} className={getColorByPercentageLum(parseInt(row.percentage))}>
+                <td>{row.url}</td>
+                <td>{row.measurement}</td>
+                <td>{row.percentage}</td>
+                <td>{row.note}</td>
+                <td>{row.evaluation}</td>
+                <td>{row.cleanliness}</td>
+                <td>{row.riskClassification}</td>
+              </tr>
+            ))}
           </tbody>
         </table>
       </div>
       <div className="buttons-luminometry">
-      <button className='btn-circle btn-green' onClick={handleGoToAuditSummary}>
-        <i className="fa-solid fa-arrow-left"></i>
+        <button className='btn-circle btn-green' onClick={handleGoToAuditSummary}>
+          <i className="fa-solid fa-arrow-left"></i>
         </button>
         <button className='btn-circle bg-warning' onClick={handleGoToDetails} title='Detalle'>
           <i className="fa-solid fa-circle-info"></i>
@@ -170,7 +80,7 @@ const Luminometry: React.FC = () => {
         </button>
       </div>
     </div>
-  )
+  );
 }
 
-export default Luminometry
+export default Luminometry;

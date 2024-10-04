@@ -13,20 +13,20 @@
 }
 
 .bg-light-green {
-  background-color: #99cc00;
-  color: #000;
+  background-color: lightgreen;
 }
 
 .bg-yellow {
-  background-color: #ffff00;
-  color: #000;
+  background-color: yellow;
 }
 
 .bg-red {
-  background-color: #ff0000;
-  color: white;
+  background-color: red;
 }
 
+.bg-danger {
+  background-color: darkred;
+}
 .table {
   width: 100%;
   margin-bottom: 1rem;
