@@ -69,7 +69,6 @@ const ResumenForm: React.FC = () => {
           </tbody>
         </table>
       </div>
-      <button>Descargar PDF</button>
     </div>
   );
 };

@@ -14,8 +14,8 @@
   text-align: left;
 }
 
-.table th {
-  background-color: #f4f4f4;
+#tabla-average th {
+  background-color: skyblue;
   font-weight: bold;
 }
 

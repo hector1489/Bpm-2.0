@@ -49,7 +49,7 @@ const AverageModules: React.FC = () => {
               </tr>
             ))}
           </tbody>
-          <tfoot>
+          <tfoot className='bg-warning'>
             <tr>
               <td colSpan={2}>PROMEDIO FINAL PONDERADO</td>
               <td>{finalAverage}%</td>

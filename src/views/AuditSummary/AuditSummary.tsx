@@ -5,6 +5,7 @@ import { useContext, useCallback } from 'react'
 import { AppContext } from '../../context/GlobalState'
 import { extractPercentage, getCurrentDate, calculateSolutionDate, getColorByPercentage } from '../../utils/utils'
 import { enviarDatosAuditoria } from '../../utils/apiUtils'
+import logoFungi from '../../assets/img/logo.jpg'
 
 const DEFAULT_ANSWER = "Sin respuesta";
 
@@ -110,9 +111,17 @@ const AuditSummary: React.FC = () => {
     navigate('/resumen-detalle')
   }
 
+  const handleGoDownloadSummary = () => {
+    navigate('/resumen-descarga');
+  };
+
   return (
     <div className="summary-container">
-      <h3>Resumen</h3>
+      <div className="logo-fungi">
+        <img src={logoFungi} alt="logo" />
+      </div>
+      <h3 className='fw-bold'>auditoria bpm</h3>
+      <p className='text-warning'>Diagnostico Inicial</p>
       <Summary />
       <BPMGraph moduleData={moduleData} />
       <AverageModules />
@@ -130,6 +139,14 @@ const AuditSummary: React.FC = () => {
         <button onClick={handleGoToHome}>
           <i className="fa-solid fa-house-chimney"></i>
         </button>
+        <button onClick={handleGoDownloadSummary}>
+            <i className="fa-solid fa-download p-2"></i>
+            Resumen
+          </button>
+          <button>
+            <i className="fa-solid fa-download p-2"></i>
+            Informe
+          </button>
       </div>
     </div>
   )

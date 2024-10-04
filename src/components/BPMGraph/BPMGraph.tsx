@@ -57,7 +57,7 @@ const BPMGraph: React.FC<BPMGraphProps> = ({ moduleData }) => {
 
   const chartOptions = {
     chart: {
-      type: 'bar',
+      type: 'column',
       renderTo: 'container',
       options3d: {
         enabled: true,
@@ -68,7 +68,7 @@ const BPMGraph: React.FC<BPMGraphProps> = ({ moduleData }) => {
       },
     },
     title: {
-      text: 'Promedio de Respuestas por Grupo',
+      text: 'Promedio de preguntas por grupo',
     },
     xAxis: {
       categories: groupNames,
@@ -90,7 +90,7 @@ const BPMGraph: React.FC<BPMGraphProps> = ({ moduleData }) => {
       },
     ],
     plotOptions: {
-      bar: {
+      column: {
         depth: 25,
       },
     },
@@ -98,7 +98,7 @@ const BPMGraph: React.FC<BPMGraphProps> = ({ moduleData }) => {
 
   return (
     <div className="bpm-graph-container">
-      <h3>Gráfico de Promedios por Grupo en 3D BPM</h3>
+      <h3>Resumen de Promedios por Grupo BPM.</h3>
       <HighchartsReact highcharts={Highcharts} options={chartOptions} />
     </div>
   );

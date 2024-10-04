@@ -1,5 +1,6 @@
-import { DesviacionesTable, IncidentSummary } from '../../components'
+import { DesviacionesTable } from '../../components'
 import { useNavigate } from 'react-router-dom'
+import logoFungi from '../../assets/img/logo.jpg'
 import './ControlDesviaciones.css'
 
 
@@ -13,10 +14,10 @@ const ControlDesviaciones: React.FC = () => {
 
   return (
     <div className="control-desviaciones-container">
-      <h3 className='m-4'>Control De Desviaciones</h3>
-      <div>
-        <IncidentSummary />
+      <div className="logo-fungi">
+        <img src={logoFungi} alt="logo" />
       </div>
+      <h3 className='m-4'>Control De Desviaciones</h3>
       <div className='control-desviaciones-table'>
         <DesviacionesTable />
       </div>

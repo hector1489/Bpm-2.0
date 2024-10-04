@@ -99,7 +99,7 @@ const Summary: React.FC = () => {
 
       <div className="puntaje-ponderado">
         <h4 className="puntaje-promedio">
-          Promedio General: <span id="promedio-general">{finalAverage}%</span>
+          Promedio General : <span id="promedio-general">{finalAverage}%</span>
         </h4>
         <div className="indicadores">
           <div className="indicador cumple">

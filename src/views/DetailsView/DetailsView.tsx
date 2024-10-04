@@ -37,7 +37,7 @@ const DetailsView: React.FC = () => {
 
   return (
     <div className="detail-container">
-      <h3>Detalle</h3>
+      <h3 className='fw-bold'>Detalle</h3>
       <div>
         <DetailsTable />
       </div>

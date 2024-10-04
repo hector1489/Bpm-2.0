@@ -24,6 +24,7 @@
 .ficha-resumen-table th {
   background-color: #f2f2f2;
   font-weight: bold;
+  color: black;
 }
 
 .resumen-span {
@@ -37,12 +38,17 @@
 }
 
 .puntaje-promedio {
+  min-height: 70px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   font-size: 1.2rem;
   font-weight: bold;
   padding: 10px;
   background-color: #007BFF;
   color: white;
   border-radius: 5px;
+  gap: 5px;
 }
 
 .indicadores {
