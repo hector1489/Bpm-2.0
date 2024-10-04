@@ -12,39 +12,6 @@ const Luminometry: React.FC = () => {
     return <div>Error: Context is not available.</div>;
   }
 
-  const { state } = context;
-
-
-  const calculatePercentage = (moduleId: number): number => {
-    try {
-      const moduleQuestions = state.IsHero.filter(question => question.id === moduleId);
-      const totalQuestions = moduleQuestions.length;
-
-      if (totalQuestions === 0) {
-        return 100;
-      }
-
-      const totalPercentage = moduleQuestions.reduce((acc, question) => {
-        if (question.answer && typeof question.answer === 'string') {
-          const match = question.answer.match(/(\d+)%/);
-          const percentage = match ? parseInt(match[1], 10) : 0;
-          return acc + percentage;
-        } else {
-          return acc;
-        }
-      }, 0);
-
-      return totalPercentage / totalQuestions;
-    } catch (error) {
-      console.error('Error calculating percentage for module:', moduleId, error);
-      return 100;
-    }
-  };
-
-  const moduleData = state.modules.map((module) => ({
-    moduleName: module.module,
-    percentage: calculatePercentage(module.id),
-  }));
 
   const handleGoToAuditSummary = () => {
     navigate('/resumen-auditoria')
@@ -62,14 +29,11 @@ const Luminometry: React.FC = () => {
     navigate('/seremi');
   }
 
-  const handleGoToKPI = () => {
-    navigate('/kpi');
-  }
 
   return (
     <div className="lum-container">
       <h3>Resumen Luminometria</h3>
-      <LUMGraph moduleData={moduleData} />
+      <LUMGraph/>
       <div className="table-responsive">
         <table className="table table-bordered text-center table-sm">
           <thead className="table-light">
@@ -192,11 +156,16 @@ const Luminometry: React.FC = () => {
         </table>
       </div>
       <div className="buttons-luminometry">
-        <button onClick={handleGoToAuditSummary}>volver</button>
-        <button onClick={handleGoToDetails}>detalle</button>
-        <button onClick={handleGoToETA}>ETA</button>
-        <button onClick={handleGoToKPI}>KPI</button>
-        <button onClick={handleGoToHome}>
+      <button className='btn-circle btn-green' onClick={handleGoToAuditSummary}>
+        <i className="fa-solid fa-arrow-left"></i>
+        </button>
+        <button className='btn-circle bg-warning' onClick={handleGoToDetails} title='Detalle'>
+          <i className="fa-solid fa-circle-info"></i>
+        </button>
+        <button className='btn-circle bg-warning' onClick={handleGoToETA} title='ETA'>
+          <i className="fa-solid fa-e"></i>
+        </button>
+        <button className='btn-circle' onClick={handleGoToHome}>
           <i className="fa-solid fa-house-chimney"></i>
         </button>
       </div>

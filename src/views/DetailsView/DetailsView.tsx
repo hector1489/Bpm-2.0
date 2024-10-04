@@ -30,11 +30,6 @@ const DetailsView: React.FC = () => {
     navigate('/seremi');
   };
 
-  const handleGoToKPI = () => {
-    navigate('/kpi');
-  };
-
-
   return (
     <div className="detail-container">
       <h3 className='fw-bold'>Detalle</h3>
@@ -57,7 +52,6 @@ const DetailsView: React.FC = () => {
         <button className='btn-circle bg-warning' onClick={handleGoToETA} title='ETA'>
           <i className="fa-solid fa-e"></i>
         </button>
-        <button className='btn-circle' onClick={handleGoToKPI}>KPI</button>
         <button className='btn-circle' onClick={handleGoToHome}>
           <i className="fa-solid fa-house-chimney"></i>
         </button>
