@@ -45,7 +45,7 @@ const ResumenEjecutivo: React.FC = () => {
         <BPMGraph moduleData={moduleData} />
       </div>
       <div id="lum-graph">
-        <LUMGraph moduleData={moduleData} />
+        <LUMGraph/>
       </div>
       <div id="eta-graph">
         <ETAGraph moduleData={moduleData}  />
