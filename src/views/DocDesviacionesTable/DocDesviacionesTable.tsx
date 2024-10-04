@@ -9,16 +9,23 @@ const DocDesviacionesTable: React.FC = () => {
     navigate('/documentacion');
   };
 
+  const handleGoToHome = () => {
+    navigate('/');
+  };
+
   return (
     <div className="control-desviaciones-container">
-    <p>DocDesviacionesTable</p>
-    <DesviacionesTable />
-    <div className="buttons-desviaciones">
+      <p>DocDesviacionesTable</p>
+      <DesviacionesTable />
+      <div className="buttons-desviaciones">
         <button onClick={handleGoDoc}>
-        <i className="fa-solid fa-arrow-left"></i>
+          <i className="fa-solid fa-arrow-left"></i>
+        </button>
+        <button onClick={handleGoToHome}>
+          <i className="fa-solid fa-house-chimney"></i>
         </button>
       </div>
-      </div>
+    </div>
   )
 }
 

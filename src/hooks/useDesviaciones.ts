@@ -44,8 +44,7 @@ export const useDesviaciones = () => {
 
     fetchDesviaciones();
   }, [context?.state.authToken]);
-
-  // Calcular responsables y estado cuando cambien las desviaciones
+  
   const { responsableCount, statusCounts, statusCountsEstados } = useMemo(() => {
     if (!desviaciones) return { responsableCount: {}, statusCounts: {}, statusCountsEstados: {} };
 
