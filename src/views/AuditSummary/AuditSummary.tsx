@@ -111,10 +111,6 @@ const AuditSummary: React.FC = () => {
     navigate('/resumen-detalle')
   }
 
-  const handleGoDownloadSummary = () => {
-    navigate('/resumen-descarga');
-  };
-
   return (
     <div className="summary-container">
       <div className="logo-fungi">
@@ -125,29 +121,24 @@ const AuditSummary: React.FC = () => {
       <Summary />
       <BPMGraph moduleData={moduleData} />
       <AverageModules />
-      <div className="buttons-summary">
-        <button onClick={handleSendIncidencias}>Enviar Incidencias</button>
-        <button onClick={handleGoToDetails} title='Detalle'>
-        <i className="fa-solid fa-circle-info"></i>
+
+      
+      <div className="buttons-summary-circle">
+      <button className='btn-circle btn-green' onClick={handleSendIncidencias} title='Enviar Incidencias'>Enviar</button>
+        <button className='btn-circle bg-warning' onClick={handleGoToDetails} title='Detalle'>
+          <i className="fa-solid fa-circle-info"></i>
         </button>
-        <button onClick={handleGoToLuminometry} title='Luminometria'>
-        <i className="fa-regular fa-lightbulb"></i>
+        <button className='btn-circle bg-warning' onClick={handleGoToLuminometry} title='Luminometria'>
+          <i className="fa-regular fa-lightbulb"></i>
         </button>
-        <button onClick={handleGoToETA} title='ETA'>
-        <i className="fa-solid fa-e"></i>
+        <button className='btn-circle bg-warning' onClick={handleGoToETA} title='ETA'>
+          <i className="fa-solid fa-e"></i>
         </button>
-        <button onClick={handleGoToHome}>
+        <button className='btn-circle' onClick={handleGoToHome}>
           <i className="fa-solid fa-house-chimney"></i>
         </button>
-        <button onClick={handleGoDownloadSummary}>
-            <i className="fa-solid fa-download p-2"></i>
-            Resumen
-          </button>
-          <button>
-            <i className="fa-solid fa-download p-2"></i>
-            Informe
-          </button>
       </div>
+
     </div>
   )
 }

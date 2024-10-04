@@ -42,17 +42,23 @@ const DetailsView: React.FC = () => {
         <DetailsTable />
       </div>
       <div>
-        <PhotoAudit photos={state.photos} />
-      </div>
-      <div>
         <AverageTable />
       </div>
+      <div>
+        <PhotoAudit photos={state.photos} />
+      </div>
       <div className="detail-button">
-        <button onClick={handleGoToAuditSummary}>Volver</button>
-        <button onClick={handleGoToLuminometry}>Luminometria</button>
-        <button onClick={handleGoToETA}>ETA</button>
-        <button onClick={handleGoToKPI}>KPI</button>
-        <button onClick={handleGoToHome}>
+        <button className='btn-circle btn-green' onClick={handleGoToAuditSummary}>
+        <i className="fa-solid fa-arrow-left"></i>
+        </button>
+        <button className='btn-circle bg-warning' onClick={handleGoToLuminometry} title='Luminometria'>
+          <i className="fa-regular fa-lightbulb"></i>
+        </button>
+        <button className='btn-circle bg-warning' onClick={handleGoToETA} title='ETA'>
+          <i className="fa-solid fa-e"></i>
+        </button>
+        <button className='btn-circle' onClick={handleGoToKPI}>KPI</button>
+        <button className='btn-circle' onClick={handleGoToHome}>
           <i className="fa-solid fa-house-chimney"></i>
         </button>
       </div>

@@ -13,42 +13,58 @@ const ETATable: React.FC = () => {
 
   const questionsETA = [
     {
-      module: 'CONTROL DE SUPERFICIES CONTACTO CON ALIMENTOS E INSTALACIONES', question: [
-        "CS 19. Los registros generados son coherentes con lo especificado en el programa (Art. 69):",
-        "CS 20. Se adoptan las medidas necesarias para evitar la contaminación de los equipos después de limpiarse y desinfectarse (Art. 42):"
+      module: 'TRA CS', question: [
+        "TRA CS 17. Aplicacion y eficiencia del programa de higiene, publicado e implementado por áreas (Art. 41, 43, 44, 64, 69):",
       ]
     },
     {
-      module: 'CONTROL DE SALUD E HIGIENE DE EMPLEADOS', question: [
-        "CSH 32. Existe un programa de higiene del personal y sus registros correspondientes. (Art. 55, 56, 60, 69)"
+      module: 'TRA CSH', question: [
+        "TRA CSH 29. Lavado y sanitizado correcto de manos y uñas:"
       ]
     },
     {
-      module: 'CONTROL DE PLAGAS', question: [
-        "CP 35. La empresa a cargo del programa de aplicación de agentes químicos o biológicos para el control de plagas cuenta con Autorización sanitaria. (Art. 48):",
-        "CP 36. Los desechos se disponen de forma de impedir el acceso y proliferación de plagas. (Art. 40):"
+      module: 'TRA CSH', question: [
+        "TRA CSH 31. Exámenes de todos los manipuladores, ecónomos y administradores. Ausencia de malestares o infecciones (Art. 52, 53):",
       ]
     },
     {
-      module: 'RECEPCION', question: [
-        "REC 42. Las materias primas utilizadas provienen de establecimientos autorizados y debidamente rotuladas y/o identificadas. (Art. 61, 96)",
-        "REC 43. Se cuenta con las especificaciones escritas para cada materia prima (condiciones de almacenamiento, duración, uso, etc.)"
+      module: 'TRA PRE', question: [
+        "TRA PRE 52. Verificar descongelación en equipos de refrigeración, en agua corriendo sólo en caso de emergencias:",
       ]
     },
     {
-      module: 'PROCESOS Y PRODUCTOS TERMINADOS', question: [
-        "PPT 82. El flujo del personal, vehículos y de materias primas en las distintas etapas del proceso, es ordenado y conocido por todos los que participan en la elaboración, para evitar contaminación cruzada. (Art. 63)",
-        "PPT 83. Se cuenta con procedimientos escritos de los procesos (Formulación del producto, flujos de operación, procesos productivos). (Art. 3, 11, 63, 66, 69, 132)",
-        "PPT 84. Los productos se almacenan en condiciones que eviten su deterioro y contaminación (envases, temperatura, humedad, etc.). (Art.11, 67)",
-        "PPT 85. La distribución de los productos terminados se realiza en vehículos autorizados, limpios y en buen estado. (Art. 11, 68)",
-        "PPT 86. Para envasar los productos se utilizan materiales adecuados, los cuales son mantenidos en condiciones que eviten su contaminación. (Art. 11, 123)",
-        "PPT 87. Los productos se etiquetan de acuerdo a las exigencias reglamentarias. (Art. 107 al 121)"
+      module: 'TRA ELB', question: [
+        "TRA ELB 60. Respetan las T° y los tiempos correctos de cocción y enfriamiento (fríos y calientes):",
       ]
     },
     {
-      module: 'CAP - CAPACITACION', question: [
-        "CAP 101. Existe un programa escrito y con sus registros correspondientes de capacitación del personal en materia de manipulación higiénica de los alimentos e higiene personal. (Art. 52, 69)",
-        "CAP 102. Existe un programa escrito de capacitación del personal de aseo en técnicas de limpieza y sus registros correspondientes. (Art. 41, 69)"
+      module: 'TRA ELB', question: [
+        "TRA ELB 66. Tiempo entre elaboración y consumo:",
+      ]
+    },
+    {
+      module: 'TRA MA', question: [
+        "TRA MA 67. Control de tiempo y Tº del equipo, al inicio y término de la mantención en frío o caliente:",
+      ]
+    },
+    {
+      module: 'TRA TPO', question: [
+        "TRA TPO 68. Traslado de alimentos cumpliendo; protección, rotulación, estiba y registros al inicio y término:",
+      ]
+    },
+    {
+      module: 'TRA SER', question: [
+        "TRA SER 72. Equipos suficientes para la correcta mantención de productos calientes y fríos:",
+      ]
+    },
+    {
+      module: 'TRA DOC', question: [
+        "TRA DOC 98. Informes de auditoría sanitaria, plan de acción, verificación de cumplimiento, por Administrador:",
+      ]
+    },
+    {
+      module: 'TRA DOC', question: [
+        "TRA DOC 99. Registros del cumplimiento al 100% del programa de charlas en Calidad y Medio Ambiente:",
       ]
     },
   ]
@@ -60,40 +76,40 @@ const ETATable: React.FC = () => {
 
   return (
     <div className="eta-table-container">
-    <div className="legend">
-      <span className="legend-item" style={{ color: 'green' }}>●</span> 90% - 100%: Cumplimiento alto <br />
-      <span className="legend-item" style={{ color: 'yellow' }}>●</span> 75% - 89%: Cumplimiento medio <br />
-      <span className="legend-item" style={{ color: 'red' }}>●</span> 0% - 74%: Cumplimiento bajo
-    </div>
-    <div className="table-responsive">
-      <table id="tabla-warning" className="table-warning">
-        <thead>
-          <tr>
-            <th>Items Evaluados</th>
-            <th colSpan={5}>Preguntas Evaluadas</th>
-            <th colSpan={5}>Observaciones</th>
-          </tr>
-        </thead>
-        <tbody>
-          {questionsETA.map((module, index) => (
-            <tr key={index}>
-              <td>{module.module}</td>
-              <td colSpan={5}>
-                {module.question.map((q, i) => (
-                  <div key={i}>{q}</div>
-                ))}
-              </td>
-              <td colSpan={5}>
-                {module.question.map((q, i) => (
-                  <div key={i}>{getAnswerForQuestion(q)}</div>
-                ))}
-              </td>
+      <div className="legend">
+        <span className="legend-item" style={{ color: 'green' }}>●</span> 90% - 100%: Cumplimiento alto <br />
+        <span className="legend-item" style={{ color: 'yellow' }}>●</span> 75% - 89%: Cumplimiento medio <br />
+        <span className="legend-item" style={{ color: 'red' }}>●</span> 0% - 74%: Cumplimiento bajo
+      </div>
+      <div className="table-responsive">
+        <table id="tabla-warning" className="table-warning">
+          <thead>
+            <tr>
+              <th>Items Evaluados</th>
+              <th colSpan={5}>Preguntas Evaluadas</th>
+              <th colSpan={5}>Observaciones</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {questionsETA.map((module, index) => (
+              <tr key={index}>
+                <td>{module.module}</td>
+                <td colSpan={5}>
+                  {module.question.map((q, i) => (
+                    <div key={i}>{q}</div>
+                  ))}
+                </td>
+                <td colSpan={5}>
+                  {module.question.map((q, i) => (
+                    <div key={i}>{getAnswerForQuestion(q)}</div>
+                  ))}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
-  </div>
   )
 }
 

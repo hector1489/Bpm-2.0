@@ -66,6 +66,7 @@ const BPMGraph: React.FC<BPMGraphProps> = ({ moduleData }) => {
         depth: 50,
         viewDistance: 25,
       },
+      reflow: true,
     },
     title: {
       text: 'Promedio de preguntas por grupo',
@@ -94,12 +95,41 @@ const BPMGraph: React.FC<BPMGraphProps> = ({ moduleData }) => {
         depth: 25,
       },
     },
+    responsive: {
+      rules: [
+        {
+          condition: {
+            maxWidth: 500,
+          },
+          chartOptions: {
+            chart: {
+              options3d: {
+                depth: 30,
+              },
+            },
+            yAxis: {
+              title: {
+                text: null,
+              },
+            },
+            legend: {
+              enabled: false,
+            },
+          },
+        },
+      ],
+    },
   };
+  
 
   return (
     <div className="bpm-graph-container">
       <h3>Resumen de Promedios por Grupo BPM.</h3>
-      <HighchartsReact highcharts={Highcharts} options={chartOptions} />
+      <HighchartsReact
+  highcharts={Highcharts}
+  options={chartOptions}
+  containerProps={{ style: { width: '100%', height: '100%' } }}
+/>
     </div>
   );
 };
