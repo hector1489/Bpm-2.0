@@ -1,7 +1,7 @@
-import Highcharts from 'highcharts';
-import Highcharts3D from 'highcharts/highcharts-3d';
-import HighchartsReact from 'highcharts-react-official';
-import './BPMGraph.css';
+import Highcharts from 'highcharts'
+import Highcharts3D from 'highcharts/highcharts-3d'
+import HighchartsReact from 'highcharts-react-official'
+import './BPMGraph.css'
 
 interface BPMGraphProps {
   moduleData: { moduleName: string, percentage: number | null }[];
@@ -51,9 +51,11 @@ const BPMGraph: React.FC<BPMGraphProps> = ({ moduleData }) => {
     { groupName: 'TRA', average: calcularPromedioGrupo(traModules) },
   ];
 
-  const groupNames = groupedData.map((group) => group.groupName);
-  const groupAverages = groupedData.map((group) => group.average);
-  const barColors = groupAverages.map((avg) => getColorByPercentage(avg));
+  const overallAverage = groupedData.reduce((acc, curr) => acc + curr.average, 0) / groupedData.length;
+
+  const groupNames = groupedData.map((group) => group.groupName).concat('PROM');
+  const groupAverages = groupedData.map((group) => group.average).concat(overallAverage);
+  const barColors = groupAverages.map((avg, index) => index === groupAverages.length - 1 ? 'blue' : getColorByPercentage(avg));
 
   const chartOptions = {
     chart: {
@@ -69,7 +71,7 @@ const BPMGraph: React.FC<BPMGraphProps> = ({ moduleData }) => {
       reflow: true,
     },
     title: {
-      text: 'Promedio de preguntas por grupo',
+      text: 'Promedio de preguntas por grupo y promedio general',
     },
     xAxis: {
       categories: groupNames,
@@ -120,18 +122,17 @@ const BPMGraph: React.FC<BPMGraphProps> = ({ moduleData }) => {
       ],
     },
   };
-  
 
   return (
     <div className="bpm-graph-container">
-      <h3>Resumen de Promedios por Grupo BPM.</h3>
+      <h3>Resumen de Promedios por Grupo BPM y Promedio General.</h3>
       <HighchartsReact
-  highcharts={Highcharts}
-  options={chartOptions}
-  containerProps={{ style: { width: '100%', height: '100%' } }}
-/>
+        highcharts={Highcharts}
+        options={chartOptions}
+        containerProps={{ style: { width: '100%', height: '100%' } }}
+      />
     </div>
-  );
-};
+  )
+}
 
-export default BPMGraph;
+export default BPMGraph
