@@ -65,6 +65,10 @@ const DocumentacionView: React.FC = () => {
     navigate('/resumen-descarga');
   };
 
+  const handleToGoPhotos = () => {
+    navigate('/evidencia-fotografica');
+  }
+
   const desviacionesFiltradas = Array.from(new Set(desviaciones.map(d => d.numero_requerimiento)))
     .map(numero_requerimiento => {
       return desviaciones.find(d => d.numero_requerimiento === numero_requerimiento);
@@ -103,8 +107,12 @@ const DocumentacionView: React.FC = () => {
 
                   {visibleMenuIndex === index && (
                     <div className="dropdown-menu">
+                      <button onClick={handleToGoPhotos}>
+                      <i className="fa-regular fa-image"></i>
+                        Evidencia Fotografica
+                      </button>
                       <button onClick={() => goToControlDesviaciones(desviacion?.id, desviacion?.numero_requerimiento)}>
-                        <i className="fa-solid fa-file"></i>
+                      <i className="fa-regular fa-pen-to-square"></i>
                         Editar Desviaciones
                       </button>
                       <button onClick={() => goToRoute2(desviacion?.id, desviacion?.numero_requerimiento)}>

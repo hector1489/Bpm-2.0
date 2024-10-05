@@ -140,8 +140,14 @@ const DesviacionesTable: React.FC = () => {
       {error && <p className="error">{error}</p>}
 
       <div className="desviaciones-table-buttons">
-        <button onClick={handleEditTable}>Editar Desviaciones</button>
-        <button onClick={handleSaveChanges}>Guardar Cambios</button>
+        <button className='btn-desviaciones-table' onClick={handleEditTable}>
+        <i className="fa-solid fa-pen-to-square"></i>
+          Editar Desviaciones
+        </button>
+        <button className='btn-desviaciones-table' onClick={handleSaveChanges}>
+          <i className="fa-solid fa-envelopes-bulk"></i>
+          Guardar Cambios
+        </button>
       </div>
 
       <table id="tabla-desviaciones">
