@@ -52,7 +52,6 @@ const AuditSummary: React.FC = () => {
 
   const handleSendIncidencias = useCallback(async () => {
     const { auditSheetData, IsHero, photos, authToken } = state;
-    const nombreEstablecimiento = auditSheetData.nombreEstablecimiento;
     const responsableDelProblema = auditSheetData.supervisorEstablecimiento;
 
     if (!authToken) {
@@ -65,6 +64,7 @@ const AuditSummary: React.FC = () => {
       .map((hero) => {
         const criticidadColor = getColorByPercentage(extractPercentage(hero.answer ?? DEFAULT_ANSWER));
         const solucionProgramada = calculateSolutionDate(criticidadColor);
+        const nombreDelEstablecimiento = state.auditSheetData.nombreEstablecimiento;
         const photo = photos.find(photo => photo.question === hero.question);
         const numeroAuditoria = state.auditSheetData.numeroAuditoria
         const auditor = state.userName
@@ -76,7 +76,7 @@ const AuditSummary: React.FC = () => {
           respuesta: hero.answer ?? DEFAULT_ANSWER,
           fecha: getCurrentDate(),
           auditor: auditor,
-          nombreEstablecimiento,
+          nombreEstablecimiento: nombreDelEstablecimiento,
           responsableDelProblema,
           solucionProgramada,
           accionesCorrectivas: '',
@@ -87,7 +87,6 @@ const AuditSummary: React.FC = () => {
       });
 
     try {
-      console.log(desviaciones);
       const result = await enviarDatosAuditoria(desviaciones, authToken);
       console.log('Incidencias enviadas exitosamente:', result);
     } catch (error) {

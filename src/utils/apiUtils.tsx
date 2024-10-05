@@ -100,7 +100,7 @@ export const cargarDatosPorAuditor = async (auditor: string, authToken: string) 
     });
 
     const datos = response.data;
-
+    
     if (datos && datos.length > 0) {
       return datos;
     } else {
