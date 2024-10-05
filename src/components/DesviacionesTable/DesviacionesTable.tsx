@@ -2,8 +2,8 @@ import './DesviacionesTable.css';
 import { useContext, useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { AppContext } from '../../context/GlobalState';
-import { useDesviaciones  } from '../../hooks/useDesviaciones';
-import { desviacionDelete } from '../../utils/apiUtils';
+import { useDesviaciones } from '../../hooks/useDesviaciones';
+import { desviacionDelete, enviarDatosAuditoria } from '../../utils/apiUtils';
 
 interface DesviacionResponse {
   id: number;
@@ -31,12 +31,13 @@ const DesviacionesTable: React.FC = () => {
   const location = useLocation();
   const { id, numero_requerimiento } = location.state || {};
   const { desviaciones, loading, error } = useDesviaciones();
- 
-  const [localDesviaciones, setLocalDesviaciones] = useState<DesviacionResponse[]>(desviaciones || []); 
+
+  const [localDesviaciones, setLocalDesviaciones] = useState<DesviacionResponse[]>(desviaciones || []);
 
   if (!context) {
     return <div>Error: Context is not available.</div>;
   }
+
 
   useEffect(() => {
     if (desviaciones) {
@@ -65,14 +66,71 @@ const DesviacionesTable: React.FC = () => {
         setLocalDesviaciones(prevDesviaciones => prevDesviaciones.filter(desviacion => desviacion.id !== id));
       } catch (error) {
         console.error('Error eliminando la desviación:', error);
-        alert('Error al eliminar la desviación. Por favor, inténtalo de nuevo.'); 
+        alert('Error al eliminar la desviación. Por favor, inténtalo de nuevo.');
       }
     }
   };
 
   const handleEditTable = () => {
-    console.log('editar tabla');
+    const tableBody = document.querySelector('#tabla-desviaciones tbody');
+    if (!tableBody) return;
+
+    tableBody.querySelectorAll('tr').forEach((row) => {
+      row.querySelectorAll('td').forEach((cell) => {
+        if (cell.textContent === 'N/A' || cell.textContent === DEFAULT_ANSWER) {
+          const input = document.createElement('input');
+          input.type = 'text';
+          input.value = '';
+          input.placeholder = 'Text ...';
+
+          cell.innerHTML = '';
+          cell.appendChild(input);
+        }
+      });
+    });
   };
+
+  const handleSaveChanges = async () => {
+    const authToken = state.authToken ?? '';
+    const tableBody = document.querySelector('#tabla-desviaciones tbody');
+    if (!tableBody) return;
+
+    const updatedDesviaciones: any[] = [];
+
+    tableBody.querySelectorAll('tr').forEach((row) => {
+      const desviacion: any = {};
+      const cells = row.querySelectorAll('td');
+
+      desviacion.id = cells[0].textContent?.trim() || null;
+      desviacion.numeroRequerimiento = (cells[1].querySelector('input')?.value || cells[1].textContent)?.trim() || '';
+      desviacion.pregunta = (cells[2].querySelector('input')?.value || cells[2].textContent)?.trim() || '';
+      desviacion.respuesta = (cells[3].querySelector('input')?.value || cells[3].textContent)?.trim() || '';
+      desviacion.responsableDelProblema = (cells[4].querySelector('input')?.value || cells[4].textContent)?.trim() || '';
+      desviacion.local = (cells[5].querySelector('input')?.value || cells[5].textContent)?.trim() || '';
+      desviacion.criticidad = (cells[6].querySelector('input')?.value || cells[6].textContent)?.trim() || '';
+      desviacion.accionesCorrectivas = (cells[7].querySelector('input')?.value || cells[7].textContent)?.trim() || '';
+      desviacion.fechaRecepcionSolicitud = (cells[8].querySelector('input')?.value || cells[8].textContent)?.trim() || '';
+      desviacion.fechaSolucionProgramada = (cells[9].querySelector('input')?.value || cells[9].textContent)?.trim() || '';
+      desviacion.estado = (cells[10].querySelector('input')?.value || cells[10].textContent)?.trim() || '';
+      desviacion.fechaCambioEstado = (cells[11].querySelector('input')?.value || cells[11].textContent)?.trim() || '';
+      desviacion.contactoClientes = (cells[12].querySelector('input')?.value || cells[12].textContent)?.trim() || '';
+      desviacion.evidenciaFotografica = (cells[13].querySelector('input')?.value || cells[13].textContent)?.trim() || '';
+      desviacion.auditor = (cells[14].querySelector('input')?.value || cells[14].textContent)?.trim() || '';
+      desviacion.correo = (cells[15].querySelector('input')?.value || cells[15].textContent)?.trim() || '';
+
+      updatedDesviaciones.push(desviacion);
+    });
+
+    try {
+      await enviarDatosAuditoria(updatedDesviaciones, authToken);
+      alert('Datos enviados exitosamente');
+    } catch (error) {
+      console.error('Error al enviar datos al backend:', error);
+      alert('Error al enviar datos. Intenta nuevamente.');
+    }
+  };
+
+
 
   return (
     <div className="desviaciones-tabla-container">
@@ -81,7 +139,10 @@ const DesviacionesTable: React.FC = () => {
       {loading && <p>Cargando desviaciones...</p>}
       {error && <p className="error">{error}</p>}
 
-      <button onClick={handleEditTable}>Editar Desviaciones</button>
+      <div className="desviaciones-table-buttons">
+        <button onClick={handleEditTable}>Editar Desviaciones</button>
+        <button onClick={handleSaveChanges}>Guardar Cambios</button>
+      </div>
 
       <table id="tabla-desviaciones">
         <thead>
