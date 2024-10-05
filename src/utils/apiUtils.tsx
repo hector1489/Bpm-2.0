@@ -1,7 +1,9 @@
 import axios from 'axios';
 import { getCurrentDate } from './utils';
+import { DesviacionResponse } from '../interfaces/interfaces'
 
 const BASE_URL = 'https://bpm-backend.onrender.com';
+
 
 // Función para obtener todas las acciones correctivas
 export const obtenerTodasLasAccionesDesdeAPI = async (authToken: string) => {
@@ -71,12 +73,61 @@ export const cargarDesviacionesDesdeBackend = async (authToken: string) => {
         'Authorization': `Bearer ${authToken}`,
       },
     });
+    console.log(response.data);
     return response.data;
   } catch (error) {
     console.error('Error al recuperar las desviaciones:', error);
     return null;
   }
 };
+
+export const actualizarDesviacionBackend = async (id: number, updatedData: DesviacionResponse, authToken: string) => {
+  // Función para formatear fecha en formato YYYY-MM-DD
+  const formatFecha = (fecha: string | null) => {
+    if (!fecha) return null;
+    const dateObj = new Date(fecha);
+    return isNaN(dateObj.getTime()) ? null : dateObj.toISOString().split('T')[0];
+  };
+
+  const updateDesviacionData = {
+    numeroRequerimiento: updatedData.numero_requerimiento || '',
+    preguntasAuditadas: updatedData.preguntas_auditadas || '',
+    desviacionOCriterio: updatedData.desviacion_o_criterio || '',
+    tipoDeAccion: updatedData.tipo_de_accion || 'N/A',
+    responsableProblema: updatedData.responsable_problema || '',
+    local: updatedData.local || '',
+    criticidad: updatedData.criticidad || '',
+    accionesCorrectivas: updatedData.acciones_correctivas || 'N/A',
+    fechaRecepcionSolicitud: updatedData.fecha_recepcion_solicitud ? formatFecha(updatedData.fecha_recepcion_solicitud) : null,
+    fechaSolucionProgramada: updatedData.fecha_solucion_programada ? formatFecha(updatedData.fecha_solucion_programada) : null,
+    estado: updatedData.estado || 'Abierto',
+    fechaCambioEstado: updatedData.fecha_cambio_estado ? formatFecha(updatedData.fecha_cambio_estado) : null,
+    contactoClientes: updatedData.contacto_clientes || '',
+    evidenciaFotografica: updatedData.evidencia_fotografica || 'N/A',
+    detalleFoto: updatedData.detalle_foto || '',
+    auditor: updatedData.auditor || '',
+    correo: updatedData.correo || '',
+    fechaUltimaModificacion: updatedData.fecha_ultima_modificacion || null,
+    authToken: authToken || '',
+  };
+
+  console.log('api utils', updateDesviacionData);
+
+  try {
+    const response = await axios.put(`${BASE_URL}/desviaciones/${id}`, updateDesviacionData, {
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${authToken}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error(`Error al actualizar la desviación con ID ${id}:`, error);
+    throw error;
+  }
+};
+
+
 
 // Función para cargar desviaciones por auditor
 export const cargarDatosPorAuditor = async (auditor: string, authToken: string) => {

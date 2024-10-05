@@ -1,25 +1,7 @@
 import { useState, useEffect, useContext, useMemo } from 'react';
-import { cargarDesviacionesDesdeBackend } from '../utils/apiUtils';
+import { cargarDesviacionesDesdeBackend, actualizarDesviacionBackend } from '../utils/apiUtils';
 import { AppContext } from '../context/GlobalState';
-
-interface DesviacionResponse {
-  id: number;
-  numero_requerimiento: string;
-  preguntas_auditadas: string;
-  desviacion_o_criterio: string;
-  responsable_problema: string;
-  local: string;
-  criticidad: string;
-  acciones_correctivas: string;
-  fecha_recepcion_solicitud: string;
-  fecha_solucion_programada: string;
-  estado: string;
-  fecha_cambio_estado: string;
-  contacto_clientes: string;
-  evidencia_fotografica: string;
-  auditor: string;
-  correo: string;
-}
+import { DesviacionResponse } from '../interfaces/interfaces'; // Asegúrate de importar la interfaz correcta
 
 export const useDesviaciones = () => {
   const context = useContext(AppContext);
@@ -30,6 +12,8 @@ export const useDesviaciones = () => {
   useEffect(() => {
     const fetchDesviaciones = async () => {
       setLoading(true);
+      setError(null);
+
       try {
         if (context?.state.authToken) {
           const data = await cargarDesviacionesDesdeBackend(context.state.authToken);
@@ -44,7 +28,7 @@ export const useDesviaciones = () => {
 
     fetchDesviaciones();
   }, [context?.state.authToken]);
-  
+
   const { responsableCount, statusCounts, statusCountsEstados } = useMemo(() => {
     if (!desviaciones) return { responsableCount: {}, statusCounts: {}, statusCountsEstados: {} };
 
@@ -76,4 +60,36 @@ export const useDesviaciones = () => {
   }, [desviaciones]);
 
   return { desviaciones, loading, error, responsableCount, statusCounts, statusCountsEstados };
+};
+
+export const useUpdateDesviaciones = () => {
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const actualizarDesviaciones = async (desviaciones: DesviacionResponse[], authToken: string) => {
+    setIsLoading(true);
+    setError(null);
+
+    const updatePromises = desviaciones.map(async (desviacion) => {
+      try {
+        await actualizarDesviacionBackend(desviacion.id, desviacion, authToken);
+        console.log(`Desviación con ID ${desviacion.id} actualizada correctamente.`);
+      } catch (err) {
+        console.error(`Error al actualizar la desviación con ID ${desviacion.id}:`, err);
+        return { error: `Error al actualizar la desviación con ID ${desviacion.id}.` };
+      }
+    });
+
+    const results = await Promise.allSettled(updatePromises);
+
+    results.forEach(result => {
+      if (result.status === 'rejected') {
+        setError(result.reason);
+      }
+    });
+
+    setIsLoading(false);
+  };
+
+  return { actualizarDesviaciones, isLoading, error };
 };

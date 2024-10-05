@@ -76,6 +76,27 @@ export interface Desviacion {
 }
 
 
-
+// interfaces.ts
+export interface DesviacionResponse {
+  id: number;
+  numero_requerimiento: string;
+  preguntas_auditadas: string;
+  desviacion_o_criterio: string;
+  responsable_problema: string;
+  local: string;
+  criticidad: string;
+  acciones_correctivas: string;
+  fecha_recepcion_solicitud: string | null;
+  fecha_solucion_programada: string | null;
+  estado: string;
+  fecha_cambio_estado: string | null;
+  contacto_clientes: string;
+  evidencia_fotografica: string;
+  auditor: string;
+  correo: string;
+  detalle_foto: string;
+  fecha_ultima_modificacion: string | null;
+  tipo_de_accion: string;
+}
 
 
