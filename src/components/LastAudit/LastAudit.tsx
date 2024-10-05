@@ -6,13 +6,21 @@ const LastAudit: React.FC = () => {
   const navigate = useNavigate();
   const { desviaciones, loading, error } = useDesviaciones();
 
-  const ultimasDesviaciones = desviaciones ? desviaciones.slice(-5) : [];
+  const ultimasDesviaciones = desviaciones ? desviaciones : [];
 
   const goToControlDesviaciones = (id: number, numeroRequerimiento: string) => {
     navigate('/doc-desviaciones', {
       state: { id, numero_requerimiento: numeroRequerimiento },
     });
   };
+
+  const desviacionesFiltradas = Array.from(
+    new Set(ultimasDesviaciones.map((incidencia) => incidencia.numero_requerimiento))
+  ).map((numero_requerimiento) => {
+    return ultimasDesviaciones.find(
+      (incidencia) => incidencia.numero_requerimiento === numero_requerimiento
+    );
+  });
 
   return (
     <div className="last-audit-container">
@@ -21,21 +29,23 @@ const LastAudit: React.FC = () => {
       {error && <p className="error">{error}</p>}
 
       <div className="last-audit-cards">
-        {ultimasDesviaciones.length > 0 ? (
-          ultimasDesviaciones.map((incidencia, index) => (
-            <div className="last-audit" key={index}>
-              <button
-                onClick={() =>
-                  goToControlDesviaciones(
-                    incidencia.id,
-                    incidencia.numero_requerimiento
-                  )
-                }
-              >
-                <i className="fa-solid fa-pen-to-square"></i>
-              </button>
-              <span>{incidencia.numero_requerimiento || 'Sin título'}</span>
-            </div>
+        {desviacionesFiltradas.length > 0 ? (
+          desviacionesFiltradas.map((incidencia, index) => (
+            incidencia && (
+              <div className="last-audit" key={index}>
+                <button
+                  onClick={() =>
+                    goToControlDesviaciones(
+                      incidencia.id,
+                      incidencia.numero_requerimiento
+                    )
+                  }
+                >
+                  <i className="fa-solid fa-pen-to-square"></i>
+                </button>
+                <span>{incidencia.numero_requerimiento || 'Sin título'}</span>
+              </div>
+            )
           ))
         ) : (
           <p>No hay incidencias recientes.</p>

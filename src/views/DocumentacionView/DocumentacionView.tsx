@@ -65,6 +65,11 @@ const DocumentacionView: React.FC = () => {
     navigate('/resumen-descarga');
   };
 
+  const desviacionesFiltradas = Array.from(new Set(desviaciones.map(d => d.numero_requerimiento)))
+    .map(numero_requerimiento => {
+      return desviaciones.find(d => d.numero_requerimiento === numero_requerimiento);
+    });
+
   return (
     <div className="documentacion-container">
       <h3 className='fw-bold'>Documentación</h3>
@@ -87,26 +92,26 @@ const DocumentacionView: React.FC = () => {
         <div>Cargando desviaciones...</div>
       ) : (
         <div className="desviaciones">
-          {desviaciones.length > 0 ? (
+          {desviacionesFiltradas.length > 0 ? (
             <div className="desviaciones-cards">
-              {desviaciones.map((desviacion, index) => (
+              {desviacionesFiltradas.map((desviacion, index) => (
                 <div className="card" key={index} onClick={() => toggleMenu(index)}>
-                  <p>Requerimiento {desviacion.numero_requerimiento}</p>
+                  <p>Auditoria <span className='text-warning fw-bold'>:</span> {desviacion?.numero_requerimiento}</p>
                   <div className="card-icon">
                     <i className="fa-solid fa-suitcase"></i>
                   </div>
 
                   {visibleMenuIndex === index && (
                     <div className="dropdown-menu">
-                      <button onClick={() => goToControlDesviaciones(desviacion.id, desviacion.numero_requerimiento)}>
+                      <button onClick={() => goToControlDesviaciones(desviacion?.id, desviacion?.numero_requerimiento)}>
                         <i className="fa-solid fa-file"></i>
                         Editar Desviaciones
                       </button>
-                      <button onClick={() => goToRoute2(desviacion.id, desviacion.numero_requerimiento)}>
+                      <button onClick={() => goToRoute2(desviacion?.id, desviacion?.numero_requerimiento)}>
                         <i className="fa-solid fa-file"></i>
                         Resumen Ejecutivo
                       </button>
-                      <button onClick={() => goToRoute1(desviacion.id, desviacion.numero_requerimiento)}>
+                      <button onClick={() => goToRoute1(desviacion?.id, desviacion?.numero_requerimiento)}>
                         <i className="fa-solid fa-file"></i>
                         Informe Ejecutivo
                       </button>

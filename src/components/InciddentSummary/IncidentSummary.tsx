@@ -209,7 +209,7 @@ const IncidentSummary: React.FC = () => {
           <div className="card bg-info text-white bordered-box">
             <div className="card-body">
               <h5><span id="estadoAbierto">{StatusCountsEstados.enProgreso}</span></h5>
-              <p>En Progreso</p>
+              <p>En Proceso</p>
             </div>
           </div>
 
