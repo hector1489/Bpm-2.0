@@ -7,8 +7,9 @@ import { AppContext } from '../../context/GlobalState'
 import { extractPercentage, getCurrentDate, calculateSolutionDate, getColorByPercentage } from '../../utils/utils'
 import { enviarDatosAuditoria } from '../../utils/apiUtils'
 import logoFungi from '../../assets/img/logo.jpg'
-import { PDFDownloadLink } from '@react-pdf/renderer'
+import { pdf } from '@react-pdf/renderer'
 import MyDocument from '../../utils/MyDocument'
+import { subirPDF } from '../../utils/apiPdfUtils'
 
 const DEFAULT_ANSWER = "Sin respuesta";
 
@@ -139,6 +140,27 @@ const AuditSummary: React.FC = () => {
 }
 
 
+const handleSendPDF = async () => {
+  if (images.length > 0) {
+    const doc = <MyDocument images={images} />;
+    
+    const pdfBlob = await pdf(doc).toBlob();
+    
+    const pdfFile = new File([pdfBlob], `auditoria_bpm_${Date.now()}.pdf`, {
+      type: 'application/pdf',
+      lastModified: Date.now(),
+    });
+    
+    try {
+      const result = await subirPDF(pdfFile, pdfFile.name);
+      console.log('PDF enviado exitosamente:', result);
+    } catch (error) {
+      console.error('Error al enviar el PDF:', error);
+    }
+  }
+};
+
+
   return (
     <div className="summary-container">
       <div className="logo-fungi">
@@ -171,14 +193,8 @@ const AuditSummary: React.FC = () => {
         </button>
         
         {images.length > 0 && (
-          <button>
-          <PDFDownloadLink
-            document={<MyDocument images={images} />}
-            fileName="auditoria_bpm.pdf"
-            className='btn-dd-pdf'
-          >
-            Descargar PDF
-          </PDFDownloadLink>
+          <button onClick={handleSendPDF} className="btn-dd-pdf">
+            Enviar PDF
           </button>
         )}
 

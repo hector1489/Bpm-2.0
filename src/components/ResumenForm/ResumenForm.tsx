@@ -1,74 +1,53 @@
 import './ResumenForm.css';
-import { useContext } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { AppContext } from '../../context/GlobalState';
+import { obtenerPDFs } from '../../utils/apiPdfUtils';
+
+interface PDFData {
+  key: string;
+  url: string;
+}
 
 const ResumenForm: React.FC = () => {
   const context = useContext(AppContext);
-  
+  const [pdfs, setPdfs] = useState<PDFData[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+
   if (!context) {
     return <div>Error al cargar el contexto</div>;
   }
 
-  const { state } = context;
-
-  const ETAQuestion = [
-    {
-      module: 'CONTROL DE SUPERFICIES CONTACTO CON ALIMENTOS E INSTALACIONES',
-      questions: ['CS 19.', 'CS 20.'],
-    },
-    {
-      module: 'CONTROL DE SALUD E HIGIENE DE EMPLEADOS',
-      questions: ['CSH 32.'],
-    },
-    {
-      module: 'CONTROL DE PLAGAS',
-      questions: ['CP 35.', 'CP 36.'],
-    },
-    {
-      module: 'RECEPCION',
-      questions: ['REC 42.', 'REC 43.'],
-    },
-    {
-      module: 'PROCESOS Y PRODUCTOS TERMINADOS',
-      questions: ['PPT 82.', 'PPT 83.', 'PPT 84.', 'PPT 85.', 'PPT 86.', 'PPT 87.'],
-    },
-    {
-      module: 'CAP - CAPACITACION',
-      questions: ['CAP 101.', 'CAP 102.'],
-    },
-  ];
-
-  
-
-  const getAnswerForQuestion = (question: string) => {
-    const foundQuestion = state.IsHero.find(q => q.question.startsWith(question));
-    return foundQuestion ? foundQuestion.answer : 'Sin respuesta';
+  const fetchPDFs = async () => {
+    try {
+      const response = await obtenerPDFs();
+      setPdfs(response);
+      setLoading(false);
+    } catch (error) {
+      console.error('Error al obtener los PDFs:', error);
+      setLoading(false);
+    }
   };
+
+  useEffect(() => {
+    fetchPDFs();
+  }, []);
 
   return (
     <div className="Resumen-form-container">
-      <div className='resumen-form'>
-        <h3>Resumen Auditoría</h3>
-        <p>ETA</p>
-        <table>
-          <thead>
-            <tr>
-              <th>Pregunta</th>
-              <th>Respuesta</th>
-            </tr>
-          </thead>
-          <tbody>
-            {ETAQuestion.map((module) => 
-              module.questions.map((question) => (
-                <tr key={question}>
-                  <td>{question}</td>
-                  <td>{getAnswerForQuestion(question)}</td>
-                </tr>
-              ))
-            )}
-          </tbody>
-        </table>
-      </div>
+      {loading ? (
+        <p>Cargando PDFs...</p>
+      ) : (
+        <div className="pdf-card-container">
+          {pdfs.map((pdf) => (
+            <div key={pdf.key} className="pdf-card">
+              <h3>PDF: {pdf.key}</h3>
+              <a href={pdf.url} target="_blank" rel="noopener noreferrer">
+                Ver PDF
+              </a>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 };
