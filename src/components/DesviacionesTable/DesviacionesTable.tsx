@@ -46,7 +46,6 @@ const DesviacionesTable: React.FC = () => {
     }
   };
 
-  // Reemplazar campos "N/A" con valores vacíos
   const replaceNA = (value: string) => (value === 'N/A' ? '' : value);
 
   // Guardar cambios
@@ -75,7 +74,6 @@ const DesviacionesTable: React.FC = () => {
       fecha_ultima_modificacion: row.fecha_ultima_modificacion || null
     }));
 
-    // Enviar los datos actualizados al backend
     await actualizarDesviaciones(updatedDesviaciones, authToken);
   };
 

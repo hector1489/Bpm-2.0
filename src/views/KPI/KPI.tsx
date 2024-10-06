@@ -72,11 +72,19 @@ const KPI: React.FC = () => {
       <KPIGraph moduleData={moduleData} />
       <KPITable />
       <div className="buttons-luminometry">
-        <button onClick={handleGoToAuditSummary}>volver</button>
-        <button onClick={handleGoToDetails}>detalle</button>
-        <button onClick={handleGoToLuminometry}>Luminometria</button>
-        <button onClick={handleGoToETA}>ETA</button>
-        <button onClick={handleGoToHome}>
+        <button className='btn-circle btn-green' onClick={handleGoToAuditSummary}>
+          <i className="fa-solid fa-arrow-left"></i>
+        </button>
+        <button className='btn-circle bg-warning' onClick={handleGoToDetails} title='Detalle'>
+          <i className="fa-solid fa-circle-info"></i>
+        </button>
+        <button className='btn-circle bg-warning' onClick={handleGoToLuminometry} title='Luminometria'>
+          <i className="fa-regular fa-lightbulb"></i>
+        </button>
+        <button className='btn-circle bg-warning' onClick={handleGoToETA} title='ETA'>
+          <i className="fa-solid fa-e"></i>
+        </button>
+        <button className='btn-circle' onClick={handleGoToHome}>
           <i className="fa-solid fa-house-chimney"></i>
         </button>
       </div>

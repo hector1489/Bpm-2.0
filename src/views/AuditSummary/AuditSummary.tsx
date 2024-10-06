@@ -7,6 +7,7 @@ import { extractPercentage, getCurrentDate, calculateSolutionDate, getColorByPer
 import { enviarDatosAuditoria } from '../../utils/apiUtils'
 import logoFungi from '../../assets/img/logo.jpg'
 
+
 const DEFAULT_ANSWER = "Sin respuesta";
 
 const AuditSummary: React.FC = () => {
@@ -110,6 +111,10 @@ const AuditSummary: React.FC = () => {
     navigate('/resumen-detalle')
   }
 
+  const handleGoToKpi = () => {
+    navigate('/kpi');
+  }
+
   return (
     <div className="summary-container">
       <div className="logo-fungi">
@@ -132,6 +137,9 @@ const AuditSummary: React.FC = () => {
         </button>
         <button className='btn-circle bg-warning' onClick={handleGoToETA} title='ETA'>
           <i className="fa-solid fa-e"></i>
+        </button>
+        <button className='btn-circle bg-warning' onClick={handleGoToKpi} title='KPI'>
+        <i className="fa-solid fa-k"></i>
         </button>
         <button className='btn-circle' onClick={handleGoToHome}>
           <i className="fa-solid fa-house-chimney"></i>

@@ -15,6 +15,7 @@ const PhotosBackend: React.FC = () => {
   const fetchIncidencias = async () => {
     try {
       const data = await obtenerFotos();
+      console.log(data);
       setPhotos(data);
     } catch (error) {
       console.error('Error al obtener las fotos:', error);

@@ -44,7 +44,7 @@ const DetailsView: React.FC = () => {
       </div>
       <div className="detail-button">
         <button className='btn-circle btn-green' onClick={handleGoToAuditSummary}>
-        <i className="fa-solid fa-arrow-left"></i>
+          <i className="fa-solid fa-arrow-left"></i>
         </button>
         <button className='btn-circle bg-warning' onClick={handleGoToLuminometry} title='Luminometria'>
           <i className="fa-regular fa-lightbulb"></i>
