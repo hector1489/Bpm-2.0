@@ -113,7 +113,8 @@ export const actualizarDesviacionBackend = async (
     authToken: handleEmptyField(authToken),
   };
 
-  console.log('Datos para el backend:', safeValues);
+  // Log para ver los valores que estamos enviando
+  console.log("Datos actualizados que se enviarán al backend:", safeValues);
 
   try {
     const response = await axios.put(`${BASE_URL}/desviaciones/${id}`, safeValues, {
@@ -122,6 +123,10 @@ export const actualizarDesviacionBackend = async (
         'Authorization': `Bearer ${authToken}`,
       },
     });
+
+    // Log del resultado de la petición
+    console.log(`Respuesta del backend para la desviación con ID ${id}:`, response.data);
+
     return response.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
@@ -134,7 +139,6 @@ export const actualizarDesviacionBackend = async (
     throw new Error('Error al actualizar la desviación en el backend');
   }
 };
-
 
 
 // Función para cargar desviaciones por auditor

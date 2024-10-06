@@ -17,13 +17,12 @@ const DesviacionesTable: React.FC = () => {
   const { actualizarDesviaciones, isLoading, error: updateError } = useUpdateDesviaciones();
 
   const [localDesviaciones, setLocalDesviaciones] = useState<DesviacionResponse[]>([]);
-  const [reloadData, setReloadData] = useState(false); // Estado para controlar el recargar datos
+  const [reloadData, setReloadData] = useState(false);
 
   if (!context) {
     return <div>Error: Context is not available.</div>;
   }
 
-  // Efecto para cargar desviaciones filtradas cuando cambien los datos o el estado de recarga
   useEffect(() => {
     if (desviaciones) {
       const filteredDesviaciones = desviaciones.filter(desviacion => {
@@ -33,7 +32,7 @@ const DesviacionesTable: React.FC = () => {
       });
       setLocalDesviaciones(filteredDesviaciones);
     }
-  }, [desviaciones, numero_requerimiento, context?.state?.userName, reloadData]); // Aquí también se escucha por el cambio en `reloadData`
+  }, [desviaciones, numero_requerimiento, context?.state?.userName, reloadData]);
 
   const eliminarFila = async (id: number) => {
     const confirmDelete = window.confirm("¿Estás seguro de que deseas eliminar esta fila?");
@@ -85,31 +84,88 @@ const DesviacionesTable: React.FC = () => {
     try {
       await actualizarDesviaciones(updatedDesviaciones, authToken);
       alert("Cambios guardados exitosamente.");
-      setReloadData(true); // Marcar que necesitamos recargar los datos
+      setReloadData(true);
     } catch (error) {
       console.error('Error al guardar los cambios:', error);
       alert('Hubo un error al guardar los cambios. Por favor, inténtalo de nuevo.');
     }
   };
 
+  const handleInputChange = (index: number, field: keyof DesviacionResponse, value: string) => {
+    setLocalDesviaciones(prevDesviaciones => {
+      const updatedDesviaciones = [...prevDesviaciones];
+      updatedDesviaciones[index] = {
+        ...updatedDesviaciones[index],
+        [field]: value,
+      };
+      return updatedDesviaciones;
+    });
+  };
+  
+
+  const getFieldFromCellIndex = (index: number): keyof DesviacionResponse => {
+    switch (index) {
+      case 1:
+        return 'numero_requerimiento';
+      case 2:
+        return 'preguntas_auditadas';
+      case 3:
+        return 'desviacion_o_criterio';
+      case 4:
+        return 'responsable_problema';
+      case 5:
+        return 'local';
+      case 6:
+        return 'criticidad';
+      case 7:
+        return 'acciones_correctivas';
+      case 8:
+        return 'fecha_recepcion_solicitud';
+      case 9:
+        return 'fecha_solucion_programada';
+      case 10:
+        return 'estado';
+      case 11:
+        return 'contacto_clientes';
+      case 12:
+        return 'evidencia_fotografica';
+      case 13:
+        return 'auditor';
+      case 14:
+        return 'correo';
+      default:
+        throw new Error('Índice de celda inválido');
+    }
+  };
+
   const handleEditTable = () => {
     const tableBody = document.querySelector('#tabla-desviaciones tbody');
     if (!tableBody) return;
-
-    tableBody.querySelectorAll('tr').forEach((row) => {
-      row.querySelectorAll('td').forEach((cell) => {
+  
+    tableBody.querySelectorAll('tr').forEach((row, rowIndex) => {
+      row.querySelectorAll('td').forEach((cell, cellIndex) => {
         if (cell.textContent === 'N/A' || cell.textContent === DEFAULT_ANSWER) {
+          const field = getFieldFromCellIndex(cellIndex);
           const input = document.createElement('input');
           input.type = 'text';
-          input.value = '';
           input.placeholder = 'Text ...';
-
+  
+          // Convertir el valor a string si es necesario
+          const currentValue = localDesviaciones[rowIndex][field];
+          input.value = currentValue !== undefined && currentValue !== null ? String(currentValue) : '';
+  
+          input.oninput = (e) => {
+            const value = (e.target as HTMLInputElement).value;
+            handleInputChange(rowIndex, field, value);
+          };
+  
           cell.innerHTML = '';
           cell.appendChild(input);
         }
       });
     });
   };
+  
 
   return (
     <div className="desviaciones-tabla-container">
@@ -186,4 +242,3 @@ const DesviacionesTable: React.FC = () => {
 };
 
 export default DesviacionesTable;
-
