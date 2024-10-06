@@ -2,10 +2,11 @@ import { useContext, useState, useEffect } from 'react';
 import { AppContext } from '../../context/GlobalState';
 import { useNavigate } from 'react-router-dom';
 import html2canvas from 'html2canvas';
-import { PDFDownloadLink } from '@react-pdf/renderer';
+import { pdf } from '@react-pdf/renderer';
 import MyDocument from '../../utils/MyDocument';
 import './DetailsView.css';
 import { AverageTable, PhotoAudit, DetailsTable } from '../../components';
+import { subirPDF } from '../../utils/apiPdfUtils';
 
 const DetailsView: React.FC = () => {
   const navigate = useNavigate();
@@ -18,6 +19,7 @@ const DetailsView: React.FC = () => {
 
   const { state } = context;
 
+  // Función para capturar las imágenes de la sección
   const handleCaptureImages = async () => {
     const element = document.querySelector('.detail-container') as HTMLElement;
     if (element) {
@@ -27,10 +29,34 @@ const DetailsView: React.FC = () => {
     }
   };
 
+  // Captura las imágenes cuando el componente se monta
   useEffect(() => {
     handleCaptureImages();
   }, []);
 
+  // Función para enviar el PDF al backend
+  const handleSendPDF = async () => {
+    if (images.length > 0) {
+      const doc = <MyDocument images={images} />;
+
+      const pdfBlob = await pdf(doc).toBlob();
+
+      const pdfFile = new File([pdfBlob], `detalle_auditoria_${Date.now()}.pdf`, {
+        type: 'application/pdf',
+        lastModified: Date.now(),
+      });
+
+      try {
+        const result = await subirPDF(pdfFile, pdfFile.name);
+        alert('PDF enviado exitosamente');
+        console.log('PDF enviado exitosamente:', result);
+      } catch (error) {
+        console.error('Error al enviar el PDF:', error);
+      }
+    }
+  };
+
+  // Navegación
   const handleGoToAuditSummary = () => {
     navigate('/resumen-auditoria');
   };
@@ -46,6 +72,10 @@ const DetailsView: React.FC = () => {
   const handleGoToETA = () => {
     navigate('/seremi');
   };
+  
+  const handleGoToKpi = () => {
+    navigate('/kpi');
+  }
 
   return (
     <div className="detail-container">
@@ -69,19 +99,16 @@ const DetailsView: React.FC = () => {
         <button className='btn-circle bg-warning' onClick={handleGoToETA} title='ETA'>
           <i className="fa-solid fa-e"></i>
         </button>
+        <button className='btn-circle bg-warning' onClick={handleGoToKpi} title='KPI'>
+          <i className="fa-solid fa-k"></i>
+        </button>
         <button className='btn-circle' onClick={handleGoToHome}>
           <i className="fa-solid fa-house-chimney"></i>
         </button>
 
         {images.length > 0 && (
-          <button>
-            <PDFDownloadLink
-              document={<MyDocument images={images} />}
-              fileName="detalle_auditoria.pdf"
-              className='btn-dd-pdf'
-            >
-              Descargar PDF
-            </PDFDownloadLink>
+          <button onClick={handleSendPDF} className="btn-dd-pdf">
+            Enviar PDF <i className="fa-solid fa-upload"></i>
           </button>
         )}
       </div>

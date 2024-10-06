@@ -1,17 +1,23 @@
 import { LUMGraph } from '../../components/index'
 import { useNavigate } from 'react-router-dom'
-import { useContext } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { AppContext } from '../../context/GlobalState'
 import './Luminometry.css'
 import { getColorByPercentageLum } from '../../utils/utils'
+import html2canvas from 'html2canvas';
+import { pdf } from '@react-pdf/renderer';
+import MyDocument from '../../utils/MyDocument';
+import { subirPDF } from '../../utils/apiPdfUtils';
 
 const Luminometry: React.FC = () => {
   const navigate = useNavigate();
   const context = useContext(AppContext);
+  const [images, setImages] = useState<string[]>([]);
 
   if (!context) {
     return <div>Error: Context is not available.</div>;
   }
+
 
   const handleGoToAuditSummary = () => navigate('/resumen-auditoria');
   const handleGoToHome = () => navigate('/');
@@ -32,6 +38,44 @@ const Luminometry: React.FC = () => {
     { url: "1001-5000", measurement: "4.1 ≤ l ≤ 4.9", percentage: "28%", note: 2, evaluation: "MALA", cleanliness: "MUY SUCIO", riskClassification: "ALTO RIESGO (MUY GRAVE)" },
     { url: "5001-10000", measurement: "5 ≤ l", percentage: "14%", note: 1, evaluation: "MUY MALA", cleanliness: "TOTALMENTE SUCIO", riskClassification: "MUY ALTO RIESGO (CRÍTICO)" },
   ];
+
+  const handleCaptureImages = async () => {
+    const element = document.querySelector('.lum-container') as HTMLElement;
+    if (element) {
+      const canvas = await html2canvas(element);
+      const dataUrl = canvas.toDataURL('image/png');
+      setImages([dataUrl]); // Capturamos la imagen del contenedor
+    }
+  };
+
+  useEffect(() => {
+    handleCaptureImages();
+  }, []);
+
+  const handleSendPDF = async () => {
+    if (images.length > 0) {
+      const doc = <MyDocument images={images} />; // Generamos el documento PDF usando las imágenes capturadas
+
+      const pdfBlob = await pdf(doc).toBlob();
+      const pdfFile = new File([pdfBlob], `luminometria_${Date.now()}.pdf`, {
+        type: 'application/pdf',
+        lastModified: Date.now(),
+      });
+
+      try {
+        const result = await subirPDF(pdfFile, pdfFile.name);
+        alert('PDF enviado exitosamente');
+        console.log('PDF enviado exitosamente:', result);
+      } catch (error) {
+        console.error('Error al enviar el PDF:', error);
+      }
+    }
+  };
+
+  const handleGoToKpi = () => {
+    navigate('/kpi');
+  }
+
 
   return (
     <div className="lum-container">
@@ -75,9 +119,18 @@ const Luminometry: React.FC = () => {
         <button className='btn-circle bg-warning' onClick={handleGoToETA} title='ETA'>
           <i className="fa-solid fa-e"></i>
         </button>
+        <button className='btn-circle bg-warning' onClick={handleGoToKpi} title='KPI'>
+          <i className="fa-solid fa-k"></i>
+        </button>
         <button className='btn-circle' onClick={handleGoToHome}>
           <i className="fa-solid fa-house-chimney"></i>
         </button>
+
+        {images.length > 0 && (
+          <button onClick={handleSendPDF} className="btn-dd-pdf">
+            Enviar PDF <i className="fa-solid fa-upload"></i>
+          </button>
+        )}
       </div>
     </div>
   );
