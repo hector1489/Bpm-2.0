@@ -1,9 +1,10 @@
-import { useState, useContext, useRef } from 'react'
-import { AppContext } from '../../context/GlobalState'
-import logoFungi from '../../assets/img/logo.jpg'
-import './AuditForm.css'
-import { Answer } from '../../interfaces/interfaces'
-import { useNavigate } from 'react-router-dom'
+import { useState, useContext, useRef } from 'react';
+import { AppContext } from '../../context/GlobalState';
+import logoFungi from '../../assets/img/logo.jpg';
+import './AuditForm.css';
+import { Answer } from '../../interfaces/interfaces';
+import { useNavigate } from 'react-router-dom';
+import { subirFoto } from '../../utils/apiPhotosUtils';
 
 const AuditForm: React.FC = () => {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
@@ -13,7 +14,6 @@ const AuditForm: React.FC = () => {
   const navigate = useNavigate();
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
-
 
   if (!context) {
     return <div>Error: El contexto no está disponible.</div>;
@@ -76,7 +76,7 @@ const AuditForm: React.FC = () => {
     }
   };
 
-  const capturePhoto = (stream: MediaStream) => {
+  const capturePhoto = async (stream: MediaStream) => {
     if (canvasRef.current && videoRef.current) {
       const video = videoRef.current;
       const canvas = canvasRef.current;
@@ -89,13 +89,27 @@ const AuditForm: React.FC = () => {
         context.drawImage(video, 0, 0, canvas.width, canvas.height);
         const photoUrl = canvas.toDataURL('image/png');
 
+        // 1. Guardar la foto en el contexto local
         addPhoto(currentQuestion?.question || '', photoUrl);
+        
+        // 2. Enviar la foto al backend
+        try {
+          const responseUrl = await subirFoto(photoUrl);
+          if (responseUrl) {
+            console.log('Foto subida al backend con éxito:', responseUrl);
+          } else {
+            console.warn('No se pudo subir la foto al backend.');
+          }
+        } catch (error) {
+          console.error('Error al subir la foto:', error);
+        }
+
         setPhotoTaken(true);
       }
     }
 
     stopCamera(stream);
-  }
+  };
 
   const stopCamera = (stream: MediaStream) => {
     const tracks = stream.getTracks();
@@ -104,12 +118,11 @@ const AuditForm: React.FC = () => {
     if (videoRef.current) {
       videoRef.current.srcObject = null;
     }
-  }
+  };
 
   const handleGoToHome = () => {
-    navigate('/')
-  }
-
+    navigate('/');
+  };
 
   return (
     <form onSubmit={(e) => e.preventDefault()}>
@@ -155,13 +168,13 @@ const AuditForm: React.FC = () => {
             <i className="fa-solid fa-camera-retro"></i> photo
           </button>
           <button className='btn-blue' onClick={handleGoToHome}>
-          <i className="fa-solid fa-house-chimney"></i>
-        </button>
+            <i className="fa-solid fa-house-chimney"></i>
+          </button>
         </div>
         {photoTaken && <p>Foto tomada, puede avanzar a la siguiente pregunta.</p>}
       </div>
     </form>
-  )
-}
+  );
+};
 
-export default AuditForm
+export default AuditForm;

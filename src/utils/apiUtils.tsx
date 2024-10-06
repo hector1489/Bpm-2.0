@@ -4,7 +4,6 @@ import { DesviacionResponse } from '../interfaces/interfaces'
 
 const BASE_URL = 'https://bpm-backend.onrender.com';
 
-
 // Función para obtener todas las acciones correctivas
 export const obtenerTodasLasAccionesDesdeAPI = async (authToken: string) => {
   try {
@@ -23,7 +22,6 @@ export const obtenerTodasLasAccionesDesdeAPI = async (authToken: string) => {
 // Función para enviar datos de auditoría al backend
 export const enviarDatosAuditoria = async (desviaciones: any, authToken: string) => {
   const correo = 'bbpmauditorias@gmail.com'
-
 
   const desviacionData= desviaciones.map((desviacion: any) => {
     return {
@@ -82,7 +80,7 @@ export const cargarDesviacionesDesdeBackend = async (authToken: string) => {
 };
 
 export const actualizarDesviacionBackend = async (id: number, updatedData: DesviacionResponse, authToken: string) => {
-  // Función para formatear fecha en formato YYYY-MM-DD
+
   const formatFecha = (fecha: string | null) => {
     if (!fecha) return null;
     const dateObj = new Date(fecha);
@@ -127,8 +125,6 @@ export const actualizarDesviacionBackend = async (id: number, updatedData: Desvi
   }
 };
 
-
-
 // Función para cargar desviaciones por auditor
 export const cargarDatosPorAuditor = async (auditor: string, authToken: string) => {
 
@@ -164,7 +160,6 @@ export const cargarDatosPorAuditor = async (auditor: string, authToken: string) 
     return [];
   }
 };
-
 
 // Función para crear un nuevo detalle de la tabla
 export const crearDetalleTabla = async (
@@ -226,9 +221,6 @@ export const crearDetalleTabla = async (
   }
 };
 
-
-
-
 // Función para obtener todos los detalles de la tabla
 export const obtenerDetallesTabla = async (authToken: string) => {
   try {
@@ -246,7 +238,6 @@ export const obtenerDetallesTabla = async (authToken: string) => {
     throw error;
   }
 };
-
 
 // Función para eliminar la fila
 export const desviacionDelete = async (id: number, authToken: string) => {
