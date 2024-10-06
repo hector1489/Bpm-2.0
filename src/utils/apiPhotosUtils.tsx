@@ -32,7 +32,7 @@ const base64ToBlob = (base64: string, contentType = 'image/png') => {
 };
 
 // Función para subir la foto
-export const subirFoto = async (imagenBase64: string) => {
+export const subirFoto = async (imagenBase64: string, fileName: string) => {
   if (!imagenBase64 || !imagenBase64.startsWith('data:image')) {
     console.warn('Formato de imagen inválido o no presente');
     return null;
@@ -43,7 +43,7 @@ export const subirFoto = async (imagenBase64: string) => {
     
     const imageBlob = base64ToBlob(imagenBase64);
     
-    formData.append('image', imageBlob, 'photo.png');
+    formData.append('image', imageBlob, fileName);
 
     const response = await axios.post(`${BASE_URL}/upload-photo`, formData, {
       headers: {
@@ -57,6 +57,7 @@ export const subirFoto = async (imagenBase64: string) => {
     return null;
   }
 };
+
 
 // Obtener una foto por su clave (key)
 export const obtenerFotoPorClave = async (key: string) => {

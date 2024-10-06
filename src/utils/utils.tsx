@@ -84,3 +84,5 @@ export const getColorByPercentageLum = (percentage: number) => {
     return 'bg-danger';
   }
 }
+
+

@@ -1,24 +1,47 @@
-import { useNavigate } from 'react-router-dom'
 import './AuditSummary.css'
+import html2canvas from 'html2canvas';
 import { AverageModules, BPMGraph, Summary } from '../../components/index'
-import { useContext, useCallback } from 'react'
+import { useContext, useCallback, useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { AppContext } from '../../context/GlobalState'
 import { extractPercentage, getCurrentDate, calculateSolutionDate, getColorByPercentage } from '../../utils/utils'
 import { enviarDatosAuditoria } from '../../utils/apiUtils'
 import logoFungi from '../../assets/img/logo.jpg'
-
+import { PDFDownloadLink } from '@react-pdf/renderer'
+import MyDocument from '../../utils/MyDocument'
 
 const DEFAULT_ANSWER = "Sin respuesta";
 
 const AuditSummary: React.FC = () => {
-  const navigate = useNavigate();
   const context = useContext(AppContext);
+  const [images, setImages] = useState<string[]>([]);
+  const navigate = useNavigate();
 
   if (!context) {
     return <div>Error: Context is not available.</div>;
   }
 
   const { state } = context;
+
+  const captureSection = async (selector: string) => {
+    const element = document.querySelector(selector) as HTMLElement;
+    if (element) {
+      const canvas = await html2canvas(element);
+      const dataUrl = canvas.toDataURL('image/png');
+      return dataUrl;
+    }
+    return '';
+  };
+
+  const handleCaptureImages = async () => {
+    const image1 = await captureSection('.summary-container');
+
+    setImages([image1]);
+  };
+
+  useEffect(() => {
+    handleCaptureImages();
+  }, []);
 
   const calculatePercentage = (moduleId: number): number => {
     try {
@@ -96,24 +119,25 @@ const AuditSummary: React.FC = () => {
   }, [state]);
 
 
-  const handleGoToHome = () => {
-    navigate('/');
-  }
+ const handleGoToHome = () => {
+  navigate('/');
+}
 
-  const handleGoToLuminometry = () => {
-    navigate('/luminometria')
-  }
-  const handleGoToETA = () => {
-    navigate('/seremi')
-  }
+ const handleGoToLuminometry = () => {
+  navigate('/luminometria')
+}
+ const handleGoToETA = () => {
+  navigate('/seremi')
+}
 
-  const handleGoToDetails = () => {
-    navigate('/resumen-detalle')
-  }
+ const handleGoToDetails = () => {
+  navigate('/resumen-detalle')
+}
 
-  const handleGoToKpi = () => {
-    navigate('/kpi');
-  }
+ const handleGoToKpi = () => {
+  navigate('/kpi');
+}
+
 
   return (
     <div className="summary-container">
@@ -126,9 +150,9 @@ const AuditSummary: React.FC = () => {
       <BPMGraph moduleData={moduleData} />
       <AverageModules />
 
-      
+
       <div className="buttons-summary-circle">
-      <button className='btn-circle btn-green' onClick={handleSendIncidencias} title='Enviar Incidencias'>Enviar</button>
+        <button className='btn-circle btn-green' onClick={handleSendIncidencias} title='Enviar Incidencias'>Enviar</button>
         <button className='btn-circle bg-warning' onClick={handleGoToDetails} title='Detalle'>
           <i className="fa-solid fa-circle-info"></i>
         </button>
@@ -139,11 +163,25 @@ const AuditSummary: React.FC = () => {
           <i className="fa-solid fa-e"></i>
         </button>
         <button className='btn-circle bg-warning' onClick={handleGoToKpi} title='KPI'>
-        <i className="fa-solid fa-k"></i>
+          <i className="fa-solid fa-k"></i>
         </button>
         <button className='btn-circle' onClick={handleGoToHome}>
           <i className="fa-solid fa-house-chimney"></i>
+
         </button>
+        
+        {images.length > 0 && (
+          <button>
+          <PDFDownloadLink
+            document={<MyDocument images={images} />}
+            fileName="auditoria_bpm.pdf"
+            className='btn-dd-pdf'
+          >
+            Descargar PDF
+          </PDFDownloadLink>
+          </button>
+        )}
+
       </div>
 
     </div>

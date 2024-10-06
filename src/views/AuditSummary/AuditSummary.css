@@ -56,6 +56,10 @@ h3.fw-bold {
   color: #ffc107;
 }
 
+.btn-dd-pdf {
+  color: aliceblue;
+}
+
 @media (max-width: 768px) {
   .summary-container {
     padding: 10px;
