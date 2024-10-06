@@ -4,7 +4,8 @@ import { useLocation } from 'react-router-dom';
 import { AppContext } from '../../context/GlobalState';
 import { useDesviaciones, useUpdateDesviaciones } from '../../hooks/useDesviaciones';
 import { desviacionDelete } from '../../utils/apiUtils';
-import { DesviacionResponse } from '../../interfaces/interfaces'; // Importar la interfaz correcta
+import { DesviacionResponse } from '../../interfaces/interfaces';
+import { getCurrentDate } from '../../utils/utils';
 
 const DEFAULT_ANSWER = "Sin respuesta";
 
@@ -32,7 +33,6 @@ const DesviacionesTable: React.FC = () => {
     }
   }, [desviaciones, numero_requerimiento, context?.state?.userName]);
 
-  // Eliminar fila
   const eliminarFila = async (id: number) => {
     const confirmDelete = window.confirm("¿Estás seguro de que deseas eliminar esta fila?");
     if (confirmDelete && context.state.authToken) {
@@ -48,10 +48,14 @@ const DesviacionesTable: React.FC = () => {
 
   const replaceNA = (value: string) => (value === 'N/A' ? '' : value);
 
-  // Guardar cambios
   const handleSaveChanges = async () => {
     const authToken = context.state.authToken ?? '';
-
+  
+    if (localDesviaciones.length === 0) {
+      alert("No hay desviaciones para actualizar.");
+      return;
+    }
+  
     const updatedDesviaciones = localDesviaciones.map(row => ({
       id: row.id,
       numero_requerimiento: replaceNA(row.numero_requerimiento),
@@ -62,22 +66,29 @@ const DesviacionesTable: React.FC = () => {
       local: replaceNA(row.local),
       criticidad: replaceNA(row.criticidad),
       acciones_correctivas: replaceNA(row.acciones_correctivas),
-      fecha_recepcion_solicitud: row.fecha_recepcion_solicitud || null,
-      fecha_solucion_programada: row.fecha_solucion_programada || null,
+
+      fecha_recepcion_solicitud: row.fecha_recepcion_solicitud || getCurrentDate(),
+      fecha_solucion_programada: row.fecha_solucion_programada || getCurrentDate(),
+      fecha_cambio_estado: row.fecha_cambio_estado || getCurrentDate(),
+  
       estado: replaceNA(row.estado),
-      fecha_cambio_estado: row.fecha_cambio_estado || null,
       contacto_clientes: replaceNA(row.contacto_clientes),
       evidencia_fotografica: replaceNA(row.evidencia_fotografica),
       auditor: replaceNA(row.auditor),
       correo: replaceNA(row.correo),
       detalle_foto: replaceNA(row.detalle_foto),
-      fecha_ultima_modificacion: row.fecha_ultima_modificacion || null
+      fecha_ultima_modificacion: getCurrentDate(),
     }));
-
-    await actualizarDesviaciones(updatedDesviaciones, authToken);
+  
+    try {
+      await actualizarDesviaciones(updatedDesviaciones, authToken);
+      alert("Cambios guardados exitosamente.");
+    } catch (error) {
+      console.error('Error al guardar los cambios:', error);
+      alert('Hubo un error al guardar los cambios. Por favor, inténtalo de nuevo.');
+    }
   };
 
-  // Función para habilitar la edición de las celdas que contienen "N/A"
   const handleEditTable = () => {
     const tableBody = document.querySelector('#tabla-desviaciones tbody');
     if (!tableBody) return;

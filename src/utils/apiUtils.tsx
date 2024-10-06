@@ -71,7 +71,6 @@ export const cargarDesviacionesDesdeBackend = async (authToken: string) => {
         'Authorization': `Bearer ${authToken}`,
       },
     });
-    console.log(response.data);
     return response.data;
   } catch (error) {
     console.error('Error al recuperar las desviaciones:', error);
@@ -79,40 +78,45 @@ export const cargarDesviacionesDesdeBackend = async (authToken: string) => {
   }
 };
 
-export const actualizarDesviacionBackend = async (id: number, updatedData: DesviacionResponse, authToken: string) => {
+export const actualizarDesviacionBackend = async (
+  id: number,
+  updatedData: DesviacionResponse,
+  authToken: string
+) => {
+  const handleEmptyField = (field: any) => (field !== undefined && field !== null ? field : '');
 
-  const formatFecha = (fecha: string | null) => {
+  const formatDate = (fecha: string | null) => {
     if (!fecha) return null;
     const dateObj = new Date(fecha);
     return isNaN(dateObj.getTime()) ? null : dateObj.toISOString().split('T')[0];
   };
 
-  const updateDesviacionData = {
-    numeroRequerimiento: updatedData.numero_requerimiento || '',
-    preguntasAuditadas: updatedData.preguntas_auditadas || '',
-    desviacionOCriterio: updatedData.desviacion_o_criterio || '',
-    tipoDeAccion: updatedData.tipo_de_accion || 'N/A',
-    responsableProblema: updatedData.responsable_problema || '',
-    local: updatedData.local || '',
-    criticidad: updatedData.criticidad || '',
-    accionesCorrectivas: updatedData.acciones_correctivas || 'N/A',
-    fechaRecepcionSolicitud: updatedData.fecha_recepcion_solicitud ? formatFecha(updatedData.fecha_recepcion_solicitud) : null,
-    fechaSolucionProgramada: updatedData.fecha_solucion_programada ? formatFecha(updatedData.fecha_solucion_programada) : null,
-    estado: updatedData.estado || 'Abierto',
-    fechaCambioEstado: updatedData.fecha_cambio_estado ? formatFecha(updatedData.fecha_cambio_estado) : null,
-    contactoClientes: updatedData.contacto_clientes || '',
-    evidenciaFotografica: updatedData.evidencia_fotografica || 'N/A',
-    detalleFoto: updatedData.detalle_foto || '',
-    auditor: updatedData.auditor || '',
-    correo: updatedData.correo || '',
-    fechaUltimaModificacion: updatedData.fecha_ultima_modificacion || null,
-    authToken: authToken || '',
+  const safeValues = {
+    numeroRequerimiento: handleEmptyField(updatedData.numero_requerimiento),
+    preguntasAuditadas: handleEmptyField(updatedData.preguntas_auditadas),
+    desviacionOCriterio: handleEmptyField(updatedData.desviacion_o_criterio),
+    tipoDeAccion: handleEmptyField(updatedData.tipo_de_accion) || 'N/A',
+    responsableProblema: handleEmptyField(updatedData.responsable_problema),
+    local: handleEmptyField(updatedData.local),
+    criticidad: handleEmptyField(updatedData.criticidad),
+    accionesCorrectivas: handleEmptyField(updatedData.acciones_correctivas) || 'N/A',
+    fechaRecepcionSolicitud: formatDate(updatedData.fecha_recepcion_solicitud),
+    fechaSolucionProgramada: formatDate(updatedData.fecha_solucion_programada),
+    estado: handleEmptyField(updatedData.estado) || 'Abierto',
+    fechaCambioEstado: formatDate(updatedData.fecha_cambio_estado),
+    contactoClientes: handleEmptyField(updatedData.contacto_clientes),
+    evidenciaFotografica: handleEmptyField(updatedData.evidencia_fotografica) || 'N/A',
+    detalleFoto: handleEmptyField(updatedData.detalle_foto),
+    auditor: handleEmptyField(updatedData.auditor),
+    correo: handleEmptyField(updatedData.correo),
+    fechaUltimaModificacion: formatDate(updatedData.fecha_ultima_modificacion),
+    authToken: handleEmptyField(authToken),
   };
 
-  console.log('api utils', updateDesviacionData);
+  console.log('Datos para el backend:', safeValues);
 
   try {
-    const response = await axios.put(`${BASE_URL}/desviaciones/${id}`, updateDesviacionData, {
+    const response = await axios.put(`${BASE_URL}/desviaciones/${id}`, safeValues, {
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${authToken}`,
@@ -120,10 +124,18 @@ export const actualizarDesviacionBackend = async (id: number, updatedData: Desvi
     });
     return response.data;
   } catch (error) {
-    console.error(`Error al actualizar la desviación con ID ${id}:`, error);
-    throw error;
+    if (axios.isAxiosError(error)) {
+      console.error(`Error al actualizar la desviación con ID ${id}:`, error.response?.data || error.message);
+    } else if (error instanceof Error) {
+      console.error(`Error general al actualizar la desviación con ID ${id}:`, error.message);
+    } else {
+      console.error(`Error desconocido al actualizar la desviación con ID ${id}:`, error);
+    }
+    throw new Error('Error al actualizar la desviación en el backend');
   }
 };
+
+
 
 // Función para cargar desviaciones por auditor
 export const cargarDatosPorAuditor = async (auditor: string, authToken: string) => {
