@@ -56,6 +56,7 @@
 .desviaciones-table-buttons {
   width: 100%;
   display: flex;
+  padding: 10px 0;
   gap: 10px;
 }
 

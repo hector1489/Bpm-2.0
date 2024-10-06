@@ -26,6 +26,13 @@
   font-weight: bold;
 }
 
+.pdf-card-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+}
+
 .pdf-card {
   background-color: var(--bg-color);
   border-radius: var(--border-radius);
