@@ -102,6 +102,7 @@ const DesviacionesTable: React.FC = () => {
     });
   };
   
+  
 
   const getFieldFromCellIndex = (index: number): keyof DesviacionResponse => {
     switch (index) {
@@ -138,9 +139,21 @@ const DesviacionesTable: React.FC = () => {
     }
   };
 
+  function debounce(func: (...args: any[]) => void, wait: number) {
+    let timeout: ReturnType<typeof setTimeout>;
+    return (...args: any[]) => {
+      clearTimeout(timeout);
+      timeout = setTimeout(() => func(...args), wait);
+    };
+  }
+  
   const handleEditTable = () => {
     const tableBody = document.querySelector('#tabla-desviaciones tbody');
     if (!tableBody) return;
+  
+    const debouncedInputChange = debounce((rowIndex: number, field: keyof DesviacionResponse, value: string) => {
+      handleInputChange(rowIndex, field, value);
+    }, 300);
   
     tableBody.querySelectorAll('tr').forEach((row, rowIndex) => {
       row.querySelectorAll('td').forEach((cell, cellIndex) => {
@@ -150,13 +163,14 @@ const DesviacionesTable: React.FC = () => {
           input.type = 'text';
           input.placeholder = 'Text ...';
   
-          // Convertir el valor a string si es necesario
           const currentValue = localDesviaciones[rowIndex][field];
           input.value = currentValue !== undefined && currentValue !== null ? String(currentValue) : '';
   
+          input.id = `input-${rowIndex}-${cellIndex}`;
+  
           input.oninput = (e) => {
             const value = (e.target as HTMLInputElement).value;
-            handleInputChange(rowIndex, field, value);
+            debouncedInputChange(rowIndex, field, value);
           };
   
           cell.innerHTML = '';
