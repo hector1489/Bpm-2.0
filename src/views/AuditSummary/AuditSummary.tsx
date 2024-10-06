@@ -120,45 +120,47 @@ const AuditSummary: React.FC = () => {
   }, [state]);
 
 
- const handleGoToHome = () => {
-  navigate('/');
-}
-
- const handleGoToLuminometry = () => {
-  navigate('/luminometria')
-}
- const handleGoToETA = () => {
-  navigate('/seremi')
-}
-
- const handleGoToDetails = () => {
-  navigate('/resumen-detalle')
-}
-
- const handleGoToKpi = () => {
-  navigate('/kpi');
-}
-
-
-const handleSendPDF = async () => {
-  if (images.length > 0) {
-    const doc = <MyDocument images={images} />;
-    
-    const pdfBlob = await pdf(doc).toBlob();
-    
-    const pdfFile = new File([pdfBlob], `auditoria_bpm_${Date.now()}.pdf`, {
-      type: 'application/pdf',
-      lastModified: Date.now(),
-    });
-    
-    try {
-      const result = await subirPDF(pdfFile, pdfFile.name);
-      console.log('PDF enviado exitosamente:', result);
-    } catch (error) {
-      console.error('Error al enviar el PDF:', error);
-    }
+  const handleGoToHome = () => {
+    navigate('/');
   }
-};
+
+  const handleGoToLuminometry = () => {
+    navigate('/luminometria')
+  }
+  const handleGoToETA = () => {
+    navigate('/seremi')
+  }
+
+  const handleGoToDetails = () => {
+    navigate('/resumen-detalle')
+  }
+
+  const handleGoToKpi = () => {
+    navigate('/kpi');
+  }
+
+
+  const handleSendPDF = async () => {
+    if (images.length > 0) {
+      const doc = <MyDocument images={images} />;
+
+      const pdfBlob = await pdf(doc).toBlob();
+
+      const pdfFile = new File([pdfBlob], `auditoria_bpm_${Date.now()}.pdf`, {
+        type: 'application/pdf',
+        lastModified: Date.now(),
+      });
+
+      try {
+        const result = await subirPDF(pdfFile, pdfFile.name);
+        await handleSendIncidencias();
+        alert('Datos guardados exitosamente');
+        console.log('PDF enviado exitosamente:', result);
+      } catch (error) {
+        console.error('Error al enviar el PDF:', error);
+      }
+    }
+  };
 
 
   return (
@@ -174,7 +176,6 @@ const handleSendPDF = async () => {
 
 
       <div className="buttons-summary-circle">
-        <button className='btn-circle btn-green' onClick={handleSendIncidencias} title='Enviar Incidencias'>Enviar</button>
         <button className='btn-circle bg-warning' onClick={handleGoToDetails} title='Detalle'>
           <i className="fa-solid fa-circle-info"></i>
         </button>
@@ -189,12 +190,11 @@ const handleSendPDF = async () => {
         </button>
         <button className='btn-circle' onClick={handleGoToHome}>
           <i className="fa-solid fa-house-chimney"></i>
-
         </button>
-        
+
         {images.length > 0 && (
-          <button onClick={handleSendPDF} className="btn-dd-pdf">
-            Enviar PDF
+          <button onClick={handleSendPDF} className="btn-dd-pdf fw-bold">
+            Guardar <i className="fa-solid fa-database"></i>
           </button>
         )}
 
