@@ -17,11 +17,13 @@ const DesviacionesTable: React.FC = () => {
   const { actualizarDesviaciones, isLoading, error: updateError } = useUpdateDesviaciones();
 
   const [localDesviaciones, setLocalDesviaciones] = useState<DesviacionResponse[]>([]);
+  const [reloadData, setReloadData] = useState(false); // Estado para controlar el recargar datos
 
   if (!context) {
     return <div>Error: Context is not available.</div>;
   }
 
+  // Efecto para cargar desviaciones filtradas cuando cambien los datos o el estado de recarga
   useEffect(() => {
     if (desviaciones) {
       const filteredDesviaciones = desviaciones.filter(desviacion => {
@@ -31,7 +33,7 @@ const DesviacionesTable: React.FC = () => {
       });
       setLocalDesviaciones(filteredDesviaciones);
     }
-  }, [desviaciones, numero_requerimiento, context?.state?.userName]);
+  }, [desviaciones, numero_requerimiento, context?.state?.userName, reloadData]); // Aquí también se escucha por el cambio en `reloadData`
 
   const eliminarFila = async (id: number) => {
     const confirmDelete = window.confirm("¿Estás seguro de que deseas eliminar esta fila?");
@@ -50,12 +52,12 @@ const DesviacionesTable: React.FC = () => {
 
   const handleSaveChanges = async () => {
     const authToken = context.state.authToken ?? '';
-  
+
     if (localDesviaciones.length === 0) {
       alert("No hay desviaciones para actualizar.");
       return;
     }
-  
+
     const updatedDesviaciones = localDesviaciones.map(row => ({
       id: row.id,
       numero_requerimiento: replaceNA(row.numero_requerimiento),
@@ -70,7 +72,7 @@ const DesviacionesTable: React.FC = () => {
       fecha_recepcion_solicitud: row.fecha_recepcion_solicitud || getCurrentDate(),
       fecha_solucion_programada: row.fecha_solucion_programada || getCurrentDate(),
       fecha_cambio_estado: row.fecha_cambio_estado || getCurrentDate(),
-  
+
       estado: replaceNA(row.estado),
       contacto_clientes: replaceNA(row.contacto_clientes),
       evidencia_fotografica: replaceNA(row.evidencia_fotografica),
@@ -79,10 +81,11 @@ const DesviacionesTable: React.FC = () => {
       detalle_foto: replaceNA(row.detalle_foto),
       fecha_ultima_modificacion: getCurrentDate(),
     }));
-  
+
     try {
       await actualizarDesviaciones(updatedDesviaciones, authToken);
       alert("Cambios guardados exitosamente.");
+      setReloadData(true); // Marcar que necesitamos recargar los datos
     } catch (error) {
       console.error('Error al guardar los cambios:', error);
       alert('Hubo un error al guardar los cambios. Por favor, inténtalo de nuevo.');
@@ -183,3 +186,4 @@ const DesviacionesTable: React.FC = () => {
 };
 
 export default DesviacionesTable;
+
