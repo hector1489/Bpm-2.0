@@ -49,12 +49,6 @@ const DocumentacionView: React.FC = () => {
     });
   };
 
-  const goToRoute2 = (id: number, numeroRequerimiento: string) => {
-    navigate('/resumen-ejecutivo', {
-      state: { id, numero_requerimiento: numeroRequerimiento },
-    });
-  };
-
   const goToControlDesviaciones = (id: number, numeroRequerimiento: string) => {
     navigate('/doc-desviaciones', {
       state: { id, numero_requerimiento: numeroRequerimiento },
@@ -115,7 +109,7 @@ const DocumentacionView: React.FC = () => {
                       <i className="fa-regular fa-pen-to-square"></i>
                         Editar Desviaciones
                       </button>
-                      <button onClick={() => goToRoute2(desviacion?.id, desviacion?.numero_requerimiento)}>
+                      <button onClick={handleGoDownloadSummary}>
                         <i className="fa-solid fa-file"></i>
                         Resumen Ejecutivo
                       </button>
