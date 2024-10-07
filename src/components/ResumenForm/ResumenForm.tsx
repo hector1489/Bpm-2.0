@@ -1,6 +1,6 @@
 import './ResumenForm.css';
 import { useContext, useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';  // Para obtener el estado de navegación
+import { useLocation } from 'react-router-dom';
 import { AppContext } from '../../context/GlobalState';
 import { obtenerPDFs, eliminarPDF } from '../../utils/apiPdfUtils';
 
@@ -31,7 +31,7 @@ const ResumenForm: React.FC = () => {
       setLoading(false);
       response.forEach((pdf: PDFData) => {
         const numeroAuditoriaExtracted = extractNumeroAuditoria(pdf.key);
-        console.log(`Número de auditoría del PDF : ${numeroAuditoriaExtracted}`);
+        console.log(`Número de auditoría del PDF: ${numeroAuditoriaExtracted}`);
       });
     } catch (error) {
       console.error('Error al obtener los PDFs:', error);
@@ -49,17 +49,19 @@ const ResumenForm: React.FC = () => {
   };
 
   const extractNumeroAuditoria = (key: string): string | null => {
-    const match = key.match(/auditoria_bpm_(\d+)_\d+\.pdf/);
+    const match = key.match(/detalle_auditoria_(\d+)_/);
     return match ? match[1] : null;
   };
 
-  // Filtrar PDFs por numero_requerimiento o numero_auditoria
   const filteredPDFs = pdfs.filter(pdf => {
     const numeroAuditoriaExtracted = extractNumeroAuditoria(pdf.key);
-    return (
-      (numeroRequerimiento && pdf.key.includes(numeroRequerimiento)) || 
-      (numeroAuditoria && numeroAuditoriaExtracted === numeroAuditoria)
-    );
+    if (numeroRequerimiento || numeroAuditoria) {
+      return (
+        (numeroRequerimiento && pdf.key.includes(numeroRequerimiento)) ||
+        (numeroAuditoria && numeroAuditoriaExtracted === numeroAuditoria)
+      );
+    }
+    return true;
   });
 
   const indexOfLastPDF = currentPage * itemsPerPage;

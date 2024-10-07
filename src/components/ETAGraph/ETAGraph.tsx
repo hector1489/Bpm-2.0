@@ -72,7 +72,7 @@ const ETAGraph: React.FC<ETAGraphProps> = ({ moduleData }) => {
       },
     },
     title: {
-      text: 'Promedio de Respuestas por Pregunta ETA (3D)',
+      text: 'Promedio de Respuestas por Preguntas ETA.',
     },
     xAxis: {
       categories: questionNames,
@@ -102,7 +102,7 @@ const ETAGraph: React.FC<ETAGraphProps> = ({ moduleData }) => {
 
   return (
     <div className="eta-graph-container">
-      <h4>Gráfico de Promedios en ETA 3D</h4>
+      <h4>Gráfico de Promedios ETA.</h4>
       <HighchartsReact highcharts={Highcharts} options={chartOptions} />
     </div>
   );
