@@ -114,13 +114,13 @@ const Luminometry: React.FC = () => {
           <i className="fa-solid fa-arrow-left"></i>
         </button>
         <button className='btn-circle bg-warning' onClick={handleGoToDetails} title='Detalle'>
-          <i className="fa-solid fa-circle-info"></i>
+          DTLS
         </button>
         <button className='btn-circle bg-warning' onClick={handleGoToETA} title='ETA'>
-          <i className="fa-solid fa-e"></i>
+          ETA
         </button>
         <button className='btn-circle bg-warning' onClick={handleGoToKpi} title='KPI'>
-          <i className="fa-solid fa-k"></i>
+          KPI
         </button>
         <button className='btn-circle' onClick={handleGoToHome}>
           <i className="fa-solid fa-house-chimney"></i>
