@@ -173,7 +173,7 @@ const AuditSummary: React.FC = () => {
         <img src={logoFungi} alt="logo" />
       </div>
       <h3 className='fw-bold'>auditoria bpm</h3>
-      <p className='text-warning'>Diagnostico Inicial</p>
+      <p>Diagnostico Inicial</p>
       <Summary />
       <BPMGraph moduleData={moduleData} />
       <AverageModules />
