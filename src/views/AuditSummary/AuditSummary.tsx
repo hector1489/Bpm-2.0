@@ -143,17 +143,20 @@ const AuditSummary: React.FC = () => {
   const handleSendPDF = async () => {
     if (images.length > 0) {
       const doc = <MyDocument images={images} />;
-
+  
       const pdfBlob = await pdf(doc).toBlob();
-
-      const pdfFile = new File([pdfBlob], `auditoria_bpm_${Date.now()}.pdf`, {
+  
+      const numeroAuditoria = state.auditSheetData.numeroAuditoria || 'sin_numero';
+  
+      const pdfFile = new File([pdfBlob], `auditoria_bpm_${numeroAuditoria}_${Date.now()}.pdf`, {
         type: 'application/pdf',
         lastModified: Date.now(),
       });
-
+  
       try {
         const result = await subirPDF(pdfFile, pdfFile.name);
         await handleSendIncidencias();
+  
         alert('Datos guardados exitosamente');
         console.log('PDF enviado exitosamente:', result);
       } catch (error) {
@@ -161,6 +164,7 @@ const AuditSummary: React.FC = () => {
       }
     }
   };
+  
 
 
   return (

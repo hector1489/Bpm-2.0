@@ -104,8 +104,6 @@ const DesviacionesTable: React.FC = () => {
       return updatedDesviaciones;
     });
   };
-  
-  
 
   const getFieldFromCellIndex = (index: number): keyof DesviacionResponse => {
     switch (index) {
@@ -149,7 +147,9 @@ const DesviacionesTable: React.FC = () => {
   
     tableBody.querySelectorAll('tr').forEach((row, rowIndex) => {
       row.querySelectorAll('td').forEach((cell, cellIndex) => {
-        if (cell.textContent === 'N/A' || cell.textContent === DEFAULT_ANSWER) {
+        const emailColumnIndex = 14; 
+  
+        if (cellIndex === emailColumnIndex || cell.textContent === 'N/A' || cell.textContent === DEFAULT_ANSWER) {
           const field = getFieldFromCellIndex(cellIndex);
           const input = document.createElement('input');
           input.type = 'text';

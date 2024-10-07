@@ -35,14 +35,16 @@ const DetailsView: React.FC = () => {
   const handleSendPDF = async () => {
     if (images.length > 0) {
       const doc = <MyDocument images={images} />;
-
+  
       const pdfBlob = await pdf(doc).toBlob();
-
-      const pdfFile = new File([pdfBlob], `detalle_auditoria_${Date.now()}.pdf`, {
+      
+      const numeroAuditoria = state.auditSheetData.numeroAuditoria || 'sin_numero';
+  
+      const pdfFile = new File([pdfBlob], `detalle_auditoria_${numeroAuditoria}_${Date.now()}.pdf`, {
         type: 'application/pdf',
         lastModified: Date.now(),
       });
-
+  
       try {
         const result = await subirPDF(pdfFile, pdfFile.name);
         alert('PDF enviado exitosamente');
@@ -52,6 +54,7 @@ const DetailsView: React.FC = () => {
       }
     }
   };
+  
 
   // Navegación
   const handleGoToAuditSummary = () => {
@@ -77,6 +80,7 @@ const DetailsView: React.FC = () => {
   return (
     <div className="detail-container">
       <h3 className='fw-bold'>Detalle</h3>
+      <p>Auditoria : <span>{state.auditSheetData.numeroAuditoria}</span></p>
       <div>
         <DetailsTable />
       </div>

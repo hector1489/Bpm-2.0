@@ -55,8 +55,10 @@ const DocumentacionView: React.FC = () => {
     });
   };
 
-  const handleGoDownloadSummary = () => {
-    navigate('/resumen-descarga');
+  const handleGoDownloadSummary = (id: number, numeroRequerimiento: string) => {
+    navigate('/resumen-descarga', {
+      state: { id, numero_requerimiento: numeroRequerimiento },
+    });
   };
 
   const handleToGoPhotos = () => {
@@ -74,16 +76,6 @@ const DocumentacionView: React.FC = () => {
 
       <div className="doc-last-audit">
         <h4>Última Auditoria : {numeroAuditoria}</h4>
-        <div className="doc-last-audit-buttons">
-          <button onClick={handleGoDownloadSummary}>
-            <i className="fa-solid fa-download p-2"></i>
-            Resumen
-          </button>
-          <button>
-            <i className="fa-solid fa-download p-2"></i>
-            Informe
-          </button>
-        </div>
       </div>
 
       {loading ? (
@@ -109,7 +101,7 @@ const DocumentacionView: React.FC = () => {
                       <i className="fa-regular fa-pen-to-square"></i>
                         Editar Desviaciones
                       </button>
-                      <button onClick={handleGoDownloadSummary}>
+                      <button onClick={() => handleGoDownloadSummary(desviacion?.id, desviacion?.numero_requerimiento)}>
                         <i className="fa-solid fa-file"></i>
                         Resumen Ejecutivo
                       </button>
