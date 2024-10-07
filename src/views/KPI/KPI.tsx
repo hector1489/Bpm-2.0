@@ -50,7 +50,6 @@ const KPI: React.FC = () => {
     percentage: calculatePercentage(module.id),
   }));
 
-  // Función para capturar la imagen de la sección KPI
   const handleCaptureImages = async () => {
     const element = document.querySelector('.kpi-container') as HTMLElement;
     if (element) {
@@ -61,22 +60,23 @@ const KPI: React.FC = () => {
   };
 
   useEffect(() => {
-    handleCaptureImages(); // Captura la imagen cuando el componente se monta
+    handleCaptureImages();
   }, []);
 
-  // Función para enviar el PDF al backend
+  const numeroAuditoria = state.auditSheetData.numeroAuditoria || 'sin_numero';
+
   const handleSendPDF = async () => {
     if (images.length > 0) {
-      const doc = <MyDocument images={images} />; // Genera el PDF con las imágenes capturadas
+      const doc = <MyDocument images={images} />;
 
       const pdfBlob = await pdf(doc).toBlob();
-      const pdfFile = new File([pdfBlob], `kpi_resumen_${Date.now()}.pdf`, {
+      const pdfFile = new File([pdfBlob], `kpi_resumen_${numeroAuditoria}_${Date.now()}.pdf`, {
         type: 'application/pdf',
         lastModified: Date.now(),
       });
 
       try {
-        const result = await subirPDF(pdfFile, pdfFile.name); // Sube el PDF al backend
+        const result = await subirPDF(pdfFile, pdfFile.name);
         alert('PDF enviado exitosamente');
         console.log('PDF enviado exitosamente:', result);
       } catch (error) {
@@ -119,7 +119,7 @@ const KPI: React.FC = () => {
           DTLS
         </button>
         <button className='btn-circle bg-warning' onClick={handleGoToLuminometry} title='Luminometria'>
-         LUM
+          LUM
         </button>
         <button className='btn-circle bg-warning' onClick={handleGoToETA} title='ETA'>
           ETA

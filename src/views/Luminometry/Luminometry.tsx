@@ -18,6 +18,7 @@ const Luminometry: React.FC = () => {
     return <div>Error: Context is not available.</div>;
   }
 
+  const { state } = context;
 
   const handleGoToAuditSummary = () => navigate('/resumen-auditoria');
   const handleGoToHome = () => navigate('/');
@@ -52,12 +53,14 @@ const Luminometry: React.FC = () => {
     handleCaptureImages();
   }, []);
 
+  const numeroAuditoria = state.auditSheetData.numeroAuditoria || 'sin_numero';
+
   const handleSendPDF = async () => {
     if (images.length > 0) {
       const doc = <MyDocument images={images} />;
 
       const pdfBlob = await pdf(doc).toBlob();
-      const pdfFile = new File([pdfBlob], `luminometria_${Date.now()}.pdf`, {
+      const pdfFile = new File([pdfBlob], `luminometria_${numeroAuditoria}_${Date.now()}.pdf`, {
         type: 'application/pdf',
         lastModified: Date.now(),
       });

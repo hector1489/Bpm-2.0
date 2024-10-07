@@ -33,41 +33,41 @@ const ETA: React.FC = () => {
   }, []);
 
 
-const calculatePercentage = (moduleId: number): number => {
-  try {
-    const moduleQuestions = state.IsHero.filter(question => question.id === moduleId);
-    const totalQuestions = moduleQuestions.length;
 
-    if (totalQuestions === 0) {
+  const calculatePercentage = (moduleId: number): number => {
+    try {
+      const moduleQuestions = state.IsHero.filter(question => question.id === moduleId);
+      const totalQuestions = moduleQuestions.length;
+
+      if (totalQuestions === 0) {
+        return 100;
+      }
+
+      const totalPercentage = moduleQuestions.reduce((acc, question) => {
+        if (question.answer && typeof question.answer === 'string') {
+          const match = question.answer.match(/(\d+)%/);
+          const percentage = match ? parseInt(match[1], 10) : 0;
+          return acc + percentage;
+        } else {
+          return acc;
+        }
+      }, 0);
+
+      return totalPercentage / totalQuestions;
+    } catch (error) {
+      console.error('Error calculating percentage for module:', moduleId, error);
       return 100;
     }
-
-    const totalPercentage = moduleQuestions.reduce((acc, question) => {
-      if (question.answer && typeof question.answer === 'string') {
-        const match = question.answer.match(/(\d+)%/);
-        const percentage = match ? parseInt(match[1], 10) : 0;
-        return acc + percentage;
-      } else {
-        return acc;
-      }
-    }, 0);
-
-    return totalPercentage / totalQuestions;
-  } catch (error) {
-    console.error('Error calculating percentage for module:', moduleId, error);
-    return 100;
   }
-}
 
+  const numeroAuditoria = state.auditSheetData.numeroAuditoria || 'sin_numero';
 
-
-  // Función para enviar el PDF al backend
   const handleSendPDF = async () => {
     if (images.length > 0) {
       const doc = <MyDocument images={images} />;
 
       const pdfBlob = await pdf(doc).toBlob();
-      const pdfFile = new File([pdfBlob], `eta_resumen_${Date.now()}.pdf`, {
+      const pdfFile = new File([pdfBlob], `eta_resumen_${numeroAuditoria}_${Date.now()}.pdf`, {
         type: 'application/pdf',
         lastModified: Date.now(),
       });
