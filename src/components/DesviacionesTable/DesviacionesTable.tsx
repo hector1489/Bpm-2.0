@@ -5,11 +5,13 @@ import { AppContext } from '../../context/GlobalState';
 import { useDesviaciones, useUpdateDesviaciones } from '../../hooks/useDesviaciones';
 import { desviacionDelete } from '../../utils/apiUtils';
 import { DesviacionResponse } from '../../interfaces/interfaces';
+import { useNavigate } from 'react-router-dom';
 import { getCurrentDate } from '../../utils/utils';
 
 const DEFAULT_ANSWER = "Sin respuesta";
 
 const DesviacionesTable: React.FC = () => {
+  const navigate = useNavigate();
   const context = useContext(AppContext);
   const location = useLocation();
   const { id, numero_requerimiento } = location.state || {};
@@ -85,6 +87,7 @@ const DesviacionesTable: React.FC = () => {
       await actualizarDesviaciones(updatedDesviaciones, authToken);
       alert("Cambios guardados exitosamente.");
       setReloadData(true);
+      handleGoToHome();
     } catch (error) {
       console.error('Error al guardar los cambios:', error);
       alert('Hubo un error al guardar los cambios. Por favor, inténtalo de nuevo.');
@@ -139,21 +142,10 @@ const DesviacionesTable: React.FC = () => {
     }
   };
 
-  function debounce(func: (...args: any[]) => void, wait: number) {
-    let timeout: ReturnType<typeof setTimeout>;
-    return (...args: any[]) => {
-      clearTimeout(timeout);
-      timeout = setTimeout(() => func(...args), wait);
-    };
-  }
   
   const handleEditTable = () => {
     const tableBody = document.querySelector('#tabla-desviaciones tbody');
     if (!tableBody) return;
-  
-    const debouncedInputChange = debounce((rowIndex: number, field: keyof DesviacionResponse, value: string) => {
-      handleInputChange(rowIndex, field, value);
-    }, 300);
   
     tableBody.querySelectorAll('tr').forEach((row, rowIndex) => {
       row.querySelectorAll('td').forEach((cell, cellIndex) => {
@@ -168,9 +160,9 @@ const DesviacionesTable: React.FC = () => {
   
           input.id = `input-${rowIndex}-${cellIndex}`;
   
-          input.oninput = (e) => {
+          input.onblur = (e) => {
             const value = (e.target as HTMLInputElement).value;
-            debouncedInputChange(rowIndex, field, value);
+            handleInputChange(rowIndex, field, value);
           };
   
           cell.innerHTML = '';
@@ -180,6 +172,10 @@ const DesviacionesTable: React.FC = () => {
     });
   };
   
+  const handleGoToHome = () => {
+    navigate('/');
+  };
+
 
   return (
     <div className="desviaciones-tabla-container">

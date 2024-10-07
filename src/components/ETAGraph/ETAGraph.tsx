@@ -31,6 +31,7 @@ const ETAGraph: React.FC<ETAGraphProps> = ({ moduleData }) => {
     "TRA TPO 68. Traslado de alimentos cumpliendo; protección, rotulación, estiba y registros al inicio y término:",
     "TRA SER 72. Equipos suficientes para la correcta mantención de productos calientes y fríos:",
     "TRA DOC 98. Informes de auditoría sanitaria, plan de acción, verificación de cumplimiento, por Administrador:",
+    "TRA DOC 99. Registros del cumplimiento al 100% del programa de charlas en Calidad y Medio Ambiente:",
   ];
 
   const getColorByPercentage = (percentage: number) => {

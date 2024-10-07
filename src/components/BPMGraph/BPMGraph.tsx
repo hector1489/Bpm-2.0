@@ -55,7 +55,8 @@ const BPMGraph: React.FC<BPMGraphProps> = ({ moduleData }) => {
 
   const groupNames = groupedData.map((group) => group.groupName).concat('PROM');
   const groupAverages = groupedData.map((group) => group.average).concat(overallAverage);
-  const barColors = groupAverages.map((avg, index) => index === groupAverages.length - 1 ? 'blue' : getColorByPercentage(avg));
+  const barColors = groupAverages.map((avg) => getColorByPercentage(avg));
+
 
   const chartOptions = {
     chart: {
