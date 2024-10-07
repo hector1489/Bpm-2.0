@@ -11,7 +11,7 @@ interface PDFData {
 
 const ResumenForm: React.FC = () => {
   const context = useContext(AppContext);
-  const location = useLocation();  // Para obtener el estado de navegación
+  const location = useLocation();
   const [pdfs, setPdfs] = useState<PDFData[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [currentPage, setCurrentPage] = useState(1);
@@ -21,9 +21,8 @@ const ResumenForm: React.FC = () => {
     return <div>Error al cargar el contexto</div>;
   }
 
-  const { state } = context;
   const numeroRequerimiento = location.state?.numero_requerimiento || null;
-  const numeroAuditoria = location.state?.numero_auditoria || null;  // Obtenemos el numero_auditoria del estado
+  const numeroAuditoria = location.state?.numero_auditoria || null;
 
   const fetchPDFs = async () => {
     try {
