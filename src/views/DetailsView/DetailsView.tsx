@@ -19,7 +19,6 @@ const DetailsView: React.FC = () => {
 
   const { state } = context;
 
-  // Función para capturar las imágenes de la sección
   const handleCaptureImages = async () => {
     const element = document.querySelector('.detail-container') as HTMLElement;
     if (element) {
@@ -29,12 +28,10 @@ const DetailsView: React.FC = () => {
     }
   };
 
-  // Captura las imágenes cuando el componente se monta
   useEffect(() => {
     handleCaptureImages();
   }, []);
 
-  // Función para enviar el PDF al backend
   const handleSendPDF = async () => {
     if (images.length > 0) {
       const doc = <MyDocument images={images} />;

@@ -172,7 +172,7 @@ const AuditForm: React.FC = () => {
             <i className="fa-solid fa-camera-retro"></i> photo
           </button>
           <button className='btn-blue' onClick={handleGoToHome}>
-            <i className="fa-solid fa-house-chimney"></i>
+            <i className="fa-solid fa-house-chimney"></i> Home
           </button>
         </div>
         {photoTaken && <p>Foto tomada, puede avanzar a la siguiente pregunta.</p>}

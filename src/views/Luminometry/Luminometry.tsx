@@ -44,7 +44,7 @@ const Luminometry: React.FC = () => {
     if (element) {
       const canvas = await html2canvas(element);
       const dataUrl = canvas.toDataURL('image/png');
-      setImages([dataUrl]); // Capturamos la imagen del contenedor
+      setImages([dataUrl]);
     }
   };
 
@@ -54,7 +54,7 @@ const Luminometry: React.FC = () => {
 
   const handleSendPDF = async () => {
     if (images.length > 0) {
-      const doc = <MyDocument images={images} />; // Generamos el documento PDF usando las imágenes capturadas
+      const doc = <MyDocument images={images} />;
 
       const pdfBlob = await pdf(doc).toBlob();
       const pdfFile = new File([pdfBlob], `luminometria_${Date.now()}.pdf`, {
