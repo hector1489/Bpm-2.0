@@ -6,7 +6,7 @@ import { useDesviaciones, useUpdateDesviaciones } from '../../hooks/useDesviacio
 import { desviacionDelete } from '../../utils/apiUtils';
 import { DesviacionResponse } from '../../interfaces/interfaces';
 import { useNavigate } from 'react-router-dom';
-import { getCurrentDate } from '../../utils/utils';
+import { getCurrentDate, getColorByPercentageFilas } from '../../utils/utils';
 
 const DEFAULT_ANSWER = "Sin respuesta";
 
@@ -140,42 +140,40 @@ const DesviacionesTable: React.FC = () => {
     }
   };
 
-  
   const handleEditTable = () => {
     const tableBody = document.querySelector('#tabla-desviaciones tbody');
     if (!tableBody) return;
-  
+
     tableBody.querySelectorAll('tr').forEach((row, rowIndex) => {
       row.querySelectorAll('td').forEach((cell, cellIndex) => {
-        const emailColumnIndex = 14; 
-  
+        const emailColumnIndex = 14;
+
         if (cellIndex === emailColumnIndex || cell.textContent === 'N/A' || cell.textContent === DEFAULT_ANSWER) {
           const field = getFieldFromCellIndex(cellIndex);
           const input = document.createElement('input');
           input.type = 'text';
           input.placeholder = 'Text ...';
-  
+
           const currentValue = localDesviaciones[rowIndex][field];
           input.value = currentValue !== undefined && currentValue !== null ? String(currentValue) : '';
-  
+
           input.id = `input-${rowIndex}-${cellIndex}`;
-  
+
           input.onblur = (e) => {
             const value = (e.target as HTMLInputElement).value;
             handleInputChange(rowIndex, field, value);
           };
-  
+
           cell.innerHTML = '';
           cell.appendChild(input);
         }
       });
     });
   };
-  
+
   const handleGoToHome = () => {
     navigate('/');
   };
-
 
   return (
     <div className="desviaciones-tabla-container">
@@ -218,34 +216,44 @@ const DesviacionesTable: React.FC = () => {
         </thead>
         <tbody>
           {localDesviaciones.length > 0 ? (
-            localDesviaciones.map((desviacion, index) => (
-              <tr key={index}>
-                <td>{desviacion.id || DEFAULT_ANSWER}</td>
-                <td>{desviacion.numero_requerimiento || DEFAULT_ANSWER}</td>
-                <td>{desviacion.preguntas_auditadas || DEFAULT_ANSWER}</td>
-                <td>{desviacion.desviacion_o_criterio || DEFAULT_ANSWER}</td>
-                <td>{desviacion.responsable_problema || DEFAULT_ANSWER}</td>
-                <td>{desviacion.local || DEFAULT_ANSWER}</td>
-                <td>{desviacion.criticidad || DEFAULT_ANSWER}</td>
-                <td>{desviacion.acciones_correctivas || DEFAULT_ANSWER}</td>
-                <td>{desviacion.fecha_recepcion_solicitud || DEFAULT_ANSWER}</td>
-                <td>{desviacion.fecha_solucion_programada || DEFAULT_ANSWER}</td>
-                <td>{desviacion.estado || DEFAULT_ANSWER}</td>
-                <td>{desviacion.contacto_clientes || DEFAULT_ANSWER}</td>
-                <td>{desviacion.evidencia_fotografica || DEFAULT_ANSWER}</td>
-                <td>{desviacion.auditor || DEFAULT_ANSWER}</td>
-                <td>{desviacion.correo || DEFAULT_ANSWER}</td>
-                <td>
-                  <button onClick={() => eliminarFila(desviacion.id)}>Eliminar</button>
-                </td>
-              </tr>
-            ))
+            localDesviaciones.map((desviacion, index) => {
+
+              const criticidadText = desviacion.criticidad || DEFAULT_ANSWER;
+              const percentageMatch = criticidadText.match(/(\d+)%/);
+              const percentage = percentageMatch ? parseInt(percentageMatch[1], 10) : 0;
+              const rowColor = getColorByPercentageFilas(percentage);
+              const textColor = rowColor === 'red' ? 'white' : 'black'; 
+
+              return (
+                <tr key={index} style={{ backgroundColor: rowColor, color: textColor  }}>
+                  <td>{desviacion.id || DEFAULT_ANSWER}</td>
+                  <td>{desviacion.numero_requerimiento || DEFAULT_ANSWER}</td>
+                  <td>{desviacion.preguntas_auditadas || DEFAULT_ANSWER}</td>
+                  <td>{desviacion.desviacion_o_criterio || DEFAULT_ANSWER}</td>
+                  <td>{desviacion.responsable_problema || DEFAULT_ANSWER}</td>
+                  <td>{desviacion.local || DEFAULT_ANSWER}</td>
+                  <td>{desviacion.criticidad || DEFAULT_ANSWER}</td>
+                  <td>{desviacion.acciones_correctivas || DEFAULT_ANSWER}</td>
+                  <td>{desviacion.fecha_recepcion_solicitud || DEFAULT_ANSWER}</td>
+                  <td>{desviacion.fecha_solucion_programada || DEFAULT_ANSWER}</td>
+                  <td>{desviacion.estado || DEFAULT_ANSWER}</td>
+                  <td>{desviacion.contacto_clientes || DEFAULT_ANSWER}</td>
+                  <td>{desviacion.evidencia_fotografica || DEFAULT_ANSWER}</td>
+                  <td>{desviacion.auditor || DEFAULT_ANSWER}</td>
+                  <td>{desviacion.correo || DEFAULT_ANSWER}</td>
+                  <td>
+                    <button onClick={() => eliminarFila(desviacion.id)}>Eliminar</button>
+                  </td>
+                </tr>
+              );
+            })
           ) : (
             <tr>
               <td colSpan={16}>No hay desviaciones disponibles.</td>
             </tr>
           )}
         </tbody>
+
       </table>
     </div>
   );
