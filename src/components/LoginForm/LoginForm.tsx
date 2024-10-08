@@ -2,6 +2,7 @@ import './LoginForm.css'
 import { useState, useContext } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { AppContext } from '../../context/GlobalState'
+import logoFungi from '../../assets/img/logo.jpg'
 
 const loginUrl = 'https://bpm-backend.onrender.com/login'
 
@@ -60,6 +61,9 @@ const LoginForm: React.FC = () => {
 
   return (
     <div className="login-container">
+      <div className="logo-fungi">
+        <img src={logoFungi} alt="logo" />
+      </div>
       <div className="login-form">
         <h2>Iniciar Sesión</h2>
         {errorMessage && <p className="error">{errorMessage}</p>}

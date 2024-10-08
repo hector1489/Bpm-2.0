@@ -163,14 +163,16 @@ const AuditForm: React.FC = () => {
           <button className='btn-green' type="button" onClick={handleNext}>
             {currentQuestionIndex < state.IsHero.length - 1 ? <i className="fa-solid fa-check"></i> : 'Enviar'}
           </button>
-          <button className='bg-warning' onClick={handleNext}>N/A</button>
-          <video ref={videoRef} autoPlay playsInline style={{ display: 'none' }}></video>
-          <canvas ref={canvasRef} style={{ display: 'none' }}></canvas>
+          <button type="button" onClick={openCamera} className="btn-blue camera-button">
+            <i className="fa-solid fa-camera"></i>
+          </button>
+          <button className='bg-black fw-bold' onClick={handleNext}>N/A</button>
+        </div>
+        <div className="audit-form-canvas">
+        <video ref={videoRef} autoPlay playsInline></video>
+        <canvas ref={canvasRef} style={{ display: 'none' }}></canvas>
         </div>
         <div className="btn-audit-form-banner">
-          <button type="button" onClick={openCamera} className="btn-blue camera-button">
-            <i className="fa-solid fa-camera-retro"></i> photo
-          </button>
           <button className='btn-blue' onClick={handleGoToHome}>
             <i className="fa-solid fa-house-chimney"></i> Home
           </button>

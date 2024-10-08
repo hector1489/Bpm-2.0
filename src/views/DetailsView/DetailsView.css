@@ -46,6 +46,10 @@ button:focus {
     font-size: 14px;
     padding: 8px 16px;
   }
+
+  .btn-kpi{
+    display: none !important;
+  }
 }
 
 @media (max-width: 480px) {
@@ -60,5 +64,9 @@ button:focus {
 
   .detail-container>div {
     margin-bottom: 15px;
+  }
+
+  .btn-kpi{
+    display: none !important;
   }
 }

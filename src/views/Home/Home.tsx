@@ -90,20 +90,20 @@ const Home: React.FC = () => {
             </div>
             <div className="card-title">Documentación</div>
           </button>
-          <button className="card" onClick={handleGoToDeafult}>
+          <button className="card card-none" onClick={handleGoToDeafult}>
               <div className="card-icon">
                 <i className="fas fa-broom"></i>
               </div>
               <div className="card-title">Auditoría Aseo</div>
           </button>
          
-          <button className="card" onClick={handleGoToAnalisis}>
+          <button className="card card-none" onClick={handleGoToAnalisis}>
             <div className="card-icon">
               <i className="fas fa-chart-line"></i>
             </div>
             <div className="card-title">Análisis</div>
           </button>
-          <button className="card" onClick={handleGoToRegister}>
+          <button className="card card-none" onClick={handleGoToRegister}>
             <div className="card-icon">
               <i className="fas fa-shield-alt"></i>
             </div>

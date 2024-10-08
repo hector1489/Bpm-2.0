@@ -38,6 +38,11 @@
   color: white;
 }
 
+.btn-black {
+  background-color: black;
+  color: white;
+}
+
 @keyframes logo-spin {
   from {
     transform: rotate(0deg);

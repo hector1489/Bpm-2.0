@@ -22,6 +22,10 @@
     padding: 1rem;
   }
 
+  .btn-kpi{
+    display: none !important;
+  }
+
 }
 
 .eta-graph,

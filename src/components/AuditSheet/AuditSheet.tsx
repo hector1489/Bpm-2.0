@@ -131,7 +131,7 @@ const AuditSheet: React.FC = () => {
       <div className="logo-fungi">
         <img src={logoFungi} alt="logo" />
       </div>
-      <h3 className="text-center">Ficha de Auditoría</h3>
+      <h3 className="text-center fw-bold">lista de chequeo auditoria bpm</h3>
       {loading && <p>Cargando desviaciones...</p>}
       {error && <p className="error">{error}</p>}
 

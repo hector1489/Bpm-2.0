@@ -100,7 +100,7 @@ const DetailsView: React.FC = () => {
         <button className='btn-circle btn-blue' onClick={handleGoToETA} title='ETA'>
           ETA
         </button>
-        <button className='btn-circle btn-blue' onClick={handleGoToKpi} title='KPI'>
+        <button className='btn-circle btn-blue btn-kpi' onClick={handleGoToKpi} title='KPI'>
           KPI
         </button>
         <button className='btn-circle' onClick={handleGoToHome}>
