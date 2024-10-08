@@ -87,6 +87,30 @@ button:disabled {
   cursor: not-allowed;
 }
 
+.audit-form-canvas {
+  position: relative;
+  width: 100%;
+  max-width: 400px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+}
+
+.audit-form-canvas video {
+  margin-top: 5px;
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+  object-fit: cover;
+}
+
+.audit-form-canvas canvas {
+  width: 100%;
+  height: auto;
+  display: none; 
+}
+
+
 @media (max-width: 768px) {
   form {
     padding: 20px;
@@ -103,6 +127,10 @@ button:disabled {
 
   .btn-audit-form-banner{
     display: none !important;
+  }
+
+  .audit-form-canvas {
+    max-width: 300px;
   }
 }
 

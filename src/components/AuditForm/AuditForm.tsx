@@ -81,23 +81,23 @@ const AuditForm: React.FC = () => {
       const video = videoRef.current;
       const canvas = canvasRef.current;
       const context = canvas.getContext('2d');
-  
+
       if (context) {
         canvas.width = video.videoWidth;
         canvas.height = video.videoHeight;
-  
+
         context.drawImage(video, 0, 0, canvas.width, canvas.height);
         const photoUrl = canvas.toDataURL('image/png');
-  
+
 
         const questionText = currentQuestion?.question || 'sin_pregunta';
         const sanitizedQuestion = questionText.replace(/\s+/g, '_').toLowerCase(); // Reemplaza espacios por guiones bajos
         const fileName = `${sanitizedQuestion}.png`;
-  
+
         addPhoto(currentQuestion?.question || '', photoUrl);
-  
+
         try {
-     
+
           const responseUrl = await subirFoto(photoUrl, fileName);
           if (responseUrl) {
             console.log('Foto subida al backend con éxito:', responseUrl);
@@ -107,11 +107,11 @@ const AuditForm: React.FC = () => {
         } catch (error) {
           console.error('Error al subir la foto:', error);
         }
-  
+
         setPhotoTaken(true);
       }
     }
-  
+
     stopCamera(stream);
   };
 
@@ -169,8 +169,8 @@ const AuditForm: React.FC = () => {
           <button className='bg-black fw-bold' onClick={handleNext}>N/A</button>
         </div>
         <div className="audit-form-canvas">
-        <video ref={videoRef} autoPlay playsInline></video>
-        <canvas ref={canvasRef} style={{ display: 'none' }}></canvas>
+          <video ref={videoRef} autoPlay playsInline></video>
+          <canvas ref={canvasRef} style={{ display: 'none' }}></canvas>
         </div>
         <div className="btn-audit-form-banner">
           <button className='btn-blue' onClick={handleGoToHome}>

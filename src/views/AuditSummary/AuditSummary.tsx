@@ -6,12 +6,13 @@ import { useNavigate } from 'react-router-dom'
 import { AppContext } from '../../context/GlobalState'
 import { extractPercentage, getCurrentDate, calculateSolutionDate, getColorByPercentage } from '../../utils/utils'
 import { enviarDatosAuditoria } from '../../utils/apiUtils'
-import logoFungi from '../../assets/img/logo.jpg'
+import logos from '../../assets/img/index'
 import { pdf } from '@react-pdf/renderer'
 import MyDocument from '../../utils/MyDocument'
 import { subirPDF } from '../../utils/apiPdfUtils'
 
 const DEFAULT_ANSWER = "Sin respuesta";
+const logoFungi = logos.logoBpm;
 
 const AuditSummary: React.FC = () => {
   const context = useContext(AppContext);
