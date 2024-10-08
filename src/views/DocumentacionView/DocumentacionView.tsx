@@ -97,11 +97,11 @@ const DocumentacionView: React.FC = () => {
                       <i className="fa-regular fa-image"></i>
                         Evidencia Fotografica
                       </button>
-                      <button onClick={() => goToControlDesviaciones(desviacion?.id, desviacion?.numero_requerimiento)}>
+                      <button className='btn-doc-editar' onClick={() => goToControlDesviaciones(desviacion?.id, desviacion?.numero_requerimiento)}>
                       <i className="fa-regular fa-pen-to-square"></i>
                         Editar Desviaciones
                       </button>
-                      <button className='btn-doc-editar' onClick={() => handleGoDownloadSummary(desviacion?.id, desviacion?.numero_requerimiento)}>
+                      <button onClick={() => handleGoDownloadSummary(desviacion?.id, desviacion?.numero_requerimiento)}>
                         <i className="fa-solid fa-file"></i>
                         Resumen Ejecutivo
                       </button>
