@@ -64,7 +64,7 @@ const KPIGraph: React.FC<BPMGraphProps> = ({ moduleData }) => {
       },
     },
     title: {
-      text: 'Promedio de Respuestas por Módulo KPI',
+      text: '',
     },
     xAxis: {
       categories: moduleNames,
@@ -94,7 +94,7 @@ const KPIGraph: React.FC<BPMGraphProps> = ({ moduleData }) => {
 
   return (
     <div className="kpi-graph-container">
-      <h3>Gráfico de Promedios por Módulo KPI</h3>
+      <h3>KPI.</h3>
       <HighchartsReact highcharts={Highcharts} options={chartOptions} />
     </div>
   );

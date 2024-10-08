@@ -11,9 +11,8 @@ interface ETAGraphProps {
   moduleData: { moduleName: string; percentage: number }[];
 }
 
-const ETAGraph: React.FC<ETAGraphProps> = ({ moduleData }) => {
+const ETAGraph: React.FC<ETAGraphProps> = () => {
   const context = useContext(AppContext);
-  console.log(moduleData);
   if (!context) {
     return <div>Error al cargar el contexto</div>;
   }
@@ -72,7 +71,7 @@ const ETAGraph: React.FC<ETAGraphProps> = ({ moduleData }) => {
       },
     },
     title: {
-      text: 'Promedio de Respuestas por Preguntas ETA.',
+      text: '',
     },
     xAxis: {
       categories: questionNames,
@@ -102,7 +101,7 @@ const ETAGraph: React.FC<ETAGraphProps> = ({ moduleData }) => {
 
   return (
     <div className="eta-graph-container">
-      <h4>Gráfico de Promedios ETA.</h4>
+      <h4>ETA.</h4>
       <HighchartsReact highcharts={Highcharts} options={chartOptions} />
     </div>
   );

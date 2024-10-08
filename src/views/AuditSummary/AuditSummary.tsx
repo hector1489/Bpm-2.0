@@ -180,16 +180,16 @@ const AuditSummary: React.FC = () => {
 
 
       <div className="buttons-summary-circle">
-        <button className='btn-circle bg-warning' onClick={handleGoToDetails} title='Detalle'>
+        <button className='btn-circle bg-blue' onClick={handleGoToDetails} title='Detalle'>
           DTLS
         </button>
-        <button className='btn-circle bg-warning' onClick={handleGoToLuminometry} title='Luminometria'>
+        <button className='btn-circle btn-blue' onClick={handleGoToLuminometry} title='Luminometria'>
           LUM
         </button>
-        <button className='btn-circle bg-warning' onClick={handleGoToETA} title='ETA'>
+        <button className='btn-circle btn-blue' onClick={handleGoToETA} title='ETA'>
           ETA
         </button>
-        <button className='btn-circle bg-warning' onClick={handleGoToKpi} title='KPI'>
+        <button className='btn-circle btn-blue' onClick={handleGoToKpi} title='KPI'>
           KPI
         </button>
         <button className='btn-circle' onClick={handleGoToHome}>

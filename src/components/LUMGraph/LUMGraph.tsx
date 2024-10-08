@@ -52,7 +52,7 @@ const LUMGraph: React.FC = () => {
       },
     },
     title: {
-      text: 'Promedio de Respuesta para LUM 21',
+      text: '',
     },
     xAxis: {
       categories: questionNames,
@@ -83,7 +83,7 @@ const LUMGraph: React.FC = () => {
 
   return (
     <div className="lum-graph-container">
-      <h4>Gráfico de Promedios LUM</h4>
+      <h4>LUM.</h4>
       <HighchartsReact highcharts={Highcharts} options={chartOptions} />
     </div>
   );

@@ -31,7 +31,6 @@
   background-color: #2D1C7D;
   color: white;
   font-weight: bold;
-
 }
 
 .btn-blue:hover {
@@ -39,7 +38,6 @@
   color: white;
 }
 
-/* Keyframe for spinning animation */
 @keyframes logo-spin {
   from {
     transform: rotate(0deg);

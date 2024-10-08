@@ -22,9 +22,11 @@ const ETA: React.FC = () => {
   const handleCaptureImages = async () => {
     const element = document.querySelector('.eta-container') as HTMLElement;
     if (element) {
+      setTimeout(async () => {
       const canvas = await html2canvas(element);
       const dataUrl = canvas.toDataURL('image/png');
       setImages([dataUrl]);
+    }, 1000);
     }
   };
 
@@ -82,7 +84,6 @@ const ETA: React.FC = () => {
     }
   };
 
-  // Funciones de navegación
   const handleGoToAuditSummary = () => {
     navigate('/resumen-auditoria');
   };
@@ -116,13 +117,13 @@ const ETA: React.FC = () => {
         <button className='btn-circle btn-green' onClick={handleGoToAuditSummary}>
           <i className="fa-solid fa-arrow-left"></i>
         </button>
-        <button className='btn-circle bg-warning' onClick={handleGoToDetails} title='Detalle'>
+        <button className='btn-circle btn-blue' onClick={handleGoToDetails} title='Detalle'>
           DTLS
         </button>
-        <button className='btn-circle bg-warning' onClick={handleGoToLuminometry} title='Luminometria'>
+        <button className='btn-circle btn-blue' onClick={handleGoToLuminometry} title='Luminometria'>
           LUM
         </button>
-        <button className='btn-circle bg-warning' onClick={handleGoToKpi} title='KPI'>
+        <button className='btn-circle btn-blue' onClick={handleGoToKpi} title='KPI'>
           KPI
         </button>
         <button className='btn-circle' onClick={handleGoToHome}>

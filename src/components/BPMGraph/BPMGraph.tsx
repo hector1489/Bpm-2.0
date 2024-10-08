@@ -72,7 +72,7 @@ const BPMGraph: React.FC<BPMGraphProps> = ({ moduleData }) => {
       reflow: true,
     },
     title: {
-      text: 'Promedio de preguntas por grupo y promedio general',
+      text: '',
     },
     xAxis: {
       categories: groupNames,
@@ -126,7 +126,7 @@ const BPMGraph: React.FC<BPMGraphProps> = ({ moduleData }) => {
 
   return (
     <div className="bpm-graph-container">
-      <h3>Resumen de Promedios por Grupo BPM y Promedio General.</h3>
+      <h3>Grupos BPM.</h3>
       <HighchartsReact
         highcharts={Highcharts}
         options={chartOptions}

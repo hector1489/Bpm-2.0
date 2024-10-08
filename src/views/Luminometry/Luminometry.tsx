@@ -43,12 +43,14 @@ const Luminometry: React.FC = () => {
   const handleCaptureImages = async () => {
     const element = document.querySelector('.lum-container') as HTMLElement;
     if (element) {
-      const canvas = await html2canvas(element);
-      const dataUrl = canvas.toDataURL('image/png');
-      setImages([dataUrl]);
+      setTimeout(async () => {
+        const canvas = await html2canvas(element);
+        const dataUrl = canvas.toDataURL('image/png');
+        setImages([dataUrl]);
+      }, 1000);
     }
   };
-
+  
   useEffect(() => {
     handleCaptureImages();
   }, []);
@@ -116,13 +118,13 @@ const Luminometry: React.FC = () => {
         <button className='btn-circle btn-green' onClick={handleGoToAuditSummary}>
           <i className="fa-solid fa-arrow-left"></i>
         </button>
-        <button className='btn-circle bg-warning' onClick={handleGoToDetails} title='Detalle'>
+        <button className='btn-circle btn-blue' onClick={handleGoToDetails} title='Detalle'>
           DTLS
         </button>
-        <button className='btn-circle bg-warning' onClick={handleGoToETA} title='ETA'>
+        <button className='btn-circle btn-blue' onClick={handleGoToETA} title='ETA'>
           ETA
         </button>
-        <button className='btn-circle bg-warning' onClick={handleGoToKpi} title='KPI'>
+        <button className='btn-circle btn-blue' onClick={handleGoToKpi} title='KPI'>
           KPI
         </button>
         <button className='btn-circle' onClick={handleGoToHome}>

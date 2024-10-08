@@ -94,13 +94,13 @@ const DetailsView: React.FC = () => {
         <button className='btn-circle btn-green' onClick={handleGoToAuditSummary}>
           <i className="fa-solid fa-arrow-left"></i>
         </button>
-        <button className='btn-circle bg-warning' onClick={handleGoToLuminometry} title='Luminometria'>
+        <button className='btn-circle btn-blue' onClick={handleGoToLuminometry} title='Luminometria'>
           LUM
         </button>
-        <button className='btn-circle bg-warning' onClick={handleGoToETA} title='ETA'>
+        <button className='btn-circle btn-blue' onClick={handleGoToETA} title='ETA'>
           ETA
         </button>
-        <button className='btn-circle bg-warning' onClick={handleGoToKpi} title='KPI'>
+        <button className='btn-circle btn-blue' onClick={handleGoToKpi} title='KPI'>
           KPI
         </button>
         <button className='btn-circle' onClick={handleGoToHome}>
