@@ -93,6 +93,9 @@ h3 {
 
 /* Responsive adjustments */
 @media (max-width: 768px) {
+  .btn-doc-editar {
+    display: none !important;
+  }
 
   .buttons-summary {
     width: 100%;
@@ -102,6 +105,10 @@ h3 {
 }
 
 @media (max-width: 480px) {
+  .btn-doc-editar {
+    display: none !important;
+  }
+
   .documentacion-container {
     padding: 10px;
   }

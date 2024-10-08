@@ -101,7 +101,7 @@ const DocumentacionView: React.FC = () => {
                       <i className="fa-regular fa-pen-to-square"></i>
                         Editar Desviaciones
                       </button>
-                      <button onClick={() => handleGoDownloadSummary(desviacion?.id, desviacion?.numero_requerimiento)}>
+                      <button className='btn-doc-editar' onClick={() => handleGoDownloadSummary(desviacion?.id, desviacion?.numero_requerimiento)}>
                         <i className="fa-solid fa-file"></i>
                         Resumen Ejecutivo
                       </button>
