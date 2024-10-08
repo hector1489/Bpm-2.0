@@ -13,6 +13,10 @@ import { subirPDF } from '../../utils/apiPdfUtils'
 
 const DEFAULT_ANSWER = "Sin respuesta";
 const logoFungi = logos.logoBpm;
+const logoDetails = logos.logoDetails
+const logoHome = logos.logoHome
+const logoLum = logos.logoLum
+const logoTra = logos.logoTra
 
 const AuditSummary: React.FC = () => {
   const context = useContext(AppContext);
@@ -128,6 +132,7 @@ const AuditSummary: React.FC = () => {
   const handleGoToLuminometry = () => {
     navigate('/luminometria')
   }
+
   const handleGoToETA = () => {
     navigate('/seremi')
   }
@@ -136,28 +141,23 @@ const AuditSummary: React.FC = () => {
     navigate('/resumen-detalle')
   }
 
-  const handleGoToKpi = () => {
-    navigate('/kpi');
-  }
-
-
   const handleSendPDF = async () => {
     if (images.length > 0) {
       const doc = <MyDocument images={images} />;
-  
+
       const pdfBlob = await pdf(doc).toBlob();
-  
+
       const numeroAuditoria = state.auditSheetData.numeroAuditoria || 'sin_numero';
-  
+
       const pdfFile = new File([pdfBlob], `auditoria_bpm_${numeroAuditoria}_${Date.now()}.pdf`, {
         type: 'application/pdf',
         lastModified: Date.now(),
       });
-  
+
       try {
         const result = await subirPDF(pdfFile, pdfFile.name);
         await handleSendIncidencias();
-  
+
         alert('Datos guardados exitosamente');
         console.log('PDF enviado exitosamente:', result);
       } catch (error) {
@@ -165,7 +165,7 @@ const AuditSummary: React.FC = () => {
       }
     }
   };
-  
+
 
 
   return (
@@ -178,23 +178,23 @@ const AuditSummary: React.FC = () => {
       <BPMGraph moduleData={moduleData} />
       <AverageModules />
 
+      <div className="buttons-summary-logo">
+        <div className="btn">
+          <img src={logoDetails} alt="details" onClick={handleGoToDetails} title='Details'/>
+        </div>
+        <div className="btn">
+          <img src={logoLum} alt="lum" onClick={handleGoToLuminometry} title='LUM' />
+        </div>
+        <div className="btn">
+          <img src={logoTra} alt="tra" onClick={handleGoToETA} title='TRA' />
+        </div>
+        <div className="btn">
+          <img src={logoHome} alt="home" onClick={handleGoToHome} title='Home' />
+        </div>
+
+      </div>
+
       <div className="buttons-summary-circle">
-      
-        <button className='btn-circle bg-blue' onClick={handleGoToDetails} title='Detalle'>
-        <i className="fa-solid fa-file-lines"></i>
-        </button>
-        <button className='btn-circle btn-blue' onClick={handleGoToLuminometry} title='Luminometria'>
-          LUM
-        </button>
-        <button className='btn-circle btn-blue' onClick={handleGoToETA} title='ETA'>
-          ETA
-        </button>
-        <button className='btn-circle btn-blue btn-kpi' onClick={handleGoToKpi} title='KPI'>
-          KPI
-        </button>
-        <button className='btn-circle' onClick={handleGoToHome}>
-          <i className="fa-solid fa-house-chimney"></i>
-        </button>
 
         {images.length > 0 && (
           <button onClick={handleSendPDF} className="btn-dd-pdf fw-bold">

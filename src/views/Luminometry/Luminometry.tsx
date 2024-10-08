@@ -4,10 +4,15 @@ import { useContext, useEffect, useState } from 'react'
 import { AppContext } from '../../context/GlobalState'
 import './Luminometry.css'
 import { getColorByPercentageLum } from '../../utils/utils'
-import html2canvas from 'html2canvas';
-import { pdf } from '@react-pdf/renderer';
-import MyDocument from '../../utils/MyDocument';
-import { subirPDF } from '../../utils/apiPdfUtils';
+import html2canvas from 'html2canvas'
+import { pdf } from '@react-pdf/renderer'
+import MyDocument from '../../utils/MyDocument'
+import { subirPDF } from '../../utils/apiPdfUtils'
+import logos from '../../assets/img/index'
+
+const logoDetails = logos.logoDetails
+const logoHome = logos.logoHome
+const logoTra = logos.logoTra
 
 const Luminometry: React.FC = () => {
   const navigate = useNavigate();
@@ -50,7 +55,7 @@ const Luminometry: React.FC = () => {
       }, 1000);
     }
   };
-  
+
   useEffect(() => {
     handleCaptureImages();
   }, []);
@@ -77,15 +82,12 @@ const Luminometry: React.FC = () => {
     }
   };
 
-  const handleGoToKpi = () => {
-    navigate('/kpi');
-  }
 
 
   return (
     <div className="lum-container">
       <h3>Resumen Luminometria</h3>
-      <LUMGraph/>
+      <LUMGraph />
       <div className="table-responsive">
         <table className="table table-bordered text-center table-sm">
           <thead className="table-light">
@@ -114,29 +116,29 @@ const Luminometry: React.FC = () => {
           </tbody>
         </table>
       </div>
-      <div className="buttons-luminometry">
-        <button className='btn-circle btn-green' onClick={handleGoToAuditSummary}>
-          <i className="fa-solid fa-arrow-left"></i>
-        </button>
-        <button className='btn-circle btn-blue' onClick={handleGoToDetails} title='Detalle'>
-          DTLS
-        </button>
-        <button className='btn-circle btn-blue' onClick={handleGoToETA} title='ETA'>
-          ETA
-        </button>
-        <button className='btn-circle btn-blue btn-kpi' onClick={handleGoToKpi} title='KPI'>
-          KPI
-        </button>
-        <button className='btn-circle' onClick={handleGoToHome}>
-          <i className="fa-solid fa-house-chimney"></i>
-        </button>
 
-        {images.length > 0 && (
-          <button onClick={handleSendPDF} className="btn-dd-pdf">
-            Enviar PDF <i className="fa-solid fa-upload"></i>
-          </button>
-        )}
+      {images.length > 0 && (
+        <button onClick={handleSendPDF} className="btn-dd-pdf">
+          Enviar PDF <i className="fa-solid fa-upload"></i>
+        </button>
+      )}
+
+      <div className="buttons-summary-logo">
+        <div className="btn" onClick={handleGoToAuditSummary} title='Volver' >
+          <i className="fa-solid fa-arrow-left" ></i>
+        </div>
+        <div className="btn">
+          <img src={logoDetails} alt="details" onClick={handleGoToDetails} title='Details'/>
+        </div>
+        <div className="btn">
+          <img src={logoTra} alt="tra" onClick={handleGoToETA} title='TRA'/>
+        </div>
+        <div className="btn">
+          <img src={logoHome} alt="home" onClick={handleGoToHome} title='Home'/>
+        </div>
+
       </div>
+
     </div>
   );
 }

@@ -4,9 +4,14 @@ import { useNavigate } from 'react-router-dom';
 import html2canvas from 'html2canvas';
 import { pdf } from '@react-pdf/renderer';
 import MyDocument from '../../utils/MyDocument';
+import logos from '../../assets/img/index'
 import './DetailsView.css';
 import { AverageTable, PhotoAudit, DetailsTable } from '../../components';
 import { subirPDF } from '../../utils/apiPdfUtils';
+
+const logoHome = logos.logoHome
+const logoLum = logos.logoLum
+const logoTra = logos.logoTra
 
 const DetailsView: React.FC = () => {
   const navigate = useNavigate();
@@ -73,9 +78,6 @@ const DetailsView: React.FC = () => {
     navigate('/seremi');
   };
   
-  const handleGoToKpi = () => {
-    navigate('/kpi');
-  }
 
   return (
     <div className="detail-container">
@@ -90,22 +92,8 @@ const DetailsView: React.FC = () => {
       <div>
         <PhotoAudit photos={state.photos} />
       </div>
+
       <div className="detail-button">
-        <button className='btn-circle btn-green' onClick={handleGoToAuditSummary}>
-          <i className="fa-solid fa-arrow-left"></i>
-        </button>
-        <button className='btn-circle btn-blue' onClick={handleGoToLuminometry} title='Luminometria'>
-          LUM
-        </button>
-        <button className='btn-circle btn-blue' onClick={handleGoToETA} title='ETA'>
-          ETA
-        </button>
-        <button className='btn-circle btn-blue btn-kpi' onClick={handleGoToKpi} title='KPI'>
-          KPI
-        </button>
-        <button className='btn-circle' onClick={handleGoToHome}>
-          <i className="fa-solid fa-house-chimney"></i>
-        </button>
 
         {images.length > 0 && (
           <button onClick={handleSendPDF} className="btn-dd-pdf">
@@ -113,6 +101,24 @@ const DetailsView: React.FC = () => {
           </button>
         )}
       </div>
+
+      <div className="buttons-summary-logo">
+        <div className="btn" onClick={handleGoToAuditSummary} title='Volver'>
+          <i className="fa-solid fa-arrow-left" ></i>
+        </div>
+        <div className="btn">
+          <img src={logoLum} alt="lum" onClick={handleGoToLuminometry} title='LUM'/>
+        </div>
+        <div className="btn">
+          <img src={logoTra} alt="tra" onClick={handleGoToETA} title='TRA'/>
+        </div>
+        <div className="btn">
+          <img src={logoHome} alt="home" onClick={handleGoToHome} title='Home'/>
+        </div>
+
+      </div>
+      
+      
     </div>
   );
 };

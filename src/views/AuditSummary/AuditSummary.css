@@ -60,6 +60,17 @@ h3.fw-bold {
   color: aliceblue;
 }
 
+.buttons-summary-logo {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.buttons-summary-logo img {
+  border: 1px solid black;
+  width: 40px;
+}
+
 @media (max-width: 768px) {
   .summary-container {
     padding: 10px;

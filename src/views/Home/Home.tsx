@@ -4,6 +4,7 @@ import { useContext } from 'react'
 import logoFungi from '../../assets/img/logo.jpg'
 import { AppContext } from '../../context/GlobalState'
 
+
 const Home: React.FC = () => {
   const navigate = useNavigate();
   const context = useContext(AppContext);

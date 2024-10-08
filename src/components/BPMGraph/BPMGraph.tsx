@@ -91,6 +91,8 @@ const BPMGraph: React.FC<BPMGraphProps> = ({ moduleData }) => {
         data: groupAverages,
         colorByPoint: true,
         colors: barColors,
+        
+
       },
     ],
     plotOptions: {

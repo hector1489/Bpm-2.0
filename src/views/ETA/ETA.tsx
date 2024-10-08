@@ -7,6 +7,12 @@ import html2canvas from 'html2canvas';
 import { pdf } from '@react-pdf/renderer';
 import MyDocument from '../../utils/MyDocument';
 import { subirPDF } from '../../utils/apiPdfUtils';
+import logos from '../../assets/img/index'
+
+const logoDetails = logos.logoDetails
+const logoHome = logos.logoHome
+const logoLum = logos.logoLum
+
 
 const ETA: React.FC = () => {
   const navigate = useNavigate();
@@ -97,12 +103,9 @@ const ETA: React.FC = () => {
   };
 
   const handleGoToLuminometry = () => {
-    navigate('/luminometria');
-  };
-
-  const handleGoToKpi = () => {
-    navigate('/kpi');
+    navigate('/luminometria')
   }
+
 
   return (
     <div className="eta-container">
@@ -113,28 +116,26 @@ const ETA: React.FC = () => {
       }))} />
       <ETATable />
 
-      <div className="detail-button">
-        <button className='btn-circle btn-green' onClick={handleGoToAuditSummary}>
-          <i className="fa-solid fa-arrow-left"></i>
-        </button>
-        <button className='btn-circle btn-blue' onClick={handleGoToDetails} title='Detalle'>
-          DTLS
-        </button>
-        <button className='btn-circle btn-blue' onClick={handleGoToLuminometry} title='Luminometria'>
-          LUM
-        </button>
-        <button className='btn-circle btn-blue btn-kpi' onClick={handleGoToKpi} title='KPI'>
-          KPI
-        </button>
-        <button className='btn-circle' onClick={handleGoToHome}>
-          <i className="fa-solid fa-house-chimney"></i>
-        </button>
-
-        {images.length > 0 && (
+      {images.length > 0 && (
           <button onClick={handleSendPDF} className="btn-dd-pdf">
             Enviar PDF <i className="fa-solid fa-upload"></i>
           </button>
         )}
+
+<div className="buttons-summary-logo">
+        <div className="btn" onClick={handleGoToAuditSummary} title='Volver'>
+          <i className="fa-solid fa-arrow-left" ></i>
+        </div>
+        <div className="btn">
+          <img src={logoDetails} alt="details" onClick={handleGoToDetails} title='Details'/>
+        </div>
+        <div className="btn">
+          <img src={logoLum} alt="lum" onClick={handleGoToLuminometry} title='LUM'/>
+        </div>
+        <div className="btn">
+          <img src={logoHome} alt="home" onClick={handleGoToHome} title='Home'/>
+        </div>
+
       </div>
     </div>
   );
