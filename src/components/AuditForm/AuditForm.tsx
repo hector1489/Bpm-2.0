@@ -10,6 +10,7 @@ const AuditForm: React.FC = () => {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [formData, setFormData] = useState<Answer[]>([]);
   const [photoTaken, setPhotoTaken] = useState<boolean>(false);
+  const [errorMessage, setErrorMessage] = useState<string>(''); // Estado para manejar el mensaje de error
   const context = useContext(AppContext);
   const navigate = useNavigate();
   const videoRef = useRef<HTMLVideoElement | null>(null);
@@ -29,9 +30,29 @@ const AuditForm: React.FC = () => {
       answer: e.target.value,
     };
     setFormData(updatedFormData);
+    setErrorMessage(''); // Limpiar el mensaje de error cuando selecciona una respuesta
   };
 
   const handleNext = () => {
+    const updatedFormData = [...formData];
+    const selectedAnswer = updatedFormData[currentQuestionIndex]?.answer;
+
+    if (!selectedAnswer) {
+      setErrorMessage('Por favor, seleccione una respuesta antes de continuar.');
+      return; // Evitar avanzar si no hay respuesta seleccionada
+    }
+
+    if (currentQuestionIndex < state.IsHero.length - 1) {
+      setFormData(updatedFormData);
+      setCurrentQuestionIndex(currentQuestionIndex + 1);
+      setPhotoTaken(false);
+    } else {
+      addAnswers(updatedFormData);
+      navigate('/resumen-auditoria');
+    }
+  };
+
+  const handleNextNA = () => {
     const updatedFormData = [...formData];
     const selectedAnswer = updatedFormData[currentQuestionIndex]?.answer;
 
@@ -159,6 +180,7 @@ const AuditForm: React.FC = () => {
             )}
           </select>
         </label>
+        {errorMessage && <p className="error-message">{errorMessage}</p>}
         <div className='btn-audit-form'>
           <button className='btn-green' type="button" onClick={handleNext}>
             {currentQuestionIndex < state.IsHero.length - 1 ? <i className="fa-solid fa-check"></i> : 'Enviar'}
@@ -166,7 +188,7 @@ const AuditForm: React.FC = () => {
           <button type="button" onClick={openCamera} className="btn-blue camera-button">
             <i className="fa-solid fa-camera"></i>
           </button>
-          <button className='bg-black fw-bold' onClick={handleNext}>N/A</button>
+          <button className='bg-black fw-bold' onClick={handleNextNA}>N/A</button>
         </div>
         <div className="audit-form-canvas">
           <video ref={videoRef} autoPlay playsInline></video>

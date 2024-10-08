@@ -53,21 +53,6 @@ const Home: React.FC = () => {
 
   return (
     <div className="container">
-      <div className="logo-fungi">
-        <img src={logoFungi} alt="logo" />
-      </div>
-
-      <div className="left-icons">
-        <div className="icon">
-          <i className="fa-solid fa-gauge-high"></i>
-        </div>
-        <div className="icon">
-          <i className="fas fa-cogs"></i>
-        </div>
-        <div className="icon logout" onClick={handleLogout}>
-          <i className="fas fa-sign-out-alt"></i>
-        </div>
-      </div>
 
       <div className="container">
         <h2 className="text-center">Panel de Control</h2>
@@ -122,6 +107,20 @@ const Home: React.FC = () => {
             <div className="card-title">Conectividad</div>
           </button>
         </div>
+
+
+      </div>
+
+      
+
+      <div className="left-icons">
+        <div className="icon logout" onClick={handleLogout}>
+          <i className="fas fa-sign-out-alt"></i>
+        </div>
+      </div>
+
+      <div className="logo-fungi">
+        <img src={logoFungi} alt="logo" />
       </div>
     </div>
   )

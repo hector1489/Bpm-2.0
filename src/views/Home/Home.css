@@ -20,6 +20,7 @@
   transform: translateY(-50%);
   display: flex;
   gap: 15px;
+  translate: 150px 215px;
 }
 
 .left-icons .icon {
@@ -139,6 +140,7 @@
     flex-direction: row;
     justify-content: center;
     margin-top: 20px;
+    translate: 90px 140px;
   }
 
   .left-icons .icon {

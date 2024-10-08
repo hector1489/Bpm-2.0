@@ -174,15 +174,14 @@ const AuditSummary: React.FC = () => {
         <img src={logoFungi} alt="logo" />
       </div>
       <h3 className='fw-bold'>auditoria bpm</h3>
-      <p>Diagnostico Inicial</p>
       <Summary />
       <BPMGraph moduleData={moduleData} />
       <AverageModules />
 
-
       <div className="buttons-summary-circle">
+      
         <button className='btn-circle bg-blue' onClick={handleGoToDetails} title='Detalle'>
-          DTLS
+        <i className="fa-solid fa-file-lines"></i>
         </button>
         <button className='btn-circle btn-blue' onClick={handleGoToLuminometry} title='Luminometria'>
           LUM

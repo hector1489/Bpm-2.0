@@ -46,7 +46,7 @@
   text-align: right;
 }
 
-.btn-form {
+button.btn-form {
   display: inline-block;
   padding: 10px 20px;
   font-size: 16px;
@@ -71,6 +71,13 @@
 .btn-green i {
   margin-right: 5px;
 }
+
+button.btn-form:disabled {
+  background-color: #4fb467;
+  color: white;
+  cursor: not-allowed;
+}
+
 
 /* Responsive Styles */
 @media (max-width: 768px) {

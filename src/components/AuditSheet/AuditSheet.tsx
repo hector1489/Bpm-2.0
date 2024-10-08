@@ -111,15 +111,31 @@ const AuditSheet: React.FC = () => {
     setFormValues(prevValues => ({ ...prevValues, [name]: value }));
   };
 
+  const isFormComplete = () => {
+    return (
+      formValues.nombreEstablecimiento !== '' &&
+      formValues.gerenteEstablecimiento !== '' &&
+      formValues.administradorEstablecimiento !== '' &&
+      formValues.supervisorEstablecimiento !== '' &&
+      formValues.auditorEmail !== '' &&
+      formValues.fechaAuditoria !== ''
+    );
+  };
+
+
   const handleSave = () => {
-    const updatedFormValues = {
-      ...formValues,
-      numeroAuditoria: auditCount.toString()
-    };
-    updateAuditSheetData(updatedFormValues);
-    handleGoToAuditoria();
-    alert('Datos guardados exitosamente');
-    setAuditCount(prevCount => prevCount + 1);
+    if (isFormComplete()) {
+      const updatedFormValues = {
+        ...formValues,
+        numeroAuditoria: auditCount.toString()
+      };
+      updateAuditSheetData(updatedFormValues);
+      handleGoToAuditoria();
+      alert('Datos guardados exitosamente');
+      setAuditCount(prevCount => prevCount + 1);
+    } else {
+      alert('Por favor, complete todos los campos antes de guardar.');
+    }
   };
 
   const handleGoToAuditoria = () => {
@@ -225,7 +241,7 @@ const AuditSheet: React.FC = () => {
             onChange={handleChange}
           />
         </div>
-        <button type="button" className="btn btn-form btn-green" onClick={handleSave}>
+        <button type="button" className="btn btn-form btn-green" onClick={handleSave} disabled={!isFormComplete()} >
           Guardar y avanzar
         </button>
       </form>
