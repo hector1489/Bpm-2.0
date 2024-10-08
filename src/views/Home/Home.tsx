@@ -53,8 +53,11 @@ const Home: React.FC = () => {
 
   return (
     <div className="container">
+      <div className="logo-fungi">
+        <img src={logoFungi} alt="logo" />
+      </div>
 
-      <div className="container">
+      <div className="panel-control-container">
         <h2 className="text-center">Panel de Control</h2>
         <div className="card-grid mt-4">
           <button className="card" onClick={handleGoToAuditFormView}>
@@ -119,9 +122,7 @@ const Home: React.FC = () => {
         </div>
       </div>
 
-      <div className="logo-fungi">
-        <img src={logoFungi} alt="logo" />
-      </div>
+      
     </div>
   )
 }

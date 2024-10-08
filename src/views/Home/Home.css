@@ -20,11 +20,12 @@
   transform: translateY(-50%);
   display: flex;
   gap: 15px;
-  translate: 150px 215px;
+  margin-top: 20px;
 }
 
 .left-icons .icon {
   font-size: 20px;
+
   color: var(--primary-color);
   cursor: pointer;
   display: flex;
@@ -48,6 +49,15 @@
 
 /* Container */
 .container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 20px;
+}
+
+.panel-control-container {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -112,6 +122,12 @@
 
 /* Responsive Design */
 @media (max-width: 767px) {
+
+  .container {
+    display: flex;
+    flex-direction: column-reverse;
+  }
+
   #form-logo {
     width: 100px;
   }
@@ -140,7 +156,7 @@
     flex-direction: row;
     justify-content: center;
     margin-top: 20px;
-    translate: 90px 140px;
+
   }
 
   .left-icons .icon {
@@ -160,7 +176,7 @@
 /* Responsive adjustments */
 @media (max-width: 767px) {
   .logo-fungi img {
-    width: 100px;
+    width: 180px;
   }
 
   .card-none {
