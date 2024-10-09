@@ -105,7 +105,7 @@ const DesviacionesTable: React.FC = () => {
   };
 
   const handleEditTable = async () => {
-    const authToken = context.state.authToken ?? ''; // Obtener el authToken del contexto
+    const authToken = context.state.authToken ?? '';
     const tableBody = document.querySelector('#tabla-desviaciones tbody');
     if (!tableBody) return;
   
@@ -113,7 +113,7 @@ const DesviacionesTable: React.FC = () => {
       row.querySelectorAll('td').forEach(async (cell, cellIndex) => {
         const emailColumnIndex = 14;
   
-        if (cellIndex === 10) { // Columna de estado
+        if (cellIndex === 10) {
           const selectEstado = crearSelectEstado();
           selectEstado.value = localDesviaciones[rowIndex].estado || 'Abierto';
           selectEstado.onchange = (e) => {
@@ -122,7 +122,7 @@ const DesviacionesTable: React.FC = () => {
           };
           cell.innerHTML = '';
           cell.appendChild(selectEstado);
-        } else if (cellIndex === 6) { // Columna de criticidad
+        } else if (cellIndex === 6) {
           const selectCriticidad = crearSelectCriticidad();
           selectCriticidad.value = localDesviaciones[rowIndex].criticidad || 'Leve';
           selectCriticidad.onchange = (e) => {
@@ -131,8 +131,8 @@ const DesviacionesTable: React.FC = () => {
           };
           cell.innerHTML = '';
           cell.appendChild(selectCriticidad);
-        } else if (cellIndex === 7) { // Columna de acciones correctivas
-          const selectAcciones = await crearSelectAcciones(authToken); // Pasar authToken aquí
+        } else if (cellIndex === 7) {
+          const selectAcciones = await crearSelectAcciones(authToken);
           selectAcciones.value = localDesviaciones[rowIndex].acciones_correctivas || ''; 
           selectAcciones.onchange = (e) => {
             const value = (e.target as HTMLSelectElement).value;

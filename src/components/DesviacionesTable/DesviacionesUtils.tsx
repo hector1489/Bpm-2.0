@@ -80,15 +80,13 @@ export const crearSelectEstado = (): HTMLSelectElement => {
 
 
 export const crearSelectAcciones = async (authToken: string): Promise<HTMLSelectElement> => {
-  // Obtener las acciones desde la API pasando el authToken
   const acciones = await obtenerTodasLasAccionesDesdeAPI(authToken);
 
-  // Crear el elemento select
+  const accionesCorrectivas = acciones.flatMap((accionObj: { action: string }) => accionObj.action);
   const select = document.createElement('select');
   select.className = 'form-control';
 
-  // Llenar el select con las acciones obtenidas
-  acciones.forEach((accion: string) => {
+  accionesCorrectivas.forEach((accion: string) => {
     const option = document.createElement('option');
     option.value = accion;
     option.text = accion;
