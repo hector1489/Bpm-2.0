@@ -1,6 +1,8 @@
 import Highcharts from 'highcharts'
 import Highcharts3D from 'highcharts/highcharts-3d'
 import HighchartsReact from 'highcharts-react-official'
+import { useContext } from 'react'
+import { AppContext } from '../../context/GlobalState'
 import './BPMGraph.css'
 
 interface BPMGraphProps {
@@ -12,6 +14,13 @@ if (typeof Highcharts === 'object') {
 }
 
 const BPMGraph: React.FC<BPMGraphProps> = ({ moduleData }) => {
+  const context = useContext(AppContext);
+
+  if (!context) {
+    return <div>Error al cargar el contexto</div>;
+  }
+
+
   const bpmModules = ['infraestructura', 'legales'];
   const poesModules = [
     'poes-control-productos', 'Agua', 'poes-superficies', 'contaminacion-cruzada',
@@ -51,7 +60,8 @@ const BPMGraph: React.FC<BPMGraphProps> = ({ moduleData }) => {
     { groupName: 'TRA', average: calcularPromedioGrupo(traModules) },
   ];
 
-  const overallAverage = groupedData.reduce((acc, curr) => acc + curr.average, 0) / groupedData.length;
+  const overallAverage = moduleData.reduce((acc, curr) => acc + (curr.percentage ?? 100), 0) / moduleData.length;
+
 
   const groupNames = groupedData.map((group) => group.groupName).concat('PROM');
   const groupAverages = groupedData.map((group) => group.average).concat(overallAverage);

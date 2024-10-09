@@ -29,7 +29,6 @@ const AverageTable: React.FC = () => {
     percentage: calculatePercentage(module.id),
   }));
 
-  // Define your module groups
   const bpmModules = ['infraestructura', 'legales'];
   const poesModules = [
     'poes-control-productos', 'Agua', 'poes-superficies', 'contaminacion-cruzada',
