@@ -118,6 +118,14 @@
   }
 }
 
+@media (min-width: 767px) {
+
+  .card-none-alimentos {
+    display: none;
+  }
+
+}
+
 /* Responsive Design */
 @media (max-width: 767px) {
 

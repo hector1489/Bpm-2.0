@@ -48,6 +48,10 @@ const Home: React.FC = () => {
     navigate('/register');
   }
 
+  const handleGoToDeafult = () => {
+    navigate('/default');
+  }
+
 
 
   return (
@@ -59,7 +63,7 @@ const Home: React.FC = () => {
       <div className="panel-control-container">
         <h2 className="text-center">Panel de Control</h2>
         <div className="card-grid mt-4">
-          <button className="card" onClick={handleGoToAuditFormView}>
+          <button className="card card-none-alimentos" onClick={handleGoToAuditFormView}>
             <div className="card-icon">
               <i className="fas fa-utensils"></i>
             </div>
@@ -86,15 +90,21 @@ const Home: React.FC = () => {
           </button>
           <button className="card card-none" onClick={handleGoToRegister}>
             <div className="card-icon">
-              <i className="fas fa-shield-alt"></i>
+              <i className="fa-solid fa-users"></i>
             </div>
-            <div className="card-title"> Registro y Seguridad</div>
+            <div className="card-title">Registrar Usuario</div>
           </button>
           <button className="card card-none" onClick={handleGoToEvidenciaFotografica}>
             <div className="card-icon">
               <i className="fas fa-images"></i>
             </div>
             <div className="card-title">Panel de Incidencias Fotograficas</div>
+          </button>
+          <button className="card card-none" onClick={handleGoToDeafult}>
+            <div className="card-icon">
+              <i className="fas fa-shield-alt"></i>
+            </div>
+            <div className="card-title">Seguridad</div>
           </button>
         </div>
 
