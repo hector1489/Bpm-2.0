@@ -22,7 +22,6 @@ const ResumenForm: React.FC = () => {
   }
 
   const numeroRequerimiento = location.state?.numero_requerimiento || null;
-  const numeroAuditoria = location.state?.numero_auditoria || null;
 
   const fetchPDFs = async () => {
     try {
@@ -49,20 +48,26 @@ const ResumenForm: React.FC = () => {
   };
 
   const extractNumeroAuditoria = (key: string): string | null => {
-    const match = key.match(/detalle_auditoria_(\d+)_/);
-    return match ? match[1] : null;
+    const matchAuditoria = key.match(/detalle_auditoria_(\d+)_/);
+    const matchRequerimiento = key.match(/_auditoria_bpm_(\d+)_/);
+  
+    if (matchAuditoria) {
+      return matchAuditoria[1];
+    } else if (matchRequerimiento) {
+      return matchRequerimiento[2];
+    }
+  
+    return null;
   };
+  
 
   const filteredPDFs = pdfs.filter(pdf => {
-    const numeroAuditoriaExtracted = extractNumeroAuditoria(pdf.key);
-    if (numeroRequerimiento || numeroAuditoria) {
-      return (
-        (numeroRequerimiento && pdf.key.includes(numeroRequerimiento)) ||
-        (numeroAuditoria && numeroAuditoriaExtracted === numeroAuditoria)
-      );
+    if (numeroRequerimiento) {
+      return pdf.key.includes(numeroRequerimiento);
     }
     return true;
   });
+  
 
   const indexOfLastPDF = currentPage * itemsPerPage;
   const indexOfFirstPDF = indexOfLastPDF - itemsPerPage;

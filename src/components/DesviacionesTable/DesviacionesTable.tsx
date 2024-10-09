@@ -6,7 +6,8 @@ import { useDesviaciones, useUpdateDesviaciones } from '../../hooks/useDesviacio
 import { desviacionDelete } from '../../utils/apiUtils';
 import { DesviacionResponse } from '../../interfaces/interfaces';
 import { useNavigate } from 'react-router-dom';
-import { getCurrentDate, getColorByPercentageFilas } from '../../utils/utils';
+import { getCurrentDate } from '../../utils/utils';
+import { replaceNA, getFieldFromCellIndex, getColorByPercentageFilas, crearSelectEstado, crearSelectCriticidad, crearSelectAcciones } from './DesviacionesUtils'
 
 const DEFAULT_ANSWER = "Sin respuesta";
 
@@ -48,8 +49,6 @@ const DesviacionesTable: React.FC = () => {
       }
     }
   };
-
-  const replaceNA = (value: string) => (value === 'N/A' ? '' : value);
 
   const handleSaveChanges = async () => {
     const authToken = context.state.authToken ?? '';
@@ -105,71 +104,66 @@ const DesviacionesTable: React.FC = () => {
     });
   };
 
-  const getFieldFromCellIndex = (index: number): keyof DesviacionResponse => {
-    switch (index) {
-      case 1:
-        return 'numero_requerimiento';
-      case 2:
-        return 'preguntas_auditadas';
-      case 3:
-        return 'desviacion_o_criterio';
-      case 4:
-        return 'responsable_problema';
-      case 5:
-        return 'local';
-      case 6:
-        return 'criticidad';
-      case 7:
-        return 'acciones_correctivas';
-      case 8:
-        return 'fecha_recepcion_solicitud';
-      case 9:
-        return 'fecha_solucion_programada';
-      case 10:
-        return 'estado';
-      case 11:
-        return 'contacto_clientes';
-      case 12:
-        return 'evidencia_fotografica';
-      case 13:
-        return 'auditor';
-      case 14:
-        return 'correo';
-      default:
-        throw new Error('Índice de celda inválido');
-    }
-  };
-
-  const handleEditTable = () => {
+  const handleEditTable = async () => {
+    const authToken = context.state.authToken ?? ''; // Obtener el authToken del contexto
     const tableBody = document.querySelector('#tabla-desviaciones tbody');
     if (!tableBody) return;
-
-    tableBody.querySelectorAll('tr').forEach((row, rowIndex) => {
-      row.querySelectorAll('td').forEach((cell, cellIndex) => {
+  
+    tableBody.querySelectorAll('tr').forEach(async (row, rowIndex) => {
+      row.querySelectorAll('td').forEach(async (cell, cellIndex) => {
         const emailColumnIndex = 14;
-
-        if (cellIndex === emailColumnIndex || cell.textContent === 'N/A' || cell.textContent === DEFAULT_ANSWER) {
+  
+        if (cellIndex === 10) { // Columna de estado
+          const selectEstado = crearSelectEstado();
+          selectEstado.value = localDesviaciones[rowIndex].estado || 'Abierto';
+          selectEstado.onchange = (e) => {
+            const value = (e.target as HTMLSelectElement).value;
+            handleInputChange(rowIndex, 'estado', value);
+          };
+          cell.innerHTML = '';
+          cell.appendChild(selectEstado);
+        } else if (cellIndex === 6) { // Columna de criticidad
+          const selectCriticidad = crearSelectCriticidad();
+          selectCriticidad.value = localDesviaciones[rowIndex].criticidad || 'Leve';
+          selectCriticidad.onchange = (e) => {
+            const value = (e.target as HTMLSelectElement).value;
+            handleInputChange(rowIndex, 'criticidad', value);
+          };
+          cell.innerHTML = '';
+          cell.appendChild(selectCriticidad);
+        } else if (cellIndex === 7) { // Columna de acciones correctivas
+          const selectAcciones = await crearSelectAcciones(authToken); // Pasar authToken aquí
+          selectAcciones.value = localDesviaciones[rowIndex].acciones_correctivas || ''; 
+          selectAcciones.onchange = (e) => {
+            const value = (e.target as HTMLSelectElement).value;
+            handleInputChange(rowIndex, 'acciones_correctivas', value);
+          };
+          cell.innerHTML = '';
+          cell.appendChild(selectAcciones);
+        } else if (cellIndex === emailColumnIndex || cell.textContent === 'N/A' || cell.textContent === DEFAULT_ANSWER) {
           const field = getFieldFromCellIndex(cellIndex);
           const input = document.createElement('input');
           input.type = 'text';
           input.placeholder = 'Text ...';
-
+  
           const currentValue = localDesviaciones[rowIndex][field];
           input.value = currentValue !== undefined && currentValue !== null ? String(currentValue) : '';
-
+  
           input.id = `input-${rowIndex}-${cellIndex}`;
-
+  
           input.onblur = (e) => {
             const value = (e.target as HTMLInputElement).value;
             handleInputChange(rowIndex, field, value);
           };
-
+  
           cell.innerHTML = '';
           cell.appendChild(input);
         }
       });
     });
   };
+  
+  
 
   const handleGoToHome = () => {
     navigate('/');
@@ -222,10 +216,10 @@ const DesviacionesTable: React.FC = () => {
               const percentageMatch = criticidadText.match(/(\d+)%/);
               const percentage = percentageMatch ? parseInt(percentageMatch[1], 10) : 0;
               const rowColor = getColorByPercentageFilas(percentage);
-              const textColor = rowColor === 'red' ? 'white' : 'black'; 
+              const textColor = rowColor === 'red' ? 'white' : 'black';
 
               return (
-                <tr key={index} style={{ backgroundColor: rowColor, color: textColor  }}>
+                <tr key={index} style={{ backgroundColor: rowColor, color: textColor }}>
                   <td>{desviacion.id || DEFAULT_ANSWER}</td>
                   <td>{desviacion.numero_requerimiento || DEFAULT_ANSWER}</td>
                   <td>{desviacion.preguntas_auditadas || DEFAULT_ANSWER}</td>
