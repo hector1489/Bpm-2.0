@@ -1,6 +1,32 @@
 import { DesviacionResponse } from '../../interfaces/interfaces';
 import { obtenerTodasLasAccionesDesdeAPI } from '../../utils/apiUtils';
 
+const prioridades = [
+  { valor: 'Leve', diasFechaSolucion: 45 },
+  { valor: 'Moderado', diasFechaSolucion: 30 },
+  { valor: 'Crítico', diasFechaSolucion: 15 }
+];
+
+export const calcularFechaSolucionProgramada = (fechaIngreso: string, criticidad: string): string => {
+  const prioridad = prioridades.find(p => p.valor === criticidad);
+  
+  if (!prioridad) return fechaIngreso;
+
+  const [dd, mm, yyyy] = fechaIngreso.split('/').map(Number);
+  const fecha = new Date(yyyy, mm - 1, dd);
+
+  fecha.setDate(fecha.getDate() + prioridad.diasFechaSolucion)
+
+  const nuevaFecha = [
+    String(fecha.getDate()).padStart(2, '0'),
+    String(fecha.getMonth() + 1).padStart(2, '0'),
+    fecha.getFullYear()
+  ].join('/');
+
+  return nuevaFecha;
+};
+
+
 export const replaceNA = (value: string) => (value === 'N/A' ? '' : value);
 
 export const getFieldFromCellIndex = (index: number): keyof DesviacionResponse => {
@@ -38,15 +64,18 @@ export const getFieldFromCellIndex = (index: number): keyof DesviacionResponse =
   }
 };
 
-export const getColorByPercentageFilas = (
-  percentage: number,
-  thresholds = { green: 90, yellow: 75 }
-) => {
-  if (percentage >= thresholds.green) return 'green';
-  if (percentage >= thresholds.yellow) return 'yellow';
-  return 'red';
+export const getColorByCriticidad = (criticidad: string) => {
+  switch (criticidad) {
+    case 'Leve':
+      return 'green';
+    case 'Moderado':
+      return 'yellow';
+    case 'Crítico':
+      return 'red';
+    default:
+      return 'white'; 
+  }
 };
-
 
 export const crearSelectCriticidad = (): HTMLSelectElement => {
   const select = document.createElement('select');
@@ -95,5 +124,33 @@ export const crearSelectAcciones = async (authToken: string): Promise<HTMLSelect
 
   return select;
 };
+
+
+export const crearSelectFechaIngreso = (): HTMLSelectElement => {
+  const select = document.createElement('select');
+  select.className = 'form-control';
+
+  const formatDate = (date: Date): string => {
+    const dd = String(date.getDate()).padStart(2, '0');
+    const mm = String(date.getMonth() + 1).padStart(2, '0');
+    const yyyy = date.getFullYear();
+    return `${dd}/${mm}/${yyyy}`;
+  };
+
+  const currentDate = new Date();
+  for (let i = 0; i < 30; i++) {
+    const date = new Date(currentDate);
+    date.setDate(currentDate.getDate() - i);
+    const formattedDate = formatDate(date);
+
+    const option = document.createElement('option');
+    option.value = formattedDate;
+    option.text = formattedDate;
+    select.appendChild(option);
+  }
+
+  return select;
+};
+
 
 

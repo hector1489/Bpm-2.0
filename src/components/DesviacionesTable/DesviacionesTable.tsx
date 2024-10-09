@@ -7,7 +7,7 @@ import { desviacionDelete } from '../../utils/apiUtils';
 import { DesviacionResponse } from '../../interfaces/interfaces';
 import { useNavigate } from 'react-router-dom';
 import { getCurrentDate } from '../../utils/utils';
-import { replaceNA, getFieldFromCellIndex, getColorByPercentageFilas, crearSelectEstado, crearSelectCriticidad, crearSelectAcciones } from './DesviacionesUtils'
+import { replaceNA, getFieldFromCellIndex, getColorByCriticidad, crearSelectEstado, crearSelectCriticidad, crearSelectAcciones, crearSelectFechaIngreso, calcularFechaSolucionProgramada  } from './DesviacionesUtils'
 
 const DEFAULT_ANSWER = "Sin respuesta";
 
@@ -128,6 +128,11 @@ const DesviacionesTable: React.FC = () => {
           selectCriticidad.onchange = (e) => {
             const value = (e.target as HTMLSelectElement).value;
             handleInputChange(rowIndex, 'criticidad', value);
+  
+
+            const fechaIngreso = localDesviaciones[rowIndex].fecha_recepcion_solicitud || getCurrentDate();
+            const fechaSolucionProgramada = calcularFechaSolucionProgramada(fechaIngreso, value);
+            handleInputChange(rowIndex, 'fecha_solucion_programada', fechaSolucionProgramada);
           };
           cell.innerHTML = '';
           cell.appendChild(selectCriticidad);
@@ -140,6 +145,19 @@ const DesviacionesTable: React.FC = () => {
           };
           cell.innerHTML = '';
           cell.appendChild(selectAcciones);
+        } else if (cellIndex === 8) {
+          const selectFechaIngreso = crearSelectFechaIngreso();
+          selectFechaIngreso.value = localDesviaciones[rowIndex].fecha_recepcion_solicitud || ''; 
+          selectFechaIngreso.onchange = (e) => {
+            const value = (e.target as HTMLSelectElement).value;
+            handleInputChange(rowIndex, 'fecha_recepcion_solicitud', value);
+  
+            const criticidad = localDesviaciones[rowIndex].criticidad || 'Leve';
+            const fechaSolucionProgramada = calcularFechaSolucionProgramada(value, criticidad);
+            handleInputChange(rowIndex, 'fecha_solucion_programada', fechaSolucionProgramada);
+          };
+          cell.innerHTML = '';
+          cell.appendChild(selectFechaIngreso);
         } else if (cellIndex === emailColumnIndex || cell.textContent === 'N/A' || cell.textContent === DEFAULT_ANSWER) {
           const field = getFieldFromCellIndex(cellIndex);
           const input = document.createElement('input');
@@ -163,8 +181,6 @@ const DesviacionesTable: React.FC = () => {
     });
   };
   
-  
-
   const handleGoToHome = () => {
     navigate('/');
   };
@@ -212,14 +228,8 @@ const DesviacionesTable: React.FC = () => {
           {localDesviaciones.length > 0 ? (
             localDesviaciones.map((desviacion, index) => {
 
-              const criticidadText = desviacion.criticidad || DEFAULT_ANSWER;
-              const percentageMatch = criticidadText.match(/(\d+)%/);
-              const percentage = percentageMatch ? parseInt(percentageMatch[1], 10) : 0;
-              const rowColor = getColorByPercentageFilas(percentage);
-              const textColor = rowColor === 'red' ? 'white' : 'black';
-
               return (
-                <tr key={index} style={{ backgroundColor: rowColor, color: textColor }}>
+                <tr key={index} style={{ backgroundColor: getColorByCriticidad(desviacion.criticidad || DEFAULT_ANSWER), color: 'black' }}>
                   <td>{desviacion.id || DEFAULT_ANSWER}</td>
                   <td>{desviacion.numero_requerimiento || DEFAULT_ANSWER}</td>
                   <td>{desviacion.preguntas_auditadas || DEFAULT_ANSWER}</td>
