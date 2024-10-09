@@ -57,7 +57,7 @@ const LUMGraph: React.FC = () => {
     xAxis: {
       categories: questionNames,
       title: {
-        text: 'Pregunta',
+        text: '',
       },
     },
     yAxis: {
@@ -72,11 +72,22 @@ const LUMGraph: React.FC = () => {
         data: percentages,
         colorByPoint: true,
         colors: barColors,
+        dataLabels: {
+          enabled: true,
+          format: '{y}%',
+          style: {
+            fontWeight: 'bold',
+            color: 'black',
+          },
+        },
       },
     ],
     plotOptions: {
       column: {
         depth: 25,
+        dataLabels: {
+          enabled: true,
+        },
       },
     },
   };

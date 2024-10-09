@@ -178,9 +178,19 @@ const AuditSummary: React.FC = () => {
       <BPMGraph moduleData={moduleData} />
       <AverageModules />
 
+      <div className="buttons-summary-circle">
+
+        {images.length > 0 && (
+          <button onClick={handleSendPDF} className="btn-dd-pdf fw-bold">
+            Guardar <i className="fa-solid fa-database"></i>
+          </button>
+        )}
+
+      </div>
+
       <div className="buttons-summary-logo">
         <div className="btn">
-          <img src={logoDetails} alt="details" onClick={handleGoToDetails} title='Details'/>
+          <img src={logoDetails} alt="details" onClick={handleGoToDetails} title='Details' />
         </div>
         <div className="btn">
           <img src={logoLum} alt="lum" onClick={handleGoToLuminometry} title='LUM' />
@@ -194,15 +204,7 @@ const AuditSummary: React.FC = () => {
 
       </div>
 
-      <div className="buttons-summary-circle">
 
-        {images.length > 0 && (
-          <button onClick={handleSendPDF} className="btn-dd-pdf fw-bold">
-            Guardar <i className="fa-solid fa-database"></i>
-          </button>
-        )}
-
-      </div>
 
     </div>
   )

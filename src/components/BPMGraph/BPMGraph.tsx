@@ -87,7 +87,7 @@ const BPMGraph: React.FC<BPMGraphProps> = ({ moduleData }) => {
     xAxis: {
       categories: groupNames,
       title: {
-        text: 'Grupos',
+        text: '',
       },
     },
     yAxis: {
@@ -101,13 +101,25 @@ const BPMGraph: React.FC<BPMGraphProps> = ({ moduleData }) => {
         data: groupAverages,
         colorByPoint: true,
         colors: barColors,
-        
-
+        dataLabels: {
+          enabled: true, 
+          format: '{y:.1f}%',
+          inside: false,
+          style: {
+            fontWeight: 'bold',
+            color: 'black',
+          },
+        },
       },
     ],
     plotOptions: {
       column: {
         depth: 25,
+      },
+      series: {
+        dataLabels: {
+          enabled: true,
+        },
       },
     },
     responsive: {
@@ -135,6 +147,7 @@ const BPMGraph: React.FC<BPMGraphProps> = ({ moduleData }) => {
       ],
     },
   };
+  
 
   return (
     <div className="bpm-graph-container">

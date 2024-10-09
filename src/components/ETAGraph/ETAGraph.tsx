@@ -76,7 +76,7 @@ const ETAGraph: React.FC<ETAGraphProps> = () => {
     xAxis: {
       categories: questionNames,
       title: {
-        text: 'Preguntas',
+        text: '',
       },
     },
     yAxis: {
@@ -90,11 +90,22 @@ const ETAGraph: React.FC<ETAGraphProps> = () => {
         data: percentages,
         colorByPoint: true,
         colors: barColors,
+        dataLabels: {
+          enabled: true,
+          format: '{y}%',
+          style: {
+            fontWeight: 'bold',
+            color: 'black',
+          },
+        },
       },
     ],
     plotOptions: {
       column: {
         depth: 25,
+        dataLabels: {
+          enabled: true,
+        },
       },
     },
   };
