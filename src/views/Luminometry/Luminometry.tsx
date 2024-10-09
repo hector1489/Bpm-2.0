@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom'
 import { useContext, useEffect, useState } from 'react'
 import { AppContext } from '../../context/GlobalState'
 import './Luminometry.css'
-import { getColorByPercentageLum } from '../../utils/utils'
 import html2canvas from 'html2canvas'
 import { pdf } from '@react-pdf/renderer'
 import MyDocument from '../../utils/MyDocument'
@@ -29,21 +28,6 @@ const Luminometry: React.FC = () => {
   const handleGoToHome = () => navigate('/');
   const handleGoToDetails = () => navigate('/resumen-detalle');
   const handleGoToETA = () => navigate('/seremi');
-
-  // Define your table data
-  const tableData = [
-    { url: "0-50", measurement: "I ≤ 2.2", percentage: "100%", note: 7, evaluation: "EXCELENTE", cleanliness: "MUY LIMPIO", riskClassification: "SIN RIESGO" },
-    { url: "51-150", measurement: "2.3", percentage: "83%", note: 6, evaluation: "MUY BUENO", cleanliness: "LIMPIO", riskClassification: "SIN RIESGO" },
-    { url: "51-150", measurement: "2.4", percentage: "83%", note: 6, evaluation: "MUY BUENO", cleanliness: "LIMPIO", riskClassification: "SIN RIESGO" },
-    { url: "51-150", measurement: "2.5", percentage: "83%", note: 6, evaluation: "MUY BUENO", cleanliness: "LIMPIO", riskClassification: "SIN RIESGO" },
-    { url: "151-250", measurement: "2.6", percentage: "69%", note: 5, evaluation: "BUENO", cleanliness: "MEDIANAMENTE SUCIO", riskClassification: "BAJO RIESGO" },
-    { url: "151-250", measurement: "2.7", percentage: "69%", note: 5, evaluation: "BUENO", cleanliness: "MEDIANAMENTE SUCIO", riskClassification: "BAJO RIESGO" },
-    { url: "251-500", measurement: "2.8", percentage: "55%", note: 4, evaluation: "REGULAR", cleanliness: "ALERTA", riskClassification: "RIESGO (LEVE)" },
-    { url: "251-500", measurement: "2.9", percentage: "55%", note: 4, evaluation: "REGULAR", cleanliness: "ALERTA", riskClassification: "RIESGO (LEVE)" },
-    { url: "501-1000", measurement: "3 ≤ l ≤ 4", percentage: "42%", note: 3, evaluation: "DEFICIENTE", cleanliness: "SUCIO", riskClassification: "MEDIANO RIESGO (GRAVE)" },
-    { url: "1001-5000", measurement: "4.1 ≤ l ≤ 4.9", percentage: "28%", note: 2, evaluation: "MALA", cleanliness: "MUY SUCIO", riskClassification: "ALTO RIESGO (MUY GRAVE)" },
-    { url: "5001-10000", measurement: "5 ≤ l", percentage: "14%", note: 1, evaluation: "MUY MALA", cleanliness: "TOTALMENTE SUCIO", riskClassification: "MUY ALTO RIESGO (CRÍTICO)" },
-  ];
 
   const handleCaptureImages = async () => {
     const element = document.querySelector('.lum-container') as HTMLElement;
@@ -89,33 +73,124 @@ const Luminometry: React.FC = () => {
       <h3>Resumen Luminometria</h3>
       <LUMGraph />
       <div className="table-responsive">
-        <table className="table table-bordered text-center table-sm">
+        <table className="table table-bordered text-center table-sm" style={{ fontSize: '12px' }}>
           <thead className="table-light">
             <tr>
-              <th scope="col">URL</th>
-              <th scope="col">MEDICIÓN DE EQUIPO</th>
-              <th scope="col">PORCENTAJE</th>
-              <th scope="col">NOTA</th>
-              <th scope="col">EVALUACIÓN</th>
-              <th scope="col">GRADO DE LIMPIEZA</th>
-              <th scope="col">CLASIFICACIÓN DEL RIESGO</th>
+              <th>URL</th>
+              <th>MEDICIÓN DE EQUIPO</th>
+              <th>PORCENTAJE</th>
+              <th>NOTA</th>
+              <th>EVALUACIÓN</th>
+              <th>GRADO DE LIMPIEZA</th>
+              <th>CLASIFICACIÓN DEL RIESGO</th>
             </tr>
           </thead>
           <tbody>
-            {tableData.map((row, index) => (
-              <tr key={index} className={getColorByPercentageLum(parseInt(row.percentage))}>
-                <td>{row.url}</td>
-                <td>{row.measurement}</td>
-                <td>{row.percentage}</td>
-                <td>{row.note}</td>
-                <td>{row.evaluation}</td>
-                <td>{row.cleanliness}</td>
-                <td>{row.riskClassification}</td>
-              </tr>
-            ))}
+            <tr style={{ backgroundColor: '#99cc00' }}>
+              <td>0-50</td>
+              <td>I ≤ 2.2</td>
+              <td>100%</td>
+              <td>7</td>
+              <td>EXCELENTE</td>
+              <td>MUY LIMPIO</td>
+              <td>SIN RIESGO</td>
+            </tr>
+            <tr style={{ backgroundColor: '#99cc00' }}>
+              <td>51-150</td>
+              <td>2.3</td>
+              <td>83%</td>
+              <td>6</td>
+              <td>MUY BUENO</td>
+              <td>LIMPIO</td>
+              <td>SIN RIESGO</td>
+            </tr>
+            <tr style={{ backgroundColor: '#99cc00' }}>
+              <td>51-150</td>
+              <td>2.4</td>
+              <td>83%</td>
+              <td>6</td>
+              <td>MUY BUENO</td>
+              <td>LIMPIO</td>
+              <td>SIN RIESGO</td>
+            </tr>
+            <tr style={{ backgroundColor: '#99cc00' }}>
+              <td>51-150</td>
+              <td>2.5</td>
+              <td>83%</td>
+              <td>6</td>
+              <td>MUY BUENO</td>
+              <td>LIMPIO</td>
+              <td>SIN RIESGO</td>
+            </tr>
+
+            <tr style={{ backgroundColor: '#ffff00' }}>
+              <td>151-250</td>
+              <td>2.6</td>
+              <td>69%</td>
+              <td>5</td>
+              <td>BUENO</td>
+              <td>MEDIANAMENTE SUCIO</td>
+              <td>BAJO RIESGO</td>
+            </tr>
+            <tr style={{ backgroundColor: '#ffff00' }}>
+              <td>151-250</td>
+              <td>2.7</td>
+              <td>69%</td>
+              <td>5</td>
+              <td>BUENO</td>
+              <td>MEDIANAMENTE SUCIO</td>
+              <td>BAJO RIESGO</td>
+            </tr>
+            <tr style={{ backgroundColor: '#ffff00' }}>
+              <td>251-500</td>
+              <td>2.8</td>
+              <td>55%</td>
+              <td>4</td>
+              <td>REGULAR</td>
+              <td>ALERTA</td>
+              <td>RIESGO (LEVE)</td>
+            </tr>
+            <tr style={{ backgroundColor: '#ffff00' }}>
+              <td>251-500</td>
+              <td>2.9</td>
+              <td>55%</td>
+              <td>4</td>
+              <td>REGULAR</td>
+              <td>ALERTA</td>
+              <td>RIESGO (LEVE)</td>
+            </tr>
+
+            <tr style={{ backgroundColor: '#ff0000', color: 'white' }}>
+              <td>501-1000</td>
+              <td>3 ≤ l ≤ 4</td>
+              <td>42%</td>
+              <td>3</td>
+              <td>DEFICIENTE</td>
+              <td>SUCIO</td>
+              <td>MEDIANO RIESGO (GRAVE)</td>
+            </tr>
+            <tr style={{ backgroundColor: '#ff0000', color: 'white' }}>
+              <td>1001-5000</td>
+              <td>4.1 ≤ l ≤ 4.9</td>
+              <td>28%</td>
+              <td>2</td>
+              <td>MALA</td>
+              <td>MUY SUCIO</td>
+              <td>ALTO RIESGO (MUY GRAVE)</td>
+            </tr>
+            <tr style={{ backgroundColor: '#ff0000', color: 'white' }}>
+              <td>5001-10000</td>
+              <td>5 ≤ l</td>
+              <td>14%</td>
+              <td>1</td>
+              <td>MUY MALA</td>
+              <td>TOTALMENTE SUCIO</td>
+              <td>MUY ALTO RIESGO (CRÍTICO)</td>
+            </tr>
           </tbody>
         </table>
       </div>
+
 
       {images.length > 0 && (
         <button onClick={handleSendPDF} className="btn-dd-pdf">
@@ -128,13 +203,13 @@ const Luminometry: React.FC = () => {
           <i className="fa-solid fa-arrow-left" ></i>
         </div>
         <div className="btn">
-          <img src={logoDetails} alt="details" onClick={handleGoToDetails} title='Details'/>
+          <img src={logoDetails} alt="details" onClick={handleGoToDetails} title='Details' />
         </div>
         <div className="btn">
-          <img src={logoTra} alt="tra" onClick={handleGoToETA} title='TRA'/>
+          <img src={logoTra} alt="tra" onClick={handleGoToETA} title='TRA' />
         </div>
         <div className="btn">
-          <img src={logoHome} alt="home" onClick={handleGoToHome} title='Home'/>
+          <img src={logoHome} alt="home" onClick={handleGoToHome} title='Home' />
         </div>
 
       </div>

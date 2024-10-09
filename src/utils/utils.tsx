@@ -79,8 +79,10 @@ export const getColorByPercentageFilas = (percentage: number) => {
   return 'red';
 }
 
-export const getColorByPercentageLum = (percentage: number) => {
-  if (percentage >= 90) {
+export const getColorByPercentageLum = (percentage: number | null | undefined) => {
+  if (percentage === null || percentage === undefined || isNaN(percentage)) {
+    return 'bg-light-green';
+  } else if (percentage >= 90) {
     return 'bg-light-green';
   } else if (percentage >= 70) {
     return 'bg-yellow';
@@ -89,6 +91,8 @@ export const getColorByPercentageLum = (percentage: number) => {
   } else {
     return 'bg-danger';
   }
-}
+};
+
+
 
 
