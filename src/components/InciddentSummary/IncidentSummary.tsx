@@ -35,7 +35,6 @@ const IncidentSummary: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [desviaciones, setDesviaciones] = useState<DesviacionResponse[] | null>(null);
   const [responsableCount, setResponsableCount] = useState<Record<string, number>>({});
-
   const [statusCounts, setStatusCounts] = useState({
     leve: 0,
     moderado: 0,
@@ -48,11 +47,19 @@ const IncidentSummary: React.FC = () => {
     cerrado: 0
   });
 
+  const [fueraDePlazoCount, setFueraDePlazoCount] = useState(0);
 
-  const fetchDesviaciones = async () => {
+  const isFechaFueraDePlazo = (fechaSolucion: string): boolean => {
+    const fechaSolucionDate = new Date(fechaSolucion);
+    const fechaActual = new Date();
+    return fechaSolucionDate < fechaActual;
+  };
+  
+
+ const fetchDesviaciones = async () => {
     const authToken = state.authToken;
     setLoading(true);
-
+  
     try {
       if (authToken) {
         const data: DesviacionResponse[] = await cargarDesviacionesDesdeBackend(authToken);
@@ -61,7 +68,7 @@ const IncidentSummary: React.FC = () => {
           
           const ultimasDesviaciones = data.slice(-5);
           setDesviaciones(ultimasDesviaciones);
-
+  
           const responsableCountData = data.reduce((acc: Record<string, number>, item: DesviacionResponse) => {
             const responsable = item.responsable_problema;
             if (responsable) {
@@ -70,16 +77,16 @@ const IncidentSummary: React.FC = () => {
             return acc;
           }, {} as Record<string, number>);
           setResponsableCount(responsableCountData);
-
+  
           const statusCountsData = data.reduce((acc, item) => {
-            const criticidadLower = item.criticidad.toLowerCase();
+            const criticidadLower = item.criticidad.normalize('NFD').replace(/[\u0300-\u036f]/g, "").toLowerCase();
             if (criticidadLower === 'leve') acc.leve++;
             else if (criticidadLower === 'moderado') acc.moderado++;
             else if (criticidadLower === 'critico') acc.critico++;
             return acc;
           }, { leve: 0, moderado: 0, critico: 0 });
           setStatusCounts(statusCountsData);
-
+  
           const statusEstadosData = data.reduce((acc, item) => {
             const estadosLower = item.estado.toLowerCase();
             if (estadosLower === 'abierto') acc.abierto++;
@@ -89,6 +96,14 @@ const IncidentSummary: React.FC = () => {
           }, { abierto: 0, enProgreso: 0, cerrado: 0 });
           setStatusCountsEstados(statusEstadosData);
 
+          const fueraDePlazoCount = data.reduce((acc, item) => {
+            if (isFechaFueraDePlazo(item.fecha_solucion_programada)) {
+              acc++;
+            }
+            return acc;
+          }, 0);
+
+          setFueraDePlazoCount(fueraDePlazoCount);
         } else {
           console.error('No se recibieron datos de desviaciones.');
           setError('No se pudieron cargar las desviaciones.');
@@ -104,6 +119,7 @@ const IncidentSummary: React.FC = () => {
       setLoading(false);
     }
   };
+  
 
   useEffect(() => {
     fetchDesviaciones();
@@ -222,7 +238,7 @@ const IncidentSummary: React.FC = () => {
 
           <div className="card bg-red text-white bordered-box">
             <div className="card-body">
-              <h5><span id="fueraDePlazo">0</span></h5>
+              <h5><span id="fueraDePlazo">{fueraDePlazoCount}</span></h5>
               <p>Fuera de plazo</p>
             </div>
           </div>

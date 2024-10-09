@@ -48,9 +48,7 @@ const Home: React.FC = () => {
     navigate('/register');
   }
 
-  const handleGoToDeafult = () => {
-    navigate('/default');
-  }
+
 
   return (
     <div className="container">
@@ -79,12 +77,6 @@ const Home: React.FC = () => {
             </div>
             <div className="card-title">Documentación</div>
           </button>
-          <button className="card card-none" onClick={handleGoToDeafult}>
-              <div className="card-icon">
-                <i className="fas fa-broom"></i>
-              </div>
-              <div className="card-title">Auditoría Aseo</div>
-          </button>
          
           <button className="card card-none" onClick={handleGoToAnalisis}>
             <div className="card-icon">
@@ -103,12 +95,6 @@ const Home: React.FC = () => {
               <i className="fas fa-images"></i>
             </div>
             <div className="card-title">Panel de Incidencias Fotograficas</div>
-          </button>
-          <button className="card card-none" onClick={handleGoToDeafult}>
-            <div className="card-icon">
-              <i className="fas fa-wifi"></i>
-            </div>
-            <div className="card-title">Conectividad</div>
           </button>
         </div>
 
