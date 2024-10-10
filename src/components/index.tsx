@@ -17,3 +17,18 @@ export { default as LastAudit } from './LastAudit/LastAudit'
 export { default as RegisterForm } from './RegisterForm/RegisterForm'
 export { default as ResumenForm } from './ResumenForm/ResumenForm'
 export { default as PhotosBackend } from './PhotosBackend/PhotosBackend'
+export { default as IECriticalFindings } from './IECriticalFindings/IECriticalFindings'
+export { default as IECriticalEvaluation } from './IECriticalEvaluation/IECriticalEvaluation'
+export { default as IETrazadores } from './IETrazadores/IETrazadores'
+export { default as IEIndicadoresClave } from './IEIndicadoresClave/IEIndicadoresClave'
+export { default as IEHigiene } from './IEHigiene/IEHigiene'
+export { default as IEEficienciaOp } from './IEEficienciaOp/IEEficienciaOp'
+export { default as IESatisfaccion } from './IESatisfaccion/IESatisfaccion'
+export { default as IESeguridad } from './IESeguridad/IESeguridad'
+export { default as IEControlCalidad } from './IEcontrolCalidad/IEControlCalidad'
+
+
+
+
+
+
