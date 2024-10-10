@@ -46,7 +46,7 @@ const Luminometry: React.FC = () => {
 
   const numeroAuditoria = state.auditSheetData.numeroAuditoria || 'sin_numero';
 
-  const handleSendPDF = async () => {
+  const handleNext = async () => {
     if (images.length > 0) {
       const doc = <MyDocument images={images} />;
 
@@ -64,7 +64,9 @@ const Luminometry: React.FC = () => {
         console.error('Error al enviar el PDF:', error);
       }
     }
-  };
+
+    handleGoToETA();
+  }
 
 
 
@@ -191,12 +193,12 @@ const Luminometry: React.FC = () => {
         </table>
       </div>
 
-
-      {images.length > 0 && (
-        <button onClick={handleSendPDF} className="btn-dd-pdf">
-          Enviar PDF <i className="fa-solid fa-upload"></i>
-        </button>
-      )}
+      <div className="detail-button">
+      <button onClick={handleNext}>
+        Siguiente <i className="fa-solid fa-arrow-right"></i>
+      </button>
+      </div>
+      
 
       <div className="buttons-summary-logo">
         <div className="btn" onClick={handleGoToAuditSummary} title='Volver' >

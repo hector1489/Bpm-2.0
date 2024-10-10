@@ -37,7 +37,24 @@ const DetailsView: React.FC = () => {
     handleCaptureImages();
   }, []);
 
-  const handleSendPDF = async () => {
+  // Navegación
+  const handleGoToAuditSummary = () => {
+    navigate('/resumen-auditoria');
+  };
+
+  const handleGoToHome = () => {
+    navigate('/');
+  };
+
+  const handleGoToLuminometry = () => {
+    navigate('/luminometria');
+  };
+
+  const handleGoToETA = () => {
+    navigate('/seremi');
+  };
+
+  const handleNext = async () => {
     if (images.length > 0) {
       const doc = <MyDocument images={images} />;
   
@@ -58,25 +75,9 @@ const DetailsView: React.FC = () => {
         console.error('Error al enviar el PDF:', error);
       }
     }
-  };
-  
 
-  // Navegación
-  const handleGoToAuditSummary = () => {
-    navigate('/resumen-auditoria');
-  };
-
-  const handleGoToHome = () => {
-    navigate('/');
-  };
-
-  const handleGoToLuminometry = () => {
-    navigate('/luminometria');
-  };
-
-  const handleGoToETA = () => {
-    navigate('/seremi');
-  };
+    handleGoToLuminometry();
+  }
   
 
   return (
@@ -95,11 +96,10 @@ const DetailsView: React.FC = () => {
 
       <div className="detail-button">
 
-        {images.length > 0 && (
-          <button onClick={handleSendPDF} className="btn-dd-pdf">
-            Enviar PDF <i className="fa-solid fa-upload"></i>
-          </button>
-        )}
+      <button onClick={handleNext}>
+        Siguiente <i className="fa-solid fa-arrow-right"></i>
+      </button>
+
       </div>
 
       <div className="buttons-summary-logo">

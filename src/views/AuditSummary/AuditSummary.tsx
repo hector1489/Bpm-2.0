@@ -141,7 +141,9 @@ const AuditSummary: React.FC = () => {
     navigate('/resumen-detalle')
   }
 
-  const handleSendPDF = async () => {
+
+  const handleNext = async () => {
+
     if (images.length > 0) {
       const doc = <MyDocument images={images} />;
 
@@ -164,7 +166,9 @@ const AuditSummary: React.FC = () => {
         console.error('Error al enviar el PDF:', error);
       }
     }
-  };
+
+    handleGoToDetails();    
+  }
 
 
 
@@ -180,11 +184,9 @@ const AuditSummary: React.FC = () => {
 
       <div className="buttons-summary-circle">
 
-        {images.length > 0 && (
-          <button onClick={handleSendPDF} className="btn-dd-pdf fw-bold">
-            Guardar <i className="fa-solid fa-database"></i>
-          </button>
-        )}
+        <button onClick={handleNext}>
+          Siguiente <i className="fa-solid fa-arrow-right"></i>
+        </button>
 
       </div>
 

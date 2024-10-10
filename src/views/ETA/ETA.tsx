@@ -29,10 +29,10 @@ const ETA: React.FC = () => {
     const element = document.querySelector('.eta-container') as HTMLElement;
     if (element) {
       setTimeout(async () => {
-      const canvas = await html2canvas(element);
-      const dataUrl = canvas.toDataURL('image/png');
-      setImages([dataUrl]);
-    }, 1000);
+        const canvas = await html2canvas(element);
+        const dataUrl = canvas.toDataURL('image/png');
+        setImages([dataUrl]);
+      }, 1000);
     }
   };
 
@@ -70,7 +70,23 @@ const ETA: React.FC = () => {
 
   const numeroAuditoria = state.auditSheetData.numeroAuditoria || 'sin_numero';
 
-  const handleSendPDF = async () => {
+  const handleGoToAuditSummary = () => {
+    navigate('/resumen-auditoria');
+  };
+
+  const handleGoToHome = () => {
+    navigate('/');
+  };
+
+  const handleGoToDetails = () => {
+    navigate('/resumen-detalle');
+  };
+
+  const handleGoToLuminometry = () => {
+    navigate('/luminometria')
+  }
+
+  const handleNext = async () => {
     if (images.length > 0) {
       const doc = <MyDocument images={images} />;
 
@@ -88,22 +104,8 @@ const ETA: React.FC = () => {
         console.error('Error al enviar el PDF:', error);
       }
     }
-  };
 
-  const handleGoToAuditSummary = () => {
-    navigate('/resumen-auditoria');
-  };
-
-  const handleGoToHome = () => {
-    navigate('/');
-  };
-
-  const handleGoToDetails = () => {
-    navigate('/resumen-detalle');
-  };
-
-  const handleGoToLuminometry = () => {
-    navigate('/luminometria')
+    handleGoToHome();
   }
 
 
@@ -116,24 +118,26 @@ const ETA: React.FC = () => {
       }))} />
       <ETATable />
 
-      {images.length > 0 && (
-          <button onClick={handleSendPDF} className="btn-dd-pdf">
-            Enviar PDF <i className="fa-solid fa-upload"></i>
-          </button>
-        )}
+      <div className="detail-button">
+        <button onClick={handleNext}>
+          Siguiente <i className="fa-solid fa-arrow-right"></i>
+        </button>
 
-<div className="buttons-summary-logo">
+      </div>
+
+
+      <div className="buttons-summary-logo">
         <div className="btn" onClick={handleGoToAuditSummary} title='Volver'>
           <i className="fa-solid fa-arrow-left" ></i>
         </div>
         <div className="btn">
-          <img src={logoDetails} alt="details" onClick={handleGoToDetails} title='Details'/>
+          <img src={logoDetails} alt="details" onClick={handleGoToDetails} title='Details' />
         </div>
         <div className="btn">
-          <img src={logoLum} alt="lum" onClick={handleGoToLuminometry} title='LUM'/>
+          <img src={logoLum} alt="lum" onClick={handleGoToLuminometry} title='LUM' />
         </div>
         <div className="btn">
-          <img src={logoHome} alt="home" onClick={handleGoToHome} title='Home'/>
+          <img src={logoHome} alt="home" onClick={handleGoToHome} title='Home' />
         </div>
 
       </div>
