@@ -1,0 +1,99 @@
+.ie-eficiencia-container {
+  margin: 20px;
+  font-family: Arial, sans-serif;
+  display: flex;
+  gap: 50px;
+}
+
+.ie-eficiencia-grafico {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  gap: 5px;
+}
+
+.eficiencia-bar {
+  width: 40px;
+  height: 150px;
+  border-radius: 5px;
+}
+
+.flujo-op {
+  background-color: #1E90FF;
+}
+
+.procedimientos {
+  background-color: #32CD32;
+}
+
+.resoluciones {
+  background-color: #FF4500;
+}
+
+.mantenciones {
+  background-color: #FFD700;
+}
+
+.almacenamiento {
+  background-color: #8A2BE2;
+}
+
+.control-temperatura {
+  background-color: #FF69B4;
+}
+
+.planificacion {
+  background-color: #20B2AA;
+}
+
+.reposicion {
+  background-color: #FF6347;
+}
+
+.ie-eficiencia-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.eficiencia-card {
+  padding: 10px;
+  color: white;
+  font-size: 14px;
+  font-weight: bold;
+  border-radius: 8px;
+  text-align: center;
+}
+
+.flujo-op {
+  background-color: #1E90FF;
+}
+
+.procedimientos {
+  background-color: #32CD32;
+}
+
+.resoluciones {
+  background-color: #FF4500;
+}
+
+.mantenciones {
+  background-color: #FFD700;
+  color: black;
+}
+
+.almacenamiento {
+  background-color: #8A2BE2;
+}
+
+.control-temperatura {
+  background-color: #FF69B4;
+}
+
+.planificacion {
+  background-color: #20B2AA;
+}
+
+.reposicion {
+  background-color: #FF6347;
+}

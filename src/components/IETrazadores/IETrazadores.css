@@ -1,0 +1,47 @@
+.trazadores-ie-container {
+  margin: 20px;
+  font-family: Arial, sans-serif;
+}
+
+.chart {
+  display: flex;
+  gap: 20px;
+  justify-content: space-around;
+  margin-top: 20px;
+}
+
+.bar {
+  width: 50px;
+  height: 150px;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #ccc;
+}
+
+.segment {
+  flex: 1;
+}
+
+.blue {
+  background-color: blue;
+}
+
+.green {
+  background-color: green;
+}
+
+.red {
+  background-color: red;
+}
+
+.bar .blue {
+  height: 40%;
+}
+
+.bar .green {
+  height: 30%;
+}
+
+.bar .red {
+  height: 30%;
+}

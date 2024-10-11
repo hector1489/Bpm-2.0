@@ -1,0 +1,36 @@
+.ie-higiene-container {
+  margin: 20px;
+  font-family: Arial, sans-serif;
+}
+
+.cards-higiene-ie {
+  display: flex;
+  flex-direction: row;
+  gap: 15px;
+}
+
+.card-higiene {
+  padding: 15px;
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+  border-radius: 8px;
+  text-align: center;
+}
+
+.red {
+  background-color: red;
+}
+
+.yellow {
+  background-color: yellow;
+  color: black;
+}
+
+.blue {
+  background-color: blue;
+}
+
+.green {
+  background-color: green;
+}

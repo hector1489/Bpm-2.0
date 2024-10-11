@@ -1,0 +1,47 @@
+.ie-seguridad-container {
+  margin: 20px;
+  font-family: Arial, sans-serif;
+}
+
+.seguridad-cards {
+  display: flex;
+  justify-content: space-between;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.seguridad-card {
+  width: 150px;
+  padding: 20px;
+  border-radius: 8px;
+  text-align: center;
+  font-weight: bold;
+  color: white;
+  font-size: 16px;
+}
+
+.black {
+  background-color: black;
+}
+
+.green {
+  background-color: green;
+}
+
+.red {
+  background-color: red;
+}
+
+.yellow {
+  background-color: yellow;
+  color: black;
+}
+
+.gray {
+  background-color: gray;
+}
+
+.blue {
+  background-color: #1E90FF;
+}
+

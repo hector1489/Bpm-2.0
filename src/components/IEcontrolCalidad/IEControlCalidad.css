@@ -1,0 +1,57 @@
+.ie-control-container {
+  margin: 20px;
+  display: flex;
+  justify-content: center;
+  font-family: Arial, sans-serif;
+  position: relative;
+}
+
+.control-linea {
+  position: relative;
+  width: 4px;
+  background-color: skyblue;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.control-punto {
+  position: relative;
+  width: 150px;
+  padding: 10px;
+  background-color: white;
+  border-radius: 5px;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.control-punto::before {
+  content: '';
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  background-color: skyblue;
+  border-radius: 50%;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.control-punto.left {
+  transform: translateX(-180px);
+  text-align: right;
+}
+
+.control-punto.right {
+  transform: translateX(180px);
+  text-align: left;
+}
+
+.control-punto.left::before {
+  right: -30px;
+}
+
+.control-punto.right::before {
+  left: -30px;
+}

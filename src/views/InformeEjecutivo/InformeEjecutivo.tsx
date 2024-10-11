@@ -14,7 +14,7 @@ const InformeEjecutivo: React.FC = () => {
 
   return (
     <div className="InformeEjecutivo-container">
-      <p>Informe Ejecutivo</p>
+      <h3>Informe Ejecutivo</h3>
       {id && <p>ID: {id}</p>}
       {numero_requerimiento && <p>Auditoria : {numero_requerimiento}</p>}
 
