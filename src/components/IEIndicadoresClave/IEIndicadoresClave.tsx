@@ -62,9 +62,11 @@ const IEIndicadoresClave: React.FC = () => {
   return (
     <div className="ie-indicadores-container">
       <div className="indicadores-head">
+        
         <div className="indicadores-bars">
           <HighchartsReact highcharts={Highcharts} options={options} />
         </div>
+
         <div className="indicadores-icons">
           <div className="indicador-icon">BPM</div>
           <div className="indicador-icon">MINUTA</div>
@@ -72,9 +74,13 @@ const IEIndicadoresClave: React.FC = () => {
           <div className="indicador-icon">INAPTITUD MICROBIOLÓGICA</div>
           <div className="indicador-icon">CAPACITACIONES</div>
         </div>
+
       </div>
+
       <div className="indicadores-footer">
+
         <div className="indicadores-circular">
+
           <div className="circular graph black">
             <i className="fa-solid fa-feather-pointed"></i>
           </div>
@@ -90,7 +96,9 @@ const IEIndicadoresClave: React.FC = () => {
           <div className="circular graph blue">
             <i className="fa-solid fa-pen-nib"></i>
           </div>
+
         </div>
+
       </div>
     </div>
   );

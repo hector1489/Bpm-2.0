@@ -1,31 +1,52 @@
+import React from 'react';
 import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
+import Highcharts3D from 'highcharts/highcharts-3d';
+import Cylinder from 'highcharts/modules/cylinder';
 import './IEHigiene.css';
+
+// Initialize Highcharts 3D and Cylinder
+Highcharts3D(Highcharts);
+Cylinder(Highcharts);
 
 const IEHigiene: React.FC = () => {
 
   const options = {
     chart: {
-      polar: true,
-      type: 'area',
-      backgroundColor: 'transparent'
+      type: 'cylinder',
+      backgroundColor: 'transparent',
+      options3d: {
+        enabled: true,
+        alpha: 15,
+        beta: 15,
+        depth: 50,
+        viewDistance: 25
+      }
     },
     title: {
       text: 'Evaluación de Higiene'
     },
-    pane: {
-      startAngle: 0,
-      endAngle: 360,
-      size: '80%'
+    plotOptions: {
+      series: {
+        depth: 25,
+        cylinder: {
+          edgeColor: '#ffffff'
+        },
+        dataLabels: {
+          enabled: true,
+          format: '{point.name}: {point.y} %'
+        }
+      }
     },
     xAxis: {
       categories: ['LUMINOMETRIA LUM 21', 'LIMPIEZA EQUIPOS CS 13', 'LIMPIEZA UTENSILIOS CS 12', 'SANITIZACION GRAL PRE 56'],
-      tickmarkPlacement: 'on',
-      lineWidth: 0
+      labels: {
+        style: {
+          color: '#000'
+        }
+      }
     },
     yAxis: {
-      gridLineInterpolation: 'polygon',
-      lineWidth: 0,
       min: 0,
       max: 100,
       tickInterval: 20,
@@ -33,33 +54,11 @@ const IEHigiene: React.FC = () => {
         text: '% de cumplimiento'
       }
     },
-    tooltip: {
-      shared: true,
-      pointFormat: '<span style="color:{series.color}">{series.name}: <b>{point.y}%</b><br/>'
-    },
     series: [{
       name: 'Cumplimiento',
       data: [80, 60, 70, 90],
-      pointPlacement: 'on',
-      color: '#000',
-      zones: [
-        {
-          value: 80,
-          color: 'red' 
-        },
-        {
-          value: 60,
-          color: 'yellow' 
-        },
-        {
-          value: 70,
-          color: 'blue' 
-        },
-        {
-          value: 90,
-          color: 'green'
-        }
-      ]
+      colorByPoint: true,
+      colors: ['#FF0000', '#FFFF00', '#0000FF', '#00FF00'] // Red, yellow, blue, green
     }],
     credits: {
       enabled: false

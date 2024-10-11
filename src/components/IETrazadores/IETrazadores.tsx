@@ -29,7 +29,22 @@ const IETrazadores: React.FC = () => {
           fontWeight: 'bold',
           color: 'gray'
         }
-      }
+      },
+      plotLines: [{
+        color: 'black',
+        width: 2,
+        value: 90,
+        dashStyle: 'Solid',
+        zIndex: 5,
+        label: {
+          text: 'Meta 90%',
+          align: 'left',
+          style: {
+            color: 'black',
+            fontWeight: 'bold'
+          }
+        }
+      }]
     },
     plotOptions: {
       bar: {

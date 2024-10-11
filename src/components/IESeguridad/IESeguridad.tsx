@@ -1,8 +1,10 @@
 import React from 'react';
 import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
+import Highcharts3D from 'highcharts/highcharts-3d';
 import './IESeguridad.css';
 
+Highcharts3D(Highcharts);
 
 const chartColors = {
   controlPlagas: '#17202a',
@@ -19,9 +21,14 @@ const IESeguridad: React.FC = () => {
     chart: {
       type: 'pie',
       backgroundColor: 'transparent',
+      options3d: {
+        enabled: true,
+        alpha: 45,
+        beta: 0,
+      }
     },
     title: {
-      text: 'Distribución de Seguridad'
+      text: 'Distribución de Seguridad en 3D (Donut)'
     },
     tooltip: {
       pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
@@ -33,8 +40,10 @@ const IESeguridad: React.FC = () => {
     },
     plotOptions: {
       pie: {
+        innerSize: '35%',
         allowPointSelect: true,
         cursor: 'pointer',
+        depth: 40,
         dataLabels: {
           enabled: true,
           format: '<b>{point.name}</b>: {point.percentage:.1f} %',

@@ -1,6 +1,11 @@
+import React from 'react';
 import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
+import Highcharts3D from 'highcharts/highcharts-3d';
 import './IECriticalEvaluation.css';
+
+// Initialize Highcharts 3D
+Highcharts3D(Highcharts);
 
 const IECriticalEvaluation: React.FC = () => {
 
@@ -10,16 +15,22 @@ const IECriticalEvaluation: React.FC = () => {
       backgroundColor: 'transparent',
       height: 200,
       width: 200,
+      options3d: {
+        enabled: true,
+        alpha: 45,
+        beta: 0,
+      },
     },
     title: {
       text: '',
     },
     plotOptions: {
       pie: {
-        innerSize: '0%',  // Esto lo mantiene como gráfico de torta (no tipo doughnut)
+        innerSize: '40%',
+        depth: 30,
         dataLabels: {
-          enabled: true, // Activa las etiquetas de cada categoría
-          format: '{point.name}', // Muestra el nombre de cada categoría
+          enabled: true, 
+          format: '{point.name}',
         },
       },
     },
@@ -40,7 +51,9 @@ const IECriticalEvaluation: React.FC = () => {
 
   return (
     <div className="criticalEvaluation-container">
+      
       <div className="card-evaluation-container">
+
         <div className="circular-graph-evaluation">
           <HighchartsReact highcharts={Highcharts} options={options} />
         </div>
