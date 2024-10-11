@@ -110,3 +110,46 @@
 .IECriticalFinding-container:hover .circle {
   transform: scale(1.05);
 }
+
+
+@media (max-width: 767px) {
+  .IECriticalFinding-container {
+    flex-direction: column;
+    padding: 15px;
+  }
+
+  .critical-card {
+    max-width: 100%;
+    margin-bottom: 20px;
+    padding: 15px;
+  }
+
+  .circular-bar {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .doughnut-chart {
+    width: 100px;
+    height: 80px;
+  }
+
+  .circle-text {
+    font-size: 14px;
+  }
+
+  .critical-text {
+    font-size: 11px;
+    padding: 6px;
+    width: 100px;
+  }
+
+  .percentage-bars {
+    gap: 6px;
+  }
+
+  .bar {
+    height: 18px;
+  }
+}
+

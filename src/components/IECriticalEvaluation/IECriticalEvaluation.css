@@ -1,12 +1,13 @@
 .criticalEvaluation-container {
   display: flex;
- flex-wrap: wrap;
+  flex-wrap: wrap;
   gap: 20px;
   padding: 20px;
   background-color: #f4f4f4;
   border-radius: 8px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   margin: 20px auto;
+  max-width: 1000px;
 }
 
 .card-evaluation-container {
@@ -59,5 +60,35 @@
   background-color: black;
 }
 
+@media (max-width: 767px) {
+  .criticalEvaluation-container {
+    flex-direction: column;
+    padding: 15px;
+  }
 
+  .card-evaluation-container {
+    flex-direction: column;
+    padding: 15px;
+    gap: 15px;
+  }
 
+  .cards-evaluation {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+  }
+
+  .circular-graph-evaluation {
+    margin-bottom: 20px;
+  }
+
+  .card-evaluation {
+    padding: 8px;
+    font-size: 12px;
+  }
+
+  .circular-graph-evaluation .highcharts-container {
+    width: 100% !important;
+    height: auto !important;
+  }
+}

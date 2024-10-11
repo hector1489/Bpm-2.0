@@ -1,15 +1,26 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
 import Highcharts3D from 'highcharts/highcharts-3d';
 import Cylinder from 'highcharts/modules/cylinder';
 import './IEHigiene.css';
 
-// Initialize Highcharts 3D and Cylinder
 Highcharts3D(Highcharts);
 Cylinder(Highcharts);
 
 const IEHigiene: React.FC = () => {
+  const [chartWidth, setChartWidth] = useState(window.innerWidth * 0.8); // Set default width
+
+  // Function to adjust the chart width based on window resize
+  const handleResize = () => {
+    const newWidth = window.innerWidth * 0.8; // Adjust chart width dynamically
+    setChartWidth(newWidth > 400 ? newWidth : 400); // Set a minimum width of 400px
+  };
+
+  useEffect(() => {
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   const options = {
     chart: {
@@ -21,7 +32,8 @@ const IEHigiene: React.FC = () => {
         beta: 15,
         depth: 50,
         viewDistance: 25
-      }
+      },
+      width: chartWidth // Set dynamic width for responsiveness
     },
     title: {
       text: 'Evaluación de Higiene'
@@ -58,7 +70,7 @@ const IEHigiene: React.FC = () => {
       name: 'Cumplimiento',
       data: [80, 60, 70, 90],
       colorByPoint: true,
-      colors: ['#FF0000', '#FFFF00', '#0000FF', '#00FF00'] // Red, yellow, blue, green
+      colors: ['#FF0000', '#FFFF00', '#0000FF', '#00FF00']
     }],
     credits: {
       enabled: false

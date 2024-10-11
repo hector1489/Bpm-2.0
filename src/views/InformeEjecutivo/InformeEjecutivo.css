@@ -4,4 +4,64 @@
   justify-content: center;
   align-items: center;
   padding: 20px;
+  text-align: center;
+  max-width: 1200px;
+  margin: 0 auto;
+  gap: 20px;
+}
+
+h3, h5 {
+  margin-bottom: 10px;
+}
+
+button {
+  background-color: #007bff;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 20px;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+@media (max-width: 767px) {
+  .InformeEjecutivo-container {
+    padding: 15px;
+  }
+
+  h3 {
+    font-size: 18px;
+  }
+
+  h5 {
+    font-size: 16px;
+  }
+
+  button {
+    padding: 8px 15px;
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .InformeEjecutivo-container {
+    padding: 10px;
+  }
+
+  h3 {
+    font-size: 16px;
+  }
+
+  h5 {
+    font-size: 14px;
+  }
+
+  button {
+    padding: 6px 12px;
+    font-size: 12px;
+  }
 }

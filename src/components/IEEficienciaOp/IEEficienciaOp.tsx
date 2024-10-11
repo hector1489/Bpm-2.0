@@ -1,4 +1,4 @@
-import React from 'react';
+import { useEffect, useState } from 'react';
 import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
 import Highcharts3D from 'highcharts/highcharts-3d';
@@ -7,6 +7,17 @@ import './IEEficienciaOp.css';
 Highcharts3D(Highcharts);
 
 const IEEficienciaOp: React.FC = () => {
+  const [chartWidth, setChartWidth] = useState(window.innerWidth * 0.8);
+
+  const handleResize = () => {
+    const newWidth = window.innerWidth * 0.8;
+    setChartWidth(newWidth > 400 ? newWidth : 400);
+  };
+
+  useEffect(() => {
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   const options = {
     chart: {
@@ -18,7 +29,8 @@ const IEEficienciaOp: React.FC = () => {
         beta: 25,
         depth: 70,
         viewDistance: 25
-      }
+      },
+      width: chartWidth,
     },
     title: {
       text: '',

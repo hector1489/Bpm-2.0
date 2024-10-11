@@ -1,11 +1,23 @@
+import { useEffect, useState } from 'react';
 import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
-import './IEIndicadores.css';
 import Highcharts3D from 'highcharts/highcharts-3d';
+import './IEIndicadores.css';
 
 Highcharts3D(Highcharts);
 
 const IEIndicadoresClave: React.FC = () => {
+  const [chartWidth, setChartWidth] = useState(window.innerWidth * 0.8);
+
+  const handleResize = () => {
+    const newWidth = window.innerWidth * 0.8;
+    setChartWidth(newWidth > 400 ? newWidth : 400);
+  };
+
+  useEffect(() => {
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   const options = {
     chart: {
@@ -23,7 +35,8 @@ const IEIndicadoresClave: React.FC = () => {
             color: 'rgba(0,0,0,0.02)'
           }
         }
-      }
+      },
+      width: chartWidth,
     },
     title: {
       text: '',

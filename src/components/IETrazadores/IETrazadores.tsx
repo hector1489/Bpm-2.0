@@ -3,7 +3,6 @@ import HighchartsReact from 'highcharts-react-official';
 import './IETrazadores.css';
 
 const IETrazadores: React.FC = () => {
-
   const options = {
     chart: {
       type: 'bar',
@@ -70,7 +69,32 @@ const IETrazadores: React.FC = () => {
         data: [30, 40, 30, 30, 20, 20, 20, 30, 30, 20, 20],
         color: '#cb4335'
       }
-    ]
+    ],
+    responsive: {
+      rules: [{
+        condition: {
+          maxWidth: 600
+        },
+        chartOptions: {
+          legend: {
+            align: 'center',
+            verticalAlign: 'bottom',
+            layout: 'horizontal'
+          },
+          xAxis: {
+            categories: ['TRA 17', 'TRA 29', 'TRA 31', 'TRA 52', 'TRA 60', 'TRA 66', 'TRA 67', 'TRA 68', 'TRA 72', 'TRA 98', 'TRA 99'],
+            labels: {
+              step: 1
+            }
+          },
+          yAxis: {
+            title: {
+              text: null
+            }
+          },
+        }
+      }]
+    }
   };
 
   return (

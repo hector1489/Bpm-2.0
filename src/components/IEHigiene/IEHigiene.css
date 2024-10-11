@@ -13,11 +13,12 @@
   height: 400px;
 }
 
-
 .cards-higiene-ie {
   display: flex;
   flex-direction: row;
   gap: 15px;
+  flex-wrap: wrap;
+  justify-content: center;
 }
 
 .card-higiene {
@@ -27,6 +28,8 @@
   font-weight: bold;
   border-radius: 8px;
   text-align: center;
+  flex: 1 1 150px;
+  min-width: 120px;
 }
 
 .red {
@@ -44,4 +47,27 @@
 
 .green {
   background-color: green;
+}
+
+@media (max-width: 767px) {
+  .chart-container {
+    height: 300px;
+  }
+
+  .card-higiene {
+    font-size: 14px;
+    padding: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .chart-container {
+    height: 250px;
+  }
+
+  .card-higiene {
+    font-size: 12px;
+    padding: 8px;
+    flex: 1 1 100%;
+  }
 }

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
 import Highcharts3D from 'highcharts/highcharts-3d';
@@ -16,6 +16,17 @@ const chartColors = {
 };
 
 const IESeguridad: React.FC = () => {
+  const [chartWidth, setChartWidth] = useState(window.innerWidth * 0.8);
+
+  const handleResize = () => {
+    const newWidth = window.innerWidth * 0.8;
+    setChartWidth(newWidth > 300 ? newWidth : 300);
+  };
+
+  useEffect(() => {
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   const options = {
     chart: {
@@ -25,10 +36,11 @@ const IESeguridad: React.FC = () => {
         enabled: true,
         alpha: 45,
         beta: 0,
-      }
+      },
+      width: chartWidth
     },
     title: {
-      text: 'Distribución de Seguridad en 3D (Donut)'
+      text: ''
     },
     tooltip: {
       pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'

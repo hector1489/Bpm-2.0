@@ -2,6 +2,7 @@
   margin: 20px;
   font-family: Arial, sans-serif;
   display: flex;
+  flex-wrap: wrap; /* Allow wrapping on smaller screens */
   gap: 50px;
   background-color: #f9f9f9;
   padding: 20px;
@@ -9,9 +10,15 @@
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
+.ie-eficiencia-grafico {
+  flex: 1 1 60%; /* Adjust the chart width on larger screens */
+  min-width: 400px; /* Set minimum width for the chart */
+}
+
 .ie-eficiencia-cards {
   display: flex;
   flex-direction: column;
+  flex: 1 1 30%; /* Adjust card container width */
   gap: 10px;
 }
 
@@ -55,4 +62,33 @@
 
 .reposicion {
   background-color: #FF6347;
+}
+
+
+@media (max-width: 767px) {
+  .ie-eficiencia-container {
+    flex-direction: column; 
+  }
+
+  .ie-eficiencia-grafico {
+    min-width: 100%;
+  }
+
+  .ie-eficiencia-cards {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-around;
+  }
+
+  .eficiencia-card {
+    flex: 1 1 45%;
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .eficiencia-card {
+    flex: 1 1 100%;
+    font-size: 10px;
+  }
 }

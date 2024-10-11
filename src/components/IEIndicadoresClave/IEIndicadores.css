@@ -11,11 +11,12 @@
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
+  flex-wrap: wrap; /* Ensure wrapping on smaller screens */
 }
 
 .indicadores-bars {
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: wrap; /* Wrap bars on smaller screens */
   gap: 15px;
 }
 
@@ -65,104 +66,7 @@
   display: flex;
   gap: 20px;
   justify-content: space-around;
-}
-
-.circular {
-  width: 60px;
-  height: 60px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 12px;
-  color: white;
-  text-align: center;
-}
-
-.graph.black {
-  background-color: black;
-}
-
-.graph.green {
-  background-color: green;
-}
-
-.graph.red {
-  background-color: red;
-}
-
-.graph.yellow {
-  background-color: yellow;
-  color: black;
-  /* Mejor legibilidad */
-}
-
-.graph.blue {
-  background-color: blue;
-}
-
-.ie-indicadores-container {
-  margin: 20px;
-  font-family: Arial, sans-serif;
-}
-
-.indicadores-head {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-}
-
-.indicadores-bars {
-  display: flex;
-  gap: 10px;
-}
-
-.indicador-bar {
-  width: 40px;
-  height: 150px;
-  border-radius: 5px;
-}
-
-.black {
-  background-color: black;
-}
-
-.green {
-  background-color: green;
-}
-
-.red {
-  background-color: red;
-}
-
-.yellow {
-  background-color: yellow;
-}
-
-.blue {
-  background-color: blue;
-}
-
-.indicadores-icons {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  margin-left: 20px;
-}
-
-.indicador-icon {
-  font-size: 14px;
-  font-weight: bold;
-}
-
-.indicadores-footer {
-  margin-top: 20px;
-}
-
-.indicadores-circular {
-  display: flex;
-  gap: 20px;
-  justify-content: space-around;
+  flex-wrap: wrap; /* Allow circular icons to wrap on smaller screens */
 }
 
 .circular {
@@ -196,4 +100,63 @@
 
 .graph.blue {
   background-color: blue;
+}
+
+/* Responsive styles */
+@media (max-width: 767px) {
+  .indicadores-head {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .indicadores-icons {
+    flex-direction: row;
+    justify-content: center;
+    gap: 10px;
+  }
+
+  .indicador-icon {
+    font-size: 12px;
+  }
+
+  .indicadores-circular {
+    justify-content: center;
+    gap: 10px;
+  }
+
+  .circular {
+    width: 50px;
+    height: 50px;
+    font-size: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .indicadores-head {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .indicadores-bars {
+    gap: 10px;
+  }
+
+  .indicador-bar {
+    width: 30px;
+    height: 120px;
+  }
+
+  .indicador-icon {
+    font-size: 10px;
+  }
+
+  .indicadores-circular {
+    gap: 5px;
+  }
+
+  .circular {
+    width: 40px;
+    height: 40px;
+    font-size: 8px;
+  }
 }
