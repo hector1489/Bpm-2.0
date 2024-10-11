@@ -1,6 +1,12 @@
 .trazadores-ie-container {
-  margin: 20px;
-  font-family: Arial, sans-serif;
+  display: flex;
+  gap: 50px;
+  margin: 20px auto;
+  font-family: 'Roboto', Arial, sans-serif;
+  background-color: #f9f9f9;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .chart {
@@ -11,11 +17,14 @@
 }
 
 .bar {
-  width: 50px;
-  height: 150px;
+  width: 60px;
+  height: 180px;
   display: flex;
   flex-direction: column;
-  border: 1px solid #ccc;
+  border-radius: 4px;
+  overflow: hidden;
+  background-color: #e0e0e0;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
 .segment {
@@ -23,15 +32,15 @@
 }
 
 .blue {
-  background-color: blue;
+  background-color: #4a90e2; /* Azul más suave */
 }
 
 .green {
-  background-color: green;
+  background-color: #7ed321; /* Verde más suave */
 }
 
 .red {
-  background-color: red;
+  background-color: #d0021b; /* Rojo más apagado */
 }
 
 .bar .blue {
@@ -44,4 +53,16 @@
 
 .bar .red {
   height: 30%;
+}
+
+.trazadores-questions {
+  font-size: 14px;
+  color: #333;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.trazadores-questions p {
+  margin: 0;
 }

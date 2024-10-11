@@ -18,14 +18,31 @@ const InformeEjecutivo: React.FC = () => {
       {id && <p>ID: {id}</p>}
       {numero_requerimiento && <p>Auditoria : {numero_requerimiento}</p>}
 
+      <h5>1.- HALLAZGOS CRITICOS/ACCIONES CORRECTIVAS</h5>
       <IECriticalFindings />
+
+      <h5>2.- EVALUACIONES CRITICAS</h5>
       <IECriticalEvaluation />
+
+      <h5>3. TRAZADORES</h5>
       <IETrazadores />
+
+      <h5>4.- INDICADORES CLAVES DE GESTION</h5>
       <IEIndicadoresClave />
+      
+      <h5>5,. HIGIENE INSTALACIONES/ALIMENTOS</h5>
       <IEHigiene />
+      
+      <h5>6. EFICIENCIA OPERACIONAL</h5>
       <IEEficienciaOp />
+
+      <h5>7.- SATISFACCION AL CLIENTE</h5>
       <IESatisfaccion />
+
+      <h5>8.  SEGURIDAD ALIMENTARIA</h5>
       <IESeguridad />
+
+      <h5>9.- CONTROL DE CALIDAD</h5>
       <IEControlCalidad />
 
       <button onClick={handleGoDoc}>volver</button>
