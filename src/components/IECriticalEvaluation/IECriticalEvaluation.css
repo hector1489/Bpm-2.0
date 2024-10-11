@@ -1,35 +1,23 @@
 .criticalEvaluation-container {
-  margin: 20px;
-  font-family: Arial, sans-serif;
-  background-color: #f9f9f9;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .card-evaluation-container {
   display: flex;
   gap: 20px;
+  align-items: center;
+  justify-content: space-around;
+  width: 100%;
 }
 
 .circular-graph-evaluation {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  margin-right: 20px;
-}
-
-.circle-evaluation {
-  width: 100px;
-  height: 100px;
-  border-radius: 50%;
-  background-color: lightblue;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 18px;
-  margin-bottom: 10px;
 }
 
 .cards-evaluation {
@@ -39,26 +27,28 @@
 }
 
 .card-evaluation {
-  padding: 15px;
+  padding: 10px;
+  border-radius: 5px;
   color: white;
   text-align: center;
-  border-radius: 8px;
-  font-weight: bold;
 }
 
 .green {
-  background-color: green;
+  background-color: #28a745;
 }
 
 .red {
-  background-color: red;
+  background-color: #dc3545;
 }
 
 .yellow {
-  background-color: yellow;
-  color: black;
+  background-color: #ffc107;
 }
 
 .gray {
-  background-color: gray;
+  background-color: #6c757d;
+}
+
+.black {
+  background-color: black;
 }

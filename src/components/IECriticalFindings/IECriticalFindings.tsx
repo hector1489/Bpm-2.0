@@ -1,14 +1,51 @@
+import Highcharts from 'highcharts';
+import HighchartsReact from 'highcharts-react-official';
 import './IECriticalFindings.css';
 
 const IECriticalFindings: React.FC = () => {
+
+  const options = {
+    chart: {
+      type: 'pie',
+      backgroundColor: 'transparent',
+      height: 120,
+      width: 120,
+    },
+    title: {
+      text: '',
+    },
+    plotOptions: {
+      pie: {
+        innerSize: '70%',
+        borderColor: null,
+        dataLabels: {
+          enabled: false,
+        },
+      },
+    },
+    tooltip: {
+      enabled: false,
+    },
+    series: [
+      {
+        data: [
+          { y: 75, color: '#007bff' },
+          { y: 25, color: '#e0e0e0' },
+        ],
+      },
+    ],
+  };
+  
 
   return (
     <div className="IECriticalFinding-container">
       <div className="critical-card">
 
         <div className="circular-bar">
-          <div className="circle">75%</div>
-          <div className='critical-text'>
+          <div className="doughnut-chart">
+            <HighchartsReact highcharts={Highcharts} options={options} />
+          </div>
+          <div className="critical-text">
             <p>cuadro de img o text</p>
           </div>
         </div>
@@ -25,8 +62,10 @@ const IECriticalFindings: React.FC = () => {
       <div className="critical-card">
 
         <div className="circular-bar">
-          <div className="circle">75%</div>
-          <div className='critical-text'>
+          <div className="doughnut-chart">
+            <HighchartsReact highcharts={Highcharts} options={options} />
+          </div>
+          <div className="critical-text">
             <p>cuadro de img o text</p>
           </div>
         </div>

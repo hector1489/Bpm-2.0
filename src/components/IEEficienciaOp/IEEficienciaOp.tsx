@@ -1,19 +1,64 @@
-import React from 'react';import './IEEficienciaOp.css';
+import Highcharts from 'highcharts';
+import HighchartsReact from 'highcharts-react-official';
+import './IEEficienciaOp.css';
 
 const IEEficienciaOp: React.FC = () => {
+
+  const options = {
+    chart: {
+      type: 'column',
+      backgroundColor: 'transparent',
+    },
+    title: {
+      text: '', // Sin título
+    },
+    xAxis: {
+      categories: [
+        'Flujo Operaciones',
+        'Procedimientos',
+        'Resoluciones',
+        'Mantenciones',
+        'Almacenamiento',
+        'Control Temp.',
+        'Planificación',
+        'Reposición'
+      ],
+      title: {
+        text: null
+      }
+    },
+    yAxis: {
+      min: 0,
+      title: {
+        text: 'Porcentaje'
+      },
+    },
+    series: [
+      {
+        name: 'Eficiencia',
+        data: [82, 83, 95, 6, 8, 41, 51, 73], // Ejemplo de valores para cada categoría
+        colorByPoint: true, // Permite que cada barra tenga su propio color
+        colors: [
+          '#1E90FF', '#32CD32', '#FF4500', '#FFD700', '#8A2BE2', '#FF69B4', '#20B2AA', '#FF6347'
+        ], // Colores correspondientes
+      }
+    ],
+    plotOptions: {
+      column: {
+        dataLabels: {
+          enabled: true,
+          format: '{y}%', // Muestra los porcentajes en las barras
+        }
+      }
+    }
+  };
 
   return (
     <div className="ie-eficiencia-container">
 
+      {/* Reemplazamos las barras estáticas con el gráfico de Highcharts */}
       <div className="ie-eficiencia-grafico">
-        <div className="eficiencia-bar flujo-op"></div>
-        <div className="eficiencia-bar procedimientos"></div>
-        <div className="eficiencia-bar resoluciones"></div>
-        <div className="eficiencia-bar mantenciones"></div>
-        <div className="eficiencia-bar almacenamiento"></div>
-        <div className="eficiencia-bar control-temperatura"></div>
-        <div className="eficiencia-bar planificacion"></div>
-        <div className="eficiencia-bar reposicion"></div>
+        <HighchartsReact highcharts={Highcharts} options={options} />
       </div>
 
       <div className="ie-eficiencia-cards">

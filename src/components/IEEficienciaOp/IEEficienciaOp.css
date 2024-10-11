@@ -9,51 +9,6 @@
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
-.ie-eficiencia-grafico {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 20px;
-  gap: 5px;
-}
-
-.eficiencia-bar {
-  width: 40px;
-  height: 150px;
-  border-radius: 5px;
-}
-
-.flujo-op {
-  background-color: #1E90FF;
-}
-
-.procedimientos {
-  background-color: #32CD32;
-}
-
-.resoluciones {
-  background-color: #FF4500;
-}
-
-.mantenciones {
-  background-color: #FFD700;
-}
-
-.almacenamiento {
-  background-color: #8A2BE2;
-}
-
-.control-temperatura {
-  background-color: #FF69B4;
-}
-
-.planificacion {
-  background-color: #20B2AA;
-}
-
-.reposicion {
-  background-color: #FF6347;
-}
-
 .ie-eficiencia-cards {
   display: flex;
   flex-direction: column;
