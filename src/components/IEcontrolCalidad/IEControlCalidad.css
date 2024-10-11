@@ -44,12 +44,12 @@
 }
 
 .control-punto.left {
-  transform: translateX(-155px);
+  transform: translateX(-180px);
   text-align: right;
 }
 
 .control-punto.right {
-  transform: translateX(155px);
+  transform: translateX(180px);
   text-align: left;
 }
 
