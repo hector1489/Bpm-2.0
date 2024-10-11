@@ -1,6 +1,10 @@
+import React from 'react';
 import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
+import Highcharts3D from 'highcharts/highcharts-3d';
 import './IEEficienciaOp.css';
+
+Highcharts3D(Highcharts);
 
 const IEEficienciaOp: React.FC = () => {
 
@@ -8,9 +12,16 @@ const IEEficienciaOp: React.FC = () => {
     chart: {
       type: 'column',
       backgroundColor: 'transparent',
+      options3d: {
+        enabled: true,
+        alpha: 10,
+        beta: 25,
+        depth: 70,
+        viewDistance: 25
+      }
     },
     title: {
-      text: '', // Sin título
+      text: '',
     },
     xAxis: {
       categories: [
@@ -36,18 +47,19 @@ const IEEficienciaOp: React.FC = () => {
     series: [
       {
         name: 'Eficiencia',
-        data: [82, 83, 95, 6, 8, 41, 51, 73], // Ejemplo de valores para cada categoría
-        colorByPoint: true, // Permite que cada barra tenga su propio color
+        data: [82, 83, 95, 6, 8, 41, 51, 73],
+        colorByPoint: true,
         colors: [
           '#1E90FF', '#32CD32', '#FF4500', '#FFD700', '#8A2BE2', '#FF69B4', '#20B2AA', '#FF6347'
-        ], // Colores correspondientes
+        ],
       }
     ],
     plotOptions: {
       column: {
+        depth: 25,
         dataLabels: {
           enabled: true,
-          format: '{y}%', // Muestra los porcentajes en las barras
+          format: '{y}%',
         }
       }
     }
@@ -56,7 +68,6 @@ const IEEficienciaOp: React.FC = () => {
   return (
     <div className="ie-eficiencia-container">
 
-      {/* Reemplazamos las barras estáticas con el gráfico de Highcharts */}
       <div className="ie-eficiencia-grafico">
         <HighchartsReact highcharts={Highcharts} options={options} />
       </div>

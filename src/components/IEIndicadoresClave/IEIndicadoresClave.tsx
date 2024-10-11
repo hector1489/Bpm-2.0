@@ -1,6 +1,9 @@
 import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
 import './IEIndicadores.css';
+import Highcharts3D from 'highcharts/highcharts-3d';
+
+Highcharts3D(Highcharts);
 
 const IEIndicadoresClave: React.FC = () => {
 
@@ -8,9 +11,22 @@ const IEIndicadoresClave: React.FC = () => {
     chart: {
       type: 'column',
       backgroundColor: 'transparent',
+      options3d: {
+        enabled: true,
+        alpha: 10,
+        beta: 25,
+        depth: 70,
+        viewDistance: 25,
+        frame: {
+          bottom: {
+            size: 1,
+            color: 'rgba(0,0,0,0.02)'
+          }
+        }
+      }
     },
     title: {
-      text: '', // Sin título
+      text: '',
     },
     xAxis: {
       categories: ['BPM', 'MINUTA', 'EXÁMENES', 'INAPTITUD', 'CAPACITACIONES'],
@@ -34,6 +50,7 @@ const IEIndicadoresClave: React.FC = () => {
     ],
     plotOptions: {
       column: {
+        depth: 25,
         dataLabels: {
           enabled: true,
           format: '{y}%',
@@ -45,7 +62,6 @@ const IEIndicadoresClave: React.FC = () => {
   return (
     <div className="ie-indicadores-container">
       <div className="indicadores-head">
-        {/* Reemplazamos las barras con el gráfico de Highcharts */}
         <div className="indicadores-bars">
           <HighchartsReact highcharts={Highcharts} options={options} />
         </div>

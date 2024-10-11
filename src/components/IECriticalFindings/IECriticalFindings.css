@@ -8,20 +8,19 @@
   padding: 30px;
   border-radius: 8px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  max-width: 1000px; /* Asegura que el contenedor no se expanda demasiado */
+  max-width: 1000px;
 }
 
 .critical-card {
   background-color: #ffffff;
   padding: 25px;
   border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   color: #333;
   flex: 1;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  min-width: 280px; /* Asegura que las tarjetas tengan un tamaño mínimo coherente */
+  min-width: 280px;
 }
 
 .circular-bar {

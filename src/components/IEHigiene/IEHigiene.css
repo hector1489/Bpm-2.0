@@ -7,6 +7,13 @@
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
+.chart-container {
+  margin-top: 30px;
+  width: 100%;
+  height: 400px;
+}
+
+
 .cards-higiene-ie {
   display: flex;
   flex-direction: row;

@@ -2,18 +2,28 @@
   margin: 20px;
   display: flex;
   justify-content: center;
-  font-family: Arial, sans-serif;
-  position: relative;
-  background-color: #f9f9f9;
-  padding: 20px;
+  align-items: center;
+  padding: 40px;
+  background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  height: 100%;
+}
+
+.container-linea {
+  background-color: #ffffff;
   border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  position: relative;
+  width: 100%;
+  max-width: 600px;
 }
 
 .control-linea {
   position: relative;
   width: 4px;
-  background-color: skyblue;
+  background-color: #0288d1;
   height: 100%;
   display: flex;
   flex-direction: column;
@@ -23,39 +33,49 @@
 
 .control-punto {
   position: relative;
-  width: 150px;
-  padding: 10px;
-  background-color: white;
-  border-radius: 5px;
-  font-size: 14px;
-  font-weight: bold;
-}
-
-.control-punto::before {
-  content: '';
-  position: absolute;
-  width: 10px;
-  height: 10px;
-  background-color: skyblue;
-  border-radius: 50%;
-  top: 50%;
-  transform: translateY(-50%);
+  width: 220px;
+  padding: 12px;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  font-size: 15px;
+  font-weight: 600;
+  color: #333;
+  transition: transform 0.3s ease;
 }
 
 .control-punto.left {
-  transform: translateX(-180px);
+  transform: translateX(-250px);
   text-align: right;
 }
 
 .control-punto.right {
-  transform: translateX(180px);
+  transform: translateX(250px);
   text-align: left;
 }
 
+.control-punto.left::before,
+.control-punto.right::before {
+  content: '';
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  background-color: #0288d1;
+  border: 3px solid #fff;
+  border-radius: 50%;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 1;
+}
+
 .control-punto.left::before {
-  right: -30px;
+  right: -40px;
 }
 
 .control-punto.right::before {
-  left: -30px;
+  left: -40px;
+}
+
+.control-punto:hover {
+  transform: scale(1.05);
 }

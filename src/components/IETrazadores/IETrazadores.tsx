@@ -10,7 +10,7 @@ const IETrazadores: React.FC = () => {
       backgroundColor: 'transparent',
     },
     title: {
-      text: '', // Sin título
+      text: '',
     },
     xAxis: {
       categories: ['TRA CS 17', 'TRA CSH 29', 'TRA CSH 31', 'TRA PRE 52', 'TRA ELB 60', 'TRA ELB 66', 'TRA MA 67', 'TRA TPO 68', 'TRA SER 72', 'TRA DOC 98', 'TRA DOC 99'],
@@ -27,7 +27,7 @@ const IETrazadores: React.FC = () => {
         enabled: true,
         style: {
           fontWeight: 'bold',
-          color: 'gray' // Puedes definir un color por defecto
+          color: 'gray'
         }
       }
     },
@@ -43,17 +43,17 @@ const IETrazadores: React.FC = () => {
       {
         name: 'Azul',
         data: [40, 35, 50, 45, 60, 70, 65, 50, 45, 60, 55],
-        color: '#4a90e2'
+        color: '#2874a6'
       },
       {
         name: 'Verde',
         data: [30, 25, 20, 25, 20, 10, 15, 20, 25, 20, 25],
-        color: '#7ed321'
+        color: '#229954'
       },
       {
         name: 'Rojo',
         data: [30, 40, 30, 30, 20, 20, 20, 30, 30, 20, 20],
-        color: '#d0021b'
+        color: '#cb4335'
       }
     ]
   };

@@ -52,6 +52,19 @@ const IECriticalEvaluation: React.FC = () => {
           <div className="card-evaluation black">Uniforme Completo</div>
         </div>
       </div>
+
+      <div className="card-evaluation-container">
+        <div className="circular-graph-evaluation">
+          <HighchartsReact highcharts={Highcharts} options={options} />
+        </div>
+        <div className="cards-evaluation">
+          <div className="card-evaluation green">Infraestructura</div>
+          <div className="card-evaluation red">Equipamiento</div>
+          <div className="card-evaluation yellow">Utensilios</div>
+          <div className="card-evaluation gray">Higiene Manipulador</div>
+          <div className="card-evaluation black">Uniforme Completo</div>
+        </div>
+      </div>
     </div>
   );
 }

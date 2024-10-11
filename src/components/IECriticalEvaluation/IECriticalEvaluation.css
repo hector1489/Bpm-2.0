@@ -1,12 +1,19 @@
 .criticalEvaluation-container {
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
+  gap: 20px;
   padding: 20px;
+  background-color: #f4f4f4;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  margin: 20px auto;
 }
 
 .card-evaluation-container {
+  background-color: #ffffff;
+  padding: 25px;
+  border-radius: 12px;
   display: flex;
   gap: 20px;
   align-items: center;
