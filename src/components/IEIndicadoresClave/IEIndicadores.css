@@ -9,14 +9,12 @@
 
 .indicadores-head {
   display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  flex-wrap: wrap; /* Ensure wrapping on smaller screens */
+
 }
 
 .indicadores-bars {
   display: flex;
-  flex-wrap: wrap; /* Wrap bars on smaller screens */
+  flex-wrap: wrap;
   gap: 15px;
 }
 
@@ -66,7 +64,7 @@
   display: flex;
   gap: 20px;
   justify-content: space-around;
-  flex-wrap: wrap; /* Allow circular icons to wrap on smaller screens */
+  flex-wrap: wrap;
 }
 
 .circular {

@@ -1,19 +1,34 @@
 import { IEControlCalidad, IECriticalEvaluation, IECriticalFindings, IEEficienciaOp, IEHigiene, IEIndicadoresClave, IESatisfaccion, IESeguridad, IETrazadores } from '../../components';
-import './InformeEjecutivo.css'
-import { useNavigate, useLocation  } from 'react-router-dom'
+import './InformeEjecutivo.css';
+import { useNavigate, useLocation } from 'react-router-dom';
+import html2canvas from 'html2canvas';
+import { useRef } from 'react';
 
 const InformeEjecutivo: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
-
   const { id, numero_requerimiento } = location.state || {};
+  const informeRef = useRef<HTMLDivElement>(null);
 
   const handleGoDoc = () => {
     navigate('/documentacion');
   };
 
+  const handleScreenshot = async () => {
+    if (!informeRef.current) return;
+
+    await html2canvas(informeRef.current, {
+      scale: 2, 
+    }).then((canvas) => {
+      const link = document.createElement('a');
+      link.download = 'InformeEjecutivo.png';
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+    });
+  };
+
   return (
-    <div className="InformeEjecutivo-container">
+    <div className="InformeEjecutivo-container" ref={informeRef}>
       <h3>Informe Ejecutivo</h3>
       {id && <p>ID: {id}</p>}
       {numero_requerimiento && <p>Auditoria : {numero_requerimiento}</p>}
@@ -29,10 +44,10 @@ const InformeEjecutivo: React.FC = () => {
 
       <h5>4.- INDICADORES CLAVES DE GESTION</h5>
       <IEIndicadoresClave />
-      
+
       <h5>5,. HIGIENE INSTALACIONES/ALIMENTOS</h5>
       <IEHigiene />
-      
+
       <h5>6. EFICIENCIA OPERACIONAL</h5>
       <IEEficienciaOp />
 
@@ -45,10 +60,12 @@ const InformeEjecutivo: React.FC = () => {
       <h5>9.- CONTROL DE CALIDAD</h5>
       <IEControlCalidad />
 
-      <button onClick={handleGoDoc}>volver</button>
+      <div className="ie-buttons">
+        <button onClick={handleGoDoc}>volver</button>
+        <button className="bg-primary" onClick={handleScreenshot}>Capturar Pantalla</button>
+      </div>
     </div>
-  )
-}
+  );
+};
 
-
-export default InformeEjecutivo
+export default InformeEjecutivo;
