@@ -5,7 +5,7 @@ const BASE_URL = 'https://bpm-backend.onrender.com';
 // Obtener todos los PDFs
 export const obtenerPDFs = async () => {
   try {
-    const response = await axios.get(`${BASE_URL}/pdfs`);
+    const response = await axios.get(`${BASE_URL}/pdf/pdfs`);
     return response.data;
   } catch (error) {
     console.error('Error al obtener los PDFs:', error);
@@ -24,7 +24,7 @@ export const subirPDF = async (pdfFile: File, fileName: string) => {
     const formData = new FormData();
     formData.append('file', pdfFile, fileName);
 
-    const response = await axios.post(`${BASE_URL}/pdfs/upload`, formData, {
+    const response = await axios.post(`${BASE_URL}/pdf/pdfs/upload`, formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
       },
@@ -40,7 +40,7 @@ export const subirPDF = async (pdfFile: File, fileName: string) => {
 // Obtener un PDF por su clave (key)
 export const obtenerPDFPorClave = async (key: string) => {
   try {
-    const response = await axios.get(`${BASE_URL}/pdfs/${key}`, {
+    const response = await axios.get(`${BASE_URL}/pdf/pdfs/${key}`, {
       responseType: 'arraybuffer',
     });
     return `data:${response.headers['content-type']};base64,${Buffer.from(response.data, 'binary').toString('base64')}`;
@@ -53,7 +53,7 @@ export const obtenerPDFPorClave = async (key: string) => {
 // Eliminar un PDF por su clave (key)
 export const eliminarPDF = async (key: string) => {
   try {
-    const response = await axios.delete(`${BASE_URL}/pdfs/${encodeURIComponent(key)}`);
+    const response = await axios.delete(`${BASE_URL}/pdf/pdfs/${encodeURIComponent(key)}`);
     return response.data;
   } catch (error) {
     console.error('Error al eliminar el PDF:', error);

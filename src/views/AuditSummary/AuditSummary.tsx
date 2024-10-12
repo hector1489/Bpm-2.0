@@ -100,6 +100,8 @@ const AuditSummary: React.FC = () => {
         const auditor = state.userName
         const email = state.auditSheetData.auditorEmail
 
+        console.log(nombreDelEstablecimiento);
+
         return {
           numeroRequerimiento: numeroAuditoria,
           pregunta: hero.question,
@@ -112,7 +114,8 @@ const AuditSummary: React.FC = () => {
           accionesCorrectivas: '',
           estado: 'Abierto',
           photoUrl: photo ? photo.photoUrl || '' : '',
-          email
+          email,
+          nombreDelEstablecimiento
         };
       });
 

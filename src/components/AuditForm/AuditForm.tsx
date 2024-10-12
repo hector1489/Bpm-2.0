@@ -30,7 +30,7 @@ const AuditForm: React.FC = () => {
       answer: e.target.value,
     };
     setFormData(updatedFormData);
-    setErrorMessage(''); // Limpiar el mensaje de error cuando selecciona una respuesta
+    setErrorMessage('');
   };
 
   const handleNext = () => {
@@ -39,7 +39,7 @@ const AuditForm: React.FC = () => {
 
     if (!selectedAnswer) {
       setErrorMessage('Por favor, seleccione una respuesta antes de continuar.');
-      return; // Evitar avanzar si no hay respuesta seleccionada
+      return;
     }
 
     if (currentQuestionIndex < state.IsHero.length - 1) {

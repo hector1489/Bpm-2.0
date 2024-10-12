@@ -5,7 +5,7 @@ const BASE_URL = 'https://bpm-backend.onrender.com';
 // Obtener todas las fotos
 export const obtenerFotos = async () => {
   try {
-    const response = await axios.get(`${BASE_URL}/photos`);
+    const response = await axios.get(`${BASE_URL}/photos/photos`);
     return response.data;
   } catch (error) {
     console.error('Error al obtener las fotos:', error);
@@ -45,7 +45,7 @@ export const subirFoto = async (imagenBase64: string, fileName: string) => {
     
     formData.append('image', imageBlob, fileName);
 
-    const response = await axios.post(`${BASE_URL}/upload-photo`, formData, {
+    const response = await axios.post(`${BASE_URL}/photos/upload-photo`, formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
       },
@@ -62,7 +62,7 @@ export const subirFoto = async (imagenBase64: string, fileName: string) => {
 // Obtener una foto por su clave (key)
 export const obtenerFotoPorClave = async (key: string) => {
   try {
-    const response = await axios.get(`${BASE_URL}/photos/${key}`, {
+    const response = await axios.get(`${BASE_URL}/photos/photos/${key}`, {
       responseType: 'arraybuffer',
     });
     return `data:${response.headers['content-type']};base64,${Buffer.from(response.data, 'binary').toString('base64')}`;
@@ -75,7 +75,7 @@ export const obtenerFotoPorClave = async (key: string) => {
 // Eliminar una foto por su clave (key)
 export const eliminarFoto = async (key: string) => {
   try {
-    const response = await axios.delete(`${BASE_URL}/delete-photos/${encodeURIComponent(key)}`);
+    const response = await axios.delete(`${BASE_URL}/photos/delete-photos/${encodeURIComponent(key)}`);
     return response.data;
   } catch (error) {
     console.error('Error al eliminar la foto:', error);

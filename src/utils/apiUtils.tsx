@@ -1,13 +1,15 @@
 import axios from 'axios';
 import { getCurrentDate } from './utils';
 import { DesviacionResponse } from '../interfaces/interfaces'
+import { calcularCriticidad } from './utils';
 
 const BASE_URL = 'https://bpm-backend.onrender.com';
+
 
 // Función para obtener todas las acciones correctivas
 export const obtenerTodasLasAccionesDesdeAPI = async (authToken: string) => {
   try {
-    const response = await axios.get(`${BASE_URL}/accion-correctivas`, {
+    const response = await axios.get(`${BASE_URL}/questions/accion-correctivas`, {
       headers: {
         'Authorization': `Bearer ${authToken}`,
       },
@@ -19,37 +21,43 @@ export const obtenerTodasLasAccionesDesdeAPI = async (authToken: string) => {
   }
 };
 
-// Función para enviar datos de auditoría al backend
-export const enviarDatosAuditoria = async (desviaciones: any, authToken: string) => {
-  const correo = 'bbpmauditorias@gmail.com'
 
-  const desviacionData= desviaciones.map((desviacion: any) => {
+export const enviarDatosAuditoria = async (desviaciones: any, authToken: string) => {
+  const correo = 'bbpmauditorias@gmail.com';
+
+  const desviacionesArray = Array.isArray(desviaciones) ? desviaciones : [desviaciones];
+
+  const desviacionData = desviacionesArray.map((desviacion: any) => {
+    const { nivelCriticidad, fechaSolucion } = calcularCriticidad(desviacion.criticidad);
+
     return {
-    numeroRequerimiento: desviacion.numeroRequerimiento || '',
-    preguntasAuditadas: desviacion.pregunta || '',
-    desviacionOCriterio: desviacion.respuesta || '',
-    tipoDeAccion: desviacion.tipoDeAccion || '',
-    responsableProblema: desviacion.responsableDelProblema || '',
-    local: desviacion.local || '',
-    criticidad: desviacion.criticidad || '',
-    accionesCorrectivas: desviacion.accionesCorrectivas || '' ,
-    fechaRecepcion: desviacion.fechaRecepcionSolicitud || getCurrentDate() || null,
-    fechaSolucion: desviacion.fechaSolucionProgramada || null,
-    estado: desviacion.estado || 'Abierto',
-    fechaCambio: desviacion.fechaCambioEstado || null,
-    contactoClientes: desviacion.contactoClientes || '',
-    evidenciaFotografica: desviacion.evidenciaFotografica || '',
-    detalleFoto: desviacion.detalleFoto || '',
-    auditor: desviacion.auditor || '',
-    correo: desviacion.email || correo || '',
-    fechaModificacion: desviacion.fechaUltimaModificacion || null,
-    authToken: authToken || '',
-    isNew: !('data-id' in desviacion)
+      numeroRequerimiento: desviacion.numeroRequerimiento || '',
+      preguntasAuditadas: desviacion.pregunta || '',
+      desviacionOCriterio: desviacion.respuesta || '',
+      tipoDeAccion: desviacion.tipoDeAccion || '',
+      responsableProblema: desviacion.responsableDelProblema || '',
+      local: desviacion.nombreDelEstablecimiento || '',
+      criticidad: nivelCriticidad || desviacion.criticidad || '',
+      accionesCorrectivas: desviacion.accionesCorrectivas || '',
+      fechaRecepcionSolicitud: desviacion.fechaRecepcion || getCurrentDate() || null,
+      fechaSolucionProgramada: fechaSolucion || desviacion.fechaSolucion || null,
+      estado: desviacion.estado || 'Abierto',
+      fechaCambioEstado: desviacion.fechaCambio || null,
+      contactoClientes: desviacion.contactoClientes || '',
+      evidenciaFotografica: desviacion.evidenciaFotografica || '',
+      detalleFoto: desviacion.detalleFoto || '',
+      auditor: desviacion.auditor || '',
+      email: desviacion.email || correo || '',
+      fechaUltimaModificacion: desviacion.fechaModificacion || null,
+      authToken: authToken || '',
+      isNew: !('data-id' in desviacion),
     };
   });
 
+  console.log(desviacionData);
+
   try {
-    const response = await axios.post(`${BASE_URL}/send-data`, desviacionData, {
+    const response = await axios.post(`${BASE_URL}/desviaciones/send-data`, desviacionData, {
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${authToken}`,
@@ -62,10 +70,12 @@ export const enviarDatosAuditoria = async (desviaciones: any, authToken: string)
   }
 };
 
+
+
 // Función para cargar desviaciones desde el backend
 export const cargarDesviacionesDesdeBackend = async (authToken: string) => {
   try {
-    const response = await axios.get(`${BASE_URL}/desviaciones`, {
+    const response = await axios.get(`${BASE_URL}/desviaciones/desviaciones`, {
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${authToken}`,
@@ -117,7 +127,7 @@ export const actualizarDesviacionBackend = async (
   console.log("Datos actualizados que se enviarán al backend:", safeValues);
 
   try {
-    const response = await axios.put(`${BASE_URL}/desviaciones/${id}`, safeValues, {
+    const response = await axios.put(`${BASE_URL}/desviaciones/desviaciones/${id}`, safeValues, {
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${authToken}`,
@@ -155,7 +165,7 @@ export const cargarDatosPorAuditor = async (auditor: string, authToken: string) 
   }
 
   try {
-    const response = await axios.get(`${BASE_URL}/desviaciones/auditor/${auditor}`, {
+    const response = await axios.get(`${BASE_URL}/desviaciones/desviaciones/auditor/${auditor}`, {
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${authToken}`,
@@ -181,7 +191,7 @@ export const cargarDatosPorAuditor = async (auditor: string, authToken: string) 
 // Función para eliminar la fila
 export const desviacionDelete = async (id: number, authToken: string) => {
   try {
-    const response = await axios.delete(`${BASE_URL}/desviacionesDelete/${id}`, {
+    const response = await axios.delete(`${BASE_URL}/desviaciones/desviacionesDelete/${id}`, {
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${authToken}`,

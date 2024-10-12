@@ -1,3 +1,5 @@
+import moment from 'moment'; 
+
 
 export const estados = ['Abierto', 'En Progreso', 'Cerrado'];
 export const criticidad = [
@@ -5,6 +7,25 @@ export const criticidad = [
   { valor: 'Moderado', clase: 'prioridad-moderada', dias: 30 },
   { valor: 'Crítico', clase: 'prioridad-critica', dias: 15 }
 ];
+
+
+export const calcularCriticidad = (nivelCriticidad: string) => {
+  const nivel = criticidad.find(c => c.valor === nivelCriticidad);
+  
+  if (nivel) {
+    const diasParaSolucion = nivel.dias;
+    const fechaSolucion = moment().add(diasParaSolucion, 'days').format('YYYY-MM-DD');
+    
+    return {
+      nivelCriticidad: nivel.valor,
+      clase: nivel.clase,
+      fechaSolucion
+    };
+  }
+  
+  return { nivelCriticidad: '', clase: '', fechaSolucion: null };
+};
+
 
 export const crearSelectEstado = (): HTMLSelectElement => {
   const select = document.createElement('select');

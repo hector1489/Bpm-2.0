@@ -137,7 +137,8 @@ const DesviacionesTable: React.FC = () => {
           cell.innerHTML = '';
           cell.appendChild(selectCriticidad);
         } else if (cellIndex === 7) {
-          const selectAcciones = await crearSelectAcciones(authToken);
+          const preguntaAuditada = localDesviaciones[rowIndex].preguntas_auditadas || '';
+          const selectAcciones = await crearSelectAcciones(authToken, preguntaAuditada);
           selectAcciones.value = localDesviaciones[rowIndex].acciones_correctivas || ''; 
           selectAcciones.onchange = (e) => {
             const value = (e.target as HTMLSelectElement).value;
@@ -206,8 +207,8 @@ const DesviacionesTable: React.FC = () => {
       <table id="tabla-desviaciones">
         <thead>
           <tr>
-            <th>ID</th>
             <th>N° DE REQUERIMIENTO</th>
+            <th>N° DE AUDITORIA</th>
             <th>PREGUNTAS AUDITADAS</th>
             <th>CRITERIO</th>
             <th>RESPONSABLE</th>

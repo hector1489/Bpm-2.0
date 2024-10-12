@@ -107,23 +107,58 @@ export const crearSelectEstado = (): HTMLSelectElement => {
   return select;
 };
 
+export const crearSelectAcciones = async (authToken: string, preguntaAuditada: string): Promise<HTMLSelectElement> => {
+  try {
+    const acciones = await obtenerTodasLasAccionesDesdeAPI(authToken);
 
-export const crearSelectAcciones = async (authToken: string): Promise<HTMLSelectElement> => {
-  const acciones = await obtenerTodasLasAccionesDesdeAPI(authToken);
+    const obtenerPrefijo = (pregunta: string) => {
+      const match = pregunta.match(/^\w+\s*\d*\./);
+      return match ? match[0].trim().toLowerCase() : '';
+    };
 
-  const accionesCorrectivas = acciones.flatMap((accionObj: { action: string }) => accionObj.action);
-  const select = document.createElement('select');
-  select.className = 'form-control';
+    const prefijoPreguntaAuditada = obtenerPrefijo(preguntaAuditada || '').toLowerCase();
 
-  accionesCorrectivas.forEach((accion: string) => {
+    const accionesFiltradas = acciones
+      .filter((accionObj: { question: string }) => {
+        const prefijoPreguntaAccion = obtenerPrefijo(accionObj.question || '').toLowerCase();
+        return prefijoPreguntaAccion === prefijoPreguntaAuditada;
+      })
+      .flatMap((accionObj: { action: string[] }) => accionObj.action);
+
+    const select = document.createElement('select');
+    select.className = 'form-control';
+
+    if (accionesFiltradas.length > 0) {
+      accionesFiltradas.forEach((accion: string) => {
+        const option = document.createElement('option');
+        option.value = accion;
+        option.text = accion;
+        select.appendChild(option);
+      });
+    } else {
+      acciones.forEach((accionObj: { action: string[] }) => {
+        accionObj.action.forEach((accion: string) => {
+          const option = document.createElement('option');
+          option.value = accion;
+          option.text = accion;
+          select.appendChild(option);
+        });
+      });
+    }
+
+    return select;
+  } catch (error) {
+    console.error('Error al crear el select de acciones correctivas:', error);
+    const select = document.createElement('select');
+    select.className = 'form-control';
     const option = document.createElement('option');
-    option.value = accion;
-    option.text = accion;
+    option.value = '';
+    option.text = 'Error al cargar acciones';
     select.appendChild(option);
-  });
-
-  return select;
+    return select;
+  }
 };
+
 
 
 export const crearSelectFechaIngreso = (): HTMLSelectElement => {
