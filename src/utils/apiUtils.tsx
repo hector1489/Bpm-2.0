@@ -1,7 +1,6 @@
 import axios from 'axios';
 import { getCurrentDate } from './utils';
 import { DesviacionResponse } from '../interfaces/interfaces'
-import { calcularCriticidad } from './utils';
 
 const BASE_URL = 'https://bpm-backend.onrender.com';
 
@@ -28,7 +27,6 @@ export const enviarDatosAuditoria = async (desviaciones: any, authToken: string)
   const desviacionesArray = Array.isArray(desviaciones) ? desviaciones : [desviaciones];
 
   const desviacionData = desviacionesArray.map((desviacion: any) => {
-    const { nivelCriticidad, fechaSolucion } = calcularCriticidad(desviacion.criticidad);
 
     return {
       numeroRequerimiento: desviacion.numeroRequerimiento || '',
@@ -37,10 +35,10 @@ export const enviarDatosAuditoria = async (desviaciones: any, authToken: string)
       tipoDeAccion: desviacion.tipoDeAccion || '',
       responsableProblema: desviacion.responsableDelProblema || '',
       local: desviacion.nombreDelEstablecimiento || '',
-      criticidad: nivelCriticidad || desviacion.criticidad || '',
+      criticidad: desviacion.criticidad || '',
       accionesCorrectivas: desviacion.accionesCorrectivas || '',
       fechaRecepcionSolicitud: desviacion.fechaRecepcion || getCurrentDate() || null,
-      fechaSolucionProgramada: fechaSolucion || desviacion.fechaSolucion || null,
+      fechaSolucionProgramada: desviacion.solucionProgramada || null,
       estado: desviacion.estado || 'Abierto',
       fechaCambioEstado: desviacion.fechaCambio || null,
       contactoClientes: desviacion.contactoClientes || '',
@@ -53,8 +51,6 @@ export const enviarDatosAuditoria = async (desviaciones: any, authToken: string)
       isNew: !('data-id' in desviacion),
     };
   });
-
-  console.log(desviacionData);
 
   try {
     const response = await axios.post(`${BASE_URL}/desviaciones/send-data`, desviacionData, {

@@ -87,6 +87,11 @@ export const calculateSolutionDate = (criticidad: string): string => {
   return `${dd}/${mm}/${yyyy}`;
 }
 
+export const getCriterioByColor = (criticidadColor: string) => {
+  if (criticidadColor == 'green') return 'Leve';
+  if (criticidadColor == 'yellow') return 'Moderado';
+  return 'Crítico';
+}
 
 export const getColorByPercentage = (percentage: number) => {
   if (percentage >= 90) return 'green';

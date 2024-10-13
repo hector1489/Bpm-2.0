@@ -4,7 +4,7 @@ import { AverageModules, BPMGraph, Summary } from '../../components/index'
 import { useContext, useCallback, useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { AppContext } from '../../context/GlobalState'
-import { extractPercentage, getCurrentDate, calculateSolutionDate, getColorByPercentage } from '../../utils/utils'
+import { extractPercentage, getCurrentDate, calculateSolutionDate, getColorByPercentage, getCriterioByColor } from '../../utils/utils'
 import { enviarDatosAuditoria } from '../../utils/apiUtils'
 import logos from '../../assets/img/index'
 import { pdf } from '@react-pdf/renderer'
@@ -99,8 +99,7 @@ const AuditSummary: React.FC = () => {
         const numeroAuditoria = state.auditSheetData.numeroAuditoria
         const auditor = state.userName
         const email = state.auditSheetData.auditorEmail
-
-        console.log(nombreDelEstablecimiento);
+        const criticidad = getCriterioByColor(criticidadColor);
 
         return {
           numeroRequerimiento: numeroAuditoria,
@@ -115,7 +114,8 @@ const AuditSummary: React.FC = () => {
           estado: 'Abierto',
           photoUrl: photo ? photo.photoUrl || '' : '',
           email,
-          nombreDelEstablecimiento
+          nombreDelEstablecimiento,
+          criticidad
         };
       });
 
@@ -170,7 +170,7 @@ const AuditSummary: React.FC = () => {
       }
     }
 
-    handleGoToDetails();    
+   // handleGoToDetails();    
   }
 
 
