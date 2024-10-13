@@ -65,7 +65,26 @@ const ResumenForm: React.FC = () => {
   
     return null;
   };
-  
+
+  const getPdfTitleWithNumber = (key: string): string => {
+    const matchAuditoria = key.match(/detalle_auditoria_(\d+)_/);
+    const matchRequerimiento = key.match(/_auditoria_bpm_(\d+)_/);
+    const matchLuminometria = key.match(/_luminometria_(\d+)_/);
+    const matchEtaResumen = key.match(/_eta_resumen_(\d+)_/);
+    
+    if (matchAuditoria) {
+      return `Detalle Auditoría ${matchAuditoria[1]}`;
+    } else if (matchRequerimiento) {
+      return `Auditoría BPM ${matchRequerimiento[1]}`;
+    } else if (matchLuminometria) {
+      return `Luminometría ${matchLuminometria[1]}`;
+    } else if (matchEtaResumen) {
+      return `ETA Resumen ${matchEtaResumen[1]}`;
+    }
+
+    return 'Desconocido';
+  };
+
   const filteredPDFs = pdfs.filter(pdf => {
     const numeroAuditoria = extractNumeroAuditoria(pdf.key);
     return numeroAuditoria === numeroRequerimiento;
@@ -101,11 +120,15 @@ const ResumenForm: React.FC = () => {
             {currentPDFs.length > 0 ? (
               currentPDFs.map((pdf) => (
                 <div key={pdf.key} className="pdf-card">
-                  <p>PDF: {pdf.key}</p>
+                  <i className="fa-regular fa-file-pdf"></i>
+            
+                  <p>{getPdfTitleWithNumber(pdf.key)}</p>
                   <div className="pdf-dd-car-buttons">
-                    <a href={pdf.url} target="_blank" rel="noopener noreferrer">
+                    <button  >
+                    <a className='btn-pdf-resumenForm' href={pdf.url} target="_blank" rel="noopener noreferrer">
                       Ver PDF
                     </a>
+                    </button>
                     <button className='btn-red' onClick={() => handleDeletePDF(pdf.key)}>Eliminar PDF</button>
                   </div>
                 </div>

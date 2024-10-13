@@ -170,7 +170,7 @@ const AuditSummary: React.FC = () => {
       }
     }
 
-   // handleGoToDetails();    
+    handleGoToDetails();    
   }
 
 

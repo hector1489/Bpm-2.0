@@ -14,6 +14,7 @@ const DownloadSummary: React.FC = () => {
   return (
 
     <div className="download-summary-container">
+      <h3>Documentacion</h3>
     <ResumenForm />
     <button onClick={handleGoToDoc}>volver</button>
     </div>
