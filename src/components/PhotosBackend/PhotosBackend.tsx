@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
-import { obtenerFotos, eliminarFoto } from '../../utils/apiPhotosUtils';
-import './PhotosBackend.css';
+import { useEffect, useState } from 'react'
+import { obtenerFotos, eliminarFoto } from '../../utils/apiPhotosUtils'
+import './PhotosBackend.css'
 
 interface Photo {
   key: string;
@@ -11,18 +11,17 @@ const PhotosBackend: React.FC = () => {
   const [photos, setPhotos] = useState<Photo[]>([]);
   const [errorMessage, setErrorMessage] = useState<string>('');
 
-  // Función para obtener todas las fotos
   const fetchIncidencias = async () => {
     try {
       const data = await obtenerFotos();
-      setPhotos(data);
+      const filteredPhotos = data.filter((item: Photo) => item.key.startsWith('photos/'));
+      setPhotos(filteredPhotos);
     } catch (error) {
       console.error('Error al obtener las fotos:', error);
       setErrorMessage('Error al cargar las fotos.');
     }
   };
 
-  // Función para eliminar una foto
   const handleDelete = async (key: string) => {
     try {
       await eliminarFoto(key);
@@ -39,7 +38,12 @@ const PhotosBackend: React.FC = () => {
 
   return (
     <div className="photos-backend-container">
-      <h4>Incidencias Guardadas <span className='text-info'><i className="fa-solid fa-database"></i></span></h4>
+      <h4>
+        Incidencias Guardadas{' '}
+        <span className="text-info">
+          <i className="fa-solid fa-database"></i>
+        </span>
+      </h4>
       {errorMessage && <p className="error-message">{errorMessage}</p>}
       <div className="photo-gallery">
         {photos.map((photo) => (
@@ -55,7 +59,7 @@ const PhotosBackend: React.FC = () => {
         ))}
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default PhotosBackend;
+export default PhotosBackend
