@@ -1,14 +1,19 @@
-import { useNavigate } from 'react-router-dom';
-import { useContext, useEffect, useState } from 'react';
-import { AppContext } from '../../context/GlobalState';
-import { cargarDatosPorAuditor } from '../../utils/apiUtils';
-import './DocumentacionView.css';
+import { useNavigate } from 'react-router-dom'
+import { useContext, useEffect, useState } from 'react'
+import { AppContext } from '../../context/GlobalState'
+import { obtenerPDFs } from '../../utils/apiPdfUtils'
+import './DocumentacionView.css'
+
+interface PDFData {
+  key: string;
+  url: string;
+}
 
 const DocumentacionView: React.FC = () => {
   const navigate = useNavigate();
   const context = useContext(AppContext);
   const [loading, setLoading] = useState(true);
-  const [desviaciones, setDesviaciones] = useState<any[]>([]);
+  const [pdfs, setPdfs] = useState<PDFData[]>([]);
   const [visibleMenuIndex, setVisibleMenuIndex] = useState<number | null>(null);
 
   if (!context) {
@@ -16,24 +21,47 @@ const DocumentacionView: React.FC = () => {
   }
 
   const { state } = context;
-  const numeroAuditoria = state.auditSheetData.numeroAuditoria;
-  const auditor = state.userName || '';
-  const authToken = state.authToken || '';
+  const numeroAuditoria = state.auditSheetData?.numeroAuditoria;
 
   useEffect(() => {
-    const cargarDatos = async () => {
+    const fetchPDFs = async () => {
       try {
-        const datos = await cargarDatosPorAuditor(auditor, authToken);
-        setDesviaciones(datos);
+        const response = await obtenerPDFs();
+        setPdfs(response); 
         setLoading(false);
       } catch (error) {
-        console.error('Error al cargar los datos del auditor:', error);
+        console.error('Error al obtener los PDFs:', error);
         setLoading(false);
       }
     };
 
-    cargarDatos();
-  }, [auditor, authToken]);
+    fetchPDFs();
+  }, []);
+
+  const extractNumeroAuditoria = (key: string): string | null => {
+    const matchAuditoria = key.match(/detalle_auditoria_(\d+)_/);
+    const matchRequerimiento = key.match(/_auditoria_bpm_(\d+)_/);
+    const matchLuminometria = key.match(/_luminometria_(\d+)_/);
+    const matchEtaResumen = key.match(/_eta_resumen_(\d+)_/);
+  
+    if (matchAuditoria) {
+      return matchAuditoria[1];
+    } else if (matchRequerimiento) {
+      return matchRequerimiento[1];
+    } else if (matchLuminometria) {
+      return matchLuminometria[1];
+    } else if (matchEtaResumen) {
+      return matchEtaResumen[1];
+    }
+  
+    return null;
+  };
+  
+  const pdfsFiltrados = Array.from(
+    new Set(pdfs.map((pdf) => extractNumeroAuditoria(pdf.key)))
+  ).map((numeroAuditoria) => {
+    return pdfs.find((pdf) => extractNumeroAuditoria(pdf.key) === numeroAuditoria);
+  });
 
   const handleGoToHome = () => {
     navigate('/');
@@ -43,79 +71,75 @@ const DocumentacionView: React.FC = () => {
     setVisibleMenuIndex(visibleMenuIndex === index ? null : index);
   };
 
-  const goToRoute1 = (id: number, numeroRequerimiento: string) => {
+  const goToRoute1 = (numeroRequerimiento: string) => {
     navigate('/informe-ejecutivo', {
-      state: { id, numero_requerimiento: numeroRequerimiento },
+      state: { numero_requerimiento: numeroRequerimiento },
     });
   };
 
-  const goToControlDesviaciones = (id: number, numeroRequerimiento: string) => {
+  const goToControlDesviaciones = (numeroRequerimiento: string) => {
     navigate('/doc-desviaciones', {
-      state: { id, numero_requerimiento: numeroRequerimiento },
+      state: { numero_requerimiento: numeroRequerimiento },
     });
   };
 
-  const handleGoDownloadSummary = (id: number, numeroRequerimiento: string) => {
+  const handleGoDownloadSummary = (numeroRequerimiento: string) => {
     navigate('/resumen-descarga', {
-      state: { id, numero_requerimiento: numeroRequerimiento },
+      state: { numero_requerimiento: numeroRequerimiento },
     });
   };
 
   const handleToGoPhotos = () => {
     navigate('/evidencia-fotografica');
-  }
-
-  const desviacionesFiltradas = Array.from(new Set(desviaciones.map(d => d.numero_requerimiento)))
-    .map(numero_requerimiento => {
-      return desviaciones.find(d => d.numero_requerimiento === numero_requerimiento);
-    });
+  };
 
   return (
     <div className="documentacion-container">
-      <h3 className='fw-bold'>Documentación</h3>
+      <h3 className="fw-bold">Documentación</h3>
 
       <div className="doc-last-audit">
         <h4>Última Auditoria : {numeroAuditoria}</h4>
       </div>
 
       {loading ? (
-        <div>Cargando desviaciones...</div>
+        <div>Cargando PDFs...</div>
       ) : (
         <div className="desviaciones">
-          {desviacionesFiltradas.length > 0 ? (
+          {pdfsFiltrados.length > 0 ? (
             <div className="desviaciones-cards">
-              {desviacionesFiltradas.map((desviacion, index) => (
-                <div className="card" key={index} onClick={() => toggleMenu(index)}>
-                  <p>Auditoria <span className='text-warning fw-bold'>:</span> {desviacion?.numero_requerimiento}</p>
-                  <div className="card-icon">
-                    <i className="fa-solid fa-suitcase"></i>
-                  </div>
-
-                  {visibleMenuIndex === index && (
-                    <div className="dropdown-menu">
-                      <button onClick={handleToGoPhotos}>
-                      <i className="fa-regular fa-image"></i>
-                        Evidencia Fotografica
-                      </button>
-                      <button className='btn-doc-editar' onClick={() => goToControlDesviaciones(desviacion?.id, desviacion?.numero_requerimiento)}>
-                      <i className="fa-regular fa-pen-to-square"></i>
-                        Editar Desviaciones
-                      </button>
-                      <button onClick={() => handleGoDownloadSummary(desviacion?.id, desviacion?.numero_requerimiento)}>
-                        <i className="fa-solid fa-file"></i>
-                        Resumen Ejecutivo
-                      </button>
-                      <button onClick={() => goToRoute1(desviacion?.id, desviacion?.numero_requerimiento)}>
-                        <i className="fa-solid fa-file"></i>
-                        Informe Ejecutivo
-                      </button>
+              {pdfsFiltrados.map((pdf, index) => {
+                const numeroAuditoria = extractNumeroAuditoria(pdf?.key || '');
+                return (
+                  <div className="card" key={index} onClick={() => toggleMenu(index)}>
+                    <p>
+                      Auditoria <span className="text-warning fw-bold">:</span> {numeroAuditoria}
+                    </p>
+                    <div className="card-icon">
+                      <i className="fa-solid fa-suitcase"></i>
                     </div>
-                  )}
-                </div>
-              ))}
+
+                    {visibleMenuIndex === index && (
+                      <div className="dropdown-menu">
+                        <button onClick={handleToGoPhotos}>
+                          <i className="fa-regular fa-image"></i> Evidencia Fotográfica
+                        </button>
+                        <button className="btn-doc-editar" onClick={() => goToControlDesviaciones(numeroAuditoria || '')}>
+                          <i className="fa-regular fa-pen-to-square"></i> Editar Desviaciones
+                        </button>
+                        <button onClick={() => handleGoDownloadSummary(numeroAuditoria || '')}>
+                          <i className="fa-solid fa-file"></i> Resumen Ejecutivo
+                        </button>
+                        <button onClick={() => goToRoute1(numeroAuditoria || '')}>
+                          <i className="fa-solid fa-file"></i> Informe Ejecutivo
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
             </div>
           ) : (
-            <p>No se encontraron desviaciones para el auditor.</p>
+            <p>No se encontraron PDFs para el auditor.</p>
           )}
         </div>
       )}
@@ -126,7 +150,7 @@ const DocumentacionView: React.FC = () => {
         </button>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default DocumentacionView;
+export default DocumentacionView
