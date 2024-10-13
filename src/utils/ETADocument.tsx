@@ -21,14 +21,14 @@ interface MyDocumentProps {
   images: string[];
 }
 
-const MyDocument: React.FC<MyDocumentProps> = ({ images }) => (
+const ETADocument: React.FC<MyDocumentProps> = ({ images }) => (
   <Document>
     <Page size="A4" style={styles.page}>
       <View style={styles.section}>
         <Text>Auditoria BPM</Text>
       </View>
       <View style={styles.section}>
-        <Text>Resumen de Auditoría</Text>
+        <Text>ETA</Text>
       </View>
 
       {images.map((image, index) => (
@@ -40,4 +40,4 @@ const MyDocument: React.FC<MyDocumentProps> = ({ images }) => (
   </Document>
 );
 
-export default MyDocument;
+export default ETADocument;

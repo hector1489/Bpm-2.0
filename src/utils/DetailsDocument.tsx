@@ -21,23 +21,19 @@ interface MyDocumentProps {
   images: string[];
 }
 
-const MyDocument: React.FC<MyDocumentProps> = ({ images }) => (
+const DetailsDocument: React.FC<MyDocumentProps> = ({ images }) => (
   <Document>
-    <Page size="A4" style={styles.page}>
-      <View style={styles.section}>
-        <Text>Auditoria BPM</Text>
-      </View>
-      <View style={styles.section}>
-        <Text>Resumen de Auditoría</Text>
-      </View>
-
-      {images.map((image, index) => (
-        <View key={index} style={styles.section}>
+    {images.map((image, index) => (
+      <Page key={index} size="A4" style={styles.page}>
+        <View style={styles.section}>
+          <Text>Auditoria BPM - Detalle {index + 1}</Text>
+        </View>
+        <View style={styles.section}>
           <Image src={image} style={styles.image} />
         </View>
-      ))}
-    </Page>
+      </Page>
+    ))}
   </Document>
 );
 
-export default MyDocument;
+export default DetailsDocument;

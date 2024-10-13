@@ -28,14 +28,24 @@ const DesviacionesTable: React.FC = () => {
 
   useEffect(() => {
     if (desviaciones) {
-      const filteredDesviaciones = desviaciones.filter(desviacion => {
+      const formatDate = (dateString: string | null | undefined): string => {
+        return dateString ? dateString.split('T')[0] : DEFAULT_ANSWER;
+      };
+  
+      const filteredDesviaciones = desviaciones.map(desviacion => ({
+        ...desviacion,
+        fecha_recepcion_solicitud: formatDate(desviacion.fecha_recepcion_solicitud),
+        fecha_solucion_programada: formatDate(desviacion.fecha_solucion_programada),
+      })).filter(desviacion => {
         const isAuditorMatch = desviacion.auditor === context?.state?.userName;
         const isRequirementMatch = numero_requerimiento ? desviacion.numero_requerimiento === numero_requerimiento : true;
         return isAuditorMatch && isRequirementMatch;
       });
+  
       setLocalDesviaciones(filteredDesviaciones);
     }
   }, [desviaciones, numero_requerimiento, context?.state?.userName, reloadData]);
+  
 
   const eliminarFila = async (id: number) => {
     const confirmDelete = window.confirm("¿Estás seguro de que deseas eliminar esta fila?");

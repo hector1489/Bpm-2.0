@@ -5,7 +5,7 @@ import { AppContext } from '../../context/GlobalState';
 import './ETA.css';
 import html2canvas from 'html2canvas';
 import { pdf } from '@react-pdf/renderer';
-import MyDocument from '../../utils/MyDocument';
+import ETADocument from '../../utils/ETADocument';
 import { subirPDF } from '../../utils/apiPdfUtils';
 import logos from '../../assets/img/index'
 
@@ -29,7 +29,11 @@ const ETA: React.FC = () => {
     const element = document.querySelector('.eta-container') as HTMLElement;
     if (element) {
       setTimeout(async () => {
-        const canvas = await html2canvas(element);
+        const canvas = await html2canvas(element, {
+          scale: 3,
+          useCORS: true, 
+          ignoreElements: (el) => el.classList.contains('detail-button') || el.classList.contains('buttons-summary-logo') // Excluir los botones
+        });
         const dataUrl = canvas.toDataURL('image/png');
         setImages([dataUrl]);
       }, 1000);
@@ -88,7 +92,7 @@ const ETA: React.FC = () => {
 
   const handleNext = async () => {
     if (images.length > 0) {
-      const doc = <MyDocument images={images} />;
+      const doc = <ETADocument images={images} />;
 
       const pdfBlob = await pdf(doc).toBlob();
       const pdfFile = new File([pdfBlob], `eta_resumen_${numeroAuditoria}_${Date.now()}.pdf`, {

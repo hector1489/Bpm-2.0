@@ -32,18 +32,37 @@ const AuditSummary: React.FC = () => {
   const captureSection = async (selector: string) => {
     const element = document.querySelector(selector) as HTMLElement;
     if (element) {
-      const canvas = await html2canvas(element);
+      const canvas = await html2canvas(element, {
+        scale: 2,
+        useCORS: true,
+      });
       const dataUrl = canvas.toDataURL('image/png');
       return dataUrl;
     }
     return '';
   };
+  
 
   const handleCaptureImages = async () => {
+    const buttons = document.querySelector('.buttons-summary-circle') as HTMLElement;
+    const buttonsSummaryLogo = document.querySelector('.buttons-summary-logo') as HTMLElement;
+    const downloadButton = document.querySelector('.fa-download')?.parentElement as HTMLElement;
+  
+    if (buttons) buttons.style.display = 'none';
+    if (buttonsSummaryLogo) buttonsSummaryLogo.style.display = 'none';
+    if (downloadButton) downloadButton.style.display = 'none';
+  
+    await new Promise(resolve => setTimeout(resolve, 500));
+  
     const image1 = await captureSection('.summary-container');
-
+  
+    if (buttons) buttons.style.display = 'flex';
+    if (buttonsSummaryLogo) buttonsSummaryLogo.style.display = 'flex';
+    if (downloadButton) downloadButton.style.display = 'inline-block';
+  
     setImages([image1]);
   };
+  
 
   useEffect(() => {
     handleCaptureImages();
@@ -173,6 +192,7 @@ const AuditSummary: React.FC = () => {
     handleGoToDetails();    
   }
 
+  
 
 
   return (
@@ -208,7 +228,6 @@ const AuditSummary: React.FC = () => {
         </div>
 
       </div>
-
 
 
     </div>

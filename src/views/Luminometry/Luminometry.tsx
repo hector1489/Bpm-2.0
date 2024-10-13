@@ -5,7 +5,7 @@ import { AppContext } from '../../context/GlobalState'
 import './Luminometry.css'
 import html2canvas from 'html2canvas'
 import { pdf } from '@react-pdf/renderer'
-import MyDocument from '../../utils/MyDocument'
+import LUMDocument from '../../utils/LumDocument'
 import { subirPDF } from '../../utils/apiPdfUtils'
 import logos from '../../assets/img/index'
 
@@ -31,13 +31,17 @@ const Luminometry: React.FC = () => {
 
   const handleCaptureImages = async () => {
     const element = document.querySelector('.lum-container') as HTMLElement;
-    if (element) {
-      setTimeout(async () => {
-        const canvas = await html2canvas(element);
-        const dataUrl = canvas.toDataURL('image/png');
-        setImages([dataUrl]);
-      }, 1000);
-    }
+  if (element) {
+    setTimeout(async () => {
+      const canvas = await html2canvas(element, {
+        scale: 3,
+        useCORS: true, 
+        ignoreElements: (el) => el.classList.contains('detail-button') || el.classList.contains('buttons-summary-logo') // Excluir los botones
+      });
+      const dataUrl = canvas.toDataURL('image/png');
+      setImages([dataUrl]);
+    }, 1000);
+  }
   };
 
   useEffect(() => {
@@ -48,7 +52,7 @@ const Luminometry: React.FC = () => {
 
   const handleNext = async () => {
     if (images.length > 0) {
-      const doc = <MyDocument images={images} />;
+      const doc = <LUMDocument images={images} />;
 
       const pdfBlob = await pdf(doc).toBlob();
       const pdfFile = new File([pdfBlob], `luminometria_${numeroAuditoria}_${Date.now()}.pdf`, {

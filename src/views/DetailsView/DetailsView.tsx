@@ -3,15 +3,15 @@ import { AppContext } from '../../context/GlobalState';
 import { useNavigate } from 'react-router-dom';
 import html2canvas from 'html2canvas';
 import { pdf } from '@react-pdf/renderer';
-import MyDocument from '../../utils/MyDocument';
-import logos from '../../assets/img/index'
+import DetailsDocument from '../../utils/DetailsDocument';
+import logos from '../../assets/img/index';
 import './DetailsView.css';
 import { AverageTable, PhotoAudit, DetailsTable } from '../../components';
 import { subirPDF } from '../../utils/apiPdfUtils';
 
-const logoHome = logos.logoHome
-const logoLum = logos.logoLum
-const logoTra = logos.logoTra
+const logoHome = logos.logoHome;
+const logoLum = logos.logoLum;
+const logoTra = logos.logoTra;
 
 const DetailsView: React.FC = () => {
   const navigate = useNavigate();
@@ -24,20 +24,34 @@ const DetailsView: React.FC = () => {
 
   const { state } = context;
 
-  const handleCaptureImages = async () => {
-    const element = document.querySelector('.detail-container') as HTMLElement;
+  const captureSection = async (selector: string) => {
+    const element = document.querySelector(selector) as HTMLElement;
     if (element) {
-      const canvas = await html2canvas(element);
+      const canvas = await html2canvas(element, {
+        scale: 2,
+        width: element.scrollWidth,
+        height: element.scrollHeight,
+        useCORS: true,
+        ignoreElements: (el) => el.classList.contains('detail-button') || el.classList.contains('buttons-summary-logo')
+      });
       const dataUrl = canvas.toDataURL('image/png');
-      setImages([dataUrl]);
+      return dataUrl;
     }
+    return '';
+  };
+
+  const handleCaptureImages = async () => {
+    const image1 = await captureSection('.details-table-container');
+    const image2 = await captureSection('.average-table-container');
+    const image3 = await captureSection('.photo-audit-container');
+
+    setImages([image1, image2, image3]);
   };
 
   useEffect(() => {
     handleCaptureImages();
   }, []);
 
-  // Navegación
   const handleGoToAuditSummary = () => {
     navigate('/resumen-auditoria');
   };
@@ -56,17 +70,17 @@ const DetailsView: React.FC = () => {
 
   const handleNext = async () => {
     if (images.length > 0) {
-      const doc = <MyDocument images={images} />;
-  
+      const doc = <DetailsDocument images={images} />;
+
       const pdfBlob = await pdf(doc).toBlob();
       
       const numeroAuditoria = state.auditSheetData.numeroAuditoria || 'sin_numero';
-  
+
       const pdfFile = new File([pdfBlob], `detalle_auditoria_${numeroAuditoria}_${Date.now()}.pdf`, {
         type: 'application/pdf',
         lastModified: Date.now(),
       });
-  
+
       try {
         const result = await subirPDF(pdfFile, pdfFile.name);
         alert('PDF enviado exitosamente');
@@ -77,34 +91,35 @@ const DetailsView: React.FC = () => {
     }
 
     handleGoToLuminometry();
-  }
-  
+  };
 
   return (
     <div className="detail-container">
       <h3 className='fw-bold'>Detalle</h3>
       <p>Auditoria : <span>{state.auditSheetData.numeroAuditoria}</span></p>
-      <div>
+
+      <div className="details-table-container">
         <DetailsTable />
       </div>
-      <div>
+
+      <div className="average-table-container">
         <AverageTable />
       </div>
-      <div>
+
+      <div className="photo-audit-container">
         <PhotoAudit photos={state.photos} />
       </div>
 
       <div className="detail-button">
-
-      <button onClick={handleNext}>
-        Siguiente <i className="fa-solid fa-arrow-right"></i>
-      </button>
-
+        <button onClick={handleNext}>
+          Siguiente <i className="fa-solid fa-arrow-right"></i>
+        </button>
       </div>
+
 
       <div className="buttons-summary-logo">
         <div className="btn" onClick={handleGoToAuditSummary} title='Volver'>
-          <i className="fa-solid fa-arrow-left" ></i>
+          <i className="fa-solid fa-arrow-left"></i>
         </div>
         <div className="btn">
           <img src={logoLum} alt="lum" onClick={handleGoToLuminometry} title='LUM'/>
@@ -115,10 +130,7 @@ const DetailsView: React.FC = () => {
         <div className="btn">
           <img src={logoHome} alt="home" onClick={handleGoToHome} title='Home'/>
         </div>
-
       </div>
-      
-      
     </div>
   );
 };
