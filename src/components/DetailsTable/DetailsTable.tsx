@@ -27,6 +27,7 @@ const DetailsTable: React.FC = () => {
 
       return {
         numero_auditoria: numeroAuditoria,
+        columna1: question.id,
         columna2: currentModule?.module || 'Unknown Module',
         columna3: question.question,
         columna4: question.answer || 'No answer yet',

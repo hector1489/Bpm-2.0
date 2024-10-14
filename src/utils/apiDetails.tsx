@@ -6,7 +6,7 @@ const BASE_URL = 'https://bpm-backend.onrender.com';
 export const createTablaDetail = async (data: any) => {
 
   try {
-    const response = await axios.post(`${BASE_URL}/details/tabla-details`, { data });
+    const response = await axios.post(`${BASE_URL}/details/tabla-details`, data );
     return response.data;
   } catch (error) {
     console.error('Error al crear el detalle:', error);
