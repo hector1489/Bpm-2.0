@@ -1,7 +1,7 @@
 import { useState, useEffect, useContext, useMemo } from 'react';
 import { cargarDesviacionesDesdeBackend, actualizarDesviacionBackend } from '../utils/apiUtils';
 import { AppContext } from '../context/GlobalState';
-import { DesviacionResponse } from '../interfaces/interfaces'; // Asegúrate de importar la interfaz correcta
+import { DesviacionResponse } from '../interfaces/interfaces';
 
 export const useDesviaciones = () => {
   const context = useContext(AppContext);

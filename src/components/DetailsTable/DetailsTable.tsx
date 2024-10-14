@@ -1,6 +1,7 @@
-import { useContext } from 'react';
+import { useContext, useEffect } from 'react';
 import { AppContext } from '../../context/GlobalState';
 import './DetailsTable.css';
+import { createTablaDetail } from '../../utils/apiDetails';
 
 const DetailsTable: React.FC = () => {
   const context = useContext(AppContext);
@@ -10,6 +11,41 @@ const DetailsTable: React.FC = () => {
   }
 
   const { state } = context;
+
+  const handleSendToBackend = async () => {
+    
+    const dataToSend = state.IsHero.map((question) => {
+      const numeroAuditoria = state.auditSheetData.numeroAuditoria
+      const currentModule = state.modules.find(module => {
+        if (!module.question) {
+          return false;
+        }
+        const moduleQuestions = Array.isArray(module.question) ? module.question : [module.question];
+        const questionText = Array.isArray(question.question) ? question.question.join(' ') : question.question;
+        return moduleQuestions.some(q => questionText.includes(q));
+      });
+
+      return {
+        numero_auditoria: numeroAuditoria,
+        columna2: currentModule?.module || 'Unknown Module',
+        columna3: question.question,
+        columna4: question.answer || 'No answer yet',
+      
+      };
+    });
+
+    try {
+      const response = await createTablaDetail(dataToSend);
+      console.log('Datos enviados con éxito:', response);
+    } catch (error) {
+      console.error('Error al enviar los datos:', error);
+    }
+  };
+
+
+  useEffect(() => {
+    handleSendToBackend();
+  }, []);
 
   return (
     <table className="details-table">
@@ -27,7 +63,7 @@ const DetailsTable: React.FC = () => {
             if (!module.question) {
               return false;
             }
-            
+
             const moduleQuestions = Array.isArray(module.question) ? module.question : [module.question];
             const questionText = Array.isArray(question.question) ? question.question.join(' ') : question.question;
 
@@ -46,6 +82,6 @@ const DetailsTable: React.FC = () => {
       </tbody>
     </table>
   );
-}
+};
 
 export default DetailsTable;
