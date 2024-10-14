@@ -67,8 +67,6 @@ export const enviarDatosAuditoria = async (desviaciones: any, authToken: string)
 };
 
 
-
-// Función para cargar desviaciones desde el backend
 export const cargarDesviacionesDesdeBackend = async (authToken: string) => {
   try {
     const response = await axios.get(`${BASE_URL}/desviaciones/desviaciones`, {
@@ -77,7 +75,7 @@ export const cargarDesviacionesDesdeBackend = async (authToken: string) => {
         'Authorization': `Bearer ${authToken}`,
       },
     });
-    
+
     return response.data;
   } catch (error) {
     console.error('Error al recuperar las desviaciones:', error);
@@ -120,7 +118,6 @@ export const actualizarDesviacionBackend = async (
     authToken: handleEmptyField(authToken),
   };
 
-  // Log para ver los valores que estamos enviando
   console.log("Datos actualizados que se enviarán al backend:", safeValues);
 
   try {

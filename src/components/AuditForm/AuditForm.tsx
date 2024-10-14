@@ -10,7 +10,7 @@ const AuditForm: React.FC = () => {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [formData, setFormData] = useState<Answer[]>([]);
   const [photoTaken, setPhotoTaken] = useState<boolean>(false);
-  const [errorMessage, setErrorMessage] = useState<string>(''); // Estado para manejar el mensaje de error
+  const [errorMessage, setErrorMessage] = useState<string>('');
   const context = useContext(AppContext);
   const navigate = useNavigate();
   const videoRef = useRef<HTMLVideoElement | null>(null);
