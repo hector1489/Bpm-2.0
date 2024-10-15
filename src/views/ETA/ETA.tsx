@@ -1,50 +1,23 @@
 import { ETAGraph, ETATable } from '../../components';
 import { useNavigate } from 'react-router-dom';
-import { useContext, useState, useEffect } from 'react';
+import { useContext } from 'react';
 import { AppContext } from '../../context/GlobalState';
 import './ETA.css';
-import html2canvas from 'html2canvas';
-import { pdf } from '@react-pdf/renderer';
-import ETADocument from '../../utils/ETADocument';
-import { subirPDF } from '../../utils/apiPdfUtils';
-import logos from '../../assets/img/index'
+import logos from '../../assets/img/index';
 
-const logoDetails = logos.logoDetails
-const logoHome = logos.logoHome
-const logoLum = logos.logoLum
-
+const logoDetails = logos.logoDetails;
+const logoHome = logos.logoHome;
+const logoLum = logos.logoLum;
 
 const ETA: React.FC = () => {
   const navigate = useNavigate();
   const context = useContext(AppContext);
-  const [images, setImages] = useState<string[]>([]);
 
   if (!context) {
     return <div>Error: Context is not available.</div>;
   }
 
   const { state } = context;
-
-  const handleCaptureImages = async () => {
-    const element = document.querySelector('.eta-container') as HTMLElement;
-    if (element) {
-      setTimeout(async () => {
-        const canvas = await html2canvas(element, {
-          scale: 3,
-          useCORS: true, 
-          ignoreElements: (el) => el.classList.contains('detail-button') || el.classList.contains('buttons-summary-logo') // Excluir los botones
-        });
-        const dataUrl = canvas.toDataURL('image/png');
-        setImages([dataUrl]);
-      }, 1000);
-    }
-  };
-
-  useEffect(() => {
-    handleCaptureImages();
-  }, []);
-
-
 
   const calculatePercentage = (moduleId: number): number => {
     try {
@@ -70,16 +43,14 @@ const ETA: React.FC = () => {
       console.error('Error calculating percentage for module:', moduleId, error);
       return 100;
     }
-  }
-
-  const numeroAuditoria = state.auditSheetData.numeroAuditoria || 'sin_numero';
+  };
 
   const handleGoToAuditSummary = () => {
     navigate('/resumen-auditoria');
   };
 
   const handleGoToHome = () => {
-    navigate('/');
+    navigate('/home');
   };
 
   const handleGoToDetails = () => {
@@ -87,31 +58,8 @@ const ETA: React.FC = () => {
   };
 
   const handleGoToLuminometry = () => {
-    navigate('/luminometria')
-  }
-
-  const handleNext = async () => {
-    if (images.length > 0) {
-      const doc = <ETADocument images={images} />;
-
-      const pdfBlob = await pdf(doc).toBlob();
-      const pdfFile = new File([pdfBlob], `eta_resumen_${numeroAuditoria}_${Date.now()}.pdf`, {
-        type: 'application/pdf',
-        lastModified: Date.now(),
-      });
-
-      try {
-        const result = await subirPDF(pdfFile, pdfFile.name);
-        alert('PDF enviado exitosamente');
-        console.log('PDF enviado exitosamente:', result);
-      } catch (error) {
-        console.error('Error al enviar el PDF:', error);
-      }
-    }
-
-    handleGoToHome();
-  }
-
+    navigate('/luminometria');
+  };
 
   return (
     <div className="eta-container">
@@ -123,12 +71,10 @@ const ETA: React.FC = () => {
       <ETATable />
 
       <div className="detail-button">
-        <button onClick={handleNext}>
+        <button onClick={handleGoToHome}>
           Siguiente <i className="fa-solid fa-arrow-right"></i>
         </button>
-
       </div>
-
 
       <div className="buttons-summary-logo">
         <div className="btn" onClick={handleGoToAuditSummary} title='Volver'>
@@ -143,7 +89,6 @@ const ETA: React.FC = () => {
         <div className="btn">
           <img src={logoHome} alt="home" onClick={handleGoToHome} title='Home' />
         </div>
-
       </div>
     </div>
   );

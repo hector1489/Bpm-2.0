@@ -64,7 +64,7 @@ const DocumentacionView: React.FC = () => {
   });
 
   const handleGoToHome = () => {
-    navigate('/');
+    navigate('/home');
   };
 
   const toggleMenu = (index: number) => {

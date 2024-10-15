@@ -112,7 +112,7 @@ const AuditForm: React.FC = () => {
 
 
         const questionText = currentQuestion?.question || 'sin_pregunta';
-        const sanitizedQuestion = questionText.replace(/\s+/g, '_').toLowerCase(); // Reemplaza espacios por guiones bajos
+        const sanitizedQuestion = questionText.replace(/\s+/g, '_').toLowerCase();
         const fileName = `${sanitizedQuestion}.png`;
 
         addPhoto(currentQuestion?.question || '', photoUrl);
@@ -146,7 +146,7 @@ const AuditForm: React.FC = () => {
   };
 
   const handleGoToHome = () => {
-    navigate('/');
+    navigate('/home');
   };
 
   return (

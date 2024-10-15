@@ -1,38 +1,123 @@
-.table-responsive {
+/* Estilos específicos para la tabla audit-summary */
+.audit-summary {
+  margin: 20px auto;
+  width: 100%;
+}
+
+.audit-summary .table-responsive {
   overflow-x: auto;
 }
 
-.table {
+.audit-summary .table {
   width: 100%;
   border-collapse: collapse;
+  margin-bottom: 20px;
 }
 
-.table th,
-.table td {
+.audit-summary .table th,
+.audit-summary .table td {
   border: 1px solid #ddd;
-  padding: 8px;
+  padding: 10px;
   text-align: left;
 }
 
-#tabla-average th {
-  background-color: skyblue;
+.audit-summary .table th {
+  background-color: #005f99; /* Color de encabezado distintivo */
+  color: white;
   font-weight: bold;
+  text-transform: uppercase;
 }
 
-.table tr:nth-child(even) {
-  background-color: #f9f9f9;
+.audit-summary .table tbody tr:nth-child(even) {
+  background-color: #f9f9f9; /* Color alterno de filas */
 }
 
-.table tr:hover {
+.audit-summary .table tbody tr:hover {
   background-color: #f1f1f1;
 }
 
-#average-table-body {
-  background-color: #fff8dc;
+.audit-summary .bg-warning {
+  background-color: #ffc107;
+  font-weight: bold;
 }
 
-.bg-sky {
-  background-color: skyblue;
+.audit-summary .table tfoot td {
+  font-weight: bold;
+  font-size: 1.1rem;
+  text-align: right;
+}
+/* Estilos para pantallas pequeñas */
+@media screen and (max-width: 768px) {
+  .audit-summary .table,
+  .audit-summary .table thead,
+  .audit-summary .table tbody,
+  .audit-summary .table th,
+  .audit-summary .table td,
+  .audit-summary .table tr {
+    display: block;
+    width: 100%;
+  }
+
+  .audit-summary .table thead {
+    display: none;
+  }
+
+  .audit-summary .table tbody tr {
+    margin-bottom: 20px;
+    border-bottom: 2px solid #ddd;
+  }
+
+  .audit-summary .table td {
+    display: flex;
+    justify-content: space-between;
+    padding-left: 50%;
+    position: relative;
+    border: none;
+    border-bottom: 1px solid #ddd;
+  }
+
+  .audit-summary .table td:before {
+    content: attr(data-label);
+    position: absolute;
+    left: 0;
+    width: 45%;
+    padding-left: 15px;
+    font-weight: bold;
+    text-transform: uppercase;
+    color: #005f99;
+  }
+
+  /* Ajustar el pie de página para ocupar todo el ancho */
+  .audit-summary .table tfoot {
+    display: table; /* Cambiar el display de tfoot */
+    width: 100%; /* Asegurar que ocupe todo el ancho */
+  }
+
+  .audit-summary .table tfoot td {
+    display: table-cell; /* Evitar el comportamiento tipo tarjeta */
+    padding: 10px;
+    text-align: right;
+    font-weight: bold;
+  }
 }
 
+@media screen and (max-width: 480px) {
+  .audit-summary .table td {
+    font-size: 0.8rem;
+    padding: 8px;
+  }
 
+  .audit-summary .table td:before {
+    font-size: 0.8rem;
+  }
+
+  #tfood-average-table {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 0;
+    font-weight: bold;
+    font-size: 16px;
+    text-align: left;
+    width: 100%;
+  }
+}

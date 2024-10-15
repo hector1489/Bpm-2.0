@@ -1,28 +1,91 @@
-.table-responsive {
+.table-responsive-audit {
   overflow-x: auto;
+  width: 100%;
+  -webkit-overflow-scrolling: touch;
 }
 
-.table {
+.audit-table {
   width: 100%;
   border-collapse: collapse;
 }
 
-.table th,
-.table td {
+.audit-table th,
+.audit-table td {
   border: 1px solid #ddd;
   padding: 8px;
   text-align: left;
+  white-space: nowrap;
 }
 
-#tabla-auditoria th {
+.audit-table th {
   background-color: skyblue;
   font-weight: bold;
 }
 
-.table tr:nth-child(even) {
+.audit-table tbody tr:nth-child(even) {
   background-color: #f9f9f9;
 }
 
-.table tr:hover {
+.audit-table tbody tr:hover {
   background-color: #f1f1f1;
+}
+
+.audit-table tfoot {
+  background-color: #ffeb3b;
+  font-weight: bold;
+  text-align: left;
+}
+
+/* Estilos para pantallas pequeñas */
+@media (max-width: 767px) {
+  .audit-table, 
+  .audit-table thead, 
+  .audit-table tbody, 
+  .audit-table th, 
+  .audit-table td, 
+  .audit-table tr, 
+  .audit-table tfoot {
+    display: block;
+    width: 100%;
+  }
+
+  .audit-table thead {
+    display: none; /* Ocultar encabezado en pantallas pequeñas */
+  }
+
+  .audit-table tr {
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+  }
+
+  /* Ajuste para mostrar el label y el contenido del td correctamente */
+  .audit-table td {
+    display: block;
+    padding: 8px;
+    font-size: 14px;
+    position: relative;
+    text-align: left;
+  }
+
+  .audit-table td::before {
+    content: attr(data-label); /* Usar el contenido de data-label */
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px; /* Añadir espacio entre el label y el contenido */
+    color: #333;
+    text-transform: uppercase;
+  }
+
+  .audit-table tfoot {
+    display: block;
+    width: 100%;
+  }
+
+  .audit-table tfoot td {
+    display: block;
+    text-align: right;
+    padding: 10px 0;
+    font-weight: bold;
+    font-size: 16px;
+  }
 }

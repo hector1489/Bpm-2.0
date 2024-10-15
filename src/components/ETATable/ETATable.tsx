@@ -76,40 +76,40 @@ const ETATable: React.FC = () => {
 
   return (
     <div className="eta-table-container">
-      <div className="legend">
-        <span className="legend-item" style={{ color: 'green' }}>●</span> 90% - 100%: Cumplimiento alto <br />
-        <span className="legend-item" style={{ color: 'yellow' }}>●</span> 75% - 89%: Cumplimiento medio <br />
-        <span className="legend-item" style={{ color: 'red' }}>●</span> 0% - 74%: Cumplimiento bajo
-      </div>
-      <div className="table-responsive">
-        <table id="tabla-warning" className="table-warning">
-          <thead>
-            <tr>
-              <th>Items Evaluados</th>
-              <th colSpan={5}>Preguntas Evaluadas</th>
-              <th colSpan={5}>Observaciones</th>
-            </tr>
-          </thead>
-          <tbody>
-            {questionsETA.map((module, index) => (
-              <tr key={index}>
-                <td>{module.module}</td>
-                <td colSpan={5}>
-                  {module.question.map((q, i) => (
-                    <div key={i}>{q}</div>
-                  ))}
-                </td>
-                <td colSpan={5}>
-                  {module.question.map((q, i) => (
-                    <div key={i}>{getAnswerForQuestion(q)}</div>
-                  ))}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+    <div className="legend">
+      <span className="legend-item" style={{ color: 'green' }}>●</span> 90% - 100%: Cumplimiento alto <br />
+      <span className="legend-item" style={{ color: 'yellow' }}>●</span> 75% - 89%: Cumplimiento medio <br />
+      <span className="legend-item" style={{ color: 'red' }}>●</span> 0% - 74%: Cumplimiento bajo
     </div>
+    <div className="table-responsive">
+      <table id="eta-warning-table" className="eta-table">
+        <thead>
+          <tr>
+            <th>Items Evaluados</th>
+            <th colSpan={5}>Preguntas Evaluadas</th>
+            <th colSpan={5}>Observaciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          {questionsETA.map((module, index) => (
+            <tr key={index}>
+              <td>{module.module}</td>
+              <td colSpan={5}>
+                {module.question.map((q, i) => (
+                  <div key={i}>{q}</div>
+                ))}
+              </td>
+              <td colSpan={5}>
+                {module.question.map((q, i) => (
+                  <div key={i}>{getAnswerForQuestion(q)}</div>
+                ))}
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  </div>
   )
 }
 

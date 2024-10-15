@@ -1,109 +1,101 @@
-.lum-container {
+#luminometry-table {
   width: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  padding: 20px;
+  border-collapse: collapse;
+  table-layout: fixed; /* Asegura que la tabla use el 100% del ancho */
 }
 
-.buttons-luminometry {
-  display: flex;
-  gap: 10px;
+#luminometry-table th,
+#luminometry-table td {
+  border: 1px solid #dee2e6;
+  padding: 0.5rem;
+  text-align: left;
+  vertical-align: middle;
 }
 
-.bg-light-green {
+#luminometry-table thead th {
+  vertical-align: bottom;
+  border-bottom: 2px solid #dee2e6;
+  background-color: #f8f9fa;
+}
+
+#luminometry-table tbody tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+/* Colores personalizados para las filas */
+#luminometry-table .bg-light-green {
   background-color: lightgreen;
 }
 
-.bg-yellow {
+#luminometry-table .bg-yellow {
   background-color: yellow;
 }
 
-.bg-red {
+#luminometry-table .bg-red {
   background-color: red;
+  color: white;
 }
 
-.bg-danger {
-  background-color: darkred;
-}
-
-.table {
-  width: 100%;
-  margin-bottom: 1rem;
-  background-color: transparent;
-  border-collapse: collapse;
-}
-
-.table th,
-.table td {
-  padding: 0.5rem;
-  text-align: center;
-  vertical-align: middle;
-  border: 1px solid #dee2e6;
-}
-
-.table thead th {
-  vertical-align: bottom;
-  border-bottom: 2px solid #dee2e6;
-}
-
-.table tbody+tbody {
-  border-top: 2px solid #dee2e6;
-}
-
-/* Responsiveness */
+/* Estilos responsive para pantallas pequeñas */
 @media (max-width: 768px) {
-  .table {
+  /* Ocultar el encabezado de la tabla */
+  #luminometry-table thead {
+    display: none;
+  }
+
+  /* Estilos para mostrar los labels al lado del contenido en pantallas pequeñas */
+  #luminometry-table, 
+  #luminometry-table tbody, 
+  #luminometry-table td, 
+  #luminometry-table tr {
+    display: block;
+    width: 100%;
+  }
+
+  /* Hacer que los td se comporten como bloques con labels al lado */
+  #luminometry-table td {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 10px;
+    position: relative;
+    text-align: left;
+    width: 100%;  /* Asegura que las celdas usen todo el ancho */
+    box-sizing: border-box;
+  }
+
+  /* Mostrar los labels como pseudo-elemento en pantallas pequeñas */
+  #luminometry-table td::before {
+    content: attr(data-label);  /* Usa el valor de data-label */
+    font-weight: bold;
+    text-transform: uppercase;
+    margin-right: 10px;
+    flex-basis: 40%;  /* Ocupa el 40% del ancho de la celda */
+    color: #333;
+  }
+
+  #luminometry-table td {
     font-size: 10px;
+    padding: 8px;
   }
 
-  .table th,
-  .table td {
-    padding: 0.25rem;
-  }
-
-  .table thead {
-    font-size: 0.9rem;
-  }
-
-  .btn-kpi{
-    display: none !important;
+  /* Asegurar que el pie de página también se muestre correctamente */
+  #luminometry-table tfoot td {
+    display: block;
+    text-align: right;
+    padding: 10px 0;
+    font-weight: bold;
+    font-size: 16px;
   }
 }
 
 @media (max-width: 576px) {
-  .table {
+  #luminometry-table {
     font-size: 8px;
   }
 
-  .table th,
-  .table td {
+  #luminometry-table th,
+  #luminometry-table td {
     padding: 0.1rem;
   }
-
-  .btn-kpi{
-    display: none !important;
-  }
-}
-
-/* Custom coloring */
-.table tbody tr:nth-child(even) {
-  background-color: #f2f2f2;
-}
-
-.table-light {
-  background-color: #f8f9fa;
-}
-
-.table-bordered {
-  border: 1px solid #dee2e6;
-}
-
-.text-center {
-  text-align: center;
-}
-
-.table tbody tr td {
-  white-space: nowrap;
 }

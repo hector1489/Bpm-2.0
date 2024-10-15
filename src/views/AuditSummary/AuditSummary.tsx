@@ -148,7 +148,7 @@ const AuditSummary: React.FC = () => {
 
 
   const handleGoToHome = () => {
-    navigate('/');
+    navigate('/home');
   }
 
   const handleGoToLuminometry = () => {

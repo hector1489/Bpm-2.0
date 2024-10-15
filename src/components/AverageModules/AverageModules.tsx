@@ -69,37 +69,39 @@ const AverageModules: React.FC = () => {
 
   return (
     <div className="audit-summary">
-      <div className="table-responsive">
-        <table id="tabla-auditoria" className="table table-bordered table-sm">
-          <thead>
-            <tr>
-              <th>N°</th>
-              <th>MODULO</th>
-              <th>ASPECTOS EVALUADOS</th>
-              <th>PONDERACIÓN (%)</th>
-              <th>PORCENTAJE (%)</th>
-            </tr>
-          </thead>
-          <tbody id="audit-table-body">
-            {groupedData.map((group, index) => (
-              <tr key={group.groupName} className="group-row">
-                <td>{state.modules.length + index + 1}</td>
-                <td>{group.groupName}</td>
-                <td>{group.aspectsEvaluated}</td>
-                <td>{group.weighing}</td>
-                <td>{group.average}%</td>
-              </tr>
-            ))}
-          </tbody>
-          <tfoot className='bg-warning'>
-            <tr>
-              <td colSpan={4}>PROMEDIO FINAL PONDERADO</td>
-              <td>{finalAverage}%</td>
-            </tr>
-          </tfoot>
-        </table>
-      </div>
-    </div>
+  <div className="table-responsive-audit">
+    <table id="tabla-auditoria" className="audit-table">
+      <thead>
+        <tr>
+          <th>N°</th>
+          <th>MODULO</th>
+          <th>ASPECTOS EVALUADOS</th>
+          <th>PONDERACIÓN (%)</th>
+          <th>PORCENTAJE (%)</th>
+        </tr>
+      </thead>
+      <tbody id="audit-table-body">
+        {groupedData.map((group, index) => (
+          <tr key={group.groupName} className="group-row">
+            <td data-label="N°">{index + 1}</td>
+            <td data-label="MODULO">{group.groupName}</td>
+            <td data-label="ASPECTOS EVALUADOS">{group.aspectsEvaluated}</td>
+            <td data-label="PONDERACIÓN (%)">{group.weighing}</td>
+            <td data-label="PORCENTAJE (%)">{group.average}%</td>
+          </tr>
+        ))}
+      </tbody>
+      <tfoot className="bg-warning">
+        <tr>
+          <td colSpan={4}>PROMEDIO FINAL PONDERADO</td>
+          <td>{finalAverage}%</td>
+        </tr>
+      </tfoot>
+    </table>
+  </div>
+</div>
+
+  
   )
 }
 

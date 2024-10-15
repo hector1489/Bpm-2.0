@@ -16,7 +16,7 @@ const PhotoEvidence: React.FC = () => {
   const { state } = context;
 
   const handleGoToHome = () => {
-    navigate('/');
+    navigate('/home');
   };
 
   return (

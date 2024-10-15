@@ -10,7 +10,7 @@ const DocDesviacionesTable: React.FC = () => {
   };
 
   const handleGoToHome = () => {
-    navigate('/');
+    navigate('/home');
   };
 
   return (

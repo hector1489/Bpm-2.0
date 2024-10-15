@@ -8,7 +8,7 @@ const ControlDesviaciones: React.FC = () => {
   const navigate = useNavigate()
 
   const handleGoToHome = () => {
-    navigate('/');
+    navigate('/home');
   };
 
 

@@ -16,7 +16,7 @@ const Analysis: React.FC = () => {
   }
 
   const handleGoToHome = () => {
-    navigate('/')
+    navigate('/home')
   }
 
   const handleDownloadPDF = () => {

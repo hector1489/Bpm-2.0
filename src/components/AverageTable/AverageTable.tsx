@@ -87,15 +87,15 @@ const AverageTable: React.FC = () => {
           <tbody id="average-table-body">
             {groupedData.map((group) => (
               <tr key={group.groupName} className={getRowClass(parseFloat(group.average))}>
-                <td>{group.groupName}</td>
-                <td>{group.average}%</td>
+                <td data-label="MODULO">{group.groupName}</td>
+                <td data-label="PORCENTAJE (%)">{group.average}%</td>
               </tr>
             ))}
           </tbody>
-          <tfoot>
+          <tfoot id='tfood-average-table'>
             <tr className='bg-warning'>
-              <td>PROMEDIO FINAL PONDERADO</td>
-              <td>{finalAverage}%</td>
+              <td data-label="PROMEDIO FINAL PONDERADO">PROMEDIO FINAL PONDERADO</td>
+              <td data-label="PORCENTAJE (%)">{finalAverage}%</td>
             </tr>
           </tfoot>
         </table>

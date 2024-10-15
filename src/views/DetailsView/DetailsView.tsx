@@ -1,13 +1,9 @@
-import { useContext, useState, useEffect } from 'react';
+import { useContext } from 'react';
 import { AppContext } from '../../context/GlobalState';
 import { useNavigate } from 'react-router-dom';
-import html2canvas from 'html2canvas';
-import { pdf } from '@react-pdf/renderer';
-import DetailsDocument from '../../utils/DetailsDocument';
 import logos from '../../assets/img/index';
 import './DetailsView.css';
 import { AverageTable, PhotoAudit, DetailsTable } from '../../components';
-import { subirPDF } from '../../utils/apiPdfUtils';
 
 const logoHome = logos.logoHome;
 const logoLum = logos.logoLum;
@@ -16,7 +12,6 @@ const logoTra = logos.logoTra;
 const DetailsView: React.FC = () => {
   const navigate = useNavigate();
   const context = useContext(AppContext);
-  const [images, setImages] = useState<string[]>([]);
 
   if (!context) {
     throw new Error('DetailsView debe ser utilizado dentro de un AppProvider');
@@ -24,40 +19,12 @@ const DetailsView: React.FC = () => {
 
   const { state } = context;
 
-  const captureSection = async (selector: string) => {
-    const element = document.querySelector(selector) as HTMLElement;
-    if (element) {
-      const canvas = await html2canvas(element, {
-        scale: 2,
-        width: element.scrollWidth,
-        height: element.scrollHeight,
-        useCORS: true,
-        ignoreElements: (el) => el.classList.contains('detail-button') || el.classList.contains('buttons-summary-logo')
-      });
-      const dataUrl = canvas.toDataURL('image/png');
-      return dataUrl;
-    }
-    return '';
-  };
-
-  const handleCaptureImages = async () => {
-    const image1 = await captureSection('.details-table-container');
-    const image2 = await captureSection('.average-table-container');
-    const image3 = await captureSection('.photo-audit-container');
-
-    setImages([image1, image2, image3]);
-  };
-
-  useEffect(() => {
-    handleCaptureImages();
-  }, []);
-
   const handleGoToAuditSummary = () => {
     navigate('/resumen-auditoria');
   };
 
   const handleGoToHome = () => {
-    navigate('/');
+    navigate('/home');
   };
 
   const handleGoToLuminometry = () => {
@@ -68,28 +35,7 @@ const DetailsView: React.FC = () => {
     navigate('/seremi');
   };
 
-  const handleNext = async () => {
-    if (images.length > 0) {
-      const doc = <DetailsDocument images={images} />;
-
-      const pdfBlob = await pdf(doc).toBlob();
-      
-      const numeroAuditoria = state.auditSheetData.numeroAuditoria || 'sin_numero';
-
-      const pdfFile = new File([pdfBlob], `detalle_auditoria_${numeroAuditoria}_${Date.now()}.pdf`, {
-        type: 'application/pdf',
-        lastModified: Date.now(),
-      });
-
-      try {
-        const result = await subirPDF(pdfFile, pdfFile.name);
-        alert('PDF enviado exitosamente');
-        console.log('PDF enviado exitosamente:', result);
-      } catch (error) {
-        console.error('Error al enviar el PDF:', error);
-      }
-    }
-
+  const handleNext = () => {
     handleGoToLuminometry();
   };
 
@@ -115,7 +61,6 @@ const DetailsView: React.FC = () => {
           Siguiente <i className="fa-solid fa-arrow-right"></i>
         </button>
       </div>
-
 
       <div className="buttons-summary-logo">
         <div className="btn" onClick={handleGoToAuditSummary} title='Volver'>

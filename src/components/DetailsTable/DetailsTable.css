@@ -1,4 +1,5 @@
-.details-table {
+/* Estilos generales para la tabla */
+.details-table-dt {
   width: 100%;
   border-collapse: collapse;
   margin: 20px 0;
@@ -7,13 +8,13 @@
   overflow-x: auto;
 }
 
-.details-table th,
-.details-table td {
+.details-table-dt th,
+.details-table-dt td {
   padding: 12px 15px;
   border: 1px solid #ddd;
 }
 
-.details-table th {
+.details-table-dt th {
   background-color: #00aaff;
   color: white;
   text-transform: uppercase;
@@ -21,15 +22,15 @@
   font-weight: bold;
 }
 
-.details-table tbody tr:nth-child(even) {
+.details-table-dt tbody tr:nth-child(even) {
   background-color: #f2f2f2;
 }
 
-.details-table tbody tr:hover {
+.details-table-dt tbody tr:hover {
   background-color: #ddd;
 }
 
-.details-table td {
+.details-table-dt td {
   font-family: 'Arial', sans-serif;
   color: #333;
   white-space: nowrap;
@@ -38,45 +39,55 @@
   max-width: 200px;
 }
 
-.details-table td a {
-  color: #00aaff;
-  text-decoration: none;
-}
-
-.details-table td a:hover {
-  text-decoration: underline;
-}
-
-.details-table .unknown-module {
-  color: red;
-}
-
+/* Estilos para pantallas pequeñas */
 @media screen and (max-width: 768px) {
-  .details-table {
-    font-size: 0.9rem;
+  .details-table-dt,
+  .details-table-dt thead,
+  .details-table-dt tbody,
+  .details-table-dt th,
+  .details-table-dt td,
+  .details-table-dt tr {
+    display: block;
+    width: 100%;
   }
 
-  .details-table th,
-  .details-table td {
-    padding: 10px;
+  .details-table-dt thead {
+    display: none;
   }
 
-  .details-table td {
-    max-width: 150px;
+  .details-table-dt tr {
+    margin-bottom: 20px;
+    border-bottom: 2px solid #ddd;
+  }
+
+  .details-table-dt td {
+    display: flex;
+    justify-content: space-between;
+    padding-left: 50%;
+    position: relative;
+  }
+
+  
+  .details-table-dt td:before {
+    content: attr(data-label);
+    position: absolute;
+    left: 0;
+    width: 45%;
+    padding-left: 15px;
+    font-weight: bold;
+    text-transform: uppercase;
+    color: #00aaff;
   }
 }
 
+/* Estilos para pantallas muy pequeñas */
 @media screen and (max-width: 480px) {
-  .details-table {
+  .details-table-dt td {
     font-size: 0.8rem;
+    padding: px;
   }
 
-  .details-table th,
-  .details-table td {
-    padding: 8px;
-  }
-
-  .details-table td {
-    max-width: 120px; 
+  .details-table-dt td:before {
+    font-size: 0.8rem;
   }
 }

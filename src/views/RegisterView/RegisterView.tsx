@@ -6,7 +6,7 @@ const RegisterView: React.FC = () => {
   const navigate = useNavigate()
 
   const handleGoToHome = () => {
-    navigate('/')
+    navigate('/home')
   }
 
   return (

@@ -64,28 +64,33 @@ const DetailsTable: React.FC = () => {
         </tr>
       </thead>
       <tbody>
-        {state.IsHero.map((question) => {
-          const currentModule = state.modules.find(module => {
-            if (!module.question) {
-              return false;
-            }
+  {state.IsHero.map((question) => {
+    const currentModule = state.modules.find((module) => {
+      if (!module.question) {
+        return false;
+      }
 
-            const moduleQuestions = Array.isArray(module.question) ? module.question : [module.question];
-            const questionText = Array.isArray(question.question) ? question.question.join(' ') : question.question;
+      const moduleQuestions = Array.isArray(module.question)
+        ? module.question
+        : [module.question];
+      const questionText = Array.isArray(question.question)
+        ? question.question.join(' ')
+        : question.question;
 
-            return moduleQuestions.some(q => questionText.includes(q));
-          });
+      return moduleQuestions.some((q) => questionText.includes(q));
+    });
 
-          return (
-            <tr key={question.id}>
-              <td>{question.id}</td>
-              <td>{currentModule?.module || 'Unknown Module'}</td>
-              <td>{question.question}</td>
-              <td>{question.answer || 'No answer yet'}</td>
-            </tr>
-          );
-        })}
-      </tbody>
+    return (
+      <tr key={question.id}>
+        <td data-label="ID">{question.id}</td>
+        <td data-label="Module">{currentModule?.module || 'Unknown Module'}</td>
+        <td data-label="Question">{question.question}</td>
+        <td data-label="Response">{question.answer || 'No answer yet'}</td>
+      </tr>
+    );
+  })}
+</tbody>
+
     </table>
   );
 };

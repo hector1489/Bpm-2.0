@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import { AppContext } from '../../context/GlobalState'
 import logoFungi from '../../assets/img/logo.jpg'
 
-const loginUrl = 'https://bpm-backend.onrender.com/login'
+const loginUrl = 'https://bpm-backend.onrender.com/user/login'
 
 const LoginForm: React.FC = () => {
   const context = useContext(AppContext);
