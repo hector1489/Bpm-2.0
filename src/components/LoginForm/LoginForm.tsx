@@ -49,7 +49,7 @@ const LoginForm: React.FC = () => {
           authToken: data.token,
         }));
 
-        navigate('/');
+        navigate('/home');
       } else {
         setErrorMessage(data.message || 'Nombre de usuario o contraseña incorrectos.');
       }

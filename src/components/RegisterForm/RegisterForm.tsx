@@ -56,7 +56,7 @@ const RegisterForm: React.FC = () => {
         if (process.env.NODE_ENV === 'development') {
           console.log('Registro exitoso', response.data);
         }
-        navigate('/');
+        navigate('/home');
       } else {
         setErrorMessage(response.data.message || 'Error en el registro.');
       }
