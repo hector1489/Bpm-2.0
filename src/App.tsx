@@ -23,7 +23,9 @@ import {
   RegisterView,
   DownloadSummary,
   BackendDetailsView,
-  TableDetailsDD
+  TableDetailsDD,
+  BPMDetailsDD,
+  ETADetailsDD
 } from './views/index';
 
 
@@ -60,6 +62,8 @@ const App: React.FC = () => {
           <Route path='/resumen-descarga' element={<DownloadSummary />} />
           <Route path='/backend-details' element={<BackendDetailsView />} />
           <Route path='/download-details' element={<TableDetailsDD/>} />
+          <Route path='/download-bpm' element={<BPMDetailsDD/>} />
+          <Route path='/download-eta' element={<ETADetailsDD/>} />
         </Routes>
       )}
     </BrowserRouter>

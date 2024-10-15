@@ -1,3 +1,13 @@
+:root {
+  --bg-color: #f8f9fa; /* Color de fondo para tarjetas */
+  --border-radius: 8px; /* Bordes redondeados */
+  --shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra */
+  --primary-color: #007bff; /* Color primario */
+  --danger-color: #dc3545; /* Color para botones de eliminación */
+  --hover-color: #0056b3; /* Color de hover en botones */
+}
+
+/* Estilo de la tarjeta del PDF */
 .pdf-card {
   background-color: var(--bg-color);
   border-radius: var(--border-radius);
@@ -13,6 +23,7 @@
   transform: scale(1.05);
 }
 
+/* Vista previa del PDF */
 .pdf-preview {
   width: 100%;
   height: auto;
@@ -21,6 +32,7 @@
   margin-bottom: 10px;
 }
 
+/* Botones de la tarjeta del PDF */
 .pdf-dd-car-buttons {
   display: flex;
   justify-content: space-around;
@@ -29,6 +41,7 @@
   flex-wrap: wrap; /* Mejora para pantallas pequeñas */
 }
 
+/* Paginación */
 .pagination {
   display: flex;
   justify-content: center;
@@ -39,7 +52,7 @@
 
 .pagination button {
   padding: 10px 15px;
-  background-color: #007bff;
+  background-color: var(--primary-color);
   color: #fff;
   border: none;
   border-radius: 4px;
@@ -57,21 +70,23 @@
   font-weight: bold;
 }
 
+/* Botón para ver PDF */
 .btn-pdf-resumenForm {
   color: #fff;
   font-weight: bold;
-  background-color: #007bff;
-  padding: 8px 12px; /* Añadir padding para mejorar el área táctil */
+  background-color: var(--primary-color);
+  padding: 8px 12px;
   border-radius: 4px;
   text-decoration: none;
 }
 
 .btn-pdf-resumenForm:hover {
-  background-color: #0056b3; /* Cambia el color al pasar el mouse */
+  background-color: var(--hover-color);
 }
 
+/* Botón rojo para eliminar PDF */
 .btn-red {
-  background-color: #dc3545;
+  background-color: var(--danger-color);
   color: #fff;
   border: none;
   padding: 8px 12px;
