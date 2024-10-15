@@ -21,7 +21,8 @@ import {
   ResumenEjecutivo,
   DocDesviacionesTable,
   RegisterView,
-  DownloadSummary
+  DownloadSummary,
+  BackendDetailsView
 } from './views/index';
 
 
@@ -56,6 +57,7 @@ const App: React.FC = () => {
           <Route path='/doc-desviaciones' element={<DocDesviacionesTable />} />
           <Route path='/register' element={<RegisterView />} />
           <Route path='/resumen-descarga' element={<DownloadSummary />} />
+          <Route path='/backend-details' element={<BackendDetailsView />} />
         </Routes>
       )}
     </BrowserRouter>

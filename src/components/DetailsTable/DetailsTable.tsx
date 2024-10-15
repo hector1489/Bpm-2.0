@@ -13,9 +13,8 @@ const DetailsTable: React.FC = () => {
   const { state } = context;
 
   const handleSendToBackend = async () => {
-    
     const dataToSend = state.IsHero.map((question) => {
-      const numeroAuditoria = state.auditSheetData.numeroAuditoria
+      const numeroAuditoria = state.auditSheetData.numeroAuditoria;
       const currentModule = state.modules.find(module => {
         if (!module.question) {
           return false;
@@ -24,17 +23,23 @@ const DetailsTable: React.FC = () => {
         const questionText = Array.isArray(question.question) ? question.question.join(' ') : question.question;
         return moduleQuestions.some(q => questionText.includes(q));
       });
-
+  
+      if (!currentModule) {
+        console.error('No se encontró el módulo correspondiente para la pregunta:', question);
+        return null;
+      }
+  
       return {
         numero_auditoria: numeroAuditoria,
         columna1: question.id,
-        columna2: currentModule?.module || 'Unknown Module',
+        columna2: currentModule.module || 'Unknown Module',
         columna3: question.question,
-        columna4: question.answer || 'No answer yet',
-      
+        columna4: question.answer || 'No answer yet'
       };
-    });
-
+    }).filter(Boolean);
+  
+    console.log('Datos que se enviarán al backend:', dataToSend);
+  
     try {
       const response = await createTablaDetail(dataToSend);
       console.log('Datos enviados con éxito:', response);
@@ -42,7 +47,7 @@ const DetailsTable: React.FC = () => {
       console.error('Error al enviar los datos:', error);
     }
   };
-
+  
 
   useEffect(() => {
     handleSendToBackend();

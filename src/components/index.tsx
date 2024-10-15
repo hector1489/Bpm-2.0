@@ -26,6 +26,7 @@ export { default as IEEficienciaOp } from './IEEficienciaOp/IEEficienciaOp'
 export { default as IESatisfaccion } from './IESatisfaccion/IESatisfaccion'
 export { default as IESeguridad } from './IESeguridad/IESeguridad'
 export { default as IEControlCalidad } from './IEcontrolCalidad/IEControlCalidad'
+export { default as BackendDetails} from './backendDetails/backendDetails'
 
 
 

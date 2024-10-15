@@ -16,3 +16,4 @@ export { default as ResumenEjecutivo } from './ResumenEjecutivo/ResumenEjecutivo
 export { default as DocDesviacionesTable } from './DocDesviacionesTable/DocDesviacionesTable.tsx'
 export { default as RegisterView } from './RegisterView/RegisterView.tsx'
 export { default as DownloadSummary } from './DownloadSummary/DownloadSummary.tsx'
+export { default as BackendDetailsView } from './backendDeatilsView/backendDetailsView.tsx'
