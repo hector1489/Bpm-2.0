@@ -97,23 +97,28 @@ const ResumenForm: React.FC = () => {
               <div className="pdf-dd-car-buttons">
                 <button>
                   <a className='btn-pdf-resumenForm' href={pdf.url} target="_blank" rel="noopener noreferrer">
-                    Ver PDF
+                    Ver Auditoria
                   </a>
                 </button>
                 <button className='btn-red' onClick={() => handleDeletePDF(pdf.key)}>Eliminar PDF</button>
               </div>
+
             </div>
+
+
+
+            <div className="routes-downloads">
+              <button onClick={handleGoToDDeatils}>Ir a Details</button>
+            </div>
+            <div className="routes-downloads">
+              <button onClick={handleGoToDBPM}>Ir a BPM</button>
+            </div>
+            <div className="routes-downloads">
+              <button onClick={handleGoToDETA}>Ir a ETA</button>
+            </div>
+
           </div>
 
-          <div className="routes-downloads">
-            <button onClick={handleGoToDDeatils}>Ir a Details</button>
-          </div>
-          <div className="routes-downloads">
-            <button onClick={handleGoToDBPM}>Ir a BPM</button>
-          </div>
-          <div className="routes-downloads">
-            <button onClick={handleGoToDETA}>Ir a ETA</button>
-          </div>
         </>
       ) : (
         <p>No se encontró el PDF de la auditoría.</p>
