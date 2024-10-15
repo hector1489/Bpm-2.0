@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { getAllTablaDetails } from '../../utils/apiDetails';
+import { useState } from 'react';
+import { getTablaDetailsByNumeroAuditoria } from '../../utils/apiDetails';
 
 interface TablaDetail {
   numero_auditoria: string;
@@ -11,24 +11,24 @@ interface TablaDetail {
 
 const BackendDetails: React.FC = () => {
   const [tablaDetails, setTablaDetails] = useState<TablaDetail[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
+  const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
+  const [auditoriaNumber, setAuditoriaNumber] = useState<string>('');
 
-  useEffect(() => {
 
-    const fetchData = async () => {
-      try {
-        const data = await getAllTablaDetails();
-        setTablaDetails(data);
-      } catch (err) {
-        setError('Error al obtener los datos de la tabla');
-      } finally {
-        setLoading(false);
-      }
-    };
+  const handleSearch = async () => {
+    setLoading(true);
+    setError(null);
 
-    fetchData();
-  }, []);
+    try {
+      const data = await getTablaDetailsByNumeroAuditoria(auditoriaNumber);
+      setTablaDetails(data);
+    } catch (err) {
+      setError('Error al obtener los datos de la tabla');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   if (loading) {
     return <p>Cargando datos...</p>;
@@ -41,6 +41,18 @@ const BackendDetails: React.FC = () => {
   return (
     <div>
       <h1>Detalles de la Tabla</h1>
+
+      <div>
+        <label htmlFor="auditoriaNumber">Número de Auditoría:</label>
+        <input
+          type="text"
+          id="auditoriaNumber"
+          value={auditoriaNumber}
+          onChange={(e) => setAuditoriaNumber(e.target.value)}
+        />
+        <button onClick={handleSearch}>Buscar</button>
+      </div>
+
       {tablaDetails.length === 0 ? (
         <p>No se encontraron registros</p>
       ) : (

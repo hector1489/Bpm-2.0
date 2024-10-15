@@ -27,6 +27,7 @@ export { default as IESatisfaccion } from './IESatisfaccion/IESatisfaccion'
 export { default as IESeguridad } from './IESeguridad/IESeguridad'
 export { default as IEControlCalidad } from './IEcontrolCalidad/IEControlCalidad'
 export { default as BackendDetails} from './backendDetails/backendDetails'
+export { default as TableDetailsSummary } from './TableDetailsSummary/TableDetailsSummary'
 
 
 

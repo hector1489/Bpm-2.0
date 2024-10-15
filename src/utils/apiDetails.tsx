@@ -2,7 +2,7 @@ import axios from 'axios';
 
 const BASE_URL = 'https://bpm-backend.onrender.com/details';
 
-// Función para crear múltiples registros en tabla_details
+// crear múltiples registros en tabla_details
 export const createTablaDetail = async (data: any) => {
   try {
     const response = await axios.post(`${BASE_URL}/tabla-details`,  data );
@@ -17,7 +17,7 @@ export const createTablaDetail = async (data: any) => {
   }
 };
 
-// Función para obtener todos los registros de tabla_details
+// obtener todos los registros de tabla_details
 export const getAllTablaDetails = async (): Promise<any[]> => {
   try {
     const response = await axios.get(`${BASE_URL}/tabla-details`);
@@ -32,7 +32,22 @@ export const getAllTablaDetails = async (): Promise<any[]> => {
   }
 };
 
-// Función para eliminar un registro por número de auditoría en tabla_details
+// obtener registros por número de auditoría
+export const getTablaDetailsByNumeroAuditoria = async (numero_auditoria: string): Promise<any[]> => {
+  try {
+    const response = await axios.get(`${BASE_URL}/tabla-details/${numero_auditoria}`);
+    return response.data;
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      console.error(`Error al obtener los detalles para el número de auditoría ${numero_auditoria}:`, error.message);
+    } else {
+      console.error('Error desconocido al obtener los detalles de la tabla');
+    }
+    throw new Error('No se pudieron recuperar los datos para el número de auditoría proporcionado');
+  }
+};
+
+// eliminar un registro por número de auditoría en tabla_details
 export const deleteTablaDetail = async (numero_auditoria: string): Promise<any> => {
   try {
     const response = await axios.delete(`${BASE_URL}/deleted-details/${numero_auditoria}`);

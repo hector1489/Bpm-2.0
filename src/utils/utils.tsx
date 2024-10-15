@@ -122,3 +122,5 @@ export const getColorByPercentageLum = (percentage: number | null | undefined) =
 
 
 
+
+

@@ -22,7 +22,8 @@ import {
   DocDesviacionesTable,
   RegisterView,
   DownloadSummary,
-  BackendDetailsView
+  BackendDetailsView,
+  TableDetailsDD
 } from './views/index';
 
 
@@ -58,6 +59,7 @@ const App: React.FC = () => {
           <Route path='/register' element={<RegisterView />} />
           <Route path='/resumen-descarga' element={<DownloadSummary />} />
           <Route path='/backend-details' element={<BackendDetailsView />} />
+          <Route path='/download-details' element={<TableDetailsDD/>} />
         </Routes>
       )}
     </BrowserRouter>

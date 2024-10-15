@@ -1,6 +1,6 @@
 import './ResumenForm.css'
 import { useContext, useEffect, useState } from 'react'
-import { useLocation } from 'react-router-dom'
+import { useLocation, useNavigate  } from 'react-router-dom'
 import { AppContext } from '../../context/GlobalState'
 import { obtenerPDFs, eliminarPDF } from '../../utils/apiPdfUtils'
 
@@ -12,6 +12,7 @@ interface PDFData {
 const ResumenForm: React.FC = () => {
   const context = useContext(AppContext);
   const location = useLocation();
+  const navigate = useNavigate();
   const [pdfs, setPdfs] = useState<PDFData[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [currentPage, setCurrentPage] = useState(1);
@@ -22,6 +23,10 @@ const ResumenForm: React.FC = () => {
   }
 
   const numeroRequerimiento = location.state?.numero_requerimiento || null;
+
+  
+
+ 
 
   const fetchPDFs = async () => {
     try {
@@ -110,6 +115,13 @@ const ResumenForm: React.FC = () => {
     fetchPDFs();
   }, []);
 
+
+  const handleGoToDDeatils = () => {
+    navigate('/download-details', {
+      state: { numero_requerimiento: numeroRequerimiento }
+    });
+  };
+
   return (
     <div className="Resumen-form-container">
       {loading ? (
@@ -145,6 +157,9 @@ const ResumenForm: React.FC = () => {
             <button onClick={handleNextPage} disabled={currentPage === Math.ceil(filteredPDFs.length / itemsPerPage)}>
               Siguiente
             </button>
+          </div>
+          <div className="routes-downloads">
+            <button onClick={handleGoToDDeatils}>ir a details</button>
           </div>
         </>
       )}
