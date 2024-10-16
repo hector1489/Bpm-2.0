@@ -1,26 +1,21 @@
-import './AuditSummary.css'
-import html2canvas from 'html2canvas';
-import { AverageModules, BPMGraph, Summary } from '../../components/index'
-import { useContext, useCallback, useState, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { AppContext } from '../../context/GlobalState'
-import { extractPercentage, getCurrentDate, calculateSolutionDate, getColorByPercentage, getCriterioByColor } from '../../utils/utils'
-import { enviarDatosAuditoria } from '../../utils/apiUtils'
-import logos from '../../assets/img/index'
-import { pdf } from '@react-pdf/renderer'
-import MyDocument from '../../utils/MyDocument'
-import { subirPDF } from '../../utils/apiPdfUtils'
+import './AuditSummary.css';
+import { AverageModules, BPMGraph, Summary } from '../../components/index';
+import { useContext, useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { AppContext } from '../../context/GlobalState';
+import { extractPercentage, getCurrentDate, calculateSolutionDate, getColorByPercentage, getCriterioByColor } from '../../utils/utils';
+import { enviarDatosAuditoria } from '../../utils/apiUtils';
+import logos from '../../assets/img/index';
 
 const DEFAULT_ANSWER = "Sin respuesta";
 const logoFungi = logos.logoBpm;
-const logoDetails = logos.logoDetails
-const logoHome = logos.logoHome
-const logoLum = logos.logoLum
-const logoTra = logos.logoTra
+const logoDetails = logos.logoDetails;
+const logoHome = logos.logoHome;
+const logoLum = logos.logoLum;
+const logoTra = logos.logoTra;
 
 const AuditSummary: React.FC = () => {
   const context = useContext(AppContext);
-  const [images, setImages] = useState<string[]>([]);
   const navigate = useNavigate();
 
   if (!context) {
@@ -28,45 +23,6 @@ const AuditSummary: React.FC = () => {
   }
 
   const { state } = context;
-
-  const captureSection = async (selector: string) => {
-    const element = document.querySelector(selector) as HTMLElement;
-    if (element) {
-      const canvas = await html2canvas(element, {
-        scale: 2,
-        useCORS: true,
-      });
-      const dataUrl = canvas.toDataURL('image/png');
-      return dataUrl;
-    }
-    return '';
-  };
-  
-
-  const handleCaptureImages = async () => {
-    const buttons = document.querySelector('.buttons-summary-circle') as HTMLElement;
-    const buttonsSummaryLogo = document.querySelector('.buttons-summary-logo') as HTMLElement;
-    const downloadButton = document.querySelector('.fa-download')?.parentElement as HTMLElement;
-  
-    if (buttons) buttons.style.display = 'none';
-    if (buttonsSummaryLogo) buttonsSummaryLogo.style.display = 'none';
-    if (downloadButton) downloadButton.style.display = 'none';
-  
-    await new Promise(resolve => setTimeout(resolve, 500));
-  
-    const image1 = await captureSection('.summary-container');
-  
-    if (buttons) buttons.style.display = 'flex';
-    if (buttonsSummaryLogo) buttonsSummaryLogo.style.display = 'flex';
-    if (downloadButton) downloadButton.style.display = 'inline-block';
-  
-    setImages([image1]);
-  };
-  
-
-  useEffect(() => {
-    handleCaptureImages();
-  }, []);
 
   const calculatePercentage = (moduleId: number): number => {
     try {
@@ -92,7 +48,7 @@ const AuditSummary: React.FC = () => {
       console.error('Error calculating percentage for module:', moduleId, error);
       return 100;
     }
-  }
+  };
 
   const moduleData = state.modules.map((module) => ({
     moduleName: module.module,
@@ -115,9 +71,9 @@ const AuditSummary: React.FC = () => {
         const solucionProgramada = calculateSolutionDate(criticidadColor);
         const nombreDelEstablecimiento = state.auditSheetData.nombreEstablecimiento;
         const photo = photos.find(photo => photo.question === hero.question);
-        const numeroAuditoria = state.auditSheetData.numeroAuditoria
-        const auditor = state.userName
-        const email = state.auditSheetData.auditorEmail
+        const numeroAuditoria = state.auditSheetData.numeroAuditoria;
+        const auditor = state.userName;
+        const email = state.auditSheetData.auditorEmail;
         const criticidad = getCriterioByColor(criticidadColor);
 
         return {
@@ -146,54 +102,27 @@ const AuditSummary: React.FC = () => {
     }
   }, [state]);
 
-
   const handleGoToHome = () => {
     navigate('/home');
-  }
+  };
 
   const handleGoToLuminometry = () => {
-    navigate('/luminometria')
-  }
+    navigate('/luminometria');
+  };
 
   const handleGoToETA = () => {
-    navigate('/seremi')
-  }
+    navigate('/seremi');
+  };
 
   const handleGoToDetails = () => {
-    navigate('/resumen-detalle')
-  }
-
+    navigate('/resumen-detalle');
+  };
 
   const handleNext = async () => {
-
-    if (images.length > 0) {
-      const doc = <MyDocument images={images} />;
-
-      const pdfBlob = await pdf(doc).toBlob();
-
-      const numeroAuditoria = state.auditSheetData.numeroAuditoria || 'sin_numero';
-
-      const pdfFile = new File([pdfBlob], `auditoria_bpm_${numeroAuditoria}_${Date.now()}.pdf`, {
-        type: 'application/pdf',
-        lastModified: Date.now(),
-      });
-
-      try {
-        const result = await subirPDF(pdfFile, pdfFile.name);
-        await handleSendIncidencias();
-
-        alert('Datos guardados exitosamente');
-        console.log('PDF enviado exitosamente:', result);
-      } catch (error) {
-        console.error('Error al enviar el PDF:', error);
-      }
-    }
-
-    handleGoToDetails();    
-  }
-
-  
-
+    await handleSendIncidencias();
+    alert('Datos guardados exitosamente');
+    handleGoToDetails();
+  };
 
   return (
     <div className="summary-container">
@@ -206,11 +135,9 @@ const AuditSummary: React.FC = () => {
       <AverageModules />
 
       <div className="buttons-summary-circle">
-
         <button onClick={handleNext}>
           Siguiente <i className="fa-solid fa-arrow-right"></i>
         </button>
-
       </div>
 
       <div className="buttons-summary-logo">
@@ -226,12 +153,9 @@ const AuditSummary: React.FC = () => {
         <div className="btn">
           <img src={logoHome} alt="home" onClick={handleGoToHome} title='Home' />
         </div>
-
       </div>
-
-
     </div>
-  )
-}
+  );
+};
 
-export default AuditSummary
+export default AuditSummary;
