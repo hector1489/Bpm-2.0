@@ -115,14 +115,11 @@ const ResumenForm: React.FC = () => {
 
             <div className="routes-downloads">
               <button onClick={handleGoToDDeatils}>Ir a Details</button>
-            </div>
-            <div className="routes-downloads">
+          
               <button onClick={handleGoToDBPM}>Ir a BPM</button>
-            </div>
-            <div className="routes-downloads">
+           
               <button onClick={handleGoToDETA}>Ir a ETA</button>
-            </div>
-            <div className="routes-downloads">
+            
               <button onClick={handleGoToDLUM}>Ir a LUM</button>
             </div>
 

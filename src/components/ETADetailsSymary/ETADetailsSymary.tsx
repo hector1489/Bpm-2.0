@@ -135,7 +135,8 @@ const ETADetailsSymary: React.FC<ETADetailsSymaryProps> = ({ numeroAuditoria }) 
 
   return (
     <div className="ETADetailsSymary-container">
-      <p>ETADetailsSymary - Número de Auditoría: {numeroAuditoria}</p>
+      <h4>ETA</h4>
+      <p>Número de Auditoría: {numeroAuditoria}</p>
       <HighchartsReact highcharts={Highcharts} options={chartOptions} />
     </div>
   );

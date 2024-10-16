@@ -31,7 +31,7 @@ export { default as TableDetailsSummary } from './TableDetailsSummary/TableDetai
 export { default as BPMDetailsSummary } from './BPMDetailsSummary/BPMDetailsSummary'
 export { default as ETADetailsSymary } from './ETADetailsSymary/ETADetailsSymary'
 export { default as LUMDetailsSummary } from './LUMDetailsSummary/LUMDetailsSummary'
-
+export { default as DetailsAverageSummary } from './DetailsAverageSummary/DetailsAverageSummary'
 
 
 

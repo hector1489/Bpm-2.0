@@ -1,10 +1,16 @@
 import { LUMDetailsSummary } from '../../components'
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import './LUMDetailsDD.css'
 
 
+
+
 const LUMDetailsDD: React.FC = () => {
+  const location = useLocation();
   const navigate = useNavigate();
+
+
+  const numeroAuditoria = location.state?.numero_requerimiento;
 
   const handleGoToDoc = () => {
     navigate('/documentacion');
@@ -12,8 +18,10 @@ const LUMDetailsDD: React.FC = () => {
 
   return (
     <div className="LUMDetailsDD-container">
-      <LUMDetailsSummary />
-      <button onClick={handleGoToDoc}>Volver</button>
+      <LUMDetailsSummary numeroAuditoria={numeroAuditoria} />
+      <div className='btn-lum-detailsDD'>
+      <button  onClick={handleGoToDoc}>Volver</button>
+      </div>
     </div>
   )
 }

@@ -1,13 +1,12 @@
 :root {
-  --bg-color: #f8f9fa; /* Color de fondo para tarjetas */
-  --border-radius: 8px; /* Bordes redondeados */
-  --shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra */
-  --primary-color: #007bff; /* Color primario */
-  --danger-color: #dc3545; /* Color para botones de eliminación */
-  --hover-color: #0056b3; /* Color de hover en botones */
+  --bg-color: #f8f9fa;
+  --border-radius: 8px;
+  --shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  --primary-color: #007bff;
+  --danger-color: #dc3545;
+  --hover-color: #0056b3;
 }
 
-/* Estilo de la tarjeta del PDF */
 .pdf-card {
   background-color: var(--bg-color);
   border-radius: var(--border-radius);
@@ -38,10 +37,9 @@
   justify-content: space-around;
   align-items: center;
   gap: 5px;
-  flex-wrap: wrap; /* Mejora para pantallas pequeñas */
+  flex-wrap: wrap;
 }
 
-/* Paginación */
 .pagination {
   display: flex;
   justify-content: center;
@@ -98,7 +96,11 @@
   background-color: #c82333;
 }
 
-/* Estilos responsivos para pantallas pequeñas */
+.routes-downloads{
+  display: flex;
+  gap: 10px;
+}
+
 @media (max-width: 767px) {
   .pdf-card-container {
     display: flex;
