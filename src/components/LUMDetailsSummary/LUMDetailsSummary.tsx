@@ -10,7 +10,7 @@ import { useContext, useEffect, useState } from 'react'
 Highcharts3D(Highcharts);
 
 interface LUMDetailsSummaryProps {
-  numeroAuditoria?: string | null;
+  numeroAuditoria: string | null;
 }
 
 interface TablaDetail {
