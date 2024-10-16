@@ -30,6 +30,7 @@ export { default as BackendDetails} from './backendDetails/backendDetails'
 export { default as TableDetailsSummary } from './TableDetailsSummary/TableDetailsSummary'
 export { default as BPMDetailsSummary } from './BPMDetailsSummary/BPMDetailsSummary'
 export { default as ETADetailsSymary } from './ETADetailsSymary/ETADetailsSymary'
+export { default as LUMDetailsSummary } from './LUMDetailsSummary/LUMDetailsSummary'
 
 
 

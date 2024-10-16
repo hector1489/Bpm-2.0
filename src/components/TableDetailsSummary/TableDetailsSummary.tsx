@@ -34,7 +34,6 @@ const TableDetailsSummary: React.FC<TableDetailsSummaryProps> = ({ numeroAuditor
 
       try {
         const data = await getTablaDetailsByNumeroAuditoria(numeroAuditoria);
-        // Ordenar los datos por 'field1' (ID de pregunta)
         const sortedData = data.sort((a: TablaDetail, b: TablaDetail) => a.field1.localeCompare(b.field1));
         setTablaDetails(sortedData);
       } catch (err) {
