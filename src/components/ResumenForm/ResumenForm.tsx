@@ -3,10 +3,17 @@ import { useContext, useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { AppContext } from '../../context/GlobalState';
 import { obtenerPDFs, eliminarPDF } from '../../utils/apiPdfUtils';
+import { deleteTablaDetail, getTablaDetailsByNumeroAuditoria } from '../../utils/apiDetails';
 
 interface PDFData {
   key: string;
   url: string;
+}
+
+interface TablaDetail {
+  id: number;
+  numero_requerimiento: string;
+  // Add other properties as needed
 }
 
 const ResumenForm: React.FC = () => {
@@ -14,6 +21,7 @@ const ResumenForm: React.FC = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const [pdf, setPdf] = useState<PDFData | null>(null);
+  const [tablaDetails, setTablaDetails] = useState<TablaDetail | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
 
   if (!context) {
@@ -36,6 +44,8 @@ const ResumenForm: React.FC = () => {
       if (pdfDetalleAuditoria) {
         const numeroAuditoriaExtracted = extractNumeroAuditoria(pdfDetalleAuditoria.key);
         console.log(`Número de auditoría del PDF: ${numeroAuditoriaExtracted}`);
+      } else {
+        await fetchTablaDetails();
       }
     } catch (error) {
       console.error('Error al obtener los PDFs:', error);
@@ -43,12 +53,34 @@ const ResumenForm: React.FC = () => {
     }
   };
 
+  const fetchTablaDetails = async () => {
+    if (numeroRequerimiento) {
+      try {
+        const response: any[] = await getTablaDetailsByNumeroAuditoria(numeroRequerimiento);
+        
+        setTablaDetails(response.length > 0 ? response[0] : null);
+        console.log('Detalles de la tabla encontrados:', response[0]);
+      } catch (error) {
+        console.error('Error al obtener los detalles de la tabla:', error);
+      }
+    }
+  };
+  
+
   const handleDeletePDF = async (key: string) => {
     try {
       await eliminarPDF(key);
+
+      if (numeroRequerimiento) {
+        await deleteTablaDetail(numeroRequerimiento);
+        console.log(`Detalles de la auditoría ${numeroRequerimiento} eliminados correctamente.`);
+      } else {
+        console.warn('No se pudo eliminar los detalles de la tabla: número de auditoría no disponible.');
+      }
+
       setPdf(null);
     } catch (error) {
-      console.error('Error al eliminar el PDF:', error);
+      console.error('Error al eliminar el PDF o los detalles de la tabla:', error);
     }
   };
 
@@ -57,16 +89,11 @@ const ResumenForm: React.FC = () => {
     return matchAuditoria ? matchAuditoria[1] : null;
   };
 
-  const getPdfTitleWithNumber = (key: string): string => {
-    const matchAuditoria = key.match(/detalle_auditoria_(\d+)_/);
-    return matchAuditoria ? `Detalle Auditoría ${matchAuditoria[1]}` : 'Desconocido';
-  };
-
   useEffect(() => {
     fetchPDF();
   }, []);
 
-  const handleGoToDDeatils = () => {
+  const handleGoToDDetails = () => {
     navigate('/download-details', {
       state: { numero_requerimiento: numeroRequerimiento },
     });
@@ -90,26 +117,35 @@ const ResumenForm: React.FC = () => {
     });
   };
 
+  const handleDeleteTable = async () => {
+    try {
+      if (numeroRequerimiento) {
+        await deleteTablaDetail(numeroRequerimiento);
+        console.log(`Detalles de la auditoría ${numeroRequerimiento} eliminados correctamente.`);
+      } else {
+        console.warn('No se pudo eliminar los detalles de la tabla: número de auditoría no disponible.');
+      }
+    } catch (error) {
+      console.error('Error al eliminar los detalles de la tabla:', error);
+    }
+  };
+  
+
   return (
     <div className="Resumen-form-container">
       {loading ? (
         <p>Cargando PDF...</p>
       ) : pdf ? (
-
         <div className="pdf-card-container">
-
           <i className="fa-regular fa-file-pdf"></i>
-          <p>{getPdfTitleWithNumber(pdf.key)}</p>
+          <p>Auditoria {numeroRequerimiento}</p>
 
           <div className="routes-downloads">
-              <button onClick={handleGoToDDeatils}>Ir a Details</button>
-
-              <button onClick={handleGoToDBPM}>Ir a BPM</button>
-
-              <button onClick={handleGoToDETA}>Ir a ETA</button>
-
-              <button onClick={handleGoToDLUM}>Ir a LUM</button>
-            </div>
+            <button onClick={handleGoToDDetails}>Ver Details</button>
+            <button onClick={handleGoToDBPM}>Ver BPM</button>
+            <button onClick={handleGoToDETA}>Ver ETA</button>
+            <button onClick={handleGoToDLUM}>Ver LUM</button>
+          </div>
 
           <div className="pdf-dd-car-buttons">
             <button>
@@ -117,19 +153,23 @@ const ResumenForm: React.FC = () => {
                 Ver Auditoria
               </a>
             </button>
-
-           
-
-            <button className='btn-red' onClick={() => handleDeletePDF(pdf.key)}>Eliminar PDF</button>
-
+            <button className='btn-red' onClick={() => handleDeletePDF(pdf.key)}>Eliminar Auditoria</button>
           </div>
+        </div>
+      ) : tablaDetails ? (
+        <div className='d-flex flex-column'>
+          <p>Detalles de la Auditoria encontrados para el requerimiento {numeroRequerimiento}:</p>
 
-
-
-
+          <div className="routes-downloads">
+          <button onClick={handleGoToDDetails}>Ver Details</button>
+          <button onClick={handleGoToDBPM}>Ver BPM</button>
+          <button onClick={handleGoToDETA}>Ver ETA</button>
+          <button onClick={handleGoToDLUM}>Ver LUM</button>
+          </div>
+          <button className='btn-red' onClick={handleDeleteTable}>Borrar Data</button>
         </div>
       ) : (
-        <p>No se encontró el PDF de la auditoría.</p>
+        <p>No se encontró el PDF ni los detalles de la auditoría.</p>
       )}
     </div>
   );
