@@ -5,3 +5,20 @@
   justify-content: center;
   align-items: center;
 }
+
+.kpi-graph-graph {
+  width: 100%;
+}
+
+.kpi-graph-table {
+  width: 100%;
+}
+
+#kpi-percentage-table {
+  width: 100%;
+}
+
+
+
+
+

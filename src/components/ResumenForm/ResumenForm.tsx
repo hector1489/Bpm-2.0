@@ -13,7 +13,6 @@ interface PDFData {
 interface TablaDetail {
   id: number;
   numero_requerimiento: string;
-  // Add other properties as needed
 }
 
 const ResumenForm: React.FC = () => {
@@ -59,7 +58,6 @@ const ResumenForm: React.FC = () => {
         const response: any[] = await getTablaDetailsByNumeroAuditoria(numeroRequerimiento);
         
         setTablaDetails(response.length > 0 ? response[0] : null);
-        console.log('Detalles de la tabla encontrados:', response[0]);
       } catch (error) {
         console.error('Error al obtener los detalles de la tabla:', error);
       }
@@ -117,6 +115,12 @@ const ResumenForm: React.FC = () => {
     });
   };
 
+  const handleGoToKPI = () => {
+    navigate('/kpi', {
+      state: { numero_requerimiento: numeroRequerimiento },
+    });
+  }
+
   const handleDeleteTable = async () => {
     try {
       if (numeroRequerimiento) {
@@ -165,6 +169,7 @@ const ResumenForm: React.FC = () => {
           <button onClick={handleGoToDBPM}>Ver BPM</button>
           <button onClick={handleGoToDETA}>Ver ETA</button>
           <button onClick={handleGoToDLUM}>Ver LUM</button>
+          <button onClick={handleGoToKPI}>Ver KPI</button>
           </div>
           <button className='btn-red' onClick={handleDeleteTable}>Borrar Data</button>
         </div>
