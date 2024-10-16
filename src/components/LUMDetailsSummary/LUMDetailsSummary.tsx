@@ -31,10 +31,6 @@ const LUMDetailsSummary: React.FC<LUMDetailsSummaryProps> = ({ numeroAuditoria }
     return <div>Error: Context no está disponible.</div>;
   }
 
-
-
-  const lumQuestion = ['LUM 21. Toma de muestra y uso de luminómetro:'];
-
   useEffect(() => {
     const fetchTablaDetails = async () => {
       if (!numeroAuditoria) return;
@@ -62,6 +58,8 @@ const LUMDetailsSummary: React.FC<LUMDetailsSummaryProps> = ({ numeroAuditoria }
   if (error) {
     return <p>{error}</p>;
   }
+
+  const lumQuestion = ['LUM 21. Toma de muestra y uso de luminómetro:'];
 
   const matchedDetails = tablaDetails.filter(detail =>
     lumQuestion.includes(detail.field3)
