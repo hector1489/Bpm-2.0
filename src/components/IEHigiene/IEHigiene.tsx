@@ -9,12 +9,11 @@ Highcharts3D(Highcharts);
 Cylinder(Highcharts);
 
 const IEHigiene: React.FC = () => {
-  const [chartWidth, setChartWidth] = useState(window.innerWidth * 0.8); // Set default width
+  const [chartWidth, setChartWidth] = useState(window.innerWidth * 0.8);
 
-  // Function to adjust the chart width based on window resize
   const handleResize = () => {
-    const newWidth = window.innerWidth * 0.8; // Adjust chart width dynamically
-    setChartWidth(newWidth > 400 ? newWidth : 400); // Set a minimum width of 400px
+    const newWidth = window.innerWidth * 0.8;
+    setChartWidth(newWidth > 400 ? newWidth : 400);
   };
 
   useEffect(() => {
@@ -33,7 +32,7 @@ const IEHigiene: React.FC = () => {
         depth: 50,
         viewDistance: 25
       },
-      width: chartWidth // Set dynamic width for responsiveness
+      width: chartWidth
     },
     title: {
       text: 'Evaluación de Higiene'

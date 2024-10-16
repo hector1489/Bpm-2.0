@@ -32,7 +32,7 @@ const IESatisfaccion: React.FC = () => {
       </div>
       <div className="satisfaccion-promedio-final">
 
-        <p>Aquí el promedio final : </p>
+        <p>Promedio Final : </p>
       </div>
     </div>
   );

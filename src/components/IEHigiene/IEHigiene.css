@@ -1,16 +1,14 @@
 .ie-higiene-container {
-  margin: 20px;
+  width: 100%;
   font-family: Arial, sans-serif;
   background-color: #f9f9f9;
   padding: 20px;
-  border-radius: 8px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .chart-container {
-  margin-top: 30px;
+  margin-top: 20px;
   width: 100%;
-  height: 400px;
 }
 
 .cards-higiene-ie {
@@ -23,13 +21,9 @@
 
 .card-higiene {
   padding: 15px;
-  color: white;
-  font-size: 16px;
   font-weight: bold;
-  border-radius: 8px;
+  border-radius: 5px;
   text-align: center;
-  flex: 1 1 150px;
-  min-width: 120px;
 }
 
 .red {
