@@ -17,11 +17,12 @@ interface TablaDetail {
   field4: string;
 }
 
-interface LUMDetailsSummaryProps {
+
+interface TableDetailsSummaryProps {
   numeroAuditoria: string | null;
 }
 
-const LUMDetailsSummary: React.FC<LUMDetailsSummaryProps> = ({ numeroAuditoria }) => {
+const LUMDetailsSummary: React.FC<TableDetailsSummaryProps> = ({ numeroAuditoria }) => {
   const context = useContext(AppContext);
   const [tablaDetails, setTablaDetails] = useState<TablaDetail[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
