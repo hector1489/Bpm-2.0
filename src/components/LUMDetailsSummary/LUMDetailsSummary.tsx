@@ -18,10 +18,10 @@ interface TablaDetail {
 }
 
 interface LUMDetailsSummaryProps {
-  numeroAuditoria?: string | null;
+  numeroAuditoria: string | null;
 }
 
-const LUMDetailsSummary: React.FC<LUMDetailsSummaryProps> = ({ numeroAuditoria = 'No disponible' }) => {
+const LUMDetailsSummary: React.FC<LUMDetailsSummaryProps> = ({ numeroAuditoria }) => {
   const context = useContext(AppContext);
   const [tablaDetails, setTablaDetails] = useState<TablaDetail[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
@@ -31,7 +31,7 @@ const LUMDetailsSummary: React.FC<LUMDetailsSummaryProps> = ({ numeroAuditoria =
     return <div>Error: Context no está disponible.</div>;
   }
 
-  const auditNumber = numeroAuditoria;
+
 
   const lumQuestion = ['LUM 21. Toma de muestra y uso de luminómetro:'];
 
@@ -126,7 +126,7 @@ const LUMDetailsSummary: React.FC<LUMDetailsSummaryProps> = ({ numeroAuditoria =
   return (
     <div className="LUMDetailsSummary-container">
       <p>LUMDetailsSummary</p>
-      <p>Numero Auditoria: {auditNumber}</p>
+      <p>Numero Auditoria: {numeroAuditoria}</p>
       <HighchartsReact highcharts={Highcharts} options={chartOptions} />
       <div className="table-responsive">
         <table id="luminometry-table" className="table table-bordered text-center table-sm" style={{ fontSize: '12px' }}>
