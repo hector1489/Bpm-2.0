@@ -5,7 +5,7 @@ import HighchartsReact from 'highcharts-react-official';
 import { useContext, useEffect, useState } from 'react';
 import { AppContext } from '../../context/GlobalState';
 import { getTablaDetailsByNumeroAuditoria } from '../../utils/apiDetails';
-import { getColorByPercentage } from '../../utils/utils'
+import { getColorByPercentage } from '../../utils/utils';
 
 interface TablaDetail {
   numero_auditoria: string;
@@ -80,11 +80,15 @@ const ETADetailsSymary: React.FC<ETADetailsSymaryProps> = ({ numeroAuditoria }) 
     questionsEta.includes(detail.field3)
   );
 
-
   const questionNames = matchedDetails.map(detail => detail.field3);
   const percentages = matchedDetails.map(detail => parseFloat(detail.field4.replace('%', '')) || 0);
-
   const barColors = percentages.map(getColorByPercentage);
+
+  // Función para extraer el módulo
+  const extractModulo = (pregunta: string) => {
+    const match = pregunta.match(/^TRA \w+ \d+/);
+    return match ? match[0] : 'N/A';
+  };
 
   const chartOptions = {
     chart: {
@@ -95,6 +99,8 @@ const ETADetailsSymary: React.FC<ETADetailsSymaryProps> = ({ numeroAuditoria }) 
         beta: 25,
         depth: 70,
       },
+      width: window.innerWidth < 768 ? 300 : null,
+      height: 600,
     },
     title: {
       text: 'Porcentaje de Cumplimiento por Pregunta',
@@ -103,6 +109,11 @@ const ETADetailsSymary: React.FC<ETADetailsSymaryProps> = ({ numeroAuditoria }) 
       categories: questionNames,
       title: {
         text: 'Preguntas',
+      },
+      labels: {
+        style: {
+          fontSize: window.innerWidth < 768 ? '10px' : '12px',
+        },
       },
     },
     yAxis: {
@@ -122,6 +133,7 @@ const ETADetailsSymary: React.FC<ETADetailsSymaryProps> = ({ numeroAuditoria }) 
           style: {
             fontWeight: 'bold',
             color: 'black',
+            fontSize: window.innerWidth < 768 ? '10px' : '12px',
           },
         },
       },
@@ -131,13 +143,110 @@ const ETADetailsSymary: React.FC<ETADetailsSymaryProps> = ({ numeroAuditoria }) 
         depth: 25,
       },
     },
+    responsive: {
+      rules: [
+        {
+          condition: {
+            maxWidth: 500,
+          },
+          chartOptions: {
+            chart: {
+              height: 300,
+            },
+            xAxis: {
+              labels: {
+                style: {
+                  fontSize: '8px',
+                },
+              },
+            },
+            yAxis: {
+              labels: {
+                style: {
+                  fontSize: '8px',
+                },
+              },
+            },
+          },
+        },
+      ],
+    },
   };
 
   return (
     <div className="ETADetailsSymary-container">
       <h4>ETA</h4>
       <p>Número de Auditoría: {numeroAuditoria}</p>
-      <HighchartsReact highcharts={Highcharts} options={chartOptions} />
+
+      <div className="ETADetailsSummary-graph">
+        <HighchartsReact highcharts={Highcharts} options={chartOptions} />
+      </div>
+
+      <h5 className='mt-2'>cumplimiento total : </h5>
+
+      <div className='ETADetailsSummary-cumplimientos'>
+        <div
+          style={{
+            backgroundColor: 'green',
+            padding: '5px',
+            border: '1px solid black',
+            width: '100%',
+            borderRadius: '5px',
+            textAlign: 'center',
+            color: 'white',
+            fontWeight: 'bold',
+          }}>
+          CUMPLE 90% - 100%
+        </div>
+        <div
+          style={{
+            backgroundColor: 'yellow',
+            padding: '5px',
+            border: '1px solid black',
+            marginTop: '5px',
+            width: '100%',
+            borderRadius: '5px',
+            textAlign: 'center',
+            color: 'black',
+            fontWeight: 'bold',
+          }}>
+          EN ALERTA 75% - 89%
+        </div>
+        <div
+          style={{
+            backgroundColor: 'red',
+            padding: '5px',
+            border: '1px solid black',
+            marginTop: '5px',
+            width: '100%',
+            borderRadius: '5px',
+            textAlign: 'center',
+            color: 'white',
+            fontWeight: 'bold',
+          }}>
+          CRITICO 0% - 74%
+        </div>
+      </div>
+
+      <table className="ETADetailsSummary-table">
+        <thead>
+          <tr style={{ backgroundColor: 'skyblue', color:'black' }}>
+            <th className='fw-bold text-uppercase'>Módulo</th>
+            <th className='fw-bold text-uppercase'>Pregunta</th>
+            <th className='fw-bold text-uppercase'>Porcentaje</th>
+          </tr>
+        </thead>
+        <tbody>
+          {matchedDetails.map((detail, index) => (
+            <tr key={index} style={{ backgroundColor: barColors[index], color:'white' }}>
+              <td>{extractModulo(detail.field3)}</td>
+              <td>{detail.field3}</td>
+              <td>{detail.field4}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+
     </div>
   );
 };

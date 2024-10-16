@@ -5,7 +5,7 @@ import HighchartsReact from 'highcharts-react-official';
 import { useContext, useEffect, useState } from 'react';
 import { AppContext } from '../../context/GlobalState';
 import { getTablaDetailsByNumeroAuditoria } from '../../utils/apiDetails';
-import { getColorByPercentage } from '../../utils/utils'
+import { getColorByPercentage } from '../../utils/utils';
 
 interface TablaDetail {
   numero_auditoria: string;
@@ -42,7 +42,6 @@ const BPMDetailsSummary: React.FC<TableDetailsSummaryProps> = ({ numeroAuditoria
 
       try {
         const data = await getTablaDetailsByNumeroAuditoria(numeroAuditoria);
-        console.log(data);
         setTablaDetails(data);
       } catch (err) {
         setError('Error al obtener los datos de la tabla');
@@ -79,6 +78,15 @@ const BPMDetailsSummary: React.FC<TableDetailsSummaryProps> = ({ numeroAuditoria
     'poes-higiene-empleados', 'poe-preelaboraciones', 'poe-elaboracion',
     'poe-mantencion', 'poe-transporte', 'poe-servicio', 'doc',
   ];
+  const ponderaciones = {
+    bpm: 4,
+    poes: 25,
+    poe: 25,
+    ma: 4,
+    doc: 10,
+    lum: 10,
+    tra: 21,
+  };
 
   // Función para calcular el promedio de un grupo o asignar 100% si no hay datos
   const calcularPromedioGrupo = (modulos: string[]) => {
@@ -89,13 +97,13 @@ const BPMDetailsSummary: React.FC<TableDetailsSummaryProps> = ({ numeroAuditoria
 
   // Agrupación de datos por módulos
   const groupedData = [
-    { groupName: 'BPM', average: calcularPromedioGrupo(bpmModules) },
-    { groupName: 'POES', average: calcularPromedioGrupo(poesModules) },
-    { groupName: 'POE', average: calcularPromedioGrupo(poeModules) },
-    { groupName: 'MA', average: calcularPromedioGrupo(maModules) },
-    { groupName: 'DOC', average: calcularPromedioGrupo(docModules) },
-    { groupName: 'LUM', average: calcularPromedioGrupo(lumModules) },
-    { groupName: 'TRA', average: calcularPromedioGrupo(traModules) },
+    { groupName: 'BPM', nombreCompleto: 'INFRAESTRUCTURA Y REQUERIMIENTOS LEGALES', percentage: ponderaciones.bpm, average: calcularPromedioGrupo(bpmModules) },
+    { groupName: 'POES', nombreCompleto: 'PROCEDIMIENTOS OP. DE SANITIZACION', percentage: ponderaciones.poes, average: calcularPromedioGrupo(poesModules) },
+    { groupName: 'POE', nombreCompleto: 'PROCEDIMIENTOS OP. DEL PROCESO', percentage: ponderaciones.poe, average: calcularPromedioGrupo(poeModules) },
+    { groupName: 'MA', nombreCompleto: 'MANEJO AMBIENTAL', percentage: ponderaciones.ma, average: calcularPromedioGrupo(maModules) },
+    { groupName: 'DOC', nombreCompleto: 'DOCUMENTACION', percentage: ponderaciones.doc, average: calcularPromedioGrupo(docModules) },
+    { groupName: 'LUM', nombreCompleto: 'LUMINOMETRIA', percentage: ponderaciones.lum, average: calcularPromedioGrupo(lumModules) },
+    { groupName: 'TRAZ', nombreCompleto: 'TRAZADORES DE POSIBLE BROTE ETA', percentage: ponderaciones.tra, average: calcularPromedioGrupo(traModules) },
   ];
 
   // Calcular el promedio general
@@ -188,6 +196,61 @@ const BPMDetailsSummary: React.FC<TableDetailsSummaryProps> = ({ numeroAuditoria
   return (
     <div className="BPMDetailsSummary-container">
       <h3>Grafico BPM Auditoría: {numeroAuditoria}</h3>
+
+      <div className="BPMDetailsSummary-data">
+
+        <div className="BPMDetailsSummary-data-promedio">
+
+          <div style={{ fontSize: 'smaller', marginTop: '10px' }}>
+            <div
+              style={{
+                backgroundColor: 'green',
+                padding: '5px',
+                border: '1px solid black',
+                width: '100%',
+                borderRadius: '5px',
+                textAlign: 'center',
+                color: 'white',
+                fontWeight: 'bold',
+              }}
+            >
+              CUMPLE 90% - 100%
+            </div>
+            <div
+              style={{
+                backgroundColor: 'yellow',
+                padding: '5px',
+                border: '1px solid black',
+                marginTop: '5px',
+                width: '100%',
+                borderRadius: '5px',
+                textAlign: 'center',
+                color: 'black',
+                fontWeight: 'bold',
+              }}
+            >
+              EN ALERTA 75% - 89%
+            </div>
+            <div
+              style={{
+                backgroundColor: 'red',
+                padding: '5px',
+                border: '1px solid black',
+                marginTop: '5px',
+                width: '100%',
+                borderRadius: '5px',
+                textAlign: 'center',
+                color: 'white',
+                fontWeight: 'bold',
+              }}
+            >
+              CRITICO 0% - 74%
+            </div>
+          </div>
+
+        </div>
+
+      </div>
       <div className="BPMDetailsSummary-graph">
         <HighchartsReact
           highcharts={Highcharts}
@@ -195,6 +258,32 @@ const BPMDetailsSummary: React.FC<TableDetailsSummaryProps> = ({ numeroAuditoria
           containerProps={{ style: { width: '100%', height: '100%' } }}
         />
       </div>
+      <table className="BPMDetailsSummary-table">
+        <thead>
+          <tr>
+            <th>Módulo</th>
+            <th>Descripción</th>
+            <th>% Ponderado</th>
+            <th>Promedio (%)</th>
+            <th>Promedio Ponderado (%)</th>
+          </tr>
+        </thead>
+        <tbody>
+          {groupedData.map((group) => (
+            <tr key={group.groupName}>
+              <td>{group.groupName}</td>
+              <td>{group.nombreCompleto}</td>
+              <td>{group.percentage}%</td>
+              <td>{group.average.toFixed(2)}%</td>
+              <td>{((group.average * group.percentage) / 100).toFixed(1)}%</td>
+            </tr>
+          ))}
+          <tr className='bg-warning'>
+            <td colSpan={4}><strong>PROMEDIO FINAL PONDERADO</strong></td>
+            <td>{overallAverage.toFixed(2)}%</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   );
 };

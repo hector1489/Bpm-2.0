@@ -2,6 +2,7 @@ import { useNavigate } from 'react-router-dom'
 import { useContext, useEffect, useState } from 'react'
 import { AppContext } from '../../context/GlobalState'
 import { obtenerPDFs } from '../../utils/apiPdfUtils'
+import logo from '../../assets/img/logo.jpg';
 import './DocumentacionView.css'
 
 interface PDFData {
@@ -19,9 +20,6 @@ const DocumentacionView: React.FC = () => {
   if (!context) {
     return <div>Error: Context is not available.</div>;
   }
-
-  const { state } = context;
-  const numeroAuditoria = state.auditSheetData?.numeroAuditoria;
 
   useEffect(() => {
     const fetchPDFs = async () => {
@@ -95,11 +93,11 @@ const DocumentacionView: React.FC = () => {
 
   return (
     <div className="documentacion-container">
+      <div className="logo-fungi">
+        <img src={logo} alt="logo" />
+      </div>
       <h3 className="fw-bold">Documentación</h3>
 
-      <div className="doc-last-audit">
-        <h4>Última Auditoria : {numeroAuditoria}</h4>
-      </div>
 
       {loading ? (
         <div>Cargando PDFs...</div>
