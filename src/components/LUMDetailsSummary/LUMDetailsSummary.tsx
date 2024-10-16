@@ -31,7 +31,7 @@ const LUMDetailsSummary: React.FC<LUMDetailsSummaryProps> = ({ numeroAuditoria }
     return <div>Error: Context is not available.</div>;
   }
 
-
+  const auditNumber = numeroAuditoria ?? 'No disponible';
 
   const lumQuestion = ['LUM 21. Toma de muestra y uso de luminómetro:'];
 
@@ -44,7 +44,6 @@ const LUMDetailsSummary: React.FC<LUMDetailsSummaryProps> = ({ numeroAuditoria }
 
       try {
         const data = await getTablaDetailsByNumeroAuditoria(numeroAuditoria);
-        console.log(data);
         setTablaDetails(data);
       } catch (err) {
         setError('Error al obtener los datos de la tabla');
@@ -67,7 +66,6 @@ const LUMDetailsSummary: React.FC<LUMDetailsSummaryProps> = ({ numeroAuditoria }
   const matchedDetails = tablaDetails.filter(detail =>
     lumQuestion.includes(detail.field3)
   );
-
 
   const questionNames = matchedDetails.map(detail => detail.field3);
   const percentages = matchedDetails.map(detail => parseFloat(detail.field4.replace('%', '')) || 0);
@@ -127,7 +125,7 @@ const LUMDetailsSummary: React.FC<LUMDetailsSummaryProps> = ({ numeroAuditoria }
   return (
     <div className="LUMDetailsSummary-container">
       <p>LUMDetailsSummary</p>
-      <p>Numero Auditoria: {numeroAuditoria ? numeroAuditoria : 'No disponible'}</p>
+      <p>Numero Auditoria: {auditNumber}</p>
       <HighchartsReact highcharts={Highcharts} options={chartOptions} />
       <div className="table-responsive">
         <table id="luminometry-table" className="table table-bordered text-center table-sm" style={{ fontSize: '12px' }}>
