@@ -10,7 +10,7 @@ const LUMDetailsDD: React.FC = () => {
   const navigate = useNavigate();
 
 
-  const numeroAuditoria = location.state?.numero_requerimiento;
+  const numeroAuditoria = location.state?.numero_requerimiento || 'No disponible';
 
   const handleGoToDoc = () => {
     navigate('/documentacion');
