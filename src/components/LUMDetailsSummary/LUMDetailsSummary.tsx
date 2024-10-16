@@ -10,7 +10,7 @@ import { useContext, useEffect, useState } from 'react'
 Highcharts3D(Highcharts);
 
 interface LUMDetailsSummaryProps {
-  numeroAuditoria: string | undefined;
+  numeroAuditoria?: string | null;
 }
 
 interface TablaDetail {
@@ -30,6 +30,7 @@ const LUMDetailsSummary: React.FC<LUMDetailsSummaryProps> = ({ numeroAuditoria }
   if (!context) {
     return <div>Error: Context is not available.</div>;
   }
+
 
 
   const lumQuestion = ['LUM 21. Toma de muestra y uso de luminómetro:'];
