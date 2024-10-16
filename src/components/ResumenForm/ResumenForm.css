@@ -7,69 +7,55 @@
   --hover-color: #0056b3;
 }
 
-.pdf-card {
+.Resumen-form-container {
+  width: 100%;
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+}
+
+.Resumen-form-container .pdf-card-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   background-color: var(--bg-color);
   border-radius: var(--border-radius);
   box-shadow: var(--shadow);
-  padding: 10px;
-  width: 200px;
+  padding: 15px;
+  width: 100%;
+  max-width: 400px;
   text-align: center;
-  margin-bottom: 15px;
+  margin-bottom: 20px;
   transition: transform 0.2s ease-in-out;
 }
 
-.pdf-card:hover {
+.Resumen-form-container .pdf-card:hover {
   transform: scale(1.05);
 }
 
-/* Vista previa del PDF */
-.pdf-preview {
-  width: 100%;
-  height: auto;
-  object-fit: cover;
-  border-radius: 5px;
-  margin-bottom: 10px;
-}
-
 /* Botones de la tarjeta del PDF */
-.pdf-dd-car-buttons {
+.Resumen-form-container .pdf-dd-car-buttons {
   display: flex;
-  justify-content: space-around;
+  justify-content: space-between;
   align-items: center;
-  gap: 5px;
+  gap: 10px;
   flex-wrap: wrap;
 }
 
-.pagination {
+.Resumen-form-container .routes-downloads {
   display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-top: 20px;
   gap: 10px;
+  justify-content: space-around;
+  width: 100%;
 }
 
-.pagination button {
-  padding: 10px 15px;
-  background-color: var(--primary-color);
-  color: #fff;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background-color 0.3s;
-}
-
-.pagination button:disabled {
-  background-color: #e0e0e0;
-  cursor: not-allowed;
-}
-
-.pagination span {
-  font-size: 16px;
-  font-weight: bold;
+.Resumen-form-container .routes-downloads button {
+  flex: 1;
 }
 
 /* Botón para ver PDF */
-.btn-pdf-resumenForm {
+.Resumen-form-container .btn-pdf-resumenForm {
   color: #fff;
   font-weight: bold;
   background-color: var(--primary-color);
@@ -78,12 +64,14 @@
   text-decoration: none;
 }
 
-.btn-pdf-resumenForm:hover {
+.Resumen-form-container .btn-pdf-resumenForm:hover,
+.Resumen-form-container .btn-pdf-resumenForm:focus {
   background-color: var(--hover-color);
+  outline: none;
 }
 
 /* Botón rojo para eliminar PDF */
-.btn-red {
+.Resumen-form-container .btn-red {
   background-color: var(--danger-color);
   color: #fff;
   border: none;
@@ -92,60 +80,50 @@
   cursor: pointer;
 }
 
-.btn-red:hover {
+.Resumen-form-container .btn-red:hover,
+.Resumen-form-container .btn-red:focus {
   background-color: #c82333;
+  outline: none;
 }
 
-.routes-downloads{
-  display: flex;
-  gap: 10px;
-}
-
+/* Responsividad */
 @media (max-width: 767px) {
-  .pdf-card-container {
-    display: flex;
+  .Resumen-form-container .pdf-card-container {
     flex-direction: column;
     align-items: center;
   }
 
-  .pdf-card {
+  .Resumen-form-container .pdf-card {
     width: 100%;
-    max-width: 300px;
+    max-width: 320px;
   }
 
-  .pagination button {
-    padding: 8px 12px;
-  }
-
-  .pagination span {
-    font-size: 14px;
+  .Resumen-form-container .routes-downloads {
+    flex-direction: column;
+    gap: 10px;
   }
 }
 
-/* Para pantallas medianas */
 @media (min-width: 768px) and (max-width: 1024px) {
-  .pdf-card-container {
-    display: flex;
+  .Resumen-form-container .pdf-card-container {
     flex-wrap: wrap;
     justify-content: space-around;
     gap: 15px;
   }
 
-  .pdf-card {
+  .Resumen-form-container .pdf-card {
     width: 45%;
   }
 }
 
-/* Para pantallas grandes */
 @media (min-width: 1025px) {
-  .pdf-card-container {
-    display: flex;
+  .Resumen-form-container .pdf-card-container {
     flex-wrap: wrap;
     justify-content: space-evenly;
     gap: 20px;
   }
 
-  .pdf-card {
-    width: 200px;
+  .Resumen-form-container .pdf-card {
+    width: 250px;
   }
 }

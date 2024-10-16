@@ -95,37 +95,39 @@ const ResumenForm: React.FC = () => {
       {loading ? (
         <p>Cargando PDF...</p>
       ) : pdf ? (
-        <>
-          <div className="pdf-card-container">
-            <div className="pdf-card">
-              <i className="fa-regular fa-file-pdf"></i>
-              <p>{getPdfTitleWithNumber(pdf.key)}</p>
-              <div className="pdf-dd-car-buttons">
-                <button>
-                  <a className='btn-pdf-resumenForm' href={pdf.url} target="_blank" rel="noopener noreferrer">
-                    Ver Auditoria
-                  </a>
-                </button>
-                <button className='btn-red' onClick={() => handleDeletePDF(pdf.key)}>Eliminar PDF</button>
-              </div>
 
-            </div>
+        <div className="pdf-card-container">
 
+          <i className="fa-regular fa-file-pdf"></i>
+          <p>{getPdfTitleWithNumber(pdf.key)}</p>
 
-
-            <div className="routes-downloads">
+          <div className="routes-downloads">
               <button onClick={handleGoToDDeatils}>Ir a Details</button>
-          
+
               <button onClick={handleGoToDBPM}>Ir a BPM</button>
-           
+
               <button onClick={handleGoToDETA}>Ir a ETA</button>
-            
+
               <button onClick={handleGoToDLUM}>Ir a LUM</button>
             </div>
 
+          <div className="pdf-dd-car-buttons">
+            <button>
+              <a className='btn-pdf-resumenForm' href={pdf.url} target="_blank" rel="noopener noreferrer">
+                Ver Auditoria
+              </a>
+            </button>
+
+           
+
+            <button className='btn-red' onClick={() => handleDeletePDF(pdf.key)}>Eliminar PDF</button>
+
           </div>
 
-        </>
+
+
+
+        </div>
       ) : (
         <p>No se encontró el PDF de la auditoría.</p>
       )}
