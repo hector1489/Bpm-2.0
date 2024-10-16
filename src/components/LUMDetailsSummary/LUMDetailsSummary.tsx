@@ -7,8 +7,6 @@ import { getColorByPercentage } from '../../utils/utils'
 import { getTablaDetailsByNumeroAuditoria } from '../../utils/apiDetails'
 import { useContext, useEffect, useState } from 'react'
 
-Highcharts3D(Highcharts);
-
 interface TablaDetail {
   numero_auditoria: string;
   field1: string;
@@ -22,11 +20,17 @@ interface TableDetailsSummaryProps {
   numeroAuditoria: string | null;
 }
 
+if (typeof Highcharts === 'object') {
+  Highcharts3D(Highcharts);
+}
+
+
 const LUMDetailsSummary: React.FC<TableDetailsSummaryProps> = ({ numeroAuditoria }) => {
   const context = useContext(AppContext);
   const [tablaDetails, setTablaDetails] = useState<TablaDetail[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
+
 
   if (!context) {
     return <div>Error: Context no está disponible.</div>;
@@ -67,7 +71,7 @@ const LUMDetailsSummary: React.FC<TableDetailsSummaryProps> = ({ numeroAuditoria
   );
 
   const questionNames = matchedDetails.map(detail => detail.field3);
-  const percentages = matchedDetails.map(detail => parseFloat(detail.field4.replace('%', '')) || 0);
+  const percentages = matchedDetails.map(detail => parseFloat(detail.field4.replace('%', '')) || 100);
   const barColors = percentages.map(getColorByPercentage);
 
   const chartOptions = {
