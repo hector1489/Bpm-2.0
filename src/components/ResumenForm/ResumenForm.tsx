@@ -84,6 +84,12 @@ const ResumenForm: React.FC = () => {
     });
   };
 
+  const handleGoToDLUM = () => {
+    navigate('/download-lum', {
+      state: { numero_requerimiento: numeroRequerimiento },
+    });
+  };
+
   return (
     <div className="Resumen-form-container">
       {loading ? (
@@ -115,6 +121,9 @@ const ResumenForm: React.FC = () => {
             </div>
             <div className="routes-downloads">
               <button onClick={handleGoToDETA}>Ir a ETA</button>
+            </div>
+            <div className="routes-downloads">
+              <button onClick={handleGoToDLUM}>Ir a LUM</button>
             </div>
 
           </div>

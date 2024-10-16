@@ -23,7 +23,8 @@ import {
   BackendDetailsView,
   TableDetailsDD,
   BPMDetailsDD,
-  ETADetailsDD
+  ETADetailsDD,
+  LUMDetailsDD
 } from './views/index';
 
 const App: React.FC = () => {
@@ -53,6 +54,7 @@ const App: React.FC = () => {
         <Route path='/download-details' element={<TableDetailsDD/>} />
         <Route path='/download-bpm' element={<BPMDetailsDD/>} />
         <Route path='/download-eta' element={<ETADetailsDD/>} />
+        <Route path='/download-lum' element={<LUMDetailsDD/>} />
       </Routes>
     </BrowserRouter>
   )

@@ -20,3 +20,4 @@ export { default as BackendDetailsView } from './backendDeatilsView/backendDetai
 export { default as TableDetailsDD } from './TableDetailsDD/TableDetailsDD.tsx'
 export { default as BPMDetailsDD } from './BPMDetailsDD/BPMDetailsDD.tsx'
 export { default as ETADetailsDD } from './ETADetailsDD/ETADetailsDD.tsx'
+export { default as LUMDetailsDD } from './LUMDetailsDD/LUMDetailsDD.tsx'
