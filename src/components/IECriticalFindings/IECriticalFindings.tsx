@@ -40,8 +40,8 @@ const IECriticalFindings: React.FC<IECriticalFindingsProps> = ({ detallesFiltrad
     series: [
       {
         data: [
-          { y: porcentaje, color: '#007bff' }, // Porcentaje representado en azul
-          { y: 100 - porcentaje, color: '#e0e0e0' }, // El restante en gris
+          { y: porcentaje, color: '#007bff' },
+          { y: 100 - porcentaje, color: '#e0e0e0' },
         ],
       },
     ],
@@ -53,7 +53,6 @@ const IECriticalFindings: React.FC<IECriticalFindingsProps> = ({ detallesFiltrad
         <div key={index} className="critical-card">
           <div className="circular-bar">
             <div className="doughnut-chart">
-              {/* Actualizamos el gráfico con el porcentaje de cada detalle */}
               <HighchartsReact highcharts={Highcharts} options={getOptions(parseInt(detalle.field4))} />
             </div>
             <div className="critical-text">

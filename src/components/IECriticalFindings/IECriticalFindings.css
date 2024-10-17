@@ -81,6 +81,17 @@
   background: linear-gradient(90deg, #00ff9d, #007bff);
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   transition: width 0.5s ease-in-out, box-shadow 0.3s ease-in-out;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.bar span {
+  display: inline-block;
+  width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .green {
