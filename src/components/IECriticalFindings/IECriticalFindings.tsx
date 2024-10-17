@@ -2,9 +2,20 @@ import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
 import './IECriticalFindings.css';
 
-const IECriticalFindings: React.FC = () => {
+interface TablaDetail {
+  numero_auditoria: string;
+  field1: string;
+  field2: string;
+  field3: string;
+  field4: string;
+}
 
-  const options = {
+interface IECriticalFindingsProps {
+  detallesFiltrados: TablaDetail[];
+}
+
+const IECriticalFindings: React.FC<IECriticalFindingsProps> = ({ detallesFiltrados }) => {
+  const getOptions = (porcentaje: number) => ({
     chart: {
       type: 'pie',
       backgroundColor: 'transparent',
@@ -29,55 +40,37 @@ const IECriticalFindings: React.FC = () => {
     series: [
       {
         data: [
-          { y: 75, color: '#007bff' },
-          { y: 25, color: '#e0e0e0' },
+          { y: porcentaje, color: '#007bff' }, // Porcentaje representado en azul
+          { y: 100 - porcentaje, color: '#e0e0e0' }, // El restante en gris
         ],
       },
     ],
-  };
-  
+  });
 
   return (
     <div className="IECriticalFinding-container">
-      <div className="critical-card">
-
-        <div className="circular-bar">
-          <div className="doughnut-chart">
-            <HighchartsReact highcharts={Highcharts} options={options} />
+      {detallesFiltrados.map((detalle, index) => (
+        <div key={index} className="critical-card">
+          <div className="circular-bar">
+            <div className="doughnut-chart">
+              {/* Actualizamos el gráfico con el porcentaje de cada detalle */}
+              <HighchartsReact highcharts={Highcharts} options={getOptions(parseInt(detalle.field4))} />
+            </div>
+            <div className="critical-text">
+              <p>{detalle.field1} - {detalle.field4}%</p>
+            </div>
           </div>
-          <div className="critical-text">
-            <p>cuadro de img o text</p>
-          </div>
-        </div>
 
-        <div className="percentage-bars">
-          <div className="bar green" style={{ width: '75%' }}>Pregunta - 75%</div>
-          <div className="bar red" style={{ width: '50%' }}>Desviación - 50%</div>
-          <div className="bar yellow" style={{ width: '85%' }}>Criticidad - 85%</div>
-          <div className="bar black" style={{ width: '30%' }}>Recomendaciones - 30%</div>
-        </div>
-
-      </div>
-
-      <div className="critical-card">
-
-        <div className="circular-bar">
-          <div className="doughnut-chart">
-            <HighchartsReact highcharts={Highcharts} options={options} />
-          </div>
-          <div className="critical-text">
-            <p>cuadro de img o text</p>
+          <div className="percentage-bars">
+            <div className="bar green" style={{ width: `${detalle.field4}%` }}>
+              <span className="question">{detalle.field3}</span>
+            </div>
+            <div className="bar yellow" style={{ width: `${detalle.field4}%` }}>
+              <span className="percentage">{detalle.field4}%</span>
+            </div>
           </div>
         </div>
-
-        <div className="percentage-bars">
-          <div className="bar green" style={{ width: '75%' }}>Pregunta - 75%</div>
-          <div className="bar red" style={{ width: '50%' }}>Desviación - 50%</div>
-          <div className="bar yellow" style={{ width: '85%' }}>Criticidad - 85%</div>
-          <div className="bar black" style={{ width: '30%' }}>Recomendaciones - 30%</div>
-        </div>
-
-      </div>
+      ))}
     </div>
   );
 }
