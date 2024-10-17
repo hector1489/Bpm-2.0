@@ -96,19 +96,19 @@ const InformeEjecutivo: React.FC = () => {
       <IECriticalFindings detallesFiltrados={detallesInferioresA100} />
 
       <h5>2.- EVALUACIONES CRITICAS</h5>
-      <IECriticalEvaluation />
+      <IECriticalEvaluation detallesFiltrados={detallesInferioresA100} />
 
       <h5>3. TRAZADORES</h5>
-      <IETrazadores />
+      <IETrazadores tablaDetails={tablaDetails}/>
 
       <h5>4.- INDICADORES CLAVES DE GESTION</h5>
-      <IEIndicadoresClave />
+      <IEIndicadoresClave tablaDetails={tablaDetails}/>
 
       <h5>5,. HIGIENE INSTALACIONES/ALIMENTOS</h5>
-      <IEHigiene />
+      <IEHigiene tablaDetails={tablaDetails}/>
 
       <h5>6. EFICIENCIA OPERACIONAL</h5>
-      <IEEficienciaOp />
+      <IEEficienciaOp tablaDetails={tablaDetails}/>
 
       <h5>7.- SATISFACCION AL CLIENTE</h5>
       <IESatisfaccion />

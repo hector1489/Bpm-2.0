@@ -1,8 +1,44 @@
+import React from 'react';
 import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
 import './IETrazadores.css';
 
-const IETrazadores: React.FC = () => {
+interface TablaDetail {
+  field3: string;
+  field4: string;
+}
+
+interface IETrazadoresProps {
+  tablaDetails: TablaDetail[];
+}
+
+
+const extractPrefix = (field3: string) => {
+  const match = field3.match(/^TRA [A-Z]+ \d+/);
+  return match ? match[0] : '';
+};
+
+const IETrazadores: React.FC<IETrazadoresProps> = ({ tablaDetails }) => {
+  
+  const categories = [
+    'TRA CS 17',
+    'TRA CSH 29',
+    'TRA CSH 31',
+    'TRA PRE 52',
+    'TRA ELB 60',
+    'TRA ELB 66',
+    'TRA MA 67',
+    'TRA TPO 68',
+    'TRA SER 72',
+    'TRA DOC 98',
+    'TRA DOC 99'
+  ];
+  
+  const filteredData = categories.map(category => {
+    const found = tablaDetails.find(detail => extractPrefix(detail.field3) === category);
+    return found ? parseInt(found.field4) : 0;
+  });
+
   const options = {
     chart: {
       type: 'bar',
@@ -12,7 +48,7 @@ const IETrazadores: React.FC = () => {
       text: '',
     },
     xAxis: {
-      categories: ['TRA CS 17', 'TRA CSH 29', 'TRA CSH 31', 'TRA PRE 52', 'TRA ELB 60', 'TRA ELB 66', 'TRA MA 67', 'TRA TPO 68', 'TRA SER 72', 'TRA DOC 98', 'TRA DOC 99'],
+      categories,
       title: {
         text: null
       }
@@ -55,19 +91,9 @@ const IETrazadores: React.FC = () => {
     },
     series: [
       {
-        name: 'Azul',
-        data: [40, 35, 50, 45, 60, 70, 65, 50, 45, 60, 55],
+        name: 'Porcentaje',
+        data: filteredData,
         color: '#2874a6'
-      },
-      {
-        name: 'Verde',
-        data: [30, 25, 20, 25, 20, 10, 15, 20, 25, 20, 25],
-        color: '#229954'
-      },
-      {
-        name: 'Rojo',
-        data: [30, 40, 30, 30, 20, 20, 20, 30, 30, 20, 20],
-        color: '#cb4335'
       }
     ],
     responsive: {

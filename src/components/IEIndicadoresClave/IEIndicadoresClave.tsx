@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
 import Highcharts3D from 'highcharts/highcharts-3d';
@@ -6,8 +6,24 @@ import './IEIndicadores.css';
 
 Highcharts3D(Highcharts);
 
-const IEIndicadoresClave: React.FC = () => {
+interface TablaDetail {
+  field3: string;
+  field4: string;
+}
+
+interface IEIndicadoresClaveProps {
+  tablaDetails: TablaDetail[];
+}
+
+
+const extractPrefix = (field3: string) => {
+  const match = field3.match(/^[A-ZÁÉÍÓÚ]+/);
+  return match ? match[0] : '';
+};
+
+const IEIndicadoresClave: React.FC<IEIndicadoresClaveProps> = ({ tablaDetails }) => {
   const [chartWidth, setChartWidth] = useState(window.innerWidth * 0.8);
+
 
   const handleResize = () => {
     const newWidth = window.innerWidth * 0.8;
@@ -18,6 +34,15 @@ const IEIndicadoresClave: React.FC = () => {
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
+
+ 
+  const categories = ['BPM', 'MINUTA', 'EXÁMENES', 'INAPTITUD', 'CAPACITACIONES'];
+
+
+  const filteredData = categories.map(category => {
+    const found = tablaDetails.find(detail => extractPrefix(detail.field3) === category);
+    return found ? parseInt(found.field4) : 100;
+  });
 
   const options = {
     chart: {
@@ -42,7 +67,7 @@ const IEIndicadoresClave: React.FC = () => {
       text: '',
     },
     xAxis: {
-      categories: ['BPM', 'MINUTA', 'EXÁMENES', 'INAPTITUD', 'CAPACITACIONES'],
+      categories,
       title: {
         text: null
       }
@@ -56,7 +81,7 @@ const IEIndicadoresClave: React.FC = () => {
     series: [
       {
         name: 'Indicadores',
-        data: [70, 85, 60, 90, 75],
+        data: filteredData,
         colorByPoint: true,
         colors: ['#000000', '#28a745', '#dc3545', '#ffc107', '#007bff'],
       }

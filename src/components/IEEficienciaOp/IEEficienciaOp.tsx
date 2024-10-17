@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
 import Highcharts3D from 'highcharts/highcharts-3d';
@@ -6,7 +6,22 @@ import './IEEficienciaOp.css';
 
 Highcharts3D(Highcharts);
 
-const IEEficienciaOp: React.FC = () => {
+interface TablaDetail {
+  field3: string;
+  field4: string;
+}
+
+interface IEEficienciaOpProps {
+  tablaDetails: TablaDetail[];
+}
+
+const extractPrefix = (field3: string) => {
+  const match = field3.match(/^TRA [A-Z]+ \d+/);
+  return match ? match[0] : '';
+};
+
+
+const IEEficienciaOp: React.FC<IEEficienciaOpProps> = ({ tablaDetails }) => {
   const [chartWidth, setChartWidth] = useState(window.innerWidth * 0.8);
 
   const handleResize = () => {
@@ -18,6 +33,66 @@ const IEEficienciaOp: React.FC = () => {
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
+
+
+  const categories = [
+    'RL 6. Cuenta con registros de mantención correctiva de equipos:',
+    'PPT 83. Se cuenta con procedimientos escritos de los procesos (Formulación del producto, flujos de operación, procesos productivos). (Art. 3, 11, 63, 66, 69, 132)',
+    'DOC 95. Autorizaciones Sanitarias (casino y verduras crudas):',
+    'RL 6. Cuenta con registros de mantención correctiva de equipos:',
+    'CQA 8. Almacenamiento de productos químicos según PH, con hojas de seguridad y EPP disponibles:',
+    'REC 41. Verificar tiempo de exposición de materias primas a Tª adecuada:',
+    'ALM 51. Verificar entrega correcta a la producción (verificación de cantidad, calidad y disponibilidad):',
+    'SER 73. Reposición continua de las preparaciones frías y calientes:'
+  ];
+
+
+  const filteredData = categories.map(category => {
+    const prefix = extractPrefix(category);
+    const found = tablaDetails.find(detail => extractPrefix(detail.field3) === prefix);
+    return found ? parseInt(found.field4) : 0;
+  });
+
+
+  const efficiencyCards = categories.map((category, index) => {
+    let className = '';
+  
+    switch (index) {
+      case 0:
+        className = 'mantenciones';
+        break;
+      case 1:
+        className = 'procedimientos';
+        break;
+      case 2:
+        className = 'resoluciones';
+        break;
+      case 3:
+        className = 'mantenciones'; // Repeated category
+        break;
+      case 4:
+        className = 'almacenamiento';
+        break;
+      case 5:
+        className = 'control-temperatura';
+        break;
+      case 6:
+        className = 'planificacion';
+        break;
+      case 7:
+        className = 'reposicion';
+        break;
+      default:
+        className = 'default';
+    }
+  
+    return {
+      name: category,
+      percentage: filteredData[index],
+      className
+    };
+  });
+  
 
   const options = {
     chart: {
@@ -36,16 +111,7 @@ const IEEficienciaOp: React.FC = () => {
       text: '',
     },
     xAxis: {
-      categories: [
-        'Flujo Operaciones',
-        'Procedimientos',
-        'Resoluciones',
-        'Mantenciones',
-        'Almacenamiento',
-        'Control Temp.',
-        'Planificación',
-        'Reposición'
-      ],
+      categories: categories.map(category => category.split(' ')[0]),
       title: {
         text: null
       }
@@ -59,7 +125,7 @@ const IEEficienciaOp: React.FC = () => {
     series: [
       {
         name: 'Eficiencia',
-        data: [82, 83, 95, 6, 8, 41, 51, 73],
+        data: filteredData,
         colorByPoint: true,
         colors: [
           '#1E90FF', '#32CD32', '#FF4500', '#FFD700', '#8A2BE2', '#FF69B4', '#20B2AA', '#FF6347'
@@ -85,14 +151,11 @@ const IEEficienciaOp: React.FC = () => {
       </div>
 
       <div className="ie-eficiencia-cards">
-        <div className="eficiencia-card flujo-op">Flujo Operaciones PPT 82</div>
-        <div className="eficiencia-card procedimientos">Procedimientos Estandarizados PPT 83</div>
-        <div className="eficiencia-card resoluciones">Cumplimiento Resoluciones Sanitarias DOC 95</div>
-        <div className="eficiencia-card mantenciones">Mantenciones Correctivas RL 6</div>
-        <div className="eficiencia-card almacenamiento">Almacenamiento de Productos Químicos SQA 8</div>
-        <div className="eficiencia-card control-temperatura">Control Tiempo de Temperatura REC 41</div>
-        <div className="eficiencia-card planificacion">Planificación de Productos ALM 51</div>
-        <div className="eficiencia-card reposicion">Reposición SER 73</div>
+        {efficiencyCards.map((card, index) => (
+          <div key={index} className={`eficiencia-card ${card.className}`}>
+            {card.name}: {card.percentage}%
+          </div>
+        ))}
       </div>
 
     </div>
