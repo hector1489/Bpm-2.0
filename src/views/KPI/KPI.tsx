@@ -1,13 +1,11 @@
 import { KPIGraph } from '../../components';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate  } from 'react-router-dom';
 import { useContext, useState, useEffect } from 'react';
 import { AppContext } from '../../context/GlobalState';
 import { getTablaDetailsByNumeroAuditoria } from '../../utils/apiDetails';
 import './KPI.css';
 
-interface LUMDetailsSummaryProps {
-  numeroAuditoria: string | undefined;
-}
+
 
 interface TablaDetail {
   numero_auditoria: string;
@@ -17,16 +15,16 @@ interface TablaDetail {
   field4: string;
 }
 
-const KPI: React.FC<LUMDetailsSummaryProps> = () => {
+interface LUMDetailsSummaryProps {
+  numeroAuditoria: string | null;
+}
+
+const KPI: React.FC<LUMDetailsSummaryProps> = ({ numeroAuditoria }) => {
   const navigate = useNavigate();
-  const location = useLocation();
   const context = useContext(AppContext);
   const [tablaDetails, setTablaDetails] = useState<TablaDetail[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
-
-  // Recuperar el número de auditoría desde location.state
-  const numeroAuditoria = location.state?.numero_requerimiento;
 
   if (!context) {
     return <div>Error: Context is not available.</div>;
@@ -53,8 +51,6 @@ const KPI: React.FC<LUMDetailsSummaryProps> = () => {
     fetchTablaDetails();
   }, [numeroAuditoria]);
 
-  console.log(tablaDetails);
-
   const moduleData = tablaDetails.map((detail) => ({
     moduleName: detail.field2,
     percentage: Number(detail.field4) || null,
@@ -67,7 +63,7 @@ const KPI: React.FC<LUMDetailsSummaryProps> = () => {
   return (
     <div className="kpi-container">
       <h3>Resumen KPI</h3>
-      <p>Numero Auditoria: {numeroAuditoria || 'No disponible'}</p>
+      <p>Numero Auditoria: {numeroAuditoria}</p>
       {loading && <p>Cargando datos...</p>}
       {error && <p>{error}</p>}
       {!loading && !error && (
@@ -79,5 +75,6 @@ const KPI: React.FC<LUMDetailsSummaryProps> = () => {
     </div>
   );
 };
+
 
 export default KPI;

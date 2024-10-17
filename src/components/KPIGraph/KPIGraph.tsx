@@ -48,7 +48,7 @@ const KPIGraph: React.FC<BPMGraphProps> = ({ moduleData }) => {
 
   const moduleNames = ['Alimentación Insp. BPM', 'Alimentación Cum. Inutas', 'Alimentación Exam. Manip.', 'Alimentación Inap. Microb.'];
   const percentages = [transporteAvg, serviciosAvg, documentosAvg, promedioGeneral];
-  const itemWeights = ['25%', '25%', '25%', '25%']; // Asumimos que cada uno tiene 25% de ponderación
+  const itemWeights = ['25%', '25%', '25%', '25%'];
 
   const barColors = percentages.map((percentage) => getColorByPercentage(percentage));
 

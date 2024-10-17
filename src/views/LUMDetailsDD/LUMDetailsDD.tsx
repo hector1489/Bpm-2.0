@@ -8,6 +8,7 @@ import './LUMDetailsDD.css'
 const LUMDetailsDD: React.FC = () => {
   const location = useLocation();
   const navigate = useNavigate();
+  
   const numeroAuditoria = location.state?.numero_requerimiento;
 
   const handleGoToDoc = () => {
