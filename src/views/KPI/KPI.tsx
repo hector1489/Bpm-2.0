@@ -1,11 +1,9 @@
 import { KPIGraph } from '../../components';
-import { useNavigate  } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';  // Asegúrate de importar useLocation
 import { useContext, useState, useEffect } from 'react';
 import { AppContext } from '../../context/GlobalState';
 import { getTablaDetailsByNumeroAuditoria } from '../../utils/apiDetails';
 import './KPI.css';
-
-
 
 interface TablaDetail {
   numero_auditoria: string;
@@ -15,16 +13,15 @@ interface TablaDetail {
   field4: string;
 }
 
-interface LUMDetailsSummaryProps {
-  numeroAuditoria: string | null;
-}
-
-const KPI: React.FC<LUMDetailsSummaryProps> = ({ numeroAuditoria }) => {
+const KPI: React.FC = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const context = useContext(AppContext);
   const [tablaDetails, setTablaDetails] = useState<TablaDetail[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
+
+  const numeroAuditoria = location.state?.numero_requerimiento || null;
 
   if (!context) {
     return <div>Error: Context is not available.</div>;
@@ -75,6 +72,5 @@ const KPI: React.FC<LUMDetailsSummaryProps> = ({ numeroAuditoria }) => {
     </div>
   );
 };
-
 
 export default KPI;
