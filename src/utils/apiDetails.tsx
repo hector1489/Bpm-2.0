@@ -17,12 +17,19 @@ export const createTablaDetail = async (data: any) => {
   }
 };
 
-// obtener todos los registros de tabla_details
-export const getAllTablaDetails = async (): Promise<any[]> => {
+
+export const getAllTablaDetailsNumbersAudit = async (): Promise<any[]> => {
   try {
-    const response = await axios.get(`${BASE_URL}/tabla-details`);
-    return response.data;
-  } catch (error: unknown) {
+    const response = await axios.get(`${BASE_URL}/auditorias`);
+
+    if (response && Array.isArray(response.data)) {
+      return response.data;
+    } else {
+      console.warn('No data found or the response is not an array.');
+      return [];
+    }
+    
+  } catch (error) {
     if (error instanceof Error) {
       console.error('Error al obtener los detalles de la tabla:', error.message);
     } else {
@@ -32,7 +39,7 @@ export const getAllTablaDetails = async (): Promise<any[]> => {
   }
 };
 
-// obtener registros por número de auditoría
+
 export const getTablaDetailsByNumeroAuditoria = async (numero_auditoria: string): Promise<any[]> => {
   try {
     const response = await axios.get(`${BASE_URL}/tabla-details/${numero_auditoria}`);
@@ -47,7 +54,7 @@ export const getTablaDetailsByNumeroAuditoria = async (numero_auditoria: string)
   }
 };
 
-// eliminar un registro por número de auditoría en tabla_details
+
 export const deleteTablaDetail = async (numero_auditoria: string): Promise<any> => {
   try {
     const response = await axios.delete(`${BASE_URL}/deleted-details/${numero_auditoria}`);
