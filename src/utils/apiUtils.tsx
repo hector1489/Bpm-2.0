@@ -21,6 +21,34 @@ export const obtenerTodasLasAccionesDesdeAPI = async (authToken: string) => {
 };
 
 
+export const sendEmail = async (
+  toEmail: string, 
+  subject: string, 
+  text: string
+) => {
+  try {
+    if (!toEmail || !text) {
+      console.error('Faltan parámetros requeridos');
+      return;
+    }
+
+    const response = await axios.post(`${BASE_URL}/email/send`, {
+      toEmail,
+      subject,
+      text,
+    });
+
+    if (response.status === 200) {
+      console.log('Correo enviado exitosamente');
+    } else {
+      console.error('Error al enviar el correo');
+    }
+  } catch (error: any) {
+    console.error('Error al enviar el correo:', error.message);
+  }
+};
+
+
 export const enviarDatosAuditoria = async (desviaciones: any, authToken: string) => {
   const correo = 'bbpmauditorias@gmail.com';
 

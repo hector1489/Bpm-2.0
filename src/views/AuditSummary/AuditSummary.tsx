@@ -1,10 +1,10 @@
 import './AuditSummary.css';
 import { AverageModules, BPMGraph, Summary } from '../../components/index';
-import { useContext, useCallback } from 'react';
+import { useContext, useCallback, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AppContext } from '../../context/GlobalState';
 import { extractPercentage, getCurrentDate, calculateSolutionDate, getColorByPercentage, getCriterioByColor } from '../../utils/utils';
-import { enviarDatosAuditoria } from '../../utils/apiUtils';
+import { enviarDatosAuditoria, sendEmail } from '../../utils/apiUtils';
 import logos from '../../assets/img/index';
 
 const DEFAULT_ANSWER = "Sin respuesta";
@@ -23,6 +23,39 @@ const AuditSummary: React.FC = () => {
   }
 
   const { state } = context;
+
+  useEffect(() => {
+    const handleSendEmail = async () => {
+      const { auditSheetData } = state;
+      const emailAudit = auditSheetData.auditorEmail;
+      const numeroAuditoria = auditSheetData.numeroAuditoria;
+
+      if (!numeroAuditoria) {
+        console.error('Error: El número de auditoría es nulo.');
+        return;
+      }
+
+      if (!emailAudit) {
+        console.error('Error: El correo del auditor es nulo.');
+        return;
+      }
+
+      try {
+        await sendEmail(
+          emailAudit,
+          'Número de Auditoría',
+          `BPM AUDITORIAS :
+          Se han ingresado nuevas desviaciones correspondientes al número de auditoría : ${numeroAuditoria}
+          `,
+        );
+        console.log('Correo enviado exitosamente');
+      } catch (error) {
+        console.error('Error al enviar el correo:', error);
+      }
+    };
+
+    handleSendEmail();
+  }, [state]);
 
   const calculatePercentage = (moduleId: number): number => {
     try {
@@ -101,6 +134,8 @@ const AuditSummary: React.FC = () => {
       console.error('Error al enviar las incidencias:', error);
     }
   }, [state]);
+
+
 
   const handleGoToHome = () => {
     navigate('/home');
