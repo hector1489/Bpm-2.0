@@ -4,7 +4,26 @@ import HighchartsReact from 'highcharts-react-official';
 import Highcharts3D from 'highcharts/highcharts-3d';
 import './IESeguridad.css';
 
+interface TablaDetail {
+  field3: string;
+  field4: string;
+}
+
+interface IESeguridadProps {
+  tablaDetails: TablaDetail[];
+}
+
 Highcharts3D(Highcharts);
+
+const extractPrefix = (field3: string) => {
+  const match = field3.match(/^TRA [A-Z]+ \d+/);
+  return match ? match[0] : '';
+};
+
+const extractPercentage = (field4: string) => {
+  const match = field4.match(/^(\d+)%/);
+  return match ? match[1] : '';
+};
 
 const chartColors = {
   controlPlagas: '#17202a',
@@ -15,13 +34,32 @@ const chartColors = {
   tomaContramuestras: '#95a5a6',
 };
 
-const IESeguridad: React.FC = () => {
+const IESeguridad: React.FC<IESeguridadProps> = ({ tablaDetails }) => {
   const [chartWidth, setChartWidth] = useState(window.innerWidth * 0.8);
 
   const handleResize = () => {
     const newWidth = window.innerWidth * 0.8;
     setChartWidth(newWidth > 300 ? newWidth : 300);
   };
+
+  const IESeguridadData = [
+    { text: 'CP 34. Revisar programa y evaluar eficacia y eficiencia', color: chartColors.controlPlagas },
+    { text: 'RL 5. Mantención de registros de control de proceso, 90 días:', color: chartColors.controlesProcesos },
+    { text: 'TRA SER 72. Equipos suficientes para la correcta mantención de productos calientes y fríos:', color: chartColors.reclamoProveedores },
+    { text: 'ALM 48. Productos No Conforme, manejo correcto (art. 105 DS977):', color: chartColors.noConformidades },
+    { text: 'CQA 10. Productos químicos y utensilios de aseo en cantidad y limpieza adecuada:', color: chartColors.controlQuimicos },
+    { text: 'QQ 81. Verificar registro y toma de contramuestras, considerar menú y gramaje (100 a 200 gramos):', color: chartColors.tomaContramuestras },
+  ];
+
+  const updatedData = IESeguridadData.map((item) => {
+    const prefix = extractPrefix(item.text);
+    const found = tablaDetails.find((detail) => extractPrefix(detail.field3) === prefix);
+    return {
+      ...item,
+      percentage: found ? `${extractPercentage(found.field4)}%` : '0%',
+      y: found ? parseInt(extractPercentage(found.field4)) : 0,
+    };
+  });
 
   useEffect(() => {
     window.addEventListener('resize', handleResize);
@@ -65,44 +103,27 @@ const IESeguridad: React.FC = () => {
     series: [{
       name: 'Porcentaje',
       colorByPoint: true,
-      data: [
-        { name: 'Control de Plagas CP 34', y: 20, color: chartColors.controlPlagas },
-        { name: 'Controles de Procesos RL 5', y: 10, color: chartColors.controlesProcesos },
-        { name: 'Reclamo a Proveedores REC 72', y: 25, color: chartColors.reclamoProveedores },
-        { name: 'No Conformidades Internas ALM 48', y: 15, color: chartColors.noConformidades },
-        { name: 'Control Uso de Químicos CQ 10', y: 10, color: chartColors.controlQuimicos },
-        { name: 'Toma Contramuestras QQ 81', y: 20, color: chartColors.tomaContramuestras }
-      ]
+      data: updatedData.map((item) => ({
+        name: item.text.split('.')[0],
+        y: item.y,
+        color: item.color
+      }))
     }]
   };
 
   return (
     <div className="ie-seguridad-container">
       <div className="seguridad-cards">
-        <div className="seguridad-card black">
-          <p>Control de Plagas CP 34</p>
-          <p>20%</p>
-        </div>
-        <div className="seguridad-card green">
-          <p>Controles de Procesos RL 5</p>
-          <p>10%</p>
-        </div>
-        <div className="seguridad-card red">
-          <p>Reclamo a Proveedores REC 72</p>
-          <p>25%</p>
-        </div>
-        <div className="seguridad-card yellow">
-          <p>No Conformidades Internas ALM 48</p>
-          <p>15%</p>
-        </div>
-        <div className="seguridad-card blue">
-          <p>Control Uso de Químicos CQ 10</p>
-          <p>10%</p>
-        </div>
-        <div className="seguridad-card gray">
-          <p>Toma Contramuestras QQ 81</p>
-          <p>20%</p>
-        </div>
+        {updatedData.map((item, index) => (
+          <div 
+            key={index} 
+            className="seguridad-card" 
+            style={{ backgroundColor: item.color }}
+          >
+            <p>{item.text}</p>
+            <p>{item.percentage}</p>
+          </div>
+        ))}
       </div>
 
       <div className="chart-container">
@@ -113,6 +134,6 @@ const IESeguridad: React.FC = () => {
       </div>
     </div>
   );
-}
+};
 
 export default IESeguridad;

@@ -68,7 +68,7 @@ const IEEficienciaOp: React.FC<IEEficienciaOpProps> = ({ tablaDetails }) => {
         className = 'resoluciones';
         break;
       case 3:
-        className = 'mantenciones'; // Repeated category
+        className = 'mantenciones';
         break;
       case 4:
         className = 'almacenamiento';

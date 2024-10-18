@@ -111,13 +111,13 @@ const InformeEjecutivo: React.FC = () => {
       <IEEficienciaOp tablaDetails={tablaDetails}/>
 
       <h5>7.- SATISFACCION AL CLIENTE</h5>
-      <IESatisfaccion />
+      <IESatisfaccion tablaDetails={tablaDetails}/>
 
       <h5>8. SEGURIDAD ALIMENTARIA</h5>
-      <IESeguridad />
+      <IESeguridad tablaDetails={tablaDetails}/>
 
       <h5>9.- CONTROL DE CALIDAD</h5>
-      <IEControlCalidad />
+      <IEControlCalidad tablaDetails={tablaDetails}/>
 
       <div className="ie-buttons">
         <button onClick={handleGoDoc}>volver</button>

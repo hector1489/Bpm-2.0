@@ -36,7 +36,6 @@ const IEHigiene: React.FC<IEHigieneProps> = ({ tablaDetails }) => {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  // Categorías que se quieren mostrar en el gráfico
   const categories = [
     'LUM 21. Toma de muestra y uso de luminómetro:',
     'CS 13. Limpieza y desinfección de equipos de proceso (máquina universal, juguera, amasadora, otros):',
