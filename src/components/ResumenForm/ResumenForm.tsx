@@ -138,7 +138,7 @@ const ResumenForm: React.FC = () => {
   return (
     <div className="Resumen-form-container">
       {loading ? (
-        <p>Cargando PDF...</p>
+        <p>Cargando la Base de Datos...</p>
       ) : pdf ? (
         <div className="pdf-card-container">
           <i className="fa-regular fa-file-pdf"></i>
@@ -162,7 +162,7 @@ const ResumenForm: React.FC = () => {
         </div>
       ) : tablaDetails ? (
         <div className='d-flex flex-column'>
-          <p>Detalles de la Auditoria encontrados para el requerimiento {numeroRequerimiento}:</p>
+          <p>Detalles de la Auditoria : {numeroRequerimiento}</p>
 
           <div className="routes-downloads">
           <button onClick={handleGoToDDetails}>Ver Details</button>
@@ -174,7 +174,7 @@ const ResumenForm: React.FC = () => {
           <button className='btn-red' onClick={handleDeleteTable}>Borrar Data</button>
         </div>
       ) : (
-        <p>No se encontró el PDF ni los detalles de la auditoría.</p>
+        <p>No se encontró datos para la auditoría.</p>
       )}
     </div>
   );

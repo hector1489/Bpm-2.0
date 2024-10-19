@@ -5,3 +5,9 @@
   align-items: center;
   padding: 20px;
 }
+
+.buttons-analysis {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}

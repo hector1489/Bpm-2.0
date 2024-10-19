@@ -75,10 +75,7 @@ const DocumentacionView: React.FC = () => {
     navigate('/evidencia-fotografica');
   };
 
-  // Extract unique `numero_auditoria`
   const uniqueAuditorias = Array.from(new Set(tablaDetails.map((detail) => detail.numero_auditoria)));
-
-
 
   return (
     <div className="documentacion-container">
@@ -88,7 +85,7 @@ const DocumentacionView: React.FC = () => {
       <h3 className="fw-bold">Documentación</h3>
 
       {loading ? (
-        <div>Cargando PDFs...</div>
+        <div>Cargando la Base de Datos...</div>
       ) : (
         <div className="desviaciones">
           {uniqueAuditorias.length > 0 ? (
@@ -122,7 +119,7 @@ const DocumentacionView: React.FC = () => {
               ))}
             </div>
           ) : (
-            <p>No se encontraron PDFs para el auditor.</p>
+            <p>No se encontraron Auditorias para el auditor.</p>
           )}
         </div>
       )}
