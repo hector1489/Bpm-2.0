@@ -36,6 +36,31 @@ const PhotosBackend: React.FC = () => {
     fetchIncidencias();
   }, []);
 
+  console.log(photos);
+
+  const extractPhotoName = (key: string) => {
+    const regex = /photos\/[^_]+_[^_]+_(.+)\.png$/;
+    const match = key.match(regex);
+    
+    return match ? match[1].replace(/_/g, ' ') : key;
+  };
+
+  const extractPhotoDateFromUrl = (url: string) => {
+    const regex = /X-Amz-Date=(\d{8})T/;
+    const match = url.match(regex);
+  
+    if (match) {
+      const dateStr = match[1];
+      const year = dateStr.substring(0, 4);
+      const month = dateStr.substring(4, 6);
+      const day = dateStr.substring(6, 8);
+      return `${day}/${month}/${year}`;
+    }
+  
+    return 'Fecha desconocida';
+  };
+  
+
   return (
     <div className="photos-backend-container">
       <h4>
@@ -49,6 +74,8 @@ const PhotosBackend: React.FC = () => {
         {photos.map((photo) => (
           <div className="photo-item" key={photo.key}>
             <img src={photo.url} alt="Imagen de Incidencia" />
+            <p>{extractPhotoName(photo.key)}</p>
+            <p>Fecha: {extractPhotoDateFromUrl(photo.url)}</p>
             <button
               className="delete-photo-button"
               onClick={() => handleDelete(photo.key)}
