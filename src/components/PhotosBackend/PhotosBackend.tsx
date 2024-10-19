@@ -80,9 +80,9 @@ const PhotosBackend: React.FC = () => {
         {photos.map((photo) => (
           <div className="photo-item" key={photo.key}>
             <img src={photo.url} alt="Imagen de Incidencia" />
-            <p>Número de Auditoría: {extractAuditNumber(photo.key)}</p>
-            <p>Fecha: {extractPhotoDateFromUrl(photo.url)}</p>
-            <p>Nombre: {extractPhotoName(photo.key)}</p>
+            <p>Número de Auditoría : {extractAuditNumber(photo.key)}</p>
+            <p>Fecha : {extractPhotoDateFromUrl(photo.url)}</p>
+            <p>Pregunta : {extractPhotoName(photo.key)}</p>
             <button
               className="delete-photo-button"
               onClick={() => handleDelete(photo.key)}
