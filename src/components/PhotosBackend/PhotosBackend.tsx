@@ -36,8 +36,6 @@ const PhotosBackend: React.FC = () => {
     fetchIncidencias();
   }, []);
 
-  console.log(photos);
-
   const extractPhotoName = (key: string) => {
     const regex = /photos\/[^_]+_[^_]+_(.+)\.png$/;
     const match = key.match(regex);

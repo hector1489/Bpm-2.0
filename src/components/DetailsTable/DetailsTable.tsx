@@ -38,7 +38,6 @@ const DetailsTable: React.FC = () => {
       };
     }).filter(Boolean);
   
-    console.log('Datos que se enviarán al backend:', dataToSend);
   
     try {
       const response = await createTablaDetail(dataToSend);
