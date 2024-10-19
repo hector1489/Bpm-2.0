@@ -110,10 +110,11 @@ const AuditForm: React.FC = () => {
         context.drawImage(video, 0, 0, canvas.width, canvas.height);
         const photoUrl = canvas.toDataURL('image/png');
 
+        const numeroAuditoria = state.auditSheetData.numeroAuditoria
 
         const questionText = currentQuestion?.question || 'sin_pregunta';
         const sanitizedQuestion = questionText.replace(/\s+/g, '_').toLowerCase();
-        const fileName = `${sanitizedQuestion}.png`;
+        const fileName = `${numeroAuditoria}_${sanitizedQuestion}.png`;
 
         addPhoto(currentQuestion?.question || '', photoUrl);
 

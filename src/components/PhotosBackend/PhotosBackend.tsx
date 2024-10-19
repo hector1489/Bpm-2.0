@@ -36,6 +36,13 @@ const PhotosBackend: React.FC = () => {
     fetchIncidencias();
   }, []);
 
+  // New function to extract the audit number
+  const extractAuditNumber = (key: string) => {
+    const regex = /photos\/[^_]+_([^_]+)_/;
+    const match = key.match(regex);
+    return match ? match[1] : 'N/A';
+  };
+
   const extractPhotoName = (key: string) => {
     const regex = /photos\/[^_]+_[^_]+_(.+)\.png$/;
     const match = key.match(regex);
@@ -57,8 +64,9 @@ const PhotosBackend: React.FC = () => {
   
     return 'Fecha desconocida';
   };
-  
 
+  console.log(photos);
+  
   return (
     <div className="photos-backend-container">
       <h4>
@@ -72,8 +80,9 @@ const PhotosBackend: React.FC = () => {
         {photos.map((photo) => (
           <div className="photo-item" key={photo.key}>
             <img src={photo.url} alt="Imagen de Incidencia" />
-            <p>{extractPhotoName(photo.key)}</p>
+            <p>Número de Auditoría: {extractAuditNumber(photo.key)}</p>
             <p>Fecha: {extractPhotoDateFromUrl(photo.url)}</p>
+            <p>Nombre: {extractPhotoName(photo.key)}</p>
             <button
               className="delete-photo-button"
               onClick={() => handleDelete(photo.key)}
@@ -84,7 +93,7 @@ const PhotosBackend: React.FC = () => {
         ))}
       </div>
     </div>
-  )
+  );
 }
 
-export default PhotosBackend
+export default PhotosBackend;
