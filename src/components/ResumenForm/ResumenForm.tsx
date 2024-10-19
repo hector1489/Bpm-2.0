@@ -52,6 +52,10 @@ const ResumenForm: React.FC = () => {
     }
   };
 
+  const handleGoToDoc = () => {
+    navigate('/documentacion');
+  };
+
   const fetchTablaDetails = async () => {
     if (numeroRequerimiento) {
       try {
@@ -132,6 +136,8 @@ const ResumenForm: React.FC = () => {
     } catch (error) {
       console.error('Error al eliminar los detalles de la tabla:', error);
     }
+
+    handleGoToDoc();
   };
   
 
