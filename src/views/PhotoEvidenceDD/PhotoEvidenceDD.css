@@ -1,0 +1,15 @@
+.PhotoEvidenceDD-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 20px;
+}
+
+.PhotoEvidenceDD-buttons {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+

@@ -71,8 +71,10 @@ const DocumentacionView: React.FC = () => {
     });
   };
 
-  const handleToGoPhotos = () => {
-    navigate('/evidencia-fotografica');
+  const handleToGoPhotos = (numeroRequerimiento: string) => {
+    navigate('/photos-auditoria', {
+      state: { numero_requerimiento: numeroRequerimiento}
+    });
   };
 
   const uniqueAuditorias = Array.from(new Set(tablaDetails.map((detail) => detail.numero_auditoria)));
@@ -101,7 +103,7 @@ const DocumentacionView: React.FC = () => {
 
                   {visibleMenuIndex === index && (
                     <div className="dropdown-menu">
-                      <button onClick={handleToGoPhotos}>
+                      <button onClick={() => handleToGoPhotos(numeroAuditoria)}>
                         <i className="fa-regular fa-image"></i> Evidencia Fotográfica
                       </button>
                       <button className="btn-doc-editar" onClick={() => goToControlDesviaciones(numeroAuditoria)}>

@@ -7,20 +7,42 @@ interface Photo {
   url: string;
 }
 
-const PhotosBackend: React.FC = () => {
+interface PhotosBackendProps {
+  numeroAuditoria: string | null;
+}
+
+const PhotosBackend: React.FC<PhotosBackendProps> = ({ numeroAuditoria }) => {
   const [photos, setPhotos] = useState<Photo[]>([]);
   const [errorMessage, setErrorMessage] = useState<string>('');
 
   const fetchIncidencias = async () => {
     try {
       const data = await obtenerFotos();
-      const filteredPhotos = data.filter((item: Photo) => item.key.startsWith('photos/'));
+  
+      let filteredPhotos: Photo[] = [];
+  
+      if (numeroAuditoria) {
+        filteredPhotos = data.filter((item: Photo) => {
+          const auditNumber = extractAuditNumber(item.key);
+          return auditNumber === numeroAuditoria;
+        });
+  
+        if (filteredPhotos.length === 0) {
+          alert(`No se encontraron fotos para el número de auditoría: ${numeroAuditoria}`);
+          filteredPhotos = data.filter((item: Photo) => item.key.startsWith('photos/'));
+        }
+      } else {
+        filteredPhotos = data.filter((item: Photo) => item.key.startsWith('photos/'));
+      }
+  
       setPhotos(filteredPhotos);
     } catch (error) {
       console.error('Error al obtener las fotos:', error);
       setErrorMessage('Error al cargar las fotos.');
     }
   };
+  
+  
 
   const handleDelete = async (key: string) => {
     try {
@@ -36,7 +58,6 @@ const PhotosBackend: React.FC = () => {
     fetchIncidencias();
   }, []);
 
-  // New function to extract the audit number
   const extractAuditNumber = (key: string) => {
     const regex = /photos\/[^_]+_([^_]+)_/;
     const match = key.match(regex);
