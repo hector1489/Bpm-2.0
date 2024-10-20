@@ -15,6 +15,8 @@ const PhotoEvidence: React.FC = () => {
 
   const { state } = context;
 
+  const numeroAuditoriaPorDefecto = "0";
+
   const handleGoToHome = () => {
     navigate('/home');
   };
@@ -23,7 +25,7 @@ const PhotoEvidence: React.FC = () => {
     <div className="panel-foto-container">
       <h3>Panel de Evidencia Fotografica</h3>
       <PhotoAudit photos={state.photos} />
-      <PhotosBackend />
+      <PhotosBackend numeroAuditoria={numeroAuditoriaPorDefecto}/>
       <div className="buttons-summary">
         <button onClick={handleGoToHome}>Home</button>
       </div>
