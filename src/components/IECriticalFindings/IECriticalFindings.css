@@ -1,5 +1,6 @@
 .IECriticalFinding-container {
   width: 100%;
+  max-height: 400px;
   display: flex;
   flex-wrap: wrap;
   gap: 30px;
@@ -7,6 +8,7 @@
   background-color: #f4f4f4;
   padding: 20px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  overflow: auto;
 }
 
 .critical-card {

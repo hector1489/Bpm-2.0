@@ -12,10 +12,19 @@ interface IETrazadoresProps {
   tablaDetails: TablaDetail[];
 }
 
-
 const extractPrefix = (field3: string) => {
   const match = field3.match(/^TRA [A-Z]+ \d+/);
   return match ? match[0] : '';
+};
+
+const getColorByPercentageIETrazadores = (percentage: number) => {
+  if (percentage >= 75) {
+    return '#2874a6';
+  } else if (percentage >= 50) {
+    return '#229954';
+  } else {
+    return '#cb4335';
+  }
 };
 
 const IETrazadores: React.FC<IETrazadoresProps> = ({ tablaDetails }) => {
@@ -38,6 +47,11 @@ const IETrazadores: React.FC<IETrazadoresProps> = ({ tablaDetails }) => {
     const found = tablaDetails.find(detail => extractPrefix(detail.field3) === category);
     return found ? parseInt(found.field4) : 0;
   });
+
+  const dataWithColors = filteredData.map(value => ({
+    y: value,
+    color: getColorByPercentageIETrazadores(value)
+  }));
 
   const options = {
     chart: {
@@ -92,8 +106,7 @@ const IETrazadores: React.FC<IETrazadoresProps> = ({ tablaDetails }) => {
     series: [
       {
         name: 'Porcentaje',
-        data: filteredData,
-        color: '#2874a6'
+        data: dataWithColors
       }
     ],
     responsive: {

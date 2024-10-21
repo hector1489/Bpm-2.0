@@ -25,8 +25,6 @@ const InformeEjecutivo: React.FC = () => {
   const informeRef = useRef<HTMLDivElement>(null);
   const numeroAuditoria = location.state?.numero_requerimiento;
 
-  console.log(tablaDetails);
-
   const filtrarDetallesInferiorA100 = (tablaDetails: TablaDetail[]): TablaDetail[] => {
     return tablaDetails.filter((detail) => {
       const porcentaje = parseInt(detail.field4);
