@@ -39,7 +39,8 @@ if (typeof Highcharts === 'object') {
 const BPMDetailsSummary: React.FC<TableDetailsSummaryProps> = ({ numeroAuditoria }) => {
   const context = useContext(AppContext);
   const [tablaDetails, setTablaDetails] = useState<TablaDetail[]>([]);
-  const [auditSheetDetails, setAuditSheetDetails] = useState<AuditSheet | null>(null);
+  const [auditSheetDetails, setAuditSheetDetails] = useState<AuditSheet[] | null>(null);
+  const [filteredAuditSheet, setFilteredAuditSheet] = useState<AuditSheet | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -70,27 +71,40 @@ const BPMDetailsSummary: React.FC<TableDetailsSummaryProps> = ({ numeroAuditoria
     fetchTablaDetails();
   }, [numeroAuditoria]);
 
-  // Nuevo useEffect para obtener los detalles del audit sheet por username
+  const fetchAuditSheetDetails = async () => {
+    const username = state?.userName;
+    if (!username) return;
+
+    setLoading(true);
+    setError(null);
+
+    try {
+      const auditSheetData = await getAuditSheetByUsername(username);
+      setAuditSheetDetails(auditSheetData);
+    } catch (err) {
+      setError('Error al obtener los datos del audit sheet');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // useEffect para filtrar los datos por numero de auditoría
+  const bpmFilteredAuditSheet = () => {
+    if (numeroAuditoria && auditSheetDetails) {
+      const filteredData = auditSheetDetails.find(
+        (sheet) => sheet.numero_auditoria === numeroAuditoria
+      );
+      setFilteredAuditSheet(filteredData || null);
+    }
+  };
+
   useEffect(() => {
-    const fetchAuditSheetDetails = async () => {
-      const username = state?.userName;
-      if (!username) return;
-
-      setLoading(true);
-      setError(null);
-
-      try {
-        const auditSheetData = await getAuditSheetByUsername(username);
-        setAuditSheetDetails(auditSheetData[0]);
-      } catch (err) {
-        setError('Error al obtener los datos del audit sheet');
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchAuditSheetDetails();
-  }, [context?.state?.userName]);
+  }, [context?.state?.userName]); 
+
+  useEffect(() => {
+    bpmFilteredAuditSheet();
+  }, [auditSheetDetails, numeroAuditoria]);
 
   if (loading) {
     return <p>Cargando datos...</p>;
@@ -100,7 +114,10 @@ const BPMDetailsSummary: React.FC<TableDetailsSummaryProps> = ({ numeroAuditoria
     return <p>{error}</p>;
   }
 
-  console.log(auditSheetDetails);
+  if (!filteredAuditSheet) {
+    return <p>No se encontraron detalles para la auditoría {numeroAuditoria}</p>;
+  }
+
 
   // Definición de los módulos
   const bpmModules = ['infraestructura', 'legales'];
@@ -243,62 +260,34 @@ const BPMDetailsSummary: React.FC<TableDetailsSummaryProps> = ({ numeroAuditoria
         <div className="BPMDetailsSummary-data-table">
 
           <table>
-            <thead>
+          <thead>
               <tr>
                 <th>Nombre del Establecimiento:</th>
-                <td>
-                  <span id="resumen-nombre-establecimiento" className="resumen-span">
-                    { }
-                  </span>
-                </td>
+                <td>{filteredAuditSheet?.field1 || 'N/A'}</td>
               </tr>
               <tr>
                 <th>Número de Auditoría:</th>
-                <td>
-                  <span id="resumen-nombre-establecimiento" className="resumen-span">
-                    { }
-                  </span>
-                </td>
+                <td>{filteredAuditSheet?.numero_auditoria || 'N/A'}</td>
               </tr>
               <tr>
                 <th>Gerente del Establecimiento:</th>
-                <td>
-                  <span id="resumen-nombre-establecimiento" className="resumen-span">
-                    { }
-                  </span>
-                </td>
+                <td>{filteredAuditSheet?.field2 || 'N/A'}</td>
               </tr>
               <tr>
                 <th>Administrador del Establecimiento:</th>
-                <td>
-                  <span id="resumen-nombre-establecimiento" className="resumen-span">
-                    { }
-                  </span>
-                </td>
+                <td>{filteredAuditSheet?.field3 || 'N/A'}</td>
               </tr>
               <tr>
                 <th>Supervisor del Establecimiento:</th>
-                <td>
-                  <span id="resumen-nombre-establecimiento" className="resumen-span">
-                    { }
-                  </span>
-                </td>
+                <td>{filteredAuditSheet?.field4 || 'N/A'}</td>
               </tr>
               <tr>
                 <th>Auditor Email:</th>
-                <td>
-                  <span id="resumen-nombre-establecimiento" className="resumen-span">
-                    { }
-                  </span>
-                </td>
+                <td>{filteredAuditSheet?.field5 || 'N/A'}</td>
               </tr>
               <tr>
-                <th>Fecha:</th>
-                <td>
-                  <span id="resumen-nombre-establecimiento" className="resumen-span">
-                    { }
-                  </span>
-                </td>
+                <th>Fecha de Auditoría:</th>
+                <td>{filteredAuditSheet?.field6 || 'N/A'}</td>
               </tr>
             </thead>
           </table>

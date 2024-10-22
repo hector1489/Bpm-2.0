@@ -5,7 +5,7 @@ const BASE_URL = 'https://bpm-backend.onrender.com/audit';
 // Crear un registro en audit_sheet
 export const createAuditSheet = async (data: any) => {
   try {
-    const response = await axios.post(`${BASE_URL}`, data);
+    const response = await axios.post(`${BASE_URL}/audit-sheet`, data);
     return response.data;
   } catch (error: unknown) {
     if (error instanceof Error) {
