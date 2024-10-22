@@ -84,7 +84,7 @@ export const deleteAuditSheet = async (numero_auditoria: string): Promise<any> =
 
 export const deleteAuditSheetById = async (id: string): Promise<any> => {
   try {
-    const response = await axios.delete(`${BASE_URL}/audit-sheet/${id}`);
+    const response = await axios.delete(`${BASE_URL}/deleted/${id}`);
     return response.data;
   } catch (error: unknown) {
     if (error instanceof Error) {
