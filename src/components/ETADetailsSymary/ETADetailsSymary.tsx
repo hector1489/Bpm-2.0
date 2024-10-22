@@ -178,59 +178,125 @@ const ETADetailsSymary: React.FC<ETADetailsSymaryProps> = ({ numeroAuditoria }) 
       <h4>ETA</h4>
       <p>Número de Auditoría: {numeroAuditoria}</p>
 
+      <div className="ETADetailsSummary-data">
+
+        <div className="ETADetailsSummary-data-table">
+        <table>
+            <thead>
+              <tr>
+                <th>Nombre del Establecimiento:</th>
+                <td>
+                  <span id="resumen-nombre-establecimiento" className="resumen-span">
+                    { }
+                  </span>
+                </td>
+              </tr>
+              <tr>
+                <th>Número de Auditoría:</th>
+                <td>
+                  <span id="resumen-nombre-establecimiento" className="resumen-span">
+                    { }
+                  </span>
+                </td>
+              </tr>
+              <tr>
+                <th>Gerente del Establecimiento:</th>
+                <td>
+                  <span id="resumen-nombre-establecimiento" className="resumen-span">
+                    { }
+                  </span>
+                </td>
+              </tr>
+              <tr>
+                <th>Administrador del Establecimiento:</th>
+                <td>
+                  <span id="resumen-nombre-establecimiento" className="resumen-span">
+                    { }
+                  </span>
+                </td>
+              </tr>
+              <tr>
+                <th>Supervisor del Establecimiento:</th>
+                <td>
+                  <span id="resumen-nombre-establecimiento" className="resumen-span">
+                    { }
+                  </span>
+                </td>
+              </tr>
+              <tr>
+                <th>Auditor Email:</th>
+                <td>
+                  <span id="resumen-nombre-establecimiento" className="resumen-span">
+                    { }
+                  </span>
+                </td>
+              </tr>
+              <tr>
+                <th>Fecha:</th>
+                <td>
+                  <span id="resumen-nombre-establecimiento" className="resumen-span">
+                    { }
+                  </span>
+                </td>
+              </tr>
+            </thead>
+          </table>
+
+        </div>
+
+        <div className='ETADetailsSummary-cumplimientos'>
+          <div
+            style={{
+              backgroundColor: 'green',
+              padding: '5px',
+              border: '1px solid black',
+              width: '100%',
+              borderRadius: '5px',
+              textAlign: 'center',
+              color: 'white',
+              fontWeight: 'bold',
+            }}>
+            CUMPLE 90% - 100%
+          </div>
+          <div
+            style={{
+              backgroundColor: 'yellow',
+              padding: '5px',
+              border: '1px solid black',
+              marginTop: '5px',
+              width: '100%',
+              borderRadius: '5px',
+              textAlign: 'center',
+              color: 'black',
+              fontWeight: 'bold',
+            }}>
+            EN ALERTA 75% - 89%
+          </div>
+          <div
+            style={{
+              backgroundColor: 'red',
+              padding: '5px',
+              border: '1px solid black',
+              marginTop: '5px',
+              width: '100%',
+              borderRadius: '5px',
+              textAlign: 'center',
+              color: 'white',
+              fontWeight: 'bold',
+            }}>
+            CRITICO 0% - 74%
+          </div>
+        </div>
+
+      </div>
+
       <div className="ETADetailsSummary-graph">
         <HighchartsReact highcharts={Highcharts} options={chartOptions} />
       </div>
 
-      <h5 className='mt-2'>cumplimiento total : </h5>
-
-      <div className='ETADetailsSummary-cumplimientos'>
-        <div
-          style={{
-            backgroundColor: 'green',
-            padding: '5px',
-            border: '1px solid black',
-            width: '100%',
-            borderRadius: '5px',
-            textAlign: 'center',
-            color: 'white',
-            fontWeight: 'bold',
-          }}>
-          CUMPLE 90% - 100%
-        </div>
-        <div
-          style={{
-            backgroundColor: 'yellow',
-            padding: '5px',
-            border: '1px solid black',
-            marginTop: '5px',
-            width: '100%',
-            borderRadius: '5px',
-            textAlign: 'center',
-            color: 'black',
-            fontWeight: 'bold',
-          }}>
-          EN ALERTA 75% - 89%
-        </div>
-        <div
-          style={{
-            backgroundColor: 'red',
-            padding: '5px',
-            border: '1px solid black',
-            marginTop: '5px',
-            width: '100%',
-            borderRadius: '5px',
-            textAlign: 'center',
-            color: 'white',
-            fontWeight: 'bold',
-          }}>
-          CRITICO 0% - 74%
-        </div>
-      </div>
-
       <table className="ETADetailsSummary-table">
         <thead>
-          <tr style={{ backgroundColor: 'skyblue', color:'black' }}>
+          <tr style={{ backgroundColor: 'skyblue', color: 'black' }}>
             <th className='fw-bold text-uppercase'>Módulo</th>
             <th className='fw-bold text-uppercase'>Pregunta</th>
             <th className='fw-bold text-uppercase'>Porcentaje</th>
@@ -238,7 +304,7 @@ const ETADetailsSymary: React.FC<ETADetailsSymaryProps> = ({ numeroAuditoria }) 
         </thead>
         <tbody>
           {matchedDetails.map((detail, index) => (
-            <tr key={index} style={{ backgroundColor: barColors[index], color:'white' }}>
+            <tr key={index} style={{ backgroundColor: barColors[index], color: 'white' }}>
               <td>{extractModulo(detail.field3)}</td>
               <td>{detail.field3}</td>
               <td>{detail.field4}</td>

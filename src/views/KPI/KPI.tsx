@@ -58,17 +58,143 @@ const KPI: React.FC = () => {
   };
 
   return (
-    <div className="kpi-container">
-      <h3>Resumen KPI</h3>
-      <p>Numero Auditoria: {numeroAuditoria}</p>
-      {loading && <p>Cargando datos...</p>}
-      {error && <p>{error}</p>}
-      {!loading && !error && (
-        <>
-          <KPIGraph moduleData={moduleData} />
-          <button onClick={handleGoToDoc}>Volver</button>
-        </>
-      )}
+    <div className="kpi-view">
+      <div className="kpi-container">
+        <h3>Resumen KPI</h3>
+        <p>Numero Auditoria: {numeroAuditoria}</p>
+        <div className="BPMDetailsSummary-data">
+
+          <div className="BPMDetailsSummary-data-table">
+
+            <table>
+              <thead>
+                <tr>
+                  <th>Nombre del Establecimiento:</th>
+                  <td>
+                    <span id="resumen-nombre-establecimiento" className="resumen-span">
+                      { }
+                    </span>
+                  </td>
+                </tr>
+                <tr>
+                  <th>Número de Auditoría:</th>
+                  <td>
+                    <span id="resumen-nombre-establecimiento" className="resumen-span">
+                      { }
+                    </span>
+                  </td>
+                </tr>
+                <tr>
+                  <th>Gerente del Establecimiento:</th>
+                  <td>
+                    <span id="resumen-nombre-establecimiento" className="resumen-span">
+                      { }
+                    </span>
+                  </td>
+                </tr>
+                <tr>
+                  <th>Administrador del Establecimiento:</th>
+                  <td>
+                    <span id="resumen-nombre-establecimiento" className="resumen-span">
+                      { }
+                    </span>
+                  </td>
+                </tr>
+                <tr>
+                  <th>Supervisor del Establecimiento:</th>
+                  <td>
+                    <span id="resumen-nombre-establecimiento" className="resumen-span">
+                      { }
+                    </span>
+                  </td>
+                </tr>
+                <tr>
+                  <th>Auditor Email:</th>
+                  <td>
+                    <span id="resumen-nombre-establecimiento" className="resumen-span">
+                      { }
+                    </span>
+                  </td>
+                </tr>
+                <tr>
+                  <th>Fecha:</th>
+                  <td>
+                    <span id="resumen-nombre-establecimiento" className="resumen-span">
+                      { }
+                    </span>
+                  </td>
+                </tr>
+              </thead>
+            </table>
+
+          </div>
+
+          <div className="BPMDetailsSummary-data-promedio">
+
+            <div style={{ fontSize: 'smaller', marginTop: '10px' }}>
+              <div
+                style={{
+                  backgroundColor: 'green',
+                  padding: '5px',
+                  border: '1px solid black',
+                  width: '100%',
+                  borderRadius: '5px',
+                  textAlign: 'center',
+                  color: 'white',
+                  fontWeight: 'bold',
+                }}
+              >
+                CUMPLE 90% - 100%
+              </div>
+              <div
+                style={{
+                  backgroundColor: 'yellow',
+                  padding: '5px',
+                  border: '1px solid black',
+                  marginTop: '5px',
+                  width: '100%',
+                  borderRadius: '5px',
+                  textAlign: 'center',
+                  color: 'black',
+                  fontWeight: 'bold',
+                }}
+              >
+                EN ALERTA 75% - 89%
+              </div>
+              <div
+                style={{
+                  backgroundColor: 'red',
+                  padding: '5px',
+                  border: '1px solid black',
+                  marginTop: '5px',
+                  width: '100%',
+                  borderRadius: '5px',
+                  textAlign: 'center',
+                  color: 'white',
+                  fontWeight: 'bold',
+                }}
+              >
+                CRITICO 0% - 74%
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+        
+        {loading && <p>Cargando datos...</p>}
+        {error && <p>{error}</p>}
+        {!loading && !error && (
+          <>
+            <KPIGraph moduleData={moduleData} />
+
+          </>
+        )}
+      </div>
+
+      <div className="kpi-view-buttons">
+        <button onClick={handleGoToDoc}>Volver</button>
+      </div>
     </div>
   );
 };

@@ -8,6 +8,21 @@
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
+.BPMDetailsSummary-data {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+
+
+.BPMDetailsSummary-data-table th,
+.BPMDetailsSummary-data-table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+  white-space: nowrap;
+}
+
 /* Título del gráfico */
 .BPMDetailsSummary-container h3 {
   font-size: 1.5rem;

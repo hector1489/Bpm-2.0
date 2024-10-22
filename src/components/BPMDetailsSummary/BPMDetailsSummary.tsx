@@ -42,6 +42,7 @@ const BPMDetailsSummary: React.FC<TableDetailsSummaryProps> = ({ numeroAuditoria
 
       try {
         const data = await getTablaDetailsByNumeroAuditoria(numeroAuditoria);
+
         setTablaDetails(data);
       } catch (err) {
         setError('Error al obtener los datos de la tabla');
@@ -60,6 +61,8 @@ const BPMDetailsSummary: React.FC<TableDetailsSummaryProps> = ({ numeroAuditoria
   if (error) {
     return <p>{error}</p>;
   }
+
+  console.log(tablaDetails);
 
   // Definición de los módulos
   const bpmModules = ['infraestructura', 'legales'];
@@ -199,6 +202,71 @@ const BPMDetailsSummary: React.FC<TableDetailsSummaryProps> = ({ numeroAuditoria
 
       <div className="BPMDetailsSummary-data">
 
+        <div className="BPMDetailsSummary-data-table">
+
+          <table>
+            <thead>
+              <tr>
+                <th>Nombre del Establecimiento:</th>
+                <td>
+                  <span id="resumen-nombre-establecimiento" className="resumen-span">
+                    { }
+                  </span>
+                </td>
+              </tr>
+              <tr>
+                <th>Número de Auditoría:</th>
+                <td>
+                  <span id="resumen-nombre-establecimiento" className="resumen-span">
+                    { }
+                  </span>
+                </td>
+              </tr>
+              <tr>
+                <th>Gerente del Establecimiento:</th>
+                <td>
+                  <span id="resumen-nombre-establecimiento" className="resumen-span">
+                    { }
+                  </span>
+                </td>
+              </tr>
+              <tr>
+                <th>Administrador del Establecimiento:</th>
+                <td>
+                  <span id="resumen-nombre-establecimiento" className="resumen-span">
+                    { }
+                  </span>
+                </td>
+              </tr>
+              <tr>
+                <th>Supervisor del Establecimiento:</th>
+                <td>
+                  <span id="resumen-nombre-establecimiento" className="resumen-span">
+                    { }
+                  </span>
+                </td>
+              </tr>
+              <tr>
+                <th>Auditor Email:</th>
+                <td>
+                  <span id="resumen-nombre-establecimiento" className="resumen-span">
+                    { }
+                  </span>
+                </td>
+              </tr>
+              <tr>
+                <th>Fecha:</th>
+                <td>
+                  <span id="resumen-nombre-establecimiento" className="resumen-span">
+                    { }
+                  </span>
+                </td>
+              </tr>
+            </thead>
+          </table>
+
+        </div>
+
         <div className="BPMDetailsSummary-data-promedio">
 
           <div style={{ fontSize: 'smaller', marginTop: '10px' }}>
@@ -251,6 +319,7 @@ const BPMDetailsSummary: React.FC<TableDetailsSummaryProps> = ({ numeroAuditoria
         </div>
 
       </div>
+
       <div className="BPMDetailsSummary-graph">
         <HighchartsReact
           highcharts={Highcharts}
@@ -258,6 +327,7 @@ const BPMDetailsSummary: React.FC<TableDetailsSummaryProps> = ({ numeroAuditoria
           containerProps={{ style: { width: '100%', height: '100%' } }}
         />
       </div>
+
       <table className="BPMDetailsSummary-table">
         <thead>
           <tr>

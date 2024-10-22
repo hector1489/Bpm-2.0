@@ -1,4 +1,3 @@
-/* Contenedor principal del componente */
 .ETADetailsSymary-container {
   width: 100%;
   margin: 0 auto;
@@ -11,16 +10,33 @@
   align-items: center;
 }
 
+.ETADetailsSummary-data {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+
+
+
+.ETADetailsSummary-data-table th,
+.ETADetailsSummary-data-table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+  white-space: nowrap;
+}
+
 .ETADetailsSummary-graph {
   width: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;
   text-align: center;
+  margin-top: 20px;
 }
 
 .ETADetailsSummary-cumplimientos {
-  width: 100%;
+
   display: flex;
   flex-direction: column;
   justify-content: center;
