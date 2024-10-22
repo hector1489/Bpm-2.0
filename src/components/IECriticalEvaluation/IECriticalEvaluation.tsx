@@ -1,4 +1,3 @@
-import React from 'react';
 import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
 import Highcharts3D from 'highcharts/highcharts-3d';
@@ -15,25 +14,65 @@ interface TablaDetail {
 }
 
 interface IECriticalEvaluationProps {
-  detallesFiltrados: TablaDetail[];
+  tablaDetails: TablaDetail[];
 }
 
-const getShortTitle = (field3: string) => {
-  const match = field3.match(/^.*?\./);
-  return match ? match[0] : field3;
-};
+const IECriticalEvaluation: React.FC<IECriticalEvaluationProps> = ({ tablaDetails }) => {
 
-const IECriticalEvaluation: React.FC<IECriticalEvaluationProps> = ({ detallesFiltrados }) => {
-  
-  const detallesInferioresA50 = detallesFiltrados.filter((detalle) => parseInt(detalle.field4) < 51);
+  if (!tablaDetails || tablaDetails.length === 0) {
+    return <div>No hay datos disponibles para mostrar.</div>;
+  }
 
-  const renderChartOptions = (percentage: number, title: string) => {
+  const IECriticalEvaluationData = [
+    {
+      name: 'Infraestructura',
+      category: 'ELB 62. Sistema de extracción e inyección de aire, en correcto funcionamiento, limpio y con registro de limpieza de ducto:',
+      color: '#28a745'
+    },
+    {
+      name: 'Equipamiento',
+      category: 'INF 2. Equipos mínimos de cocción y frío (quemadores, refrigeradores, mantenedores, otros):',
+      color: '#dc3545'
+    },
+    {
+      name: 'Utensilios',
+      category: 'PRE 54. Materias primas ya procesadas en recipientes o envases lavables y tapadas:',
+      color: '#ffc107'
+    },
+    {
+      name: 'Higiene Manipulador',
+      category: 'CSH 28. Cubre-pelo (gorro o cofia), mascarilla y guantes usados correctamente (Art.56):',
+      color: '#6c757d'
+    },
+    {
+      name: 'Uniforme Completo',
+      category: 'CSH 27. Uniforme completo de todos, limpio y en buen estado - Sin accesorios adicionales (reloj, joyas, celular, otros) (Art.56):',
+      color: '#343a40'
+    }
+  ];
+
+  const evaluationData = IECriticalEvaluationData.map((item) => {
+    const matchingDetails = tablaDetails.filter((detalle) =>
+      detalle.field3.toLowerCase().includes(item.category.split('.')[0].toLowerCase())
+    );
+
+    const totalPercentage = matchingDetails.reduce((acc, detalle) => acc + parseInt(detalle.field4), 0);
+    const averagePercentage = matchingDetails.length > 0 ? totalPercentage / matchingDetails.length : 0;
+
+    return {
+      name: item.name,
+      y: averagePercentage,
+      color: item.color
+    };
+  });
+
+  const renderChartOptions = () => {
     return {
       chart: {
         type: 'pie',
         backgroundColor: 'transparent',
-        height: 200,
-        width: 200,
+        height: 400,
+        maxWidth: 400,
         options3d: {
           enabled: true,
           alpha: 45,
@@ -41,7 +80,7 @@ const IECriticalEvaluation: React.FC<IECriticalEvaluationProps> = ({ detallesFil
         },
       },
       title: {
-        text: title,
+        text: 'Evaluación Crítica',
       },
       plotOptions: {
         pie: {
@@ -49,7 +88,7 @@ const IECriticalEvaluation: React.FC<IECriticalEvaluationProps> = ({ detallesFil
           depth: 30,
           dataLabels: {
             enabled: true,
-            format: '{point.name}',
+            format: '{point.name}: {point.y:.1f}%',
           },
         },
       },
@@ -57,13 +96,7 @@ const IECriticalEvaluation: React.FC<IECriticalEvaluationProps> = ({ detallesFil
         {
           name: 'Evaluación Crítica',
           colorByPoint: true,
-          data: [
-            { name: 'Infraestructura', y: percentage, color: '#28a745' },
-            { name: 'Equipamiento', y: percentage, color: '#dc3545' },
-            { name: 'Utensilios', y: percentage, color: '#ffc107' },
-            { name: 'Higiene Manipulador', y: percentage, color: '#6c757d' },
-            { name: 'Uniforme Completo', y: percentage, color: '#343a40' },
-          ],
+          data: evaluationData.filter((d) => d.y > 0),
         },
       ],
     };
@@ -71,20 +104,16 @@ const IECriticalEvaluation: React.FC<IECriticalEvaluationProps> = ({ detallesFil
 
   return (
     <div className="criticalEvaluation-container">
-      {detallesInferioresA50.map((detalle, index) => (
-        <div key={index} className="card-evaluation-container">
-          <div className="circular-graph-evaluation">
-            <HighchartsReact highcharts={Highcharts} options={renderChartOptions(parseInt(detalle.field4), getShortTitle(detalle.field3))} />
+      <div className="circular-graph-evaluation">
+        <HighchartsReact highcharts={Highcharts} options={renderChartOptions()} />
+      </div>
+      <div className="cards-evaluation">
+        {IECriticalEvaluationData.map((item, index) => (
+          <div key={index} className={`card-evaluation`} style={{ backgroundColor: item.color }}>
+            {item.name}
           </div>
-          <div className="cards-evaluation">
-            <div className="card-evaluation green">Infraestructura</div>
-            <div className="card-evaluation red">Equipamiento</div>
-            <div className="card-evaluation yellow">Utensilios</div>
-            <div className="card-evaluation gray">Higiene Manipulador</div>
-            <div className="card-evaluation black">Uniforme Completo</div>
-          </div>
-        </div>
-      ))}
+        ))}
+      </div>
     </div>
   );
 };

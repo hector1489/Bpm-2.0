@@ -8,13 +8,18 @@
 
 .indicadores-head {
   display: flex;
-
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
 }
 
 .indicadores-bars {
   display: flex;
   flex-wrap: wrap;
   gap: 15px;
+  width: 100%;
+  justify-content: center;
 }
 
 .indicador-bar {
@@ -67,93 +72,60 @@
 }
 
 .circular {
-  width: 60px;
-  height: 60px;
+  width: 100px;
+  height: 100px;
   border-radius: 50%;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-size: 12px;
+  font-size: 14px;
   color: white;
   text-align: center;
+  padding: 10px;
 }
 
 .graph.black {
-  background-color: black;
+  border: 10px solid black;
 }
 
 .graph.green {
-  background-color: green;
+  border: 10px solid green;
 }
 
 .graph.red {
-  background-color: red;
+  border: 10px solid red;
 }
 
 .graph.yellow {
-  background-color: yellow;
+  border: 10px solid yellow;
   color: black;
 }
 
 .graph.blue {
-  background-color: blue;
+  border: 10px solid blue;
+}
+
+.circular p {
+  margin: 0;
+  font-size: 12px;
+  font-weight: bold;
+  color: inherit;
 }
 
 /* Responsive styles */
 @media (max-width: 767px) {
-  .indicadores-head {
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .indicadores-icons {
-    flex-direction: row;
-    justify-content: center;
-    gap: 10px;
-  }
-
-  .indicador-icon {
-    font-size: 12px;
-  }
-
-  .indicadores-circular {
-    justify-content: center;
-    gap: 10px;
-  }
-
   .circular {
-    width: 50px;
-    height: 50px;
-    font-size: 10px;
+    width: 80px;
+    height: 80px;
+    font-size: 12px;
   }
 }
 
 @media (max-width: 480px) {
-  .indicadores-head {
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .indicadores-bars {
-    gap: 10px;
-  }
-
-  .indicador-bar {
-    width: 30px;
-    height: 120px;
-  }
-
-  .indicador-icon {
-    font-size: 10px;
-  }
-
-  .indicadores-circular {
-    gap: 5px;
-  }
-
   .circular {
-    width: 40px;
-    height: 40px;
-    font-size: 8px;
+    width: 60px;
+    height: 60px;
+    font-size: 10px;
   }
 }

@@ -1,7 +1,10 @@
 import React from 'react';
 import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
+import Highcharts3D from 'highcharts/highcharts-3d';
 import './IETrazadores.css';
+
+Highcharts3D(Highcharts);
 
 interface TablaDetail {
   field3: string;
@@ -28,7 +31,11 @@ const getColorByPercentageIETrazadores = (percentage: number) => {
 };
 
 const IETrazadores: React.FC<IETrazadoresProps> = ({ tablaDetails }) => {
-  
+
+  if (!tablaDetails || tablaDetails.length === 0) {
+    return <div>No hay datos disponibles para mostrar.</div>;
+  }
+
   const categories = [
     'TRA CS 17',
     'TRA CSH 29',
@@ -42,7 +49,7 @@ const IETrazadores: React.FC<IETrazadoresProps> = ({ tablaDetails }) => {
     'TRA DOC 98',
     'TRA DOC 99'
   ];
-  
+
   const filteredData = categories.map(category => {
     const found = tablaDetails.find(detail => extractPrefix(detail.field3) === category);
     return found ? parseInt(found.field4) : 0;
@@ -55,8 +62,15 @@ const IETrazadores: React.FC<IETrazadoresProps> = ({ tablaDetails }) => {
 
   const options = {
     chart: {
-      type: 'bar',
+      type: 'column',
       backgroundColor: 'transparent',
+      options3d: {
+        enabled: true,
+        alpha: 10,
+        beta: 25,
+        depth: 50,
+        viewDistance: 25
+      },
     },
     title: {
       text: '',
@@ -96,8 +110,8 @@ const IETrazadores: React.FC<IETrazadoresProps> = ({ tablaDetails }) => {
       }]
     },
     plotOptions: {
-      bar: {
-        stacking: 'normal',
+      column: {
+        depth: 25,
         dataLabels: {
           enabled: true
         }
@@ -138,8 +152,18 @@ const IETrazadores: React.FC<IETrazadoresProps> = ({ tablaDetails }) => {
 
   return (
     <div className="trazadores-ie-container">
-      <div className="chart">
+      <div className="chart-trazadores-ie">
         <HighchartsReact highcharts={Highcharts} options={options} />
+      </div>
+
+      {/* Agregamos las tarjetas aquí */}
+      <div className="cards-trazadores">
+        {categories.map((category, index) => (
+          <div key={index} className="card-trazadores">
+            <h3>{category}</h3>
+            <p>Porcentaje: {filteredData[index]}%</p>
+          </div>
+        ))}
       </div>
     </div>
   );

@@ -20,7 +20,7 @@
   align-items: center;
   width: 150px;
   padding: 10px;
-  border-radius: 5px;
+  border-radius: 5px 30px;
   text-align: center;
 }
 

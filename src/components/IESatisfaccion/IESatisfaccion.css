@@ -1,66 +1,85 @@
 .ie-satisfaccion-container {
   width: 100%;
-  font-family: Arial, sans-serif;
-  background-color: #f9f9f9;
+  font-family: 'Arial', sans-serif;
+  background-color: #f0f0f0;
   padding: 20px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  border-radius: 12px;
+  color: #fff;
 }
 
 .satisfaccion-cards {
   display: flex;
-  justify-content: space-between;
-  gap: 10px;
+  justify-content: space-around;
+  gap: 20px;
   margin-bottom: 20px;
   flex-wrap: wrap;
 }
 
 .satisfaccion-card {
-  width: 150px;
-  padding: 10px;
+  width: 160px;
+  padding: 20px;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  border-radius: 5px;
+  border-radius: 10px 30px;
   text-align: center;
   font-weight: bold;
+  font-size: 18px;
+  background: linear-gradient(145deg, #222, #333);
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.4);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
   color: white;
-  font-size: 16px;
+}
+
+.satisfaccion-card:hover {
+  transform: translateY(-5px) scale(1.05);
+  box-shadow: 0 12px 25px rgba(0, 0, 0, 0.6);
 }
 
 .satisfaccion-card p {
-  margin-top: 5px;
-  color: white;
+  margin-top: 10px;
+  font-size: 14px;
   font-weight: bold;
-  font-size: 12px;
 }
 
 .blue {
-  background-color: #1E90FF;
+  background: radial-gradient(circle, rgba(30,144,255,1) 0%, rgba(65,105,225,1) 100%);
+  box-shadow: 0 0 15px rgba(30,144,255, 0.6);
 }
 
 .red {
-  background-color: #FF4500;
+  background: radial-gradient(circle, rgba(255,69,0,1) 0%, rgba(220,20,60,1) 100%);
+  box-shadow: 0 0 15px rgba(255,69,0, 0.6);
 }
 
 .yellow {
-  background-color: #FFD700;
+  background: radial-gradient(circle, rgba(255,215,0,1) 0%, rgba(255,165,0,1) 100%);
   color: black;
+  box-shadow: 0 0 15px rgba(255,215,0, 0.6);
 }
 
 .gray {
-  background-color: gray;
+  background: radial-gradient(circle, rgba(128,128,128,1) 0%, rgba(169,169,169,1) 100%);
+  box-shadow: 0 0 15px rgba(128,128,128, 0.6);
 }
 
 .satisfaccion-promedio-final {
+  background: linear-gradient(145deg, #444, #555);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
   color: white;
-  padding: 20px;
+  padding: 25px;
   text-align: center;
-  border-radius: 8px;
-  font-size: 18px;
+  border-radius: 12px;
+  font-size: 22px;
   font-weight: bold;
 }
 
+.satisfaccion-promedio-final p {
+  color: white;
+}
 
 @media (max-width: 767px) {
   .satisfaccion-cards {
@@ -69,13 +88,13 @@
   }
 
   .satisfaccion-card {
-    width: 130px;
+    width: 140px;
     padding: 15px;
-    font-size: 14px;
+    font-size: 16px;
   }
 
   .satisfaccion-promedio-final {
-    font-size: 16px;
+    font-size: 18px;
     padding: 15px;
   }
 }
@@ -89,11 +108,11 @@
   .satisfaccion-card {
     width: 100%;
     padding: 10px;
-    font-size: 12px;
+    font-size: 14px;
   }
 
   .satisfaccion-promedio-final {
-    font-size: 14px;
+    font-size: 16px;
     padding: 10px;
   }
 }

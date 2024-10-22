@@ -1,43 +1,35 @@
 .criticalEvaluation-container {
   width: 100%;
-  max-height: 400px;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: flex-start;
   gap: 20px;
   padding: 20px;
   background-color: #f4f4f4;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  overflow: auto;
-}
-
-.card-evaluation-container {
-  background-color: #ffffff;
-  padding: 25px;
-  border-radius: 12px;
-  display: flex;
-  gap: 20px;
-  align-items: center;
-  justify-content: space-around;
-  width: 100%;
 }
 
 .circular-graph-evaluation {
   display: flex;
-  flex-direction: column;
+  justify-content: center;
   align-items: center;
+  max-width: 60%;
 }
 
 .cards-evaluation {
   display: flex;
   flex-direction: column;
   gap: 10px;
+  width: 40%;
 }
 
 .card-evaluation {
-  padding: 10px;
+  padding: 15px;
   border-radius: 5px;
   color: white;
   text-align: center;
+  font-weight: bold;
 }
 
 .green {
@@ -60,30 +52,28 @@
   background-color: black;
 }
 
+/* Responsive Design */
 @media (max-width: 767px) {
   .criticalEvaluation-container {
     flex-direction: column;
-    padding: 15px;
+    align-items: center;
   }
 
-  .card-evaluation-container {
-    flex-direction: column;
-    padding: 15px;
-    gap: 15px;
+  .circular-graph-evaluation {
+    width: 100%;
+    margin-bottom: 20px;
   }
 
   .cards-evaluation {
+    width: 100%;
     flex-direction: row;
     flex-wrap: wrap;
     justify-content: space-between;
   }
 
-  .circular-graph-evaluation {
-    margin-bottom: 20px;
-  }
-
   .card-evaluation {
-    padding: 8px;
+    width: 48%;
+    padding: 10px;
     font-size: 12px;
   }
 

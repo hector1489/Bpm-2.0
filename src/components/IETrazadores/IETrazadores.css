@@ -5,14 +5,55 @@
   background-color: #f9f9f9;
 }
 
-.chart {
+.chart-trazadores-ie {
   width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   height: auto;
 }
 
+.cards-trazadores {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  margin-top: 20px;
+}
+
+.card-trazadores {
+  background-color: #2874a6;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  padding: 10px;
+  max-width: 200px;
+  text-align: center;
+  margin: 5px;
+}
+
+.card-trazadores h3 {
+  font-size: 1.2rem;
+  margin-bottom: 10px;
+}
+
+.card-trazadores p {
+  font-size: 1rem;
+  color: white;
+}
+
+/* Estilos responsivos */
 @media (max-width: 600px) {
-  .chart {
+  .chart-trazadores-ie {
     width: 100%;
     height: 400px;
+  }
+  
+  .cards-trazadores {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .card-trazadores {
+    width: 90%;
+    margin-bottom: 15px;
   }
 }

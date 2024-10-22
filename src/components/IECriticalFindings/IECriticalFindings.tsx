@@ -30,7 +30,17 @@ const IECriticalFindings: React.FC<IECriticalFindingsProps> = ({ detallesFiltrad
         innerSize: '70%',
         borderColor: null,
         dataLabels: {
-          enabled: false,
+          enabled: true,
+          distance: -30,
+          style: {
+            color: '#000000',
+            fontSize: '12px',
+            fontWeight: 'bold',
+            textOutline: 'none',
+          },
+          formatter: function () {
+            return `${porcentaje}%`;
+          },
         },
       },
     },

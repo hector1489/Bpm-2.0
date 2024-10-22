@@ -2,11 +2,9 @@ import React, { useEffect, useState } from 'react';
 import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
 import Highcharts3D from 'highcharts/highcharts-3d';
-import Cylinder from 'highcharts/modules/cylinder';
 import './IEHigiene.css';
 
 Highcharts3D(Highcharts);
-Cylinder(Highcharts);
 
 interface TablaDetail {
   field3: string;
@@ -17,10 +15,21 @@ interface IEHigieneProps {
   tablaDetails: TablaDetail[];
 }
 
-
 const extractPrefix = (field3: string) => {
-  const match = field3.match(/^(LUM|CS|PRE) \d+/)
+  const match = field3.match(/^(LUM|CS|PRE) \d+/);
   return match ? match[0] : '';
+};
+
+const extractPercentage = (field4: string) => {
+  const match = field4.match(/^(\d+)%/);
+  return match ? match[1] : '';
+};
+
+const chartColors = {
+  luminometria: '#c0392b',
+  limpiezaEquipos: '#f1c40f',
+  limpiezaUtensilios: '#2e86c1',
+  sanitizacionGral: '#28b463',
 };
 
 const IEHigiene: React.FC<IEHigieneProps> = ({ tablaDetails }) => {
@@ -36,86 +45,65 @@ const IEHigiene: React.FC<IEHigieneProps> = ({ tablaDetails }) => {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  const categories = [
-    'LUM 21. Toma de muestra y uso de luminómetro:',
-    'CS 13. Limpieza y desinfección de equipos de proceso (máquina universal, juguera, amasadora, otros):',
-    'CS 12. Aplicación de procedimiento de higiene de tablas, cuchillos y mesones:',
-    'PRE 56. Sanitizado con concentración y tiempo correctos. Verificar registro si aplica:'
+  const IEHigieneData = [
+    { text: 'LUM 21. Toma de muestra y uso de luminómetro:', color: chartColors.luminometria },
+    { text: 'CS 13. Limpieza y desinfección de equipos de proceso (máquina universal, juguera, amasadora, otros):', color: chartColors.limpiezaEquipos },
+    { text: 'CS 12. Aplicación de procedimiento de higiene de tablas, cuchillos y mesones:', color: chartColors.limpiezaUtensilios },
+    { text: 'PRE 56. Sanitizado con concentración y tiempo correctos. Verificar registro si aplica:', color: chartColors.sanitizacionGral },
   ];
 
-  const filteredData = categories.map(category => {
-    const found = tablaDetails.find(detail => extractPrefix(detail.field3) === category.split(' ')[0]);
-    return found ? parseInt(found.field4) : 100;
+  const updatedData = IEHigieneData.map((item) => {
+    const prefix = extractPrefix(item.text);
+    const found = tablaDetails.find((detail) => extractPrefix(detail.field3) === prefix);
+    return {
+      ...item,
+      percentage: found ? `${extractPercentage(found.field4)}%` : '0%',
+      y: found ? parseInt(extractPercentage(found.field4)) : 0,
+    };
   });
-
-  const hygieneCards = [
-    { name: 'LUMINOMETRIA LUM 21', percentage: filteredData[0], color: 'red' },
-    { name: 'LIMPIEZA EQUIPOS CS 13', percentage: filteredData[1], color: 'yellow' },
-    { name: 'LIMPIEZA UTENSILIOS CS 12', percentage: filteredData[2], color: 'blue' },
-    { name: 'SANITIZACION GRAL PRE 56', percentage: filteredData[3], color: 'green' }
-  ];
 
   const options = {
     chart: {
-      type: 'cylinder',
+      type: 'pie',
       backgroundColor: 'transparent',
       options3d: {
         enabled: true,
-        alpha: 15,
-        beta: 15,
-        depth: 50,
-        viewDistance: 25
+        alpha: 45,
+        beta: 0,
       },
-      width: chartWidth
+      width: chartWidth,
     },
     title: {
       text: 'Evaluación de Higiene'
     },
+    tooltip: {
+      pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+    },
     plotOptions: {
-      series: {
-        depth: 25,
-        cylinder: {
-          edgeColor: '#ffffff'
-        },
+      pie: {
+        innerSize: '35%',
+        allowPointSelect: true,
+        cursor: 'pointer',
+        depth: 40,
         dataLabels: {
           enabled: true,
-          format: '{point.name}: {point.y} %'
+          format: '<b>{point.name}</b>: {point.percentage:.1f} %',
         }
-      }
-    },
-    xAxis: {
-      categories: categories.map(cat => cat.split('.')[0]),
-      title: {
-        text: null
-      },
-      labels: {
-        style: {
-          color: '#000'
-        }
-      }
-    },
-    yAxis: {
-      min: 0,
-      max: 100,
-      tickInterval: 20,
-      title: {
-        text: '% de cumplimiento'
       }
     },
     series: [{
       name: 'Cumplimiento',
-      data: filteredData,
       colorByPoint: true,
-      colors: ['#FF0000', '#FFFF00', '#0000FF', '#00FF00']
-    }],
-    credits: {
-      enabled: false
-    }
+      data: updatedData.map((item) => ({
+        name: item.text.split('.')[0],
+        y: item.y,
+        color: item.color,
+      }))
+    }]
   };
 
   return (
     <div className="ie-higiene-container">
-
       <div className="chart-container">
         <HighchartsReact
           highcharts={Highcharts}
@@ -124,16 +112,15 @@ const IEHigiene: React.FC<IEHigieneProps> = ({ tablaDetails }) => {
       </div>
 
       <div className="cards-higiene-ie">
-        {hygieneCards.map((card, index) => (
-          <div key={index} className={`card-higiene ${card.color}`}>
-            <p>{card.name}</p>
-            <p>{card.percentage}%</p>
+        {updatedData.map((item, index) => (
+          <div key={index} className="card-higiene" style={{ backgroundColor: item.color }}>
+            <p>{item.text}</p>
+            <p>{item.percentage}</p>
           </div>
         ))}
       </div>
-
     </div>
   );
-}
+};
 
 export default IEHigiene;

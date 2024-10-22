@@ -15,7 +15,6 @@ interface IEIndicadoresClaveProps {
   tablaDetails: TablaDetail[];
 }
 
-
 const extractPrefix = (field3: string) => {
   const match = field3.match(/^[A-ZÁÉÍÓÚ]+/);
   return match ? match[0] : '';
@@ -24,25 +23,33 @@ const extractPrefix = (field3: string) => {
 const IEIndicadoresClave: React.FC<IEIndicadoresClaveProps> = ({ tablaDetails }) => {
   const [chartWidth, setChartWidth] = useState(window.innerWidth * 0.8);
 
-
   const handleResize = () => {
     const newWidth = window.innerWidth * 0.8;
-    setChartWidth(newWidth > 400 ? newWidth : 400);
+    const minWidth = 400;
+    const maxWidth = 1000;
+    setChartWidth(newWidth > maxWidth ? maxWidth : newWidth < minWidth ? minWidth : newWidth);
   };
+  
 
   useEffect(() => {
+    handleResize();
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
- 
   const categories = ['BPM', 'MINUTA', 'EXÁMENES', 'INAPTITUD', 'CAPACITACIONES'];
-
 
   const filteredData = categories.map(category => {
     const found = tablaDetails.find(detail => extractPrefix(detail.field3) === category);
     return found ? parseInt(found.field4) : 100;
   });
+
+  // Calcular los promedios
+  const bpm = filteredData[0];
+  const minuta = filteredData[1];
+  const examenes = filteredData[2];
+  const inaptitud = filteredData[3];
+  const capacitaciones = filteredData[4];
 
   const options = {
     chart: {
@@ -100,46 +107,37 @@ const IEIndicadoresClave: React.FC<IEIndicadoresClaveProps> = ({ tablaDetails })
   return (
     <div className="ie-indicadores-container">
       <div className="indicadores-head">
-        
         <div className="indicadores-bars">
           <HighchartsReact highcharts={Highcharts} options={options} />
         </div>
-
-        <div className="indicadores-icons">
-          <div className="indicador-icon">BPM</div>
-          <div className="indicador-icon">MINUTA</div>
-          <div className="indicador-icon">EXÁMENES</div>
-          <div className="indicador-icon">INAPTITUD MICROBIOLÓGICA</div>
-          <div className="indicador-icon">CAPACITACIONES</div>
-        </div>
-
       </div>
 
       <div className="indicadores-footer">
-
         <div className="indicadores-circular">
-
           <div className="circular graph black">
-            <i className="fa-solid fa-feather-pointed"></i>
+            <p>BPM</p>
+            <p>{bpm}%</p>
           </div>
           <div className="circular graph green">
-            <i className="fa-solid fa-gears"></i>
+            <p>MINUTA</p>
+            <p>{minuta}%</p>
           </div>
           <div className="circular graph red">
-            <i className="fa-solid fa-user"></i>
+            <p>EXÁMENES</p>
+            <p>{examenes}%</p>
           </div>
           <div className="circular graph yellow">
-            <i className="fa-solid fa-star"></i>
+            <p>INAPTITUD MICROBIOLÓGICA</p>
+            <p>{inaptitud}%</p>
           </div>
           <div className="circular graph blue">
-            <i className="fa-solid fa-pen-nib"></i>
+            <p>CAPACITACIONES</p>
+            <p>{capacitaciones}%</p>
           </div>
-
         </div>
-
       </div>
     </div>
   );
-}
+};
 
 export default IEIndicadoresClave;

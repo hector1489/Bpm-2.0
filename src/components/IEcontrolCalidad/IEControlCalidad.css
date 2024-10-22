@@ -30,7 +30,7 @@
   position: relative;
   width: 220px;
   padding: 12px;
-  background-color: #0288d1;
+  background-color: #2e86c1;
   border-radius: 10px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   font-size: 15px;
@@ -59,9 +59,9 @@
 .control-punto.right::before {
   content: '';
   position: absolute;
-  width: 15px;
-  height: 15px;
-  background-color: #0288d1;
+  width: 20px;
+  height: 20px;
+  background-color: #2e86c1;
   border: 3px solid #fff;
   border-radius: 50%;
   top: 50%;
