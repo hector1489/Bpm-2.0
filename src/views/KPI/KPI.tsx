@@ -1,9 +1,11 @@
 import { KPIGraph } from '../../components';
-import { useNavigate, useLocation } from 'react-router-dom';  // Asegúrate de importar useLocation
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useContext, useState, useEffect } from 'react';
 import { AppContext } from '../../context/GlobalState';
 import { getTablaDetailsByNumeroAuditoria } from '../../utils/apiDetails';
+import { getAuditSheetByUsername } from '../../utils/apiAuditSheet';
 import './KPI.css';
+
 
 interface TablaDetail {
   numero_auditoria: string;
@@ -13,11 +15,24 @@ interface TablaDetail {
   field4: string;
 }
 
+interface AuditSheet {
+  username: string;
+  numero_auditoria: string;
+  field1: string;
+  field2: string;
+  field3: string;
+  field4: string;
+  field5: string;
+  field6: string;
+}
+
 const KPI: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const context = useContext(AppContext);
   const [tablaDetails, setTablaDetails] = useState<TablaDetail[]>([]);
+  const [auditSheetDetails, setAuditSheetDetails] = useState<AuditSheet[] | null>(null);
+  const [filteredAuditSheet, setFilteredAuditSheet] = useState<AuditSheet | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -26,6 +41,8 @@ const KPI: React.FC = () => {
   if (!context) {
     return <div>Error: Context is not available.</div>;
   }
+
+  const { state } = context;
 
   useEffect(() => {
     const fetchTablaDetails = async () => {
@@ -48,6 +65,53 @@ const KPI: React.FC = () => {
     fetchTablaDetails();
   }, [numeroAuditoria]);
 
+  const fetchAuditSheetDetails = async () => {
+    const username = state?.userName;
+    if (!username) return;
+
+    setLoading(true);
+    setError(null);
+
+    try {
+      const auditSheetData = await getAuditSheetByUsername(username);
+      setAuditSheetDetails(auditSheetData);
+    } catch (err) {
+      setError('Error al obtener los datos del audit sheet');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // useEffect para filtrar los datos por numero de auditoría
+  const bpmFilteredAuditSheet = () => {
+    if (numeroAuditoria && auditSheetDetails) {
+      const filteredData = auditSheetDetails.find(
+        (sheet) => sheet.numero_auditoria === numeroAuditoria
+      );
+      setFilteredAuditSheet(filteredData || null);
+    }
+  };
+
+  useEffect(() => {
+    fetchAuditSheetDetails();
+  }, [context?.state?.userName]); 
+
+  useEffect(() => {
+    bpmFilteredAuditSheet();
+  }, [auditSheetDetails, numeroAuditoria]);
+
+  if (loading) {
+    return <p>Cargando datos...</p>;
+  }
+
+  if (error) {
+    return <p>{error}</p>;
+  }
+
+  if (!filteredAuditSheet) {
+    return <p>No se encontraron detalles para la auditoría {numeroAuditoria}</p>;
+  }
+
   const moduleData = tablaDetails.map((detail) => ({
     moduleName: detail.field2,
     percentage: Number(detail.field4) || null,
@@ -67,64 +131,36 @@ const KPI: React.FC = () => {
           <div className="BPMDetailsSummary-data-table">
 
             <table>
-              <thead>
-                <tr>
-                  <th>Nombre del Establecimiento:</th>
-                  <td>
-                    <span id="resumen-nombre-establecimiento" className="resumen-span">
-                      { }
-                    </span>
-                  </td>
-                </tr>
-                <tr>
-                  <th>Número de Auditoría:</th>
-                  <td>
-                    <span id="resumen-nombre-establecimiento" className="resumen-span">
-                      { }
-                    </span>
-                  </td>
-                </tr>
-                <tr>
-                  <th>Gerente del Establecimiento:</th>
-                  <td>
-                    <span id="resumen-nombre-establecimiento" className="resumen-span">
-                      { }
-                    </span>
-                  </td>
-                </tr>
-                <tr>
-                  <th>Administrador del Establecimiento:</th>
-                  <td>
-                    <span id="resumen-nombre-establecimiento" className="resumen-span">
-                      { }
-                    </span>
-                  </td>
-                </tr>
-                <tr>
-                  <th>Supervisor del Establecimiento:</th>
-                  <td>
-                    <span id="resumen-nombre-establecimiento" className="resumen-span">
-                      { }
-                    </span>
-                  </td>
-                </tr>
-                <tr>
-                  <th>Auditor Email:</th>
-                  <td>
-                    <span id="resumen-nombre-establecimiento" className="resumen-span">
-                      { }
-                    </span>
-                  </td>
-                </tr>
-                <tr>
-                  <th>Fecha:</th>
-                  <td>
-                    <span id="resumen-nombre-establecimiento" className="resumen-span">
-                      { }
-                    </span>
-                  </td>
-                </tr>
-              </thead>
+            <thead>
+              <tr>
+                <th>Nombre del Establecimiento:</th>
+                <td>{filteredAuditSheet?.field1 || 'N/A'}</td>
+              </tr>
+              <tr>
+                <th>Número de Auditoría:</th>
+                <td>{filteredAuditSheet?.numero_auditoria || 'N/A'}</td>
+              </tr>
+              <tr>
+                <th>Gerente del Establecimiento:</th>
+                <td>{filteredAuditSheet?.field2 || 'N/A'}</td>
+              </tr>
+              <tr>
+                <th>Administrador del Establecimiento:</th>
+                <td>{filteredAuditSheet?.field3 || 'N/A'}</td>
+              </tr>
+              <tr>
+                <th>Supervisor del Establecimiento:</th>
+                <td>{filteredAuditSheet?.field4 || 'N/A'}</td>
+              </tr>
+              <tr>
+                <th>Auditor Email:</th>
+                <td>{filteredAuditSheet?.field5 || 'N/A'}</td>
+              </tr>
+              <tr>
+                <th>Fecha de Auditoría:</th>
+                <td>{filteredAuditSheet?.field6 || 'N/A'}</td>
+              </tr>
+            </thead>
             </table>
 
           </div>
