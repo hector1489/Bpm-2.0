@@ -4,3 +4,11 @@
   padding: 20px;
   gap: 10px;
 }
+
+.TableDetailsDD-buttons {
+  display: flex;
+  justify-content: center;
+}
+
+
+
