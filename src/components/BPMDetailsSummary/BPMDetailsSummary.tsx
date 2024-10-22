@@ -6,6 +6,7 @@ import { useContext, useEffect, useState } from 'react';
 import { AppContext } from '../../context/GlobalState';
 import { getTablaDetailsByNumeroAuditoria } from '../../utils/apiDetails';
 import { getColorByPercentage } from '../../utils/utils';
+import { getAuditSheetByUsername } from '../../utils/apiAuditSheet';
 
 interface TablaDetail {
   numero_auditoria: string;
@@ -19,6 +20,18 @@ interface TableDetailsSummaryProps {
   numeroAuditoria: string | null;
 }
 
+interface AuditSheet {
+  username: string;
+  numero_auditoria: string;
+  field1: string;
+  field2: string;
+  field3: string;
+  field4: string;
+  field5: string;
+  field6: string;
+}
+
+
 if (typeof Highcharts === 'object') {
   Highcharts3D(Highcharts);
 }
@@ -26,12 +39,15 @@ if (typeof Highcharts === 'object') {
 const BPMDetailsSummary: React.FC<TableDetailsSummaryProps> = ({ numeroAuditoria }) => {
   const context = useContext(AppContext);
   const [tablaDetails, setTablaDetails] = useState<TablaDetail[]>([]);
+  const [auditSheetDetails, setAuditSheetDetails] = useState<AuditSheet | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 
   if (!context) {
     return <div>Error al cargar el contexto</div>;
   }
+
+  const { state } = context;
 
   useEffect(() => {
     const fetchTablaDetails = async () => {
@@ -54,6 +70,28 @@ const BPMDetailsSummary: React.FC<TableDetailsSummaryProps> = ({ numeroAuditoria
     fetchTablaDetails();
   }, [numeroAuditoria]);
 
+  // Nuevo useEffect para obtener los detalles del audit sheet por username
+  useEffect(() => {
+    const fetchAuditSheetDetails = async () => {
+      const username = state?.userName;
+      if (!username) return;
+
+      setLoading(true);
+      setError(null);
+
+      try {
+        const auditSheetData = await getAuditSheetByUsername(username);
+        setAuditSheetDetails(auditSheetData[0]);
+      } catch (err) {
+        setError('Error al obtener los datos del audit sheet');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchAuditSheetDetails();
+  }, [context?.state?.userName]);
+
   if (loading) {
     return <p>Cargando datos...</p>;
   }
@@ -62,7 +100,7 @@ const BPMDetailsSummary: React.FC<TableDetailsSummaryProps> = ({ numeroAuditoria
     return <p>{error}</p>;
   }
 
-  console.log(tablaDetails);
+  console.log(auditSheetDetails);
 
   // Definición de los módulos
   const bpmModules = ['infraestructura', 'legales'];
