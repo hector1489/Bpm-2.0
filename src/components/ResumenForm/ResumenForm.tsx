@@ -4,6 +4,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { AppContext } from '../../context/GlobalState';
 import { obtenerPDFs, eliminarPDF } from '../../utils/apiPdfUtils';
 import { deleteTablaDetail, getTablaDetailsByNumeroAuditoria } from '../../utils/apiDetails';
+import { getAuditSheetByUsername, deleteAuditSheetById } from '../../utils/apiAuditSheet';
 
 interface PDFData {
   key: string;
@@ -15,19 +16,37 @@ interface TablaDetail {
   numero_requerimiento: string;
 }
 
+interface AuditSheet {
+  id: string;
+  username: string;
+  numero_auditoria: string;
+  field1: string;
+  field2: string;
+  field3: string;
+  field4: string;
+  field5: string;
+  field6: string;
+}
+
 const ResumenForm: React.FC = () => {
   const context = useContext(AppContext);
   const location = useLocation();
   const navigate = useNavigate();
   const [pdf, setPdf] = useState<PDFData | null>(null);
   const [tablaDetails, setTablaDetails] = useState<TablaDetail | null>(null);
-  const [loading, setLoading] = useState<boolean>(true);
+  const [auditSheetDetails, setAuditSheetDetails] = useState<AuditSheet[] | null>(null);
+  const [filteredAuditSheet, setFilteredAuditSheet] = useState<AuditSheet | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
 
   if (!context) {
     return <div>Error al cargar el contexto</div>;
   }
 
+  const { state } = context;
+
   const numeroRequerimiento = location.state?.numero_requerimiento || null;
+  
 
   const fetchPDF = async () => {
     try {
@@ -67,7 +86,8 @@ const ResumenForm: React.FC = () => {
       }
     }
   };
-  
+
+ 
 
   const handleDeletePDF = async (key: string) => {
     try {
@@ -125,20 +145,79 @@ const ResumenForm: React.FC = () => {
     });
   }
 
+
+
+  const fetchAuditSheetDetails = async () => {
+    const username = state?.userName;
+    if (!username) return;
+
+    setLoading(true);
+    setError(null);
+
+    try {
+      const auditSheetData = await getAuditSheetByUsername(username);
+      setAuditSheetDetails(auditSheetData);
+    } catch (err) {
+      setError('Error al obtener los datos del audit sheet');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const numeroAuditoria = numeroRequerimiento;
+  // useEffect para filtrar los datos por numero de auditoría
+  const bpmFilteredAuditSheet = () => {
+   
+    if (numeroAuditoria && auditSheetDetails) {
+      const filteredData = auditSheetDetails.find(
+        (sheet) => sheet.numero_auditoria === numeroAuditoria
+      );
+      setFilteredAuditSheet(filteredData || null);
+    }
+  };
+
+  useEffect(() => {
+    fetchAuditSheetDetails();
+  }, [context?.state?.userName]); 
+
+  useEffect(() => {
+    bpmFilteredAuditSheet();
+  }, [auditSheetDetails, numeroAuditoria]);
+
+  if (loading) {
+    return <p>Cargando datos...</p>;
+  }
+
+  if (error) {
+    return <p>{error}</p>;
+  }
+
+  if (!filteredAuditSheet) {
+    return <p>No se encontraron detalles para la auditoría {numeroAuditoria}</p>;
+  }
+  
   const handleDeleteTable = async () => {
     try {
       if (numeroRequerimiento) {
         await deleteTablaDetail(numeroRequerimiento);
         console.log(`Detalles de la auditoría ${numeroRequerimiento} eliminados correctamente.`);
+  
+        if (filteredAuditSheet) {
+          await deleteAuditSheetById(filteredAuditSheet.id);
+          console.log(`Registro audit_sheet con id ${filteredAuditSheet.id} eliminado correctamente.`);
+        } else {
+          console.warn('No se pudo eliminar el registro audit_sheet: ID no encontrado.');
+        }
       } else {
         console.warn('No se pudo eliminar los detalles de la tabla: número de auditoría no disponible.');
       }
     } catch (error) {
-      console.error('Error al eliminar los detalles de la tabla:', error);
+      console.error('Error al eliminar los detalles de la tabla o audit_sheet:', error);
     }
-
-    handleGoToDoc();
+  
+    handleGoToDoc(); 
   };
+  
   
 
   return (

@@ -81,3 +81,26 @@ export const deleteAuditSheet = async (numero_auditoria: string): Promise<any> =
     throw new Error('No se pudo eliminar el registro');
   }
 };
+
+export const deleteAuditSheetById = async (id: string): Promise<any> => {
+  try {
+    const response = await axios.delete(`${BASE_URL}/audit-sheet/${id}`);
+    return response.data;
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      console.error('Error al eliminar el registro por id en audit_sheet:', error.message);
+    } else {
+      console.error('Error desconocido al eliminar el registro por id en audit_sheet');
+    }
+    throw new Error('No se pudo eliminar el registro por id');
+  }
+};
+
+
+
+
+
+
+
+
+
