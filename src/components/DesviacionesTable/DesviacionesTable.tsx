@@ -133,7 +133,7 @@ const DesviacionesTable: React.FC = () => {
     tableBody.querySelectorAll('tr').forEach(async (row, rowIndex) => {
       row.querySelectorAll('td').forEach(async (cell, cellIndex) => {
         const emailColumnIndex = 14;
-        const fechaIngresoColumnIndex = 8; // Índice de la columna de "Fecha de Ingreso"
+        const fechaIngresoColumnIndex = 8;
   
         if (cellIndex === 10) {
           const selectEstado = crearSelectEstado();
@@ -186,21 +186,15 @@ const DesviacionesTable: React.FC = () => {
           cell.innerHTML = '';
           cell.appendChild(input);
         } else if (cellIndex === fechaIngresoColumnIndex) {
-          // Asegurarse de que la columna "Fecha de Ingreso" no sea editable
           cell.innerHTML = localDesviaciones[rowIndex].fecha_recepcion_solicitud || DEFAULT_ANSWER;
         }
       });
     });
   };
-  
-  
 
   const handleGoToHome = () => {
     navigate('/home');
   };
-
- 
-
 
   return (
     <div className="desviaciones-tabla-container">

@@ -193,13 +193,25 @@ export const calcularDiasRestantes = (fechaIngreso: string, criticidad: string):
   const prioridad = prioridades.find(p => p.valor === criticidad);
   if (!prioridad) return 0;
 
-  const [dd, mm, yyyy] = fechaIngreso.split('/').map(Number);
+  let dd, mm, yyyy;
+
+  // Detectamos si la fecha está en formato yyyy-mm-dd o dd/mm/yyyy
+  if (fechaIngreso.includes('-')) {
+    // Formato yyyy-mm-dd
+    [yyyy, mm, dd] = fechaIngreso.split('-').map(Number);
+  } else if (fechaIngreso.includes('/')) {
+    // Formato dd/mm/yyyy
+    [dd, mm, yyyy] = fechaIngreso.split('/').map(Number);
+  } else {
+    // Si no está en un formato reconocido, retornamos 0
+    return 0;
+  }
 
   // Verifica que la fecha sea válida
   if (isNaN(dd) || isNaN(mm) || isNaN(yyyy)) return 0;
 
   const fechaIngresoDate = new Date(yyyy, mm - 1, dd);
-  
+
   // Sumamos los días correspondientes a la criticidad
   fechaIngresoDate.setDate(fechaIngresoDate.getDate() + prioridad.diasFechaSolucion);
 
