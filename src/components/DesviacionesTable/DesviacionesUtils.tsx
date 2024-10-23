@@ -187,5 +187,31 @@ export const crearSelectFechaIngreso = (): HTMLSelectElement => {
   return select;
 };
 
+export const calcularDiasRestantes = (fechaIngreso: string, criticidad: string): number => {
+  if (!fechaIngreso || !criticidad) return 0;
+
+  const prioridad = prioridades.find(p => p.valor === criticidad);
+  if (!prioridad) return 0;
+
+  const [dd, mm, yyyy] = fechaIngreso.split('/').map(Number);
+
+  // Verifica que la fecha sea válida
+  if (isNaN(dd) || isNaN(mm) || isNaN(yyyy)) return 0;
+
+  const fechaIngresoDate = new Date(yyyy, mm - 1, dd);
+  
+  // Sumamos los días correspondientes a la criticidad
+  fechaIngresoDate.setDate(fechaIngresoDate.getDate() + prioridad.diasFechaSolucion);
+
+  const fechaActual = new Date();
+
+  const diferenciaEnMilisegundos = fechaIngresoDate.getTime() - fechaActual.getTime();
+  const diasRestantes = Math.ceil(diferenciaEnMilisegundos / (1000 * 60 * 60 * 24));
+
+  return isNaN(diasRestantes) ? 0 : diasRestantes;
+};
+
+
+
 
 

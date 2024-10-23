@@ -7,7 +7,16 @@ import { desviacionDelete } from '../../utils/apiUtils';
 import { DesviacionResponse } from '../../interfaces/interfaces';
 import { useNavigate } from 'react-router-dom';
 import { getCurrentDate } from '../../utils/utils';
-import { replaceNA, getFieldFromCellIndex, getColorByCriticidad, crearSelectEstado, crearSelectCriticidad, crearSelectAcciones, crearSelectFechaIngreso, calcularFechaSolucionProgramada  } from './DesviacionesUtils'
+import {
+  replaceNA,
+  getFieldFromCellIndex,
+  getColorByCriticidad,
+  crearSelectEstado,
+  crearSelectCriticidad,
+  crearSelectAcciones,
+  calcularFechaSolucionProgramada,
+  calcularDiasRestantes
+} from './DesviacionesUtils'
 
 const DEFAULT_ANSWER = "Sin respuesta";
 
@@ -31,7 +40,7 @@ const DesviacionesTable: React.FC = () => {
       const formatDate = (dateString: string | null | undefined): string => {
         return dateString ? dateString.split('T')[0] : DEFAULT_ANSWER;
       };
-  
+
       const filteredDesviaciones = desviaciones.map(desviacion => ({
         ...desviacion,
         fecha_recepcion_solicitud: formatDate(desviacion.fecha_recepcion_solicitud),
@@ -41,12 +50,14 @@ const DesviacionesTable: React.FC = () => {
         const isRequirementMatch = numero_requerimiento ? desviacion.numero_requerimiento === numero_requerimiento : true;
         return isAuditorMatch && isRequirementMatch;
       });
-  
+
+      console.log('Desviaciones filtradas:', filteredDesviaciones);
+
       setLocalDesviaciones(filteredDesviaciones);
     }
   }, [desviaciones, numero_requerimiento, context?.state?.userName, reloadData]);
-  
-  
+
+
   const eliminarFila = async (id: number) => {
     const confirmDelete = window.confirm("¿Estás seguro de que deseas eliminar esta fila?");
     if (confirmDelete && context.state.authToken) {
@@ -122,6 +133,7 @@ const DesviacionesTable: React.FC = () => {
     tableBody.querySelectorAll('tr').forEach(async (row, rowIndex) => {
       row.querySelectorAll('td').forEach(async (cell, cellIndex) => {
         const emailColumnIndex = 14;
+        const fechaIngresoColumnIndex = 8; // Índice de la columna de "Fecha de Ingreso"
   
         if (cellIndex === 10) {
           const selectEstado = crearSelectEstado();
@@ -139,7 +151,6 @@ const DesviacionesTable: React.FC = () => {
             const value = (e.target as HTMLSelectElement).value;
             handleInputChange(rowIndex, 'criticidad', value);
   
-
             const fechaIngreso = localDesviaciones[rowIndex].fecha_recepcion_solicitud || getCurrentDate();
             const fechaSolucionProgramada = calcularFechaSolucionProgramada(fechaIngreso, value);
             handleInputChange(rowIndex, 'fecha_solucion_programada', fechaSolucionProgramada);
@@ -149,26 +160,13 @@ const DesviacionesTable: React.FC = () => {
         } else if (cellIndex === 7) {
           const preguntaAuditada = localDesviaciones[rowIndex].preguntas_auditadas || '';
           const selectAcciones = await crearSelectAcciones(authToken, preguntaAuditada);
-          selectAcciones.value = localDesviaciones[rowIndex].acciones_correctivas || ''; 
+          selectAcciones.value = localDesviaciones[rowIndex].acciones_correctivas || '';
           selectAcciones.onchange = (e) => {
             const value = (e.target as HTMLSelectElement).value;
             handleInputChange(rowIndex, 'acciones_correctivas', value);
           };
           cell.innerHTML = '';
           cell.appendChild(selectAcciones);
-        } else if (cellIndex === 8) {
-          const selectFechaIngreso = crearSelectFechaIngreso();
-          selectFechaIngreso.value = localDesviaciones[rowIndex].fecha_recepcion_solicitud || ''; 
-          selectFechaIngreso.onchange = (e) => {
-            const value = (e.target as HTMLSelectElement).value;
-            handleInputChange(rowIndex, 'fecha_recepcion_solicitud', value);
-  
-            const criticidad = localDesviaciones[rowIndex].criticidad || 'Leve';
-            const fechaSolucionProgramada = calcularFechaSolucionProgramada(value, criticidad);
-            handleInputChange(rowIndex, 'fecha_solucion_programada', fechaSolucionProgramada);
-          };
-          cell.innerHTML = '';
-          cell.appendChild(selectFechaIngreso);
         } else if (cellIndex === emailColumnIndex || cell.textContent === 'N/A' || cell.textContent === DEFAULT_ANSWER) {
           const field = getFieldFromCellIndex(cellIndex);
           const input = document.createElement('input');
@@ -187,14 +185,22 @@ const DesviacionesTable: React.FC = () => {
   
           cell.innerHTML = '';
           cell.appendChild(input);
+        } else if (cellIndex === fechaIngresoColumnIndex) {
+          // Asegurarse de que la columna "Fecha de Ingreso" no sea editable
+          cell.innerHTML = localDesviaciones[rowIndex].fecha_recepcion_solicitud || DEFAULT_ANSWER;
         }
       });
     });
   };
   
+  
+
   const handleGoToHome = () => {
-    navigate('/');
+    navigate('/home');
   };
+
+ 
+
 
   return (
     <div className="desviaciones-tabla-container">
@@ -232,13 +238,16 @@ const DesviacionesTable: React.FC = () => {
             <th>EVIDENCIA FOTOGRAFICA</th>
             <th>AUDITOR</th>
             <th>EMAIL</th>
+            <th>DÍAS RESTANTES</th>
             <th>ELIMINAR FILA</th>
           </tr>
         </thead>
         <tbody>
           {localDesviaciones.length > 0 ? (
             localDesviaciones.map((desviacion, index) => {
-
+              console.log(`Fecha de ingreso para la desviación ${desviacion.id}:`, desviacion.fecha_recepcion_solicitud);
+              const diasRestantes = calcularDiasRestantes(desviacion.fecha_recepcion_solicitud || getCurrentDate(), desviacion.criticidad || 'Leve');
+            
               return (
                 <tr key={index} style={{ backgroundColor: getColorByCriticidad(desviacion.criticidad || DEFAULT_ANSWER), color: 'black' }}>
                   <td>{desviacion.id || DEFAULT_ANSWER}</td>
@@ -256,6 +265,7 @@ const DesviacionesTable: React.FC = () => {
                   <td>{desviacion.evidencia_fotografica || DEFAULT_ANSWER}</td>
                   <td>{desviacion.auditor || DEFAULT_ANSWER}</td>
                   <td>{desviacion.correo || DEFAULT_ANSWER}</td>
+                  <td>{diasRestantes}</td>
                   <td>
                     <button onClick={() => eliminarFila(desviacion.id)}>Eliminar</button>
                   </td>
@@ -275,3 +285,10 @@ const DesviacionesTable: React.FC = () => {
 };
 
 export default DesviacionesTable;
+
+
+
+
+
+
+

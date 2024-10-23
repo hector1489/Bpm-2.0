@@ -206,17 +206,9 @@ const AuditSheet: React.FC = () => {
             value={formValues.supervisorEstablecimiento}
             onChange={handleChange}
           >
-            <option value="gerente-contrato">Gerente De Contrato</option>
-            <option value="administrador">Administrador</option>
-            <option value="supervisor-mantencion">Supervisor De Mantención</option>
-            <option value="supervisor-casino">Supervisor De Casino</option>
-            <option value="supervisor-aseo">Supervisor De Aseo</option>
-            <option value="coordinador-calidad">Coordinador De Calidad</option>
-            <option value="asesor-sso">Asesor SSO</option>
-            <option value="asesor-medio-ambiente">Asesor Medio Ambiente</option>
-            <option value="jefe-rh">Jefe RH</option>
-            <option value="bodeguero">Bodeguero</option>
-            <option value="chef">Chef</option>
+            <option value="gerente-contrato">Responsable 1</option>
+            <option value="administrador">Responsable 2</option>
+            <option value="supervisor-mantencion">Auditor</option>
           </select>
         </div>
         <div className="form-group">

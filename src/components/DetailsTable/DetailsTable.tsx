@@ -79,6 +79,8 @@ const DetailsTable: React.FC = () => {
     handleSendAuditSheetToBackend();
   }, []);
 
+
+
   return (
     <table className="details-table">
       <thead>
