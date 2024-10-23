@@ -133,7 +133,6 @@ const DesviacionesTable: React.FC = () => {
     tableBody.querySelectorAll('tr').forEach(async (row, rowIndex) => {
       row.querySelectorAll('td').forEach(async (cell, cellIndex) => {
         const emailColumnIndex = 14;
-        const fechaIngresoColumnIndex = 8;
   
         if (cellIndex === 10) {
           const selectEstado = crearSelectEstado();
@@ -151,6 +150,7 @@ const DesviacionesTable: React.FC = () => {
             const value = (e.target as HTMLSelectElement).value;
             handleInputChange(rowIndex, 'criticidad', value);
   
+            // Aquí se actualiza la fecha de solución programada solo cuando cambia la criticidad
             const fechaIngreso = localDesviaciones[rowIndex].fecha_recepcion_solicitud || getCurrentDate();
             const fechaSolucionProgramada = calcularFechaSolucionProgramada(fechaIngreso, value);
             handleInputChange(rowIndex, 'fecha_solucion_programada', fechaSolucionProgramada);
@@ -185,12 +185,11 @@ const DesviacionesTable: React.FC = () => {
   
           cell.innerHTML = '';
           cell.appendChild(input);
-        } else if (cellIndex === fechaIngresoColumnIndex) {
-          cell.innerHTML = localDesviaciones[rowIndex].fecha_recepcion_solicitud || DEFAULT_ANSWER;
         }
       });
     });
   };
+  
 
   const handleGoToHome = () => {
     navigate('/home');
@@ -237,41 +236,53 @@ const DesviacionesTable: React.FC = () => {
           </tr>
         </thead>
         <tbody>
-          {localDesviaciones.length > 0 ? (
-            localDesviaciones.map((desviacion, index) => {
-              console.log(`Fecha de ingreso para la desviación ${desviacion.id}:`, desviacion.fecha_recepcion_solicitud);
-              const diasRestantes = calcularDiasRestantes(desviacion.fecha_recepcion_solicitud || getCurrentDate(), desviacion.criticidad || 'Leve');
-            
-              return (
-                <tr key={index} style={{ backgroundColor: getColorByCriticidad(desviacion.criticidad || DEFAULT_ANSWER), color: 'black' }}>
-                  <td>{desviacion.id || DEFAULT_ANSWER}</td>
-                  <td>{desviacion.numero_requerimiento || DEFAULT_ANSWER}</td>
-                  <td>{desviacion.preguntas_auditadas || DEFAULT_ANSWER}</td>
-                  <td>{desviacion.desviacion_o_criterio || DEFAULT_ANSWER}</td>
-                  <td>{desviacion.responsable_problema || DEFAULT_ANSWER}</td>
-                  <td>{desviacion.local || DEFAULT_ANSWER}</td>
-                  <td>{desviacion.criticidad || DEFAULT_ANSWER}</td>
-                  <td>{desviacion.acciones_correctivas || DEFAULT_ANSWER}</td>
-                  <td>{desviacion.fecha_recepcion_solicitud || DEFAULT_ANSWER}</td>
-                  <td>{desviacion.fecha_solucion_programada || DEFAULT_ANSWER}</td>
-                  <td>{desviacion.estado || DEFAULT_ANSWER}</td>
-                  <td>{desviacion.contacto_clientes || DEFAULT_ANSWER}</td>
-                  <td>{desviacion.evidencia_fotografica || DEFAULT_ANSWER}</td>
-                  <td>{desviacion.auditor || DEFAULT_ANSWER}</td>
-                  <td>{desviacion.correo || DEFAULT_ANSWER}</td>
-                  <td>{diasRestantes}</td>
-                  <td>
-                    <button onClick={() => eliminarFila(desviacion.id)}>Eliminar</button>
-                  </td>
-                </tr>
-              );
-            })
-          ) : (
-            <tr>
-              <td colSpan={16}>No hay desviaciones disponibles.</td>
-            </tr>
-          )}
-        </tbody>
+  {localDesviaciones.length > 0 ? (
+    localDesviaciones.map((desviacion, index) => {
+      const backgroundColor = getColorByCriticidad(desviacion.criticidad || DEFAULT_ANSWER);
+      const diasRestantes = calcularDiasRestantes(desviacion.fecha_recepcion_solicitud || getCurrentDate(), desviacion.criticidad || 'Leve');
+
+      let textColor = 'black';
+      if (backgroundColor === 'red') {
+        textColor = 'white';
+      } else if (backgroundColor === 'yellow') {
+        textColor = 'black';
+      }
+
+      return (
+        <tr key={index} style={{ backgroundColor, color: textColor }}>
+          <td>{desviacion.id || DEFAULT_ANSWER}</td>
+          <td>{desviacion.numero_requerimiento || DEFAULT_ANSWER}</td>
+          <td>{desviacion.preguntas_auditadas || DEFAULT_ANSWER}</td>
+          <td>{desviacion.desviacion_o_criterio || DEFAULT_ANSWER}</td>
+          <td>{desviacion.responsable_problema || DEFAULT_ANSWER}</td>
+          <td>{desviacion.local || DEFAULT_ANSWER}</td>
+          <td>{desviacion.criticidad || DEFAULT_ANSWER}</td>
+          <td>{desviacion.acciones_correctivas || DEFAULT_ANSWER}</td>
+          <td>{desviacion.fecha_recepcion_solicitud || DEFAULT_ANSWER}</td>
+          <td>{desviacion.fecha_solucion_programada || DEFAULT_ANSWER}</td>
+          <td>{desviacion.estado || DEFAULT_ANSWER}</td>
+          <td>{desviacion.contacto_clientes || DEFAULT_ANSWER}</td>
+          <td>{desviacion.evidencia_fotografica || DEFAULT_ANSWER}</td>
+          <td>{desviacion.auditor || DEFAULT_ANSWER}</td>
+          <td>{desviacion.correo || DEFAULT_ANSWER}</td>
+          <td>
+            <p className='desviaciones-diasRestantes' style={{ color: textColor }}>
+              🚨{diasRestantes}
+            </p>
+          </td>
+          <td>
+            <button onClick={() => eliminarFila(desviacion.id)}>Eliminar</button>
+          </td>
+        </tr>
+      );
+    })
+  ) : (
+    <tr>
+      <td colSpan={16}>No hay desviaciones disponibles.</td>
+    </tr>
+  )}
+</tbody>
+
 
       </table>
     </div>

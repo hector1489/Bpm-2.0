@@ -197,13 +197,10 @@ export const calcularDiasRestantes = (fechaIngreso: string, criticidad: string):
 
   // Detectamos si la fecha está en formato yyyy-mm-dd o dd/mm/yyyy
   if (fechaIngreso.includes('-')) {
-    // Formato yyyy-mm-dd
     [yyyy, mm, dd] = fechaIngreso.split('-').map(Number);
   } else if (fechaIngreso.includes('/')) {
-    // Formato dd/mm/yyyy
     [dd, mm, yyyy] = fechaIngreso.split('/').map(Number);
   } else {
-    // Si no está en un formato reconocido, retornamos 0
     return 0;
   }
 
