@@ -1,3 +1,6 @@
+import Highcharts from 'highcharts';
+import HighchartsReact from 'highcharts-react-official';
+import Highcharts3D from 'highcharts/highcharts-3d';
 import './IESatisfaccion.css';
 
 interface TablaDetail {
@@ -16,6 +19,8 @@ interface IESatisfaccionProps {
   tablaDetails: TablaDetail[];
 }
 
+Highcharts3D(Highcharts);
+
 const extractPrefix = (field3: string) => {
   const match = field3.match(/^TRA [A-Z]+ \d+/);
   return match ? match[0] : '';
@@ -27,7 +32,6 @@ const extractPercentage = (field4: string) => {
 };
 
 const IESatisfaccion: React.FC<IESatisfaccionProps> = ({ tablaDetails }) => {
-
   const cardsData: SatisfaccionCard[] = [
     {
       iconClass: 'fa-regular fa-user',
@@ -64,7 +68,6 @@ const IESatisfaccion: React.FC<IESatisfaccionProps> = ({ tablaDetails }) => {
     };
   });
 
-
   const calculateAverage = () => {
     const percentages = updatedCardsData
       .map(card => parseInt(card.percentage))
@@ -74,20 +77,63 @@ const IESatisfaccion: React.FC<IESatisfaccionProps> = ({ tablaDetails }) => {
     return average.toFixed(2);
   };
 
-  const renderSatisfaccionCards = () => {
-    return updatedCardsData.map((card, index) => (
-      <div key={index} className={`satisfaccion-card ${card.colorClass}`}>
-        <i className={card.iconClass}></i>
-        <p>{card.text}</p>
-        <p>{card.percentage}</p>
-      </div>
-    ));
+  // Definir colores basados en las clases de color de las tarjetas
+  const colors = ['#1E90FF', '#FF4500', '#FFD700', '#808080']; // azul, rojo, amarillo, gris
+
+  const chartOptions = {
+    chart: {
+      type: 'pie',
+      options3d: {
+        enabled: true,
+        alpha: 45,
+        beta: 0
+      }
+    },
+    title: {
+      text: 'Porcentajes de Satisfacción'
+    },
+    accessibility: {
+      point: {
+        valueSuffix: '%'
+      }
+    },
+    plotOptions: {
+      pie: {
+        allowPointSelect: true,
+        cursor: 'pointer',
+        depth: 35,
+        dataLabels: {
+          enabled: true,
+          format: '{point.name}: {point.y}%'
+        }
+      }
+    },
+    series: [{
+      name: 'Satisfacción',
+      colors, // Asignar los colores definidos
+      data: updatedCardsData
+        .map((card, index) => ({
+          name: card.text,
+          y: parseInt(card.percentage),
+          color: colors[index] // Asignar el color de acuerdo con el índice de la tarjeta
+        }))
+        .filter(point => !isNaN(point.y))
+    }]
   };
 
   return (
     <div className="ie-satisfaccion-container">
       <div className="satisfaccion-cards">
-        {renderSatisfaccionCards()}
+        {updatedCardsData.map((card, index) => (
+          <div key={index} className={`satisfaccion-card ${card.colorClass}`}>
+            <i className={card.iconClass}></i>
+            <p>{card.text}</p>
+            <p>{card.percentage}</p>
+          </div>
+        ))}
+      </div>
+      <div className="satisfaccion-pie-chart">
+        <HighchartsReact highcharts={Highcharts} options={chartOptions} />
       </div>
       <div className="satisfaccion-promedio-final">
         <p>Promedio: {calculateAverage()}%</p>

@@ -16,7 +16,7 @@ const extractPrefix = (field3: string) => {
 
 const extractPercentage = (field4: string) => {
   const match = field4.match(/^(\d+)%/);
-  return match ? match[1] : '';
+  return match ? match[1] : '0';
 };
 
 const IEControlCalidad: React.FC<IEControlCalidadProps> = ({ tablaDetails }) => {
@@ -37,9 +37,15 @@ const IEControlCalidad: React.FC<IEControlCalidadProps> = ({ tablaDetails }) => 
     const found = tablaDetails.find((detail) => extractPrefix(detail.field3) === prefix);
     return {
       text: point,
-      percentage: found ? `${extractPercentage(found.field4)}%` : '0%'
+      percentage: found ? `${extractPercentage(found.field4)}` : '0'
     };
   });
+
+  const calculateAverage = () => {
+    const percentages = updatedControlPoints.map(point => parseInt(point.percentage)).filter(p => !isNaN(p));
+    const total = percentages.reduce((acc, value) => acc + value, 0);
+    return percentages.length > 0 ? (total / percentages.length).toFixed(2) : '0';
+  };
 
   return (
     <div className="ie-control-container">
@@ -47,10 +53,16 @@ const IEControlCalidad: React.FC<IEControlCalidadProps> = ({ tablaDetails }) => 
         <div className="control-linea">
           {updatedControlPoints.map((point, index) => (
             <div key={index} className={`control-punto ${index % 2 === 0 ? 'left' : 'right'}`}>
-              {point.text} - {point.percentage}
+              <div className="percentage-circle">{point.percentage}%</div>
+              <div className="point-text">
+                {point.text}
+              </div>
             </div>
           ))}
         </div>
+      </div>
+      <div className="control-promedio-final">
+        <p>Promedio: {calculateAverage()}%</p>
       </div>
     </div>
   );

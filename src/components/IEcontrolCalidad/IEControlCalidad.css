@@ -1,6 +1,7 @@
 .ie-control-container {
   margin: 20px;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   padding: 40px;
@@ -24,12 +25,16 @@
   justify-content: space-around;
   align-items: center;
   border-radius: 2px;
+  margin: 0 auto;
 }
 
 .control-punto {
   position: relative;
   width: 220px;
   padding: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   background-color: #2e86c1;
   border-radius: 10px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
@@ -38,6 +43,7 @@
   color: white;
   transition: transform 0.4s ease, box-shadow 0.3s ease;
   cursor: pointer;
+  margin-bottom: 20px;
 }
 
 .control-punto:hover {
@@ -45,36 +51,46 @@
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
 }
 
+.percentage-circle {
+  width: 50px;
+  height: 50px;
+  background-color: #f39c12;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 16px;
+  font-weight: bold;
+  color: white;
+  margin-bottom: 10px;
+  
+}
+
+.point-text {
+  text-align: center;
+}
+
 .control-punto.left {
   transform: translateX(-180px);
-  text-align: right;
 }
 
 .control-punto.right {
   transform: translateX(180px);
-  text-align: left;
 }
 
-.control-punto.left::before,
-.control-punto.right::before {
-  content: '';
-  position: absolute;
-  width: 20px;
-  height: 20px;
+.control-promedio-final {
+  margin-top: 40px;
+  padding: 20px;
   background-color: #2e86c1;
-  border: 3px solid #fff;
-  border-radius: 50%;
-  top: 50%;
-  transform: translateY(-50%);
-  z-index: 1;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  font-size: 18px;
+  font-weight: bold;
+  text-align: center;
 }
 
-.control-punto.left::before {
-  right: -40px;
-}
-
-.control-punto.right::before {
-  left: -40px;
+.control-promedio-final p {
+  color: white;
 }
 
 /* Responsive styles */
@@ -97,10 +113,15 @@
     transform: translateX(150px);
   }
 
-  .control-punto.left::before,
-  .control-punto.right::before {
-    right: -30px;
-    left: -30px;
+  .percentage-circle {
+    width: 40px;
+    height: 40px;
+    font-size: 14px;
+  }
+
+  .control-promedio-final {
+    font-size: 16px;
+    padding: 15px;
   }
 }
 
@@ -126,8 +147,14 @@
     text-align: center;
   }
 
-  .control-punto.left::before,
-  .control-punto.right::before {
-    display: none;
+  .percentage-circle {
+    width: 30px;
+    height: 30px;
+    font-size: 12px;
+  }
+
+  .control-promedio-final {
+    font-size: 14px;
+    padding: 10px;
   }
 }

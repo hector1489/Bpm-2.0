@@ -36,7 +36,7 @@ const IEEficienciaOp: React.FC<IEEficienciaOpProps> = ({ tablaDetails }) => {
 
 
   const categories = [
-    'RL 6. Cuenta con registros de mantención correctiva de equipos:',
+    'PPT 82. El flujo del personal, vehículos y de materias primas en las distintas etapas del proceso, es ordenado y conocido por todos los que participan en la elaboración, para evitar contaminación cruzada. (Art. 63)',
     'PPT 83. Se cuenta con procedimientos escritos de los procesos (Formulación del producto, flujos de operación, procesos productivos). (Art. 3, 11, 63, 66, 69, 132)',
     'DOC 95. Autorizaciones Sanitarias (casino y verduras crudas):',
     'RL 6. Cuenta con registros de mantención correctiva de equipos:',
