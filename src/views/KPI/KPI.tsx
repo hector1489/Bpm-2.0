@@ -53,7 +53,6 @@ const KPI: React.FC = () => {
 
       try {
         const data = await getTablaDetailsByNumeroAuditoria(numeroAuditoria);
-        console.log(data);
         setTablaDetails(data);
       } catch (err) {
         setError('Error al obtener los datos de la tabla');
@@ -113,6 +112,8 @@ const KPI: React.FC = () => {
   }
 
   const moduleData = tablaDetails.map((detail) => ({
+    question: detail.field3,
+    answer: detail.field4,
     moduleName: detail.field2,
     percentage: Number(detail.field4) || null,
   }));

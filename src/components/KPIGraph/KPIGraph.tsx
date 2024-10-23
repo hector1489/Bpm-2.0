@@ -4,14 +4,16 @@ import HighchartsReact from 'highcharts-react-official';
 import './KPIGraph.css';
 
 interface BPMGraphProps {
-  moduleData: { moduleName: string, percentage: number | null }[];
+  moduleData: { moduleName: string, percentage: number | null, question: string, answer: string }[];
 }
 
+// Inicializa Highcharts con la funcionalidad 3D
 if (typeof Highcharts === 'object') {
   Highcharts3D(Highcharts);
 }
 
 const KPIGraph: React.FC<BPMGraphProps> = ({ moduleData }) => {
+  // Define los módulos por categoría
   const Transporte = [
     'poes-higiene-empleados', 'poe-preelaboraciones', 'poe-elaboracion',
     'poe-mantencion', 'poe-transporte', 'poe-servicio', 'doc'
@@ -22,20 +24,38 @@ const KPIGraph: React.FC<BPMGraphProps> = ({ moduleData }) => {
   ];
   const Documentos = ['doc'];
 
+  // Función para extraer el porcentaje de la respuesta
+  const extractPercentageFromAnswer = (answer: string): number | null => {
+    const match = answer.match(/(\d+)%/);
+    return match ? parseInt(match[1]) : null;
+  };
+
+  // Buscar CAP 101
+  const cap101Detail = moduleData.find((module) =>
+    module.question === 'CAP 101. Existe un programa escrito y con sus registros correspondientes de capacitación del personal en materia de manipulación higiénica de los alimentos e higiene personal. (Art. 52, 69)'
+  );
+  const cap101Percentage = cap101Detail ? extractPercentageFromAnswer(cap101Detail.answer) : null;
+
+
+  // Función para determinar el color basado en el porcentaje
   const getColorByPercentage = (percentage: number) => {
     if (percentage >= 90) return 'green';
     if (percentage >= 75) return 'yellow';
     return 'red';
   };
 
+  // Filtrar los datos por módulo
   const filterByModules = (modules: string[]) =>
     moduleData.filter((module) => modules.includes(module.moduleName));
 
+  // Calcula el promedio de los porcentajes
   const calculateAverage = (data: { moduleName: string, percentage: number | null }[]) => {
-    const total = data.reduce((acc, module) => acc + (module.percentage ?? 100), 0);
-    return data.length > 0 ? total / data.length : 100;
+    const validData = data.filter((module) => module.percentage !== null);
+    const total = validData.reduce((acc, module) => acc + (module.percentage ?? 100), 0);
+    return validData.length > 0 ? total / validData.length : 100;
   };
 
+  // Filtrar y calcular promedios para cada categoría
   const transporteData = filterByModules(Transporte);
   const serviciosData = filterByModules(Servicios);
   const documentosData = filterByModules(Documentos);
@@ -44,14 +64,18 @@ const KPIGraph: React.FC<BPMGraphProps> = ({ moduleData }) => {
   const serviciosAvg = calculateAverage(serviciosData);
   const documentosAvg = calculateAverage(documentosData);
 
-  const promedioGeneral = (transporteAvg + serviciosAvg + documentosAvg) / 3;
+  // Calcular el promedio general incluyendo CAP 101 si está presente
+  const promedioGeneral = (transporteAvg + serviciosAvg + documentosAvg + (cap101Percentage ?? 0)) / (cap101Percentage ? 4 : 3);
 
+  // Configurar nombres de los módulos, porcentajes y pesos
   const moduleNames = ['Alimentación Insp. BPM', 'Alimentación Cum. Inutas', 'Alimentación Exam. Manip.', 'Alimentación Inap. Microb.'];
   const percentages = [transporteAvg, serviciosAvg, documentosAvg, promedioGeneral];
   const itemWeights = ['25%', '25%', '25%', '25%'];
 
+  // Asignar colores a las barras según el porcentaje
   const barColors = percentages.map((percentage) => getColorByPercentage(percentage));
 
+  // Opciones del gráfico de Highcharts
   const chartOptions = {
     chart: {
       type: 'bar',
@@ -74,7 +98,7 @@ const KPIGraph: React.FC<BPMGraphProps> = ({ moduleData }) => {
       },
     },
     xAxis: {
-      categories: moduleNames,
+      categories: [...moduleNames, 'CAP 101'], // Añadir CAP 101 al eje X
       title: {
         text: '',
         style: {
@@ -105,9 +129,9 @@ const KPIGraph: React.FC<BPMGraphProps> = ({ moduleData }) => {
     series: [
       {
         name: 'Promedio',
-        data: percentages,
+        data: [...percentages, cap101Percentage],
         colorByPoint: true,
-        colors: barColors,
+        colors: [...barColors, getColorByPercentage(cap101Percentage ?? 0)],
       },
     ],
     plotOptions: {
@@ -123,41 +147,46 @@ const KPIGraph: React.FC<BPMGraphProps> = ({ moduleData }) => {
       enabled: false,
     },
   };
-  
 
   return (
     <div className="kpi-graph-container">
       <h3>KPI</h3>
       <div className="kpi-graph-graph">
-      <HighchartsReact highcharts={Highcharts} options={chartOptions} />
+        <HighchartsReact highcharts={Highcharts} options={chartOptions} />
       </div>
      
       <div className="kpi-graph-table">
-      <table id="kpi-percentage-table">
-        <thead>
-          <tr style={{ backgroundColor: 'skyblue', color:'black' }}>
-            <th>INDICADOR</th>
-            <th>PONDERACIÓN ITEM CODELCO (25%)</th>
-            <th>PROMEDIO</th>
-          </tr>
-        </thead>
-        <tbody>
-          {moduleNames.map((name, index) => (
-            <tr key={name}>
-              <td>{name}</td>
-              <td>{itemWeights[index]}</td>
-              <td>{percentages[index].toFixed(2)}%</td>
+        <table id="kpi-percentage-table">
+          <thead>
+            <tr style={{ backgroundColor: 'skyblue', color: 'black' }}>
+              <th>INDICADOR</th>
+              <th>PONDERACIÓN ITEM CODELCO (25%)</th>
+              <th>PROMEDIO</th>
             </tr>
-          ))}
-          <tr className='bg-warning'>
-            <td><strong>TOTAL ALIMENTACIÓN</strong></td>
-            <td><strong>100%</strong></td>
-            <td><strong>{promedioGeneral.toFixed(2)}%</strong></td>
-          </tr>
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {moduleNames.map((name, index) => (
+              <tr key={name}>
+                <td>{name}</td>
+                <td>{itemWeights[index]}</td>
+                <td>{percentages[index].toFixed(2)}%</td>
+              </tr>
+            ))}
+            {cap101Percentage !== null && (
+              <tr>
+                <td>CAP 101</td>
+                <td>25%</td>
+                <td>{cap101Percentage?.toFixed(2)}%</td>
+              </tr>
+            )}
+            <tr className="bg-warning">
+              <td><strong>TOTAL ALIMENTACIÓN</strong></td>
+              <td><strong>100%</strong></td>
+              <td><strong>{promedioGeneral.toFixed(2)}%</strong></td>
+            </tr>
+          </tbody>
+        </table>
       </div>
-      
     </div>
   );
 };
