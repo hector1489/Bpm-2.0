@@ -4,7 +4,7 @@ import HighchartsReact from 'highcharts-react-official';
 import './KPIGraph.css';
 
 interface BPMGraphProps {
-  moduleData: { moduleName: string, percentage: number | null, question: string, answer: string }[];
+  moduleData: { moduleName: string, question: string, answer: string, percentage: number | null }[];
 }
 
 // Inicializa Highcharts con la funcionalidad 3D

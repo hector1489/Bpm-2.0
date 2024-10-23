@@ -14,6 +14,22 @@ function createModuleData(module: Module): { moduleName: string; percentage: num
   };
 }
 
+function createKPIModuleData(module: Module): { moduleName: string; question: string; answer: string; percentage: number | null } {
+  return {
+    moduleName: module.module,
+    question: `Pregunta para ${module.module}`,
+    answer: `Respuesta para ${module.module}`,
+    percentage: Math.random() > 0.5 ? Math.floor(Math.random() * 101) : null,
+  };
+}
+
+function createETAModuleData(module: Module): { moduleName: string; percentage: number } {
+  return {
+    moduleName: module.module,
+    percentage: Math.floor(Math.random() * 101),
+  };
+}
+
 const ResumenEjecutivo: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -28,6 +44,8 @@ const ResumenEjecutivo: React.FC = () => {
   ];
 
   const moduleData = modules.map(createModuleData);
+  const kpiModuleData = modules.map(createKPIModuleData);
+  const etaModuleData = modules.map(createETAModuleData);
 
   const handleGoDoc = () => {
     navigate('/documentacion');
@@ -39,7 +57,7 @@ const ResumenEjecutivo: React.FC = () => {
       {id && <p>ID: {id}</p>}
       {numero_requerimiento && <p>Auditoria : {numero_requerimiento}</p>}
       <div id="kpi-graph">
-        <KPIGraph moduleData={moduleData} />
+        <KPIGraph moduleData={kpiModuleData} />
       </div>
       <div id="bpm-graph">
         <BPMGraph moduleData={moduleData} />
@@ -48,7 +66,7 @@ const ResumenEjecutivo: React.FC = () => {
         <LUMGraph/>
       </div>
       <div id="eta-graph">
-        <ETAGraph moduleData={moduleData}  />
+        <ETAGraph moduleData={etaModuleData}  />
       </div>
       <button onClick={handleGoDoc}>Volver</button>
     </div>
