@@ -63,6 +63,10 @@
   background-color: #2ecc71;
 }
 
+.average-higiene {
+  margin-top: 10px;
+}
+
 @media (max-width: 767px) {
   .chart-container {
     height: 300px;

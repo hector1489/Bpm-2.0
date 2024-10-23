@@ -51,6 +51,7 @@ const IECriticalEvaluation: React.FC<IECriticalEvaluationProps> = ({ tablaDetail
     }
   ];
 
+  // Mapeo de datos de evaluación
   const evaluationData = IECriticalEvaluationData.map((item) => {
     const matchingDetails = tablaDetails.filter((detalle) =>
       detalle.field3.toLowerCase().includes(item.category.split('.')[0].toLowerCase())
@@ -66,6 +67,9 @@ const IECriticalEvaluation: React.FC<IECriticalEvaluationProps> = ({ tablaDetail
     };
   });
 
+  const totalAverage = evaluationData.reduce((acc, data) => acc + data.y, 0) / evaluationData.length;
+
+  // Opciones del gráfico
   const renderChartOptions = () => {
     return {
       chart: {
@@ -103,16 +107,26 @@ const IECriticalEvaluation: React.FC<IECriticalEvaluationProps> = ({ tablaDetail
   };
 
   return (
+    <div className="criticalEvaluation">
+
     <div className="criticalEvaluation-container">
       <div className="circular-graph-evaluation">
         <HighchartsReact highcharts={Highcharts} options={renderChartOptions()} />
       </div>
+
       <div className="cards-evaluation">
         {IECriticalEvaluationData.map((item, index) => (
           <div key={index} className={`card-evaluation`} style={{ backgroundColor: item.color }}>
             {item.name}
           </div>
         ))}
+      </div>
+
+      
+    </div>
+
+    <div className="average-total">
+        <p>Promedio Total : {totalAverage.toFixed(2)}%</p>
       </div>
     </div>
   );

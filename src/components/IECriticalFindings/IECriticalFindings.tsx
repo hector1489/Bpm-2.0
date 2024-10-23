@@ -15,6 +15,7 @@ interface IECriticalFindingsProps {
 }
 
 const IECriticalFindings: React.FC<IECriticalFindingsProps> = ({ detallesFiltrados }) => {
+  // Función para obtener las opciones de Highcharts
   const getOptions = (porcentaje: number) => ({
     chart: {
       type: 'pie',
@@ -57,29 +58,43 @@ const IECriticalFindings: React.FC<IECriticalFindingsProps> = ({ detallesFiltrad
     ],
   });
 
-  return (
-    <div className="IECriticalFinding-container">
-      {detallesFiltrados.map((detalle, index) => (
-        <div key={index} className="critical-card">
-          <div className="circular-bar">
-            <div className="doughnut-chart">
-              <HighchartsReact highcharts={Highcharts} options={getOptions(parseInt(detalle.field4))} />
-            </div>
-            <div className="critical-text">
-              <p>{detalle.field1} - {detalle.field4}%</p>
-            </div>
-          </div>
+  // Calcular el promedio total de los porcentajes
+  const totalPorcentaje = detallesFiltrados.reduce((sum, detalle) => sum + parseInt(detalle.field4), 0);
+  const promedioPorcentaje = (detallesFiltrados.length > 0) ? (totalPorcentaje / detallesFiltrados.length).toFixed(2) : '0';
 
-          <div className="percentage-bars">
-            <div className="bar green" style={{ width: `${detalle.field4}%` }}>
-              <span className="question">{detalle.field3}</span>
+  return (
+    <div className="IECriticalFinding">
+      <div className="IECriticalFinding-container">
+
+
+        {detallesFiltrados.map((detalle, index) => (
+          <div key={index} className="critical-card">
+            <div className="circular-bar">
+              <div className="doughnut-chart">
+                <HighchartsReact highcharts={Highcharts} options={getOptions(parseInt(detalle.field4))} />
+              </div>
+              <div className="critical-text">
+                <p>{detalle.field1} - {detalle.field4}%</p>
+              </div>
             </div>
-            <div className="bar yellow" style={{ width: `${detalle.field4}%` }}>
-              <span className="percentage">{detalle.field4}%</span>
+
+            <div className="percentage-bars">
+              <div className="bar green" style={{ width: `${detalle.field4}%` }}>
+                <span className="question">{detalle.field3}</span>
+              </div>
+              <div className="bar yellow" style={{ width: `${detalle.field4}%` }}>
+                <span className="percentage">{detalle.field4}%</span>
+              </div>
             </div>
           </div>
+        ))}
+
+        
+      </div>
+
+      <div className="average-title">
+          <p>Promedio Total: {promedioPorcentaje}%</p>
         </div>
-      ))}
     </div>
   );
 }

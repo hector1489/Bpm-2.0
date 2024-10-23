@@ -107,7 +107,6 @@ const ETADetailsSymary: React.FC<ETADetailsSymaryProps> = ({ numeroAuditoria }) 
 
       try {
         const data = await getTablaDetailsByNumeroAuditoria(numeroAuditoria);
-        console.log(data);
         setTablaDetails(data);
       } catch (err) {
         setError('Error al obtener los datos de la tabla');
@@ -131,13 +130,17 @@ const ETADetailsSymary: React.FC<ETADetailsSymaryProps> = ({ numeroAuditoria }) 
     return <p>No se encontraron detalles para la auditoría {numeroAuditoria}</p>;
   }
 
-  const matchedDetails = tablaDetails.filter(detail =>
-    questionsEta.includes(detail.field3)
-  );
+  const matchedDetails = tablaDetails
+    .filter(detail => questionsEta.includes(detail.field3))
+    // Filtrar preguntas duplicadas basadas en 'field3'
+    .filter((detail, index, self) =>
+      index === self.findIndex((d) => d.field3 === detail.field3)
+    );
 
   const questionNames = matchedDetails.map(detail => detail.field3);
   const percentages = matchedDetails.map(detail => parseFloat(detail.field4.replace('%', '')) || 0);
   const barColors = percentages.map(getColorByPercentage);
+
 
   // Función para extraer el módulo
   const extractModulo = (pregunta: string) => {
@@ -163,7 +166,7 @@ const ETADetailsSymary: React.FC<ETADetailsSymaryProps> = ({ numeroAuditoria }) 
     xAxis: {
       categories: questionNames,
       title: {
-        text: 'Preguntas',
+        text: '',
       },
       labels: {
         style: {

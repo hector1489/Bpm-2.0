@@ -55,6 +55,10 @@ const IETrazadores: React.FC<IETrazadoresProps> = ({ tablaDetails }) => {
     return found ? parseInt(found.field4) : 0;
   });
 
+  // Cálculo del promedio
+  const total = filteredData.reduce((sum, value) => sum + value, 0);
+  const average = (total / filteredData.length).toFixed(2);
+
   const dataWithColors = filteredData.map(value => ({
     y: value,
     color: getColorByPercentageIETrazadores(value)
@@ -156,7 +160,6 @@ const IETrazadores: React.FC<IETrazadoresProps> = ({ tablaDetails }) => {
         <HighchartsReact highcharts={Highcharts} options={options} />
       </div>
 
-      {/* Agregamos las tarjetas aquí */}
       <div className="cards-trazadores">
         {categories.map((category, index) => (
           <div key={index} className="card-trazadores">
@@ -164,6 +167,10 @@ const IETrazadores: React.FC<IETrazadoresProps> = ({ tablaDetails }) => {
             <p>Porcentaje: {filteredData[index]}%</p>
           </div>
         ))}
+      </div>
+
+      <div className="average-trazadores">
+        <p>Promedio Total : {average}%</p>
       </div>
     </div>
   );

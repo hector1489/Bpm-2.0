@@ -62,6 +62,10 @@ const IEHigiene: React.FC<IEHigieneProps> = ({ tablaDetails }) => {
     };
   });
 
+  // Calcular el promedio de los porcentajes
+  const total = updatedData.reduce((sum, item) => sum + item.y, 0);
+  const average = (total / updatedData.length).toFixed(2);
+
   const options = {
     chart: {
       type: 'pie',
@@ -118,6 +122,10 @@ const IEHigiene: React.FC<IEHigieneProps> = ({ tablaDetails }) => {
             <p>{item.percentage}</p>
           </div>
         ))}
+      </div>
+
+      <div className="average-higiene">
+        <p>Promedio total de los porcentajes: {average}%</p>
       </div>
     </div>
   );

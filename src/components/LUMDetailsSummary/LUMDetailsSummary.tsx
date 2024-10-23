@@ -55,7 +55,7 @@ const LUMDetailsSummary: React.FC<TableDetailsSummaryProps> = ({ numeroAuditoria
 
   useEffect(() => {
     const fetchTablaDetails = async () => {
-      if (!numeroAuditoria) return;
+      if (!numeroAuditoria || tablaDetails.length > 0) return;  // Verificar si ya hay datos
 
       setLoading(true);
       setError(null);
@@ -71,7 +71,8 @@ const LUMDetailsSummary: React.FC<TableDetailsSummaryProps> = ({ numeroAuditoria
     };
 
     fetchTablaDetails();
-  }, [numeroAuditoria]);
+  }, [numeroAuditoria, tablaDetails.length]);
+
 
   const fetchAuditSheetDetails = async () => {
     const username = state?.userName;
@@ -102,7 +103,7 @@ const LUMDetailsSummary: React.FC<TableDetailsSummaryProps> = ({ numeroAuditoria
 
   useEffect(() => {
     fetchAuditSheetDetails();
-  }, [context?.state?.userName]); 
+  }, [context?.state?.userName]);
 
   useEffect(() => {
     bpmFilteredAuditSheet();
@@ -127,8 +128,13 @@ const LUMDetailsSummary: React.FC<TableDetailsSummaryProps> = ({ numeroAuditoria
     lumQuestion.includes(detail.field3)
   );
 
-  const questionNames = matchedDetails.map(detail => detail.field3);
-  const percentages = matchedDetails.map(detail => parseFloat(detail.field4.replace('%', '')) || 100);
+  const uniqueMatchedDetails = matchedDetails.filter(
+    (detail, index, self) =>
+      index === self.findIndex((d) => d.field3 === detail.field3)
+  );
+
+  const questionNames = uniqueMatchedDetails.map(detail => detail.field3);
+  const percentages = uniqueMatchedDetails.map(detail => parseFloat(detail.field4.replace('%', '')) || 100);
   const barColors = percentages.map(getColorByPercentage);
 
   const chartOptions = {
@@ -193,7 +199,7 @@ const LUMDetailsSummary: React.FC<TableDetailsSummaryProps> = ({ numeroAuditoria
         <div className="BPMDetailsSummary-data-table">
 
           <table>
-          <thead>
+            <thead>
               <tr>
                 <th>Nombre del Establecimiento:</th>
                 <td>{filteredAuditSheet?.field1 || 'N/A'}</td>
@@ -283,7 +289,7 @@ const LUMDetailsSummary: React.FC<TableDetailsSummaryProps> = ({ numeroAuditoria
 
       <HighchartsReact highcharts={Highcharts} options={chartOptions} />
 
-      
+
       <div className="table-responsive">
         <table id="luminometry-table" className="table table-bordered text-center table-sm" style={{ fontSize: '12px' }}>
           <thead className="table-light">

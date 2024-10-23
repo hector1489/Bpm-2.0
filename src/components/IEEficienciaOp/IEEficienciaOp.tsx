@@ -20,7 +20,6 @@ const extractPrefix = (field3: string) => {
   return match ? match[0] : '';
 };
 
-
 const IEEficienciaOp: React.FC<IEEficienciaOpProps> = ({ tablaDetails }) => {
   const [chartWidth, setChartWidth] = useState(window.innerWidth * 0.8);
 
@@ -34,7 +33,6 @@ const IEEficienciaOp: React.FC<IEEficienciaOpProps> = ({ tablaDetails }) => {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-
   const categories = [
     'PPT 82. El flujo del personal, vehículos y de materias primas en las distintas etapas del proceso, es ordenado y conocido por todos los que participan en la elaboración, para evitar contaminación cruzada. (Art. 63)',
     'PPT 83. Se cuenta con procedimientos escritos de los procesos (Formulación del producto, flujos de operación, procesos productivos). (Art. 3, 11, 63, 66, 69, 132)',
@@ -46,13 +44,11 @@ const IEEficienciaOp: React.FC<IEEficienciaOpProps> = ({ tablaDetails }) => {
     'SER 73. Reposición continua de las preparaciones frías y calientes:'
   ];
 
-
   const filteredData = categories.map(category => {
     const prefix = extractPrefix(category);
     const found = tablaDetails.find(detail => extractPrefix(detail.field3) === prefix);
     return found ? parseInt(found.field4) : 0;
   });
-
 
   const efficiencyCards = categories.map((category, index) => {
     let className = '';
@@ -92,7 +88,10 @@ const IEEficienciaOp: React.FC<IEEficienciaOpProps> = ({ tablaDetails }) => {
       className
     };
   });
-  
+
+  // Calcular el promedio de los porcentajes
+  const total = filteredData.reduce((sum, value) => sum + value, 0);
+  const average = (total / filteredData.length).toFixed(2);
 
   const options = {
     chart: {
@@ -156,6 +155,10 @@ const IEEficienciaOp: React.FC<IEEficienciaOpProps> = ({ tablaDetails }) => {
             {card.name}: {card.percentage}%
           </div>
         ))}
+      </div>
+
+      <div className="average-eficiencia">
+        <p>Promedio Total : {average}%</p>
       </div>
 
     </div>

@@ -113,6 +113,10 @@
   color: inherit;
 }
 
+.average-indicadores {
+  margin-top: 10px;
+}
+
 /* Responsive styles */
 @media (max-width: 767px) {
   .circular {

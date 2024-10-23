@@ -66,6 +66,10 @@ const IESeguridad: React.FC<IESeguridadProps> = ({ tablaDetails }) => {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
+  // Calcular el promedio de los porcentajes
+  const total = updatedData.reduce((sum, item) => sum + item.y, 0);
+  const average = (total / updatedData.length).toFixed(2);
+
   const options = {
     chart: {
       type: 'pie',
@@ -131,6 +135,10 @@ const IESeguridad: React.FC<IESeguridadProps> = ({ tablaDetails }) => {
           highcharts={Highcharts}
           options={options}
         />
+      </div>
+
+      <div className="average-seguridad">
+        <p>Promedio Total : {average}%</p>
       </div>
     </div>
   );

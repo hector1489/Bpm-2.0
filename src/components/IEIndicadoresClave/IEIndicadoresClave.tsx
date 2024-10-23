@@ -44,12 +44,16 @@ const IEIndicadoresClave: React.FC<IEIndicadoresClaveProps> = ({ tablaDetails })
     return found ? parseInt(found.field4) : 100;
   });
 
-  // Calcular los promedios
+  // Calcular los promedios individuales
   const bpm = filteredData[0];
   const minuta = filteredData[1];
   const examenes = filteredData[2];
   const inaptitud = filteredData[3];
   const capacitaciones = filteredData[4];
+
+  // Calcular el promedio total
+  const total = filteredData.reduce((sum, value) => sum + value, 0);
+  const average = (total / filteredData.length).toFixed(2);
 
   const options = {
     chart: {
@@ -135,6 +139,10 @@ const IEIndicadoresClave: React.FC<IEIndicadoresClaveProps> = ({ tablaDetails })
             <p>{capacitaciones}%</p>
           </div>
         </div>
+      </div>
+
+      <div className="average-indicadores">
+        <p>Promedio Total : {average}%</p>
       </div>
     </div>
   );

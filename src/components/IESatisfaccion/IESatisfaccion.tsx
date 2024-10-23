@@ -78,7 +78,7 @@ const IESatisfaccion: React.FC<IESatisfaccionProps> = ({ tablaDetails }) => {
   };
 
   // Definir colores basados en las clases de color de las tarjetas
-  const colors = ['#1E90FF', '#FF4500', '#FFD700', '#808080']; // azul, rojo, amarillo, gris
+  const colors = ['#1E90FF', '#FF4500', '#FFD700', '#808080'];
 
   const chartOptions = {
     chart: {
@@ -115,7 +115,7 @@ const IESatisfaccion: React.FC<IESatisfaccionProps> = ({ tablaDetails }) => {
         .map((card, index) => ({
           name: card.text,
           y: parseInt(card.percentage),
-          color: colors[index] // Asignar el color de acuerdo con el índice de la tarjeta
+          color: colors[index]
         }))
         .filter(point => !isNaN(point.y))
     }]
@@ -136,7 +136,7 @@ const IESatisfaccion: React.FC<IESatisfaccionProps> = ({ tablaDetails }) => {
         <HighchartsReact highcharts={Highcharts} options={chartOptions} />
       </div>
       <div className="satisfaccion-promedio-final">
-        <p>Promedio: {calculateAverage()}%</p>
+        <p>Promedio Total : {calculateAverage()}%</p>
       </div>
     </div>
   );

@@ -62,7 +62,7 @@ const IEControlCalidad: React.FC<IEControlCalidadProps> = ({ tablaDetails }) => 
         </div>
       </div>
       <div className="control-promedio-final">
-        <p>Promedio: {calculateAverage()}%</p>
+        <p>Promedio Total : {calculateAverage()}%</p>
       </div>
     </div>
   );
