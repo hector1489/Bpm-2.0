@@ -4,6 +4,7 @@ import html2canvas from 'html2canvas';
 import { useRef, useEffect, useState } from 'react';
 import { getTablaDetailsByNumeroAuditoria } from '../../utils/apiDetails';
 import { IEControlCalidad, IECriticalEvaluation, IECriticalFindings, IEEficienciaOp, IEHigiene, IEIndicadoresClave, IESatisfaccion, IESeguridad, IETrazadores } from '../../components';
+import logoFungi from '../../assets/img/logo.jpg'
 
 interface TablaDetail {
   numero_auditoria: string;
@@ -86,6 +87,9 @@ const InformeEjecutivo: React.FC = () => {
 
   return (
     <div className="InformeEjecutivo-container" ref={informeRef}>
+       <div className="logo-fungi">
+        <img src={logoFungi} alt="logo" />
+      </div>
       <h3>Informe Ejecutivo</h3>
       {id && <p>ID: {id}</p>}
       {numero_requerimiento && <p>Auditoria : {numero_requerimiento}</p>}
