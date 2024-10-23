@@ -90,6 +90,14 @@ const InformeEjecutivo: React.FC = () => {
       {id && <p>ID: {id}</p>}
       {numero_requerimiento && <p>Auditoria : {numero_requerimiento}</p>}
 
+      <div className="InformeEjecutivo-info">
+        <h4> Objetivo General : </h4>
+        <p>1.- Mejora continua de sus procesos y productos, lo que se traduce en eficiencia operativa, reducción de costos y un aumento en la satisfacción del  Cliente.</p>
+        <h4>Objetivo Especifico :</h4>
+        <p>1.	Aseguramiento de la conformidad con estándares y regulaciones :</p>
+      
+      </div>
+
       <h5>1.- HALLAZGOS CRITICOS/ACCIONES CORRECTIVAS</h5>
       <IECriticalFindings detallesFiltrados={detallesInferioresA100} />
 
