@@ -5,9 +5,16 @@ import './ETAGraph.css';
 import { useContext, useMemo } from 'react';
 import { AppContext } from '../../context/GlobalState';
 
+interface ETAGraphProps {
+  moduleData: {
+    moduleName: string;
+    percentage: number;
+  }[];
+}
+
 Highcharts3D(Highcharts);
 
-const ETAGraph: React.FC = () => {
+const ETAGraph: React.FC<ETAGraphProps> = () => {
   const context = useContext(AppContext);
 
   if (!context) {
