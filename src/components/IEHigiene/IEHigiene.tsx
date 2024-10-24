@@ -55,16 +55,21 @@ const IEHigiene: React.FC<IEHigieneProps> = ({ tablaDetails }) => {
   const updatedData = IEHigieneData.map((item) => {
     const prefix = extractPrefix(item.text);
     const found = tablaDetails.find((detail) => extractPrefix(detail.field3) === prefix);
+    const percentage = found && !isNaN(parseInt(extractPercentage(found.field4)))
+      ? `${extractPercentage(found.field4)}%`
+      : 'NA';
+
     return {
       ...item,
-      percentage: found ? `${extractPercentage(found.field4)}%` : '0%',
-      y: found ? parseInt(extractPercentage(found.field4)) : 0,
+      percentage,
+      y: percentage !== 'NA' ? parseInt(extractPercentage(found?.field4 || '0')) : 0,
     };
   });
 
-  // Calcular el promedio de los porcentajes
-  const total = updatedData.reduce((sum, item) => sum + item.y, 0);
-  const average = (total / updatedData.length).toFixed(2);
+  // Calcular el promedio solo con los valores válidos
+  const validData = updatedData.filter(item => item.percentage !== 'NA');
+  const total = validData.reduce((sum, item) => sum + item.y, 0);
+  const average = validData.length > 0 ? (total / validData.length).toFixed(2) : 'NA';
 
   const options = {
     chart: {
@@ -125,10 +130,14 @@ const IEHigiene: React.FC<IEHigieneProps> = ({ tablaDetails }) => {
       </div>
 
       <div className="average-higiene">
-        <p>Promedio total de los porcentajes: {average}%</p>
+        <p>Promedio total de los porcentajes: {average === 'NA' ? 'NA' : `${average}%`}</p>
       </div>
     </div>
   );
 };
 
 export default IEHigiene;
+
+
+
+

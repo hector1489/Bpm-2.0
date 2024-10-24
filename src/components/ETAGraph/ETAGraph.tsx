@@ -2,17 +2,14 @@ import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
 import Highcharts3D from 'highcharts/highcharts-3d';
 import './ETAGraph.css';
-import { useContext } from 'react';
+import { useContext, useMemo } from 'react';
 import { AppContext } from '../../context/GlobalState';
 
 Highcharts3D(Highcharts);
 
-interface ETAGraphProps {
-  moduleData: { moduleName: string; percentage: number }[];
-}
-
-const ETAGraph: React.FC<ETAGraphProps> = () => {
+const ETAGraph: React.FC = () => {
   const context = useContext(AppContext);
+
   if (!context) {
     return <div>Error al cargar el contexto</div>;
   }
@@ -39,22 +36,35 @@ const ETAGraph: React.FC<ETAGraphProps> = () => {
     return 'red';
   };
 
+  // Calcular etaData y nonApplicableQuestions
+  const { etaData, nonApplicableQuestions } = useMemo(() => {
+    const etaData = state.IsHero
+      .filter((question) => questionsEta.includes(question.question))
+      .map((question) => {
+        const answer = question.answer ?? '';
+        let percentage = 0;
 
-  const etaData = state.IsHero
-    .filter((question) => questionsEta.includes(question.question))
-    .map((question) => {
-      const answer = question.answer ?? '';
-      const percentageMatch = answer.match(/^\d+/);
-      const percentage = percentageMatch ? parseInt(percentageMatch[0], 10) : 0;
+        if (answer !== 'N/A' && answer !== null) {
+          const percentageMatch = answer.match(/^\d+/);
+          percentage = percentageMatch ? parseInt(percentageMatch[0], 10) : 0;
+        }
 
-      const shortQuestionName = question.question.split('.')[0] + '.';
+        const shortQuestionName = question.question.split('.')[0] + '.';
 
-      return {
-        question: question.question,
-        shortQuestion: shortQuestionName,
-        percentage,
-      };
-    });
+        return {
+          question: question.question,
+          shortQuestion: shortQuestionName,
+          percentage,
+          isNotApplicable: answer === 'N/A' || answer === null,
+        };
+      });
+
+    const nonApplicableQuestions = etaData
+      .filter((data) => data.isNotApplicable)
+      .map((data) => data.shortQuestion);
+
+    return { etaData, nonApplicableQuestions };
+  }, [state.IsHero]);
 
   const questionNames = etaData.map((data) => data.shortQuestion);
   const percentages = etaData.map((data) => data.percentage);
@@ -114,6 +124,16 @@ const ETAGraph: React.FC<ETAGraphProps> = () => {
     <div className="eta-graph-container">
       <h4>ETA.</h4>
       <HighchartsReact highcharts={Highcharts} options={chartOptions} />
+      {nonApplicableQuestions.length > 0 && (
+        <div className="eta-graph-na-questions">
+          <p>Las siguientes preguntas no aplican ('N/A'):</p>
+          <ul>
+            {nonApplicableQuestions.map((question, index) => (
+              <li key={index}>{question}</li>
+            ))}
+          </ul>
+        </div>
+      )}
     </div>
   );
 };

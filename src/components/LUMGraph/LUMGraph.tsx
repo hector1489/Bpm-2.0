@@ -2,13 +2,14 @@ import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
 import Highcharts3D from 'highcharts/highcharts-3d';
 import './LUMGraph.css';
-import { useContext } from 'react';
+import { useContext, useState, useEffect } from 'react';
 import { AppContext } from '../../context/GlobalState';
 
 Highcharts3D(Highcharts);
 
 const LUMGraph: React.FC = () => {
   const context = useContext(AppContext);
+  const [nonApplicable, setNonApplicable] = useState(false);
 
   if (!context) {
     return <div>Error: Context is not available.</div>;
@@ -23,22 +24,32 @@ const LUMGraph: React.FC = () => {
     return 'red';
   };
 
-  const etaData = state.IsHero
+  const lumData = state.IsHero
     .filter((question) => lumQuestion.includes(question.question))
     .map((question) => {
       const answer = question.answer ?? '';
-      const percentageMatch = answer.match(/^\d+/);
-      const percentage = percentageMatch ? parseInt(percentageMatch[0], 10) : 0;
+      let percentage = 0;
+
+      if (answer !== 'N/A' && answer !== null) {
+        const percentageMatch = answer.match(/^\d+/);
+        percentage = percentageMatch ? parseInt(percentageMatch[0], 10) : 0;
+      }
 
       return {
         question: question.question,
         shortQuestion: 'LUM 21',
         percentage,
+        isNotApplicable: answer === 'N/A' || answer === null,
       };
     });
 
-  const questionNames = etaData.map((data) => data.shortQuestion);
-  const percentages = etaData.map((data) => data.percentage);
+  useEffect(() => {
+    const hasNonApplicable = lumData.some((data) => data.isNotApplicable);
+    setNonApplicable(hasNonApplicable);
+  }, [lumData]);
+
+  const questionNames = lumData.map((data) => data.shortQuestion);
+  const percentages = lumData.map((data) => data.percentage);
   const barColors = percentages.map(getColorByPercentage);
 
   const chartOptions = {
@@ -96,6 +107,9 @@ const LUMGraph: React.FC = () => {
     <div className="lum-graph-container">
       <h4>LUM.</h4>
       <HighchartsReact highcharts={Highcharts} options={chartOptions} />
+      {nonApplicable && (
+        <p className="na-message">Esta pregunta no aplica ('N/A')</p>
+      )}
     </div>
   );
 };

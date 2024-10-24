@@ -104,14 +104,14 @@ const InformeEjecutivo: React.FC = () => {
 
       <h5>1.- HALLAZGOS CRITICOS/ACCIONES CORRECTIVAS</h5>
       <IECriticalFindings detallesFiltrados={detallesInferioresA100} />
-
+ 
       <h5>2.- EVALUACIONES CRITICAS</h5>
       <IECriticalEvaluation tablaDetails={tablaDetails} />
 
       <h5>3. TRAZADORES</h5>
       <IETrazadores tablaDetails={tablaDetails}/>
 
-      <h5>4.- INDICADORES CLAVES DE GESTION</h5>
+     <h5>4.- INDICADORES CLAVES DE GESTION</h5>
       <IEIndicadoresClave tablaDetails={tablaDetails}/>
 
       <h5>5,. HIGIENE INSTALACIONES/ALIMENTOS</h5>

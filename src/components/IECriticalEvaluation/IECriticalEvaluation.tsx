@@ -18,7 +18,6 @@ interface IECriticalEvaluationProps {
 }
 
 const IECriticalEvaluation: React.FC<IECriticalEvaluationProps> = ({ tablaDetails }) => {
-
   if (!tablaDetails || tablaDetails.length === 0) {
     return <div>No hay datos disponibles para mostrar.</div>;
   }
@@ -57,17 +56,22 @@ const IECriticalEvaluation: React.FC<IECriticalEvaluationProps> = ({ tablaDetail
       detalle.field3.toLowerCase().includes(item.category.split('.')[0].toLowerCase())
     );
 
-    const totalPercentage = matchingDetails.reduce((acc, detalle) => acc + parseInt(detalle.field4), 0);
-    const averagePercentage = matchingDetails.length > 0 ? totalPercentage / matchingDetails.length : 0;
+    const totalPercentage = matchingDetails.reduce((acc, detalle) => {
+      const percentage = isNaN(parseInt(detalle.field4)) ? 0 : parseInt(detalle.field4);
+      return acc + percentage;
+    }, 0);
+
+    const averagePercentage = matchingDetails.length > 0 ? totalPercentage / matchingDetails.length : 'NA';
 
     return {
       name: item.name,
-      y: averagePercentage,
-      color: item.color
+      y: averagePercentage === 'NA' ? 0 : averagePercentage, // Asigna 0 si es NA para evitar errores en el gráfico
+      color: item.color,
+      label: averagePercentage === 'NA' ? 'NA' : `${averagePercentage.toFixed(1)}%`
     };
   });
 
-  const totalAverage = evaluationData.reduce((acc, data) => acc + data.y, 0) / evaluationData.length;
+  const totalAverage = evaluationData.reduce((acc, data) => acc + (typeof data.y === 'number' ? data.y : 0), 0) / evaluationData.length;
 
   // Opciones del gráfico
   const renderChartOptions = () => {
@@ -92,7 +96,7 @@ const IECriticalEvaluation: React.FC<IECriticalEvaluationProps> = ({ tablaDetail
           depth: 30,
           dataLabels: {
             enabled: true,
-            format: '{point.name}: {point.y:.1f}%',
+            format: '{point.name}: {point.label}',
           },
         },
       },
@@ -100,7 +104,7 @@ const IECriticalEvaluation: React.FC<IECriticalEvaluationProps> = ({ tablaDetail
         {
           name: 'Evaluación Crítica',
           colorByPoint: true,
-          data: evaluationData.filter((d) => d.y > 0),
+          data: evaluationData.filter((d) => typeof d.y === 'number' && d.y > 0), // Filtra solo los valores válidos
         },
       ],
     };
@@ -108,24 +112,21 @@ const IECriticalEvaluation: React.FC<IECriticalEvaluationProps> = ({ tablaDetail
 
   return (
     <div className="criticalEvaluation">
+      <div className="criticalEvaluation-container">
+        <div className="circular-graph-evaluation">
+          <HighchartsReact highcharts={Highcharts} options={renderChartOptions()} />
+        </div>
 
-    <div className="criticalEvaluation-container">
-      <div className="circular-graph-evaluation">
-        <HighchartsReact highcharts={Highcharts} options={renderChartOptions()} />
+        <div className="cards-evaluation">
+          {IECriticalEvaluationData.map((item, index) => (
+            <div key={index} className={`card-evaluation`} style={{ backgroundColor: item.color }}>
+              {item.name}
+            </div>
+          ))}
+        </div>
       </div>
 
-      <div className="cards-evaluation">
-        {IECriticalEvaluationData.map((item, index) => (
-          <div key={index} className={`card-evaluation`} style={{ backgroundColor: item.color }}>
-            {item.name}
-          </div>
-        ))}
-      </div>
-
-      
-    </div>
-
-    <div className="average-total">
+      <div className="average-total">
         <p>Promedio Total : {totalAverage.toFixed(2)}%</p>
       </div>
     </div>
@@ -133,3 +134,7 @@ const IECriticalEvaluation: React.FC<IECriticalEvaluationProps> = ({ tablaDetail
 };
 
 export default IECriticalEvaluation;
+
+
+
+

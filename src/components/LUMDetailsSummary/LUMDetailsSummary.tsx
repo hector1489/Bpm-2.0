@@ -55,7 +55,7 @@ const LUMDetailsSummary: React.FC<TableDetailsSummaryProps> = ({ numeroAuditoria
 
   useEffect(() => {
     const fetchTablaDetails = async () => {
-      if (!numeroAuditoria || tablaDetails.length > 0) return;  // Verificar si ya hay datos
+      if (!numeroAuditoria || tablaDetails.length > 0) return;
 
       setLoading(true);
       setError(null);
@@ -134,8 +134,9 @@ const LUMDetailsSummary: React.FC<TableDetailsSummaryProps> = ({ numeroAuditoria
   );
 
   const questionNames = uniqueMatchedDetails.map(detail => detail.field3);
-  const percentages = uniqueMatchedDetails.map(detail => parseFloat(detail.field4.replace('%', '')) || 100);
+  const percentages = uniqueMatchedDetails.map(detail => parseFloat(detail.field4.replace('%', '')) || 0);
   const barColors = percentages.map(getColorByPercentage);
+  const lumNA = uniqueMatchedDetails.map(detail => parseFloat(detail.field4.replace('%', '')) || 'N/A');
 
   const chartOptions = {
     chart: {
@@ -191,7 +192,7 @@ const LUMDetailsSummary: React.FC<TableDetailsSummaryProps> = ({ numeroAuditoria
 
   return (
     <div className="LUMDetailsSummary-container">
-      <p>LUMDetailsSummary</p>
+      <p>LUMINOMETRIA</p>
       <p>Numero Auditoria: {numeroAuditoria}</p>
 
       <div className="BPMDetailsSummary-data">
@@ -286,8 +287,10 @@ const LUMDetailsSummary: React.FC<TableDetailsSummaryProps> = ({ numeroAuditoria
 
       </div>
 
-
+      <div className="LUMDetailsSummary-graph">
       <HighchartsReact highcharts={Highcharts} options={chartOptions} />
+      <p>Luminometria fue auditada como : {lumNA}</p>
+      </div>
 
 
       <div className="table-responsive">

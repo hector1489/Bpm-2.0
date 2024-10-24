@@ -23,13 +23,12 @@ const extractPrefix = (field3: string) => {
 const IEIndicadoresClave: React.FC<IEIndicadoresClaveProps> = ({ tablaDetails }) => {
   const [chartWidth, setChartWidth] = useState(window.innerWidth * 0.8);
 
-  const handleResize = () => {
+  const handleResize = () => { 
     const newWidth = window.innerWidth * 0.8;
     const minWidth = 400;
     const maxWidth = 1000;
     setChartWidth(newWidth > maxWidth ? maxWidth : newWidth < minWidth ? minWidth : newWidth);
   };
-  
 
   useEffect(() => {
     handleResize();
@@ -41,19 +40,20 @@ const IEIndicadoresClave: React.FC<IEIndicadoresClaveProps> = ({ tablaDetails })
 
   const filteredData = categories.map(category => {
     const found = tablaDetails.find(detail => extractPrefix(detail.field3) === category);
-    return found ? parseInt(found.field4) : 100;
+    return found && !isNaN(parseInt(found.field4)) ? parseInt(found.field4) : 'NA';
   });
 
-  // Calcular los promedios individuales
-  const bpm = filteredData[0];
-  const minuta = filteredData[1];
-  const examenes = filteredData[2];
-  const inaptitud = filteredData[3];
-  const capacitaciones = filteredData[4];
+  // Filtrar los valores válidos para el cálculo del promedio
+  const validData = filteredData.filter(value => typeof value === 'number') as number[];
+  const total = validData.reduce((sum, value) => sum + value, 0);
+  const average = validData.length > 0 ? (total / validData.length).toFixed(2) : 'NA';
 
-  // Calcular el promedio total
-  const total = filteredData.reduce((sum, value) => sum + value, 0);
-  const average = (total / filteredData.length).toFixed(2);
+  // Definir los valores individuales, asignando 'NA' si el dato no es válido
+  const bpm = filteredData[0] === 'NA' ? 'NA' : filteredData[0];
+  const minuta = filteredData[1] === 'NA' ? 'NA' : filteredData[1];
+  const examenes = filteredData[2] === 'NA' ? 'NA' : filteredData[2];
+  const inaptitud = filteredData[3] === 'NA' ? 'NA' : filteredData[3];
+  const capacitaciones = filteredData[4] === 'NA' ? 'NA' : filteredData[4];
 
   const options = {
     chart: {
@@ -92,7 +92,7 @@ const IEIndicadoresClave: React.FC<IEIndicadoresClaveProps> = ({ tablaDetails })
     series: [
       {
         name: 'Indicadores',
-        data: filteredData,
+        data: filteredData.map(value => (typeof value === 'number' ? value : 0)), // Asignamos 0 si es 'NA'
         colorByPoint: true,
         colors: ['#000000', '#28a745', '#dc3545', '#ffc107', '#007bff'],
       }
@@ -120,32 +120,34 @@ const IEIndicadoresClave: React.FC<IEIndicadoresClaveProps> = ({ tablaDetails })
         <div className="indicadores-circular">
           <div className="circular graph black">
             <p>BPM</p>
-            <p>{bpm}%</p>
+            <p>{bpm === 'NA' ? 'NA' : `${bpm}%`}</p>
           </div>
           <div className="circular graph green">
             <p>MINUTA</p>
-            <p>{minuta}%</p>
+            <p>{minuta === 'NA' ? 'NA' : `${minuta}%`}</p>
           </div>
           <div className="circular graph red">
             <p>EXÁMENES</p>
-            <p>{examenes}%</p>
+            <p>{examenes === 'NA' ? 'NA' : `${examenes}%`}</p>
           </div>
           <div className="circular graph yellow">
             <p>INAPTITUD MICROBIOLÓGICA</p>
-            <p>{inaptitud}%</p>
+            <p>{inaptitud === 'NA' ? 'NA' : `${inaptitud}%`}</p>
           </div>
           <div className="circular graph blue">
             <p>CAPACITACIONES</p>
-            <p>{capacitaciones}%</p>
+            <p>{capacitaciones === 'NA' ? 'NA' : `${capacitaciones}%`}</p>
           </div>
         </div>
       </div>
 
       <div className="average-indicadores">
-        <p>Promedio Total : {average}%</p>
+        <p>Promedio Total: {average === 'NA' ? 'NA' : `${average}%`}</p>
       </div>
     </div>
   );
 };
 
 export default IEIndicadoresClave;
+
+

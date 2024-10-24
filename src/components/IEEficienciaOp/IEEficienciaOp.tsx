@@ -47,7 +47,8 @@ const IEEficienciaOp: React.FC<IEEficienciaOpProps> = ({ tablaDetails }) => {
   const filteredData = categories.map(category => {
     const prefix = extractPrefix(category);
     const found = tablaDetails.find(detail => extractPrefix(detail.field3) === prefix);
-    return found ? parseInt(found.field4) : 0;
+    const value = found?.field4 === 'N/A' ? 'N/A' : parseInt(found?.field4 || '0');
+    return value;
   });
 
   const efficiencyCards = categories.map((category, index) => {
@@ -89,9 +90,10 @@ const IEEficienciaOp: React.FC<IEEficienciaOpProps> = ({ tablaDetails }) => {
     };
   });
 
-  // Calcular el promedio de los porcentajes
-  const total = filteredData.reduce((sum, value) => sum + value, 0);
-  const average = (total / filteredData.length).toFixed(2);
+  // Calcular el promedio solo con los valores numéricos válidos
+  const validData = filteredData.filter(value => typeof value === 'number') as number[];
+  const total = validData.reduce((sum, value) => sum + value, 0);
+  const average = validData.length > 0 ? (total / validData.length).toFixed(2) : 'N/A';
 
   const options = {
     chart: {
@@ -124,7 +126,7 @@ const IEEficienciaOp: React.FC<IEEficienciaOpProps> = ({ tablaDetails }) => {
     series: [
       {
         name: 'Eficiencia',
-        data: filteredData,
+        data: filteredData.map(value => (typeof value === 'number' ? value : 0)), // Mostrar 0 si es 'N/A'
         colorByPoint: true,
         colors: [
           '#1E90FF', '#32CD32', '#FF4500', '#FFD700', '#8A2BE2', '#FF69B4', '#20B2AA', '#FF6347'
@@ -152,13 +154,13 @@ const IEEficienciaOp: React.FC<IEEficienciaOpProps> = ({ tablaDetails }) => {
       <div className="ie-eficiencia-cards">
         {efficiencyCards.map((card, index) => (
           <div key={index} className={`eficiencia-card ${card.className}`}>
-            {card.name}: {card.percentage}%
+            {card.name}: {card.percentage === 'N/A' ? 'N/A' : `${card.percentage}%`}
           </div>
         ))}
       </div>
 
       <div className="average-eficiencia">
-        <p>Promedio Total : {average}%</p>
+        <p>Promedio Total: {average === 'N/A' ? 'N/A' : `${average}%`}</p>
       </div>
 
     </div>
@@ -166,3 +168,6 @@ const IEEficienciaOp: React.FC<IEEficienciaOpProps> = ({ tablaDetails }) => {
 }
 
 export default IEEficienciaOp;
+
+
+

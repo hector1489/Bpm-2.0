@@ -54,10 +54,12 @@ const IESeguridad: React.FC<IESeguridadProps> = ({ tablaDetails }) => {
   const updatedData = IESeguridadData.map((item) => {
     const prefix = extractPrefix(item.text);
     const found = tablaDetails.find((detail) => extractPrefix(detail.field3) === prefix);
+    const percentage = found?.field4 === 'N/A' ? 'N/A' : `${extractPercentage(found?.field4 || '0')}%`;
+
     return {
       ...item,
-      percentage: found ? `${extractPercentage(found.field4)}%` : '0%',
-      y: found ? parseInt(extractPercentage(found.field4)) : 0,
+      percentage,
+      y: percentage === 'N/A' ? 0 : parseInt(extractPercentage(found?.field4 || '0')),
     };
   });
 
@@ -66,9 +68,10 @@ const IESeguridad: React.FC<IESeguridadProps> = ({ tablaDetails }) => {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  // Calcular el promedio de los porcentajes
-  const total = updatedData.reduce((sum, item) => sum + item.y, 0);
-  const average = (total / updatedData.length).toFixed(2);
+  // Calcular el promedio solo con los valores numéricos válidos
+  const validData = updatedData.filter(item => item.percentage !== 'N/A');
+  const total = validData.reduce((sum, item) => sum + item.y, 0);
+  const average = validData.length > 0 ? (total / validData.length).toFixed(2) : 'N/A';
 
   const options = {
     chart: {
@@ -138,10 +141,14 @@ const IESeguridad: React.FC<IESeguridadProps> = ({ tablaDetails }) => {
       </div>
 
       <div className="average-seguridad">
-        <p>Promedio Total : {average}%</p>
+        <p>Promedio Total: {average === 'N/A' ? 'N/A' : `${average}%`}</p>
       </div>
     </div>
   );
 };
 
 export default IESeguridad;
+
+
+
+

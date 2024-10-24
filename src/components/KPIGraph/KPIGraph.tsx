@@ -24,8 +24,9 @@ const KPIGraph: React.FC<BPMGraphProps> = ({ moduleData }) => {
   ];
   const Documentos = ['doc'];
 
-  // Función para extraer el porcentaje de la respuesta
+  // Función para extraer el porcentaje de la respuesta, si la respuesta es "N/A" devuelve null
   const extractPercentageFromAnswer = (answer: string): number | null => {
+    if (answer === 'N/A') return null;
     const match = answer.match(/(\d+)%/);
     return match ? parseInt(match[1]) : null;
   };
@@ -36,9 +37,9 @@ const KPIGraph: React.FC<BPMGraphProps> = ({ moduleData }) => {
   );
   const cap101Percentage = cap101Detail ? extractPercentageFromAnswer(cap101Detail.answer) : null;
 
-
   // Función para determinar el color basado en el porcentaje
-  const getColorByPercentage = (percentage: number) => {
+  const getColorByPercentage = (percentage: number | null) => {
+    if (percentage === null) return 'grey';
     if (percentage >= 90) return 'green';
     if (percentage >= 75) return 'yellow';
     return 'red';
@@ -48,11 +49,11 @@ const KPIGraph: React.FC<BPMGraphProps> = ({ moduleData }) => {
   const filterByModules = (modules: string[]) =>
     moduleData.filter((module) => modules.includes(module.moduleName));
 
-  // Calcula el promedio de los porcentajes
+  // Calcula el promedio de los porcentajes, excluyendo los `null`
   const calculateAverage = (data: { moduleName: string, percentage: number | null }[]) => {
     const validData = data.filter((module) => module.percentage !== null);
-    const total = validData.reduce((acc, module) => acc + (module.percentage ?? 100), 0);
-    return validData.length > 0 ? total / validData.length : 100;
+    const total = validData.reduce((acc, module) => acc + (module.percentage ?? 0), 0);
+    return validData.length > 0 ? total / validData.length : null;
   };
 
   // Filtrar y calcular promedios para cada categoría
@@ -64,16 +65,17 @@ const KPIGraph: React.FC<BPMGraphProps> = ({ moduleData }) => {
   const serviciosAvg = calculateAverage(serviciosData);
   const documentosAvg = calculateAverage(documentosData);
 
-  // Calcular el promedio general incluyendo CAP 101 si está presente
-  const promedioGeneral = (transporteAvg + serviciosAvg + documentosAvg + (cap101Percentage ?? 0)) / (cap101Percentage ? 4 : 3);
+  // Calcular el promedio general incluyendo CAP 101 si está presente, excluyendo `null`
+  const validAverages = [transporteAvg, serviciosAvg, documentosAvg, cap101Percentage].filter(avg => avg !== null);
+  const promedioGeneral = validAverages.length > 0 ? validAverages.reduce((acc, avg) => acc + (avg ?? 0), 0) / validAverages.length : null;
 
   // Configurar nombres de los módulos, porcentajes y pesos
-  const moduleNames = ['Alimentación Insp. BPM', 'Alimentación Cum. Inutas', 'Alimentación Exam. Manip.', 'Alimentación Inap. Microb.'];
-  const percentages = [transporteAvg, serviciosAvg, documentosAvg, promedioGeneral];
-  const itemWeights = ['25%', '25%', '25%', '25%'];
+  const moduleNames = ['Transporte', 'Servicios', 'Documentos'];
+  const percentages = [transporteAvg, serviciosAvg, documentosAvg];
+  const itemWeights = ['25%', '25%', '25%'];
 
   // Asignar colores a las barras según el porcentaje
-  const barColors = percentages.map((percentage) => getColorByPercentage(percentage));
+  const barColors = [...percentages.map(getColorByPercentage), getColorByPercentage(cap101Percentage)];
 
   // Opciones del gráfico de Highcharts
   const chartOptions = {
@@ -98,7 +100,7 @@ const KPIGraph: React.FC<BPMGraphProps> = ({ moduleData }) => {
       },
     },
     xAxis: {
-      categories: [...moduleNames, 'CAP 101'], // Añadir CAP 101 al eje X
+      categories: [...moduleNames, 'CAP 101'],
       title: {
         text: '',
         style: {
@@ -131,7 +133,7 @@ const KPIGraph: React.FC<BPMGraphProps> = ({ moduleData }) => {
         name: 'Promedio',
         data: [...percentages, cap101Percentage],
         colorByPoint: true,
-        colors: [...barColors, getColorByPercentage(cap101Percentage ?? 0)],
+        colors: barColors,
       },
     ],
     plotOptions: {
@@ -169,20 +171,26 @@ const KPIGraph: React.FC<BPMGraphProps> = ({ moduleData }) => {
               <tr key={name}>
                 <td>{name}</td>
                 <td>{itemWeights[index]}</td>
-                <td>{percentages[index].toFixed(2)}%</td>
+                <td>{percentages[index] !== null ? percentages[index]?.toFixed(2) + '%' : 'N/A'}</td>
               </tr>
             ))}
-            {cap101Percentage !== null && (
+            {cap101Percentage !== null ? (
               <tr>
                 <td>CAP 101</td>
                 <td>25%</td>
                 <td>{cap101Percentage?.toFixed(2)}%</td>
               </tr>
+            ) : (
+              <tr>
+                <td>CAP 101</td>
+                <td>25%</td>
+                <td>N/A</td>
+              </tr>
             )}
             <tr className="bg-warning">
               <td><strong>TOTAL ALIMENTACIÓN</strong></td>
               <td><strong>100%</strong></td>
-              <td><strong>{promedioGeneral.toFixed(2)}%</strong></td>
+              <td><strong>{promedioGeneral !== null ? promedioGeneral.toFixed(2) + '%' : 'N/A'}</strong></td>
             </tr>
           </tbody>
         </table>

@@ -62,9 +62,11 @@ const IESatisfaccion: React.FC<IESatisfaccionProps> = ({ tablaDetails }) => {
   const updatedCardsData = cardsData.map(card => {
     const prefix = extractPrefix(card.text);
     const found = tablaDetails.find(detail => extractPrefix(detail.field3) === prefix);
+    const percentage = found?.field4 === 'N/A' ? 'N/A' : `${extractPercentage(found?.field4 || '0')}%`;
+
     return {
       ...card,
-      percentage: found ? `${extractPercentage(found.field4)}%` : '%' 
+      percentage
     };
   });
 
@@ -114,10 +116,10 @@ const IESatisfaccion: React.FC<IESatisfaccionProps> = ({ tablaDetails }) => {
       data: updatedCardsData
         .map((card, index) => ({
           name: card.text,
-          y: parseInt(card.percentage),
+          y: card.percentage === 'N/A' ? 0 : parseInt(card.percentage),
           color: colors[index]
         }))
-        .filter(point => !isNaN(point.y))
+        .filter(point => !isNaN(point.y) && point.y > 0)
     }]
   };
 
@@ -128,7 +130,7 @@ const IESatisfaccion: React.FC<IESatisfaccionProps> = ({ tablaDetails }) => {
           <div key={index} className={`satisfaccion-card ${card.colorClass}`}>
             <i className={card.iconClass}></i>
             <p>{card.text}</p>
-            <p>{card.percentage}</p>
+            <p>{card.percentage === 'N/A' ? 'N/A' : `${card.percentage}`}</p>
           </div>
         ))}
       </div>
@@ -136,10 +138,12 @@ const IESatisfaccion: React.FC<IESatisfaccionProps> = ({ tablaDetails }) => {
         <HighchartsReact highcharts={Highcharts} options={chartOptions} />
       </div>
       <div className="satisfaccion-promedio-final">
-        <p>Promedio Total : {calculateAverage()}%</p>
+        <p>Promedio Total: {calculateAverage()}%</p>
       </div>
     </div>
   );
 };
 
 export default IESatisfaccion;
+
+

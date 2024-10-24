@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { LoginForm } from './components'
 import './App.css'
+import ErrorBoundary from './hooks/ErrorBoundary'
 import {
   Auditoria,
   Home,
@@ -31,6 +32,7 @@ import {
 const App: React.FC = () => {
   return (
     <BrowserRouter>
+      <ErrorBoundary>
       <Routes>
         <Route path='/' element={<LoginForm />} />
         <Route path='/home' element={<Home />} />
@@ -46,7 +48,9 @@ const App: React.FC = () => {
         <Route path='/evidencia-fotografica' element={<PhotoEvidence />} />
         <Route path='/analisis' element={<Analisis />} />
         <Route path='/default' element={<DefaultView />} />
+      
         <Route path='/informe-ejecutivo' element={<InformeEjecutivo />} />
+
         <Route path='/resumen-ejecutivo' element={<ResumenEjecutivo />} />
         <Route path='/doc-desviaciones' element={<DocDesviacionesTable />} />
         <Route path='/register' element={<RegisterView />} />
@@ -58,6 +62,7 @@ const App: React.FC = () => {
         <Route path='/download-lum' element={<LUMDetailsDD/>} />
         <Route path='/photos-auditoria' element={<PhotoEvidenceDD/>} />
       </Routes>
+      </ErrorBoundary>
     </BrowserRouter>
   )
 }

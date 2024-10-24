@@ -31,7 +31,6 @@ interface AuditSheet {
   field6: string;
 }
 
-
 if (typeof Highcharts === 'object') {
   Highcharts3D(Highcharts);
 }
@@ -43,6 +42,7 @@ const BPMDetailsSummary: React.FC<TableDetailsSummaryProps> = ({ numeroAuditoria
   const [filteredAuditSheet, setFilteredAuditSheet] = useState<AuditSheet | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
+  const [nonApplicableModules, setNonApplicableModules] = useState<string[]>([]);
 
   if (!context) {
     return <div>Error al cargar el contexto</div>;
@@ -59,7 +59,6 @@ const BPMDetailsSummary: React.FC<TableDetailsSummaryProps> = ({ numeroAuditoria
 
       try {
         const data = await getTablaDetailsByNumeroAuditoria(numeroAuditoria);
-
         setTablaDetails(data);
       } catch (err) {
         setError('Error al obtener los datos de la tabla');
@@ -88,23 +87,28 @@ const BPMDetailsSummary: React.FC<TableDetailsSummaryProps> = ({ numeroAuditoria
     }
   };
 
-  // useEffect para filtrar los datos por numero de auditoría
-  const bpmFilteredAuditSheet = () => {
+  useEffect(() => {
+    fetchAuditSheetDetails();
+  }, [state?.userName]);
+
+  useEffect(() => {
     if (numeroAuditoria && auditSheetDetails) {
       const filteredData = auditSheetDetails.find(
         (sheet) => sheet.numero_auditoria === numeroAuditoria
       );
       setFilteredAuditSheet(filteredData || null);
     }
-  };
-
-  useEffect(() => {
-    fetchAuditSheetDetails();
-  }, [context?.state?.userName]); 
-
-  useEffect(() => {
-    bpmFilteredAuditSheet();
   }, [auditSheetDetails, numeroAuditoria]);
+
+  // Cálculo del promedio y módulos no aplicables en un efecto separado
+  useEffect(() => {
+    if (tablaDetails.length > 0) {
+      const nonApplicable = tablaDetails
+        .filter((mod) => mod.field4 === null || mod.field4 === 'N/A')
+        .map((mod) => mod.field2);
+      setNonApplicableModules(nonApplicable);
+    }
+  }, [tablaDetails]);
 
   if (loading) {
     return <p>Cargando datos...</p>;
@@ -117,7 +121,6 @@ const BPMDetailsSummary: React.FC<TableDetailsSummaryProps> = ({ numeroAuditoria
   if (!filteredAuditSheet) {
     return <p>No se encontraron detalles para la auditoría {numeroAuditoria}</p>;
   }
-
 
   // Definición de los módulos
   const bpmModules = ['infraestructura', 'legales'];
@@ -146,12 +149,18 @@ const BPMDetailsSummary: React.FC<TableDetailsSummaryProps> = ({ numeroAuditoria
     tra: 21,
   };
 
-  // Función para calcular el promedio de un grupo o asignar 100% si no hay datos
+  // Función para calcular el promedio de un grupo o asignar 100% si no hay datos válidos
   const calcularPromedioGrupo = (modulos: string[]) => {
     const modulosDelGrupo = tablaDetails.filter((mod) => modulos.includes(mod.field2));
-    const total = modulosDelGrupo.reduce((acc, curr) => acc + parseFloat(curr.field4 ?? '100'), 0);
-    return modulosDelGrupo.length > 0 ? total / modulosDelGrupo.length : 100;
+
+    const validItems = modulosDelGrupo.filter((mod) => mod.field4 !== null && mod.field4 !== 'N/A');
+
+    // Sumar solo los valores válidos
+    const total = validItems.reduce((acc, curr) => acc + parseFloat(curr.field4), 0);
+
+    return validItems.length > 0 ? total / validItems.length : 100;
   };
+
 
   // Agrupación de datos por módulos
   const groupedData = [
@@ -164,13 +173,26 @@ const BPMDetailsSummary: React.FC<TableDetailsSummaryProps> = ({ numeroAuditoria
     { groupName: 'TRAZ', nombreCompleto: 'TRAZADORES DE POSIBLE BROTE ETA', percentage: ponderaciones.tra, average: calcularPromedioGrupo(traModules) },
   ];
 
-  // Calcular el promedio general
-  const overallAverage = groupedData.reduce((acc, curr) => acc + curr.average, 0) / groupedData.length;
+  // Calcular el promedio general excluyendo valores `null`
+  const validGroupAverages = groupedData.filter(group => group.average !== null);
+  const overallAverage = validGroupAverages.length > 0
+    ? validGroupAverages.reduce((acc, curr) => acc + curr.average, 0) / validGroupAverages.length
+    : 0;
 
+  // Obtener los nombres de los grupos
   const groupNames = groupedData.map((group) => group.groupName).concat('PROM');
-  const groupAverages = groupedData.map((group) => group.average).concat(overallAverage);
-  const barColors = groupAverages.map((avg) => getColorByPercentage(avg));
 
+  // Filtrar promedios y evitar incluir `null` en los promedios del gráfico
+  const groupAverages = groupedData.map((group) => {
+    return group.average !== null ? group.average : null;
+  }).concat(overallAverage);
+
+
+
+  // Definir los colores de las barras, omitimos los valores `null` en el color también
+  const barColors = groupAverages.map((avg) => avg !== null ? getColorByPercentage(avg) : 'transparent');
+
+  // Opciones del gráfico
   const chartOptions = {
     chart: {
       type: 'column',
@@ -201,7 +223,8 @@ const BPMDetailsSummary: React.FC<TableDetailsSummaryProps> = ({ numeroAuditoria
     series: [
       {
         name: 'Promedio',
-        data: groupAverages,
+        // Filtrar los valores `null`
+        data: groupAverages.filter(avg => avg !== null),
         colorByPoint: true,
         colors: barColors,
         dataLabels: {
@@ -253,99 +276,7 @@ const BPMDetailsSummary: React.FC<TableDetailsSummaryProps> = ({ numeroAuditoria
 
   return (
     <div className="BPMDetailsSummary-container">
-      <h3>Grafico BPM Auditoría: {numeroAuditoria}</h3>
-
-      <div className="BPMDetailsSummary-data">
-
-        <div className="BPMDetailsSummary-data-table">
-
-          <table>
-          <thead>
-              <tr>
-                <th>Nombre del Establecimiento:</th>
-                <td>{filteredAuditSheet?.field1 || 'N/A'}</td>
-              </tr>
-              <tr>
-                <th>Número de Auditoría:</th>
-                <td>{filteredAuditSheet?.numero_auditoria || 'N/A'}</td>
-              </tr>
-              <tr>
-                <th>Gerente del Establecimiento:</th>
-                <td>{filteredAuditSheet?.field2 || 'N/A'}</td>
-              </tr>
-              <tr>
-                <th>Administrador del Establecimiento:</th>
-                <td>{filteredAuditSheet?.field3 || 'N/A'}</td>
-              </tr>
-              <tr>
-                <th>Supervisor del Establecimiento:</th>
-                <td>{filteredAuditSheet?.field4 || 'N/A'}</td>
-              </tr>
-              <tr>
-                <th>Auditor Email:</th>
-                <td>{filteredAuditSheet?.field5 || 'N/A'}</td>
-              </tr>
-              <tr>
-                <th>Fecha de Auditoría:</th>
-                <td>{filteredAuditSheet?.field6 || 'N/A'}</td>
-              </tr>
-            </thead>
-          </table>
-
-        </div>
-
-        <div className="BPMDetailsSummary-data-promedio">
-
-          <div style={{ fontSize: 'smaller', marginTop: '10px' }}>
-            <div
-              style={{
-                backgroundColor: 'green',
-                padding: '5px',
-                border: '1px solid black',
-                width: '100%',
-                borderRadius: '5px',
-                textAlign: 'center',
-                color: 'white',
-                fontWeight: 'bold',
-              }}
-            >
-              CUMPLE 90% - 100%
-            </div>
-            <div
-              style={{
-                backgroundColor: 'yellow',
-                padding: '5px',
-                border: '1px solid black',
-                marginTop: '5px',
-                width: '100%',
-                borderRadius: '5px',
-                textAlign: 'center',
-                color: 'black',
-                fontWeight: 'bold',
-              }}
-            >
-              EN ALERTA 75% - 89%
-            </div>
-            <div
-              style={{
-                backgroundColor: 'red',
-                padding: '5px',
-                border: '1px solid black',
-                marginTop: '5px',
-                width: '100%',
-                borderRadius: '5px',
-                textAlign: 'center',
-                color: 'white',
-                fontWeight: 'bold',
-              }}
-            >
-              CRITICO 0% - 74%
-            </div>
-          </div>
-
-        </div>
-
-      </div>
+      <h3>Gráfico BPM Auditoría: {numeroAuditoria}</h3>
 
       <div className="BPMDetailsSummary-graph">
         <HighchartsReact
@@ -357,13 +288,7 @@ const BPMDetailsSummary: React.FC<TableDetailsSummaryProps> = ({ numeroAuditoria
 
       <table className="BPMDetailsSummary-table">
         <thead>
-          <tr>
-            <th>Módulo</th>
-            <th>Descripción</th>
-            <th>% Ponderado</th>
-            <th>Promedio (%)</th>
-            <th>Promedio Ponderado (%)</th>
-          </tr>
+          {/* Encabezados de la tabla */}
         </thead>
         <tbody>
           {groupedData.map((group) => (
@@ -371,16 +296,27 @@ const BPMDetailsSummary: React.FC<TableDetailsSummaryProps> = ({ numeroAuditoria
               <td>{group.groupName}</td>
               <td>{group.nombreCompleto}</td>
               <td>{group.percentage}%</td>
-              <td>{group.average.toFixed(2)}%</td>
-              <td>{((group.average * group.percentage) / 100).toFixed(1)}%</td>
+              <td>{group.average !== null ? group.average.toFixed(2) : 'N/A'}%</td>
+              <td>{group.average !== null ? ((group.average * group.percentage) / 100).toFixed(1) : 'N/A'}%</td>
             </tr>
           ))}
-          <tr className='bg-warning'>
+          <tr className="bg-warning">
             <td colSpan={4}><strong>PROMEDIO FINAL PONDERADO</strong></td>
             <td>{overallAverage.toFixed(2)}%</td>
           </tr>
         </tbody>
       </table>
+
+      {nonApplicableModules.length > 0 && (
+        <div className="BPMDetailsSummary-non-applicable-modules">
+          <p>Módulos no aplicables o sin datos:</p>
+          <ul>
+            {nonApplicableModules.map((module, index) => (
+              <li key={index}>{module}</li>
+            ))}
+          </ul>
+        </div>
+      )}
     </div>
   );
 };

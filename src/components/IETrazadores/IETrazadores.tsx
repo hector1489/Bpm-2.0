@@ -1,4 +1,3 @@
-import React from 'react';
 import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
 import Highcharts3D from 'highcharts/highcharts-3d';
@@ -52,17 +51,28 @@ const IETrazadores: React.FC<IETrazadoresProps> = ({ tablaDetails }) => {
 
   const filteredData = categories.map(category => {
     const found = tablaDetails.find(detail => extractPrefix(detail.field3) === category);
-    return found ? parseInt(found.field4) : 0;
+
+    const value = found ? parseInt(found.field4, 10) : 0;
+    return isNaN(value) ? 0 : value;
   });
+
+  // Validar que `filteredData` no esté vacío
+  if (filteredData.length === 0) {
+    return <div>No hay datos disponibles para mostrar.</div>;
+  }
 
   // Cálculo del promedio
   const total = filteredData.reduce((sum, value) => sum + value, 0);
-  const average = (total / filteredData.length).toFixed(2);
+  const average = filteredData.length > 0 ? (total / filteredData.length).toFixed(2) : 'N/A';
 
   const dataWithColors = filteredData.map(value => ({
     y: value,
     color: getColorByPercentageIETrazadores(value)
   }));
+
+  // Evitar problemas con `plotLines` si no hay datos válidos
+  const plotLineValue = 90;
+  const shouldRenderPlotLine = filteredData.some(value => value > 0);
 
   const options = {
     chart: {
@@ -97,27 +107,28 @@ const IETrazadores: React.FC<IETrazadoresProps> = ({ tablaDetails }) => {
           color: 'gray'
         }
       },
-      plotLines: [{
+      plotLines: shouldRenderPlotLine ? [{
         color: 'black',
         width: 2,
-        value: 90,
+        value: plotLineValue,
         dashStyle: 'Solid',
         zIndex: 5,
         label: {
-          text: 'Meta 90%',
+          text: `Meta ${plotLineValue}%`,
           align: 'left',
           style: {
             color: 'black',
             fontWeight: 'bold'
           }
         }
-      }]
+      }] : []
     },
     plotOptions: {
       column: {
         depth: 25,
         dataLabels: {
-          enabled: true
+          enabled: true,
+          format: '{point.y:.1f}%'
         }
       }
     },

@@ -1,9 +1,9 @@
-import Highcharts from 'highcharts'
-import Highcharts3D from 'highcharts/highcharts-3d'
-import HighchartsReact from 'highcharts-react-official'
-import { useContext } from 'react'
-import { AppContext } from '../../context/GlobalState'
-import './BPMGraph.css'
+import Highcharts from 'highcharts';
+import Highcharts3D from 'highcharts/highcharts-3d';
+import HighchartsReact from 'highcharts-react-official';
+import { useContext, useMemo, useState } from 'react';
+import { AppContext } from '../../context/GlobalState';
+import './BPMGraph.css';
 
 interface BPMGraphProps {
   moduleData: { moduleName: string, percentage: number | null }[];
@@ -15,11 +15,11 @@ if (typeof Highcharts === 'object') {
 
 const BPMGraph: React.FC<BPMGraphProps> = ({ moduleData }) => {
   const context = useContext(AppContext);
+  const [nonApplicableModules, setNonApplicableModules] = useState<string[]>([]);
 
   if (!context) {
     return <div>Error al cargar el contexto</div>;
   }
-
 
   const bpmModules = ['infraestructura', 'legales'];
   const poesModules = [
@@ -38,8 +38,18 @@ const BPMGraph: React.FC<BPMGraphProps> = ({ moduleData }) => {
     'poe-mantencion', 'poe-transporte', 'poe-servicio', 'doc'
   ];
 
+  // Calcular el promedio de un grupo y manejar valores no aplicables
   const calcularPromedioGrupo = (modulos: string[]) => {
     const modulosDelGrupo = moduleData.filter((mod) => modulos.includes(mod.moduleName));
+    
+    const nonApplicable = modulosDelGrupo
+      .filter((mod) => mod.percentage === null)  // Solo comparar con null
+      .map((mod) => mod.moduleName);
+    
+    if (nonApplicable.length > 0) {
+      setNonApplicableModules((prev) => [...prev, ...nonApplicable]);
+    }
+
     const total = modulosDelGrupo.reduce((acc, curr) => acc + (curr.percentage ?? 100), 0);
     return modulosDelGrupo.length > 0 ? total / modulosDelGrupo.length : 100;
   };
@@ -50,7 +60,7 @@ const BPMGraph: React.FC<BPMGraphProps> = ({ moduleData }) => {
     return 'red';
   };
 
-  const groupedData = [
+  const groupedData = useMemo(() => [
     { groupName: 'BPM', average: calcularPromedioGrupo(bpmModules) },
     { groupName: 'POES', average: calcularPromedioGrupo(poesModules) },
     { groupName: 'POE', average: calcularPromedioGrupo(poeModules) },
@@ -58,15 +68,15 @@ const BPMGraph: React.FC<BPMGraphProps> = ({ moduleData }) => {
     { groupName: 'DOC', average: calcularPromedioGrupo(docModules) },
     { groupName: 'LUM', average: calcularPromedioGrupo(lumModules) },
     { groupName: 'TRA', average: calcularPromedioGrupo(traModules) },
-  ];
+  ], [moduleData]);
 
-  const overallAverage = moduleData.reduce((acc, curr) => acc + (curr.percentage ?? 100), 0) / moduleData.length;
-
+  const overallAverage = useMemo(() => {
+    return moduleData.reduce((acc, curr) => acc + (curr.percentage ?? 100), 0) / moduleData.length;
+  }, [moduleData]);
 
   const groupNames = groupedData.map((group) => group.groupName).concat('PROM');
   const groupAverages = groupedData.map((group) => group.average).concat(overallAverage);
   const barColors = groupAverages.map((avg) => getColorByPercentage(avg));
-
 
   const chartOptions = {
     chart: {
@@ -102,7 +112,7 @@ const BPMGraph: React.FC<BPMGraphProps> = ({ moduleData }) => {
         colorByPoint: true,
         colors: barColors,
         dataLabels: {
-          enabled: true, 
+          enabled: true,
           format: '{y:.1f}%',
           inside: false,
           style: {
@@ -147,7 +157,6 @@ const BPMGraph: React.FC<BPMGraphProps> = ({ moduleData }) => {
       ],
     },
   };
-  
 
   return (
     <div className="bpm-graph-container">
@@ -157,8 +166,22 @@ const BPMGraph: React.FC<BPMGraphProps> = ({ moduleData }) => {
         options={chartOptions}
         containerProps={{ style: { width: '100%', height: '100%' } }}
       />
+      {nonApplicableModules.length > 0 && (
+        <div className="na-modules">
+          <p>Módulos no aplicables ('N/A') o sin datos:</p>
+          <ul>
+            {nonApplicableModules.map((module, index) => (
+              <li key={index}>{module}</li>
+            ))}
+          </ul>
+        </div>
+      )}
     </div>
-  )
-}
+  );
+};
 
-export default BPMGraph
+export default BPMGraph;
+
+
+
+

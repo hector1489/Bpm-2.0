@@ -54,15 +54,11 @@ const AuditForm: React.FC = () => {
 
   const handleNextNA = () => {
     const updatedFormData = [...formData];
-    const selectedAnswer = updatedFormData[currentQuestionIndex]?.answer;
 
-    if (!selectedAnswer) {
-      const defaultAnswer = currentQuestion?.responses?.[0] || '';
-      updatedFormData[currentQuestionIndex] = {
-        question: currentQuestion?.question || '',
-        answer: defaultAnswer,
-      };
-    }
+    updatedFormData[currentQuestionIndex] = {
+      question: currentQuestion?.question || '',
+      answer: 'N/A',
+    };
 
     if (currentQuestionIndex < state.IsHero.length - 1) {
       setFormData(updatedFormData);

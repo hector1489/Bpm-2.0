@@ -76,6 +76,41 @@
   text-align: left;
 }
 
+.BPMDetailsSummary-non-applicable-modules {
+  margin-top: 20px;
+  padding: 10px;
+  background-color: #f8d7da;
+  border: 1px solid #f5c2c7;
+  border-radius: 5px;
+  color: #721c24;
+  font-weight: bold;
+  text-align: center;
+}
+
+.BPMDetailsSummary-non-applicable-modules p {
+  margin-bottom: 10px;
+  font-size: 16px;
+  color: #721c24;
+}
+
+.BPMDetailsSummary-non-applicable-modules ul {
+  list-style-type: none;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.BPMDetailsSummary-non-applicable-modules li {
+  margin: 5px 10px;
+  padding: 5px 10px;
+  background-color: #f5c2c7;
+  border-radius: 5px;
+  font-size: 14px;
+  color: #721c24;
+}
+
+
 
 /* Estilos responsive para pantallas pequeñas */
 @media screen and (max-width: 767px) {
