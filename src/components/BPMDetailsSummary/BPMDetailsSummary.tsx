@@ -5,7 +5,7 @@ import HighchartsReact from 'highcharts-react-official';
 import { useContext, useEffect, useState } from 'react';
 import { AppContext } from '../../context/GlobalState';
 import { getTablaDetailsByNumeroAuditoria } from '../../utils/apiDetails';
-import { getColorByPercentage } from '../../utils/utils';
+import { getColorByPercentage, getColorByPercentageFilas  } from '../../utils/utils';
 import { getAuditSheetByUsername } from '../../utils/apiAuditSheet';
 
 interface TablaDetail {
@@ -274,6 +274,15 @@ const BPMDetailsSummary: React.FC<TableDetailsSummaryProps> = ({ numeroAuditoria
     },
   };
 
+  const backgroundColor = getColorByPercentageFilas(parseFloat(overallAverage.toFixed(2)));
+
+  let textColor = 'black';
+  if (backgroundColor === 'red') {
+    textColor = 'white';
+  } else if (backgroundColor === 'yellow') {
+    textColor = 'black';
+  }
+
   return (
     <div className="BPMDetailsSummary-container">
       <h3>Gráfico BPM Auditoría: {numeroAuditoria}</h3>
@@ -359,7 +368,7 @@ const BPMDetailsSummary: React.FC<TableDetailsSummaryProps> = ({ numeroAuditoria
             CRITICO 0% - 74%
           </div>
 
-          <p className="BPMDetailsSummary-general-average">
+          <p className="BPMDetailsSummary-general-average" style={{ backgroundColor, color: textColor }}>
             Promedio General : <strong>{overallAverage.toFixed(2)}</strong>
           </p>
 

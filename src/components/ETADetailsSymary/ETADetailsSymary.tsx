@@ -5,7 +5,7 @@ import HighchartsReact from 'highcharts-react-official';
 import { useContext, useEffect, useState } from 'react';
 import { AppContext } from '../../context/GlobalState';
 import { getTablaDetailsByNumeroAuditoria } from '../../utils/apiDetails';
-import { getColorByPercentage } from '../../utils/utils';
+import { getColorByPercentage, getColorByPercentageFilas } from '../../utils/utils';
 import { getAuditSheetByUsername } from '../../utils/apiAuditSheet';
 
 interface TablaDetail {
@@ -240,6 +240,15 @@ const ETADetailsSymary: React.FC<ETADetailsSymaryProps> = ({ numeroAuditoria }) 
   // Calcula el promedio general una vez que `percentages` esté disponible
   const generalAverage = calculateGeneralAverage();
 
+  const backgroundColor = getColorByPercentageFilas(parseInt(generalAverage));
+
+  let textColor = 'black';
+  if (backgroundColor === 'red') {
+    textColor = 'white';
+  } else if (backgroundColor === 'yellow') {
+    textColor = 'black';
+  }
+
   return (
     <div className="ETADetailsSymary-container">
       <h4>ETA</h4>
@@ -326,7 +335,7 @@ const ETADetailsSymary: React.FC<ETADetailsSymaryProps> = ({ numeroAuditoria }) 
             CRITICO 0% - 74%
           </div>
 
-          <p className="ETADetailsSummary-general-average">
+          <p className="ETADetailsSummary-general-average" style={{ backgroundColor, color: textColor }}>
             Promedio General : <strong>{generalAverage} </strong>
           </p>
 

@@ -3,7 +3,7 @@ import Highcharts from 'highcharts'
 import HighchartsReact from 'highcharts-react-official'
 import Highcharts3D from 'highcharts/highcharts-3d'
 import { AppContext } from '../../context/GlobalState'
-import { getColorByPercentage } from '../../utils/utils'
+import { getColorByPercentage, getColorByPercentageFilas  } from '../../utils/utils'
 import { getTablaDetailsByNumeroAuditoria } from '../../utils/apiDetails'
 import { useContext, useEffect, useState } from 'react'
 import { getAuditSheetByUsername } from '../../utils/apiAuditSheet';
@@ -188,7 +188,23 @@ const LUMDetailsSummary: React.FC<TableDetailsSummaryProps> = ({ numeroAuditoria
       },
     },
   };
+  
+  // Filtrar valores numéricos y calcular el promedio
+const numericValues = lumNA.filter((value): value is number => typeof value === 'number');
+const lumAverage = numericValues.length > 0
+  ? numericValues.reduce((acc, value) => acc + value, 0) / numericValues.length
+  : 0;
 
+// Usar el promedio para obtener el color de fondo
+const backgroundColor = getColorByPercentageFilas(lumAverage);
+
+
+  let textColor = 'black';
+  if (backgroundColor === 'red') {
+    textColor = 'white';
+  } else if (backgroundColor === 'yellow') {
+    textColor = 'black';
+  }
 
   return (
     <div className="LUMDetailsSummary-container">
@@ -282,8 +298,8 @@ const LUMDetailsSummary: React.FC<TableDetailsSummaryProps> = ({ numeroAuditoria
               CRITICO 0% - 74%
             </div>
 
-            <p className="LUMDetailsSummary-general-average">
-              Promedio General : <strong>{lumNA} %</strong>
+            <p className="LUMDetailsSummary-general-average" style={{ backgroundColor, color: textColor }}>
+              Promedio General : <strong>{lumAverage} %</strong>
             </p>
 
           </div>

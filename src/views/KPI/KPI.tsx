@@ -4,6 +4,7 @@ import { useContext, useState, useEffect } from 'react';
 import { AppContext } from '../../context/GlobalState';
 import { getTablaDetailsByNumeroAuditoria } from '../../utils/apiDetails';
 import { getAuditSheetByUsername } from '../../utils/apiAuditSheet';
+import { getColorByPercentageFilas  } from '../../utils/utils'
 import './KPI.css';
 
 
@@ -183,6 +184,17 @@ const KPI: React.FC = () => {
  const validAverages = [bpmPercentage, doc97Percentage, csh31Percentage, ser71Percentage, cap101Percentage].filter(avg => avg !== null);
  const promedioGeneral = validAverages.length > 0 ? validAverages.reduce((acc, avg) => acc + (avg ?? 0), 0) / validAverages.length : null;
 
+
+ const backgroundColor = getColorByPercentageFilas(promedioGeneral ?? 0);
+
+
+ let textColor = 'black';
+ if (backgroundColor === 'red') {
+   textColor = 'white';
+ } else if (backgroundColor === 'yellow') {
+   textColor = 'black';
+ }
+
   return (
     <div className="kpi-view">
       <div className="kpi-container">
@@ -276,8 +288,8 @@ const KPI: React.FC = () => {
               </div>
             </div>
 
-            <p className="kpi-general-average">
-              Promedio General : <strong>{promedioGeneral !== null ? promedioGeneral.toFixed(2) + '%' : 'N/A'} </strong>
+            <p className="kpi-general-average" style={{ backgroundColor, color: textColor }}>
+              Promedio : <strong>{promedioGeneral !== null ? promedioGeneral.toFixed(2) + '%' : 'N/A'} </strong>
             </p>
 
           </div>

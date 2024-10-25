@@ -35,9 +35,8 @@ const TableDetailsSummary: React.FC<TableDetailsSummaryProps> = ({ numeroAuditor
 
       try {
         const data = await getTablaDetailsByNumeroAuditoria(numeroAuditoria);
-        // Agrupar los detalles por el campo `field2` (Módulo) y filtrar preguntas duplicadas por `field1`
         const groupedData = data.reduce((acc: { [key: string]: TablaDetail[] }, detail: TablaDetail) => {
-          const module = detail.field2;  // Agrupamos por Módulo
+          const module = detail.field2; 
           if (!acc[module]) {
             acc[module] = [];
           }
@@ -81,7 +80,7 @@ const TableDetailsSummary: React.FC<TableDetailsSummaryProps> = ({ numeroAuditor
 
   return (
     <div className='table-details-summary'>
-      <h3>Detalles de la Auditoría</h3>
+     
       {Object.keys(tablaDetails).length === 0 ? (
         <p>No se encontraron registros</p>
       ) : (
