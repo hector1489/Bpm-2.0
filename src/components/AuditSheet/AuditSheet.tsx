@@ -175,7 +175,7 @@ const AuditSheet: React.FC = () => {
           />
         </div>
         <div className="form-group">
-          <label htmlFor="gerente-establecimiento">Gerente de Establecimiento:</label>
+          <label htmlFor="gerente-establecimiento">Responsable 1 :</label>
           <input
             type="text"
             className="form-control"
@@ -186,7 +186,7 @@ const AuditSheet: React.FC = () => {
           />
         </div>
         <div className="form-group">
-          <label htmlFor="administrador-establecimiento">Administrador de Establecimiento:</label>
+          <label htmlFor="administrador-establecimiento">Responsable 2 :</label>
           <input
             type="text"
             className="form-control"
@@ -198,7 +198,7 @@ const AuditSheet: React.FC = () => {
         </div>
 
         <div className="form-group">
-          <label htmlFor="supervisor-establecimiento">Supervisor de Establecimiento:</label>
+          <label htmlFor="supervisor-establecimiento">Auditor :</label>
           <input
             type="text"
             className="form-control"

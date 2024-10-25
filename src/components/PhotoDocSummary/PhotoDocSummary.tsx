@@ -1,22 +1,41 @@
+import './PhotoDocSummary.css';
 import { useEffect, useState } from 'react';
 import { obtenerFotos, eliminarFoto } from '../../utils/apiPhotosUtils';
-import './PhotosBackend.css';
 
 interface Photo {
   key: string;
   url: string;
 }
 
-const PhotosBackend: React.FC = () => {
+interface PhotoDocSummaryProps {
+  numeroAuditoria: string | undefined;
+}
+
+const PhotoDocSummary: React.FC<PhotoDocSummaryProps> = ({ numeroAuditoria }) => {
   const [photos, setPhotos] = useState<Photo[]>([]);
   const [errorMessage, setErrorMessage] = useState<string>('');
 
   const fetchIncidencias = async () => {
     try {
       const data = await obtenerFotos();
-      // Ya no se filtran fotos, se muestran todas las obtenidas
-      const allPhotos = data.filter((item: Photo) => item.key.startsWith('photos/'));
-      setPhotos(allPhotos);
+  
+      let filteredPhotos: Photo[] = [];
+  
+      if (numeroAuditoria) {
+        filteredPhotos = data.filter((item: Photo) => {
+          const auditNumber = extractAuditNumber(item.key);
+          return auditNumber === numeroAuditoria;
+        });
+  
+        if (filteredPhotos.length === 0) {
+          alert(`No se encontraron fotos para el número de auditoría: ${numeroAuditoria}`);
+          filteredPhotos = data.filter((item: Photo) => item.key.startsWith('photos/'));
+        }
+      } else {
+        filteredPhotos = data.filter((item: Photo) => item.key.startsWith('photos/'));
+      }
+  
+      setPhotos(filteredPhotos);
     } catch (error) {
       console.error('Error al obtener las fotos:', error);
       setErrorMessage('Error al cargar las fotos.');
@@ -49,10 +68,12 @@ const PhotosBackend: React.FC = () => {
     return match ? match[1].replace(/_/g, ' ') : key;
   };
 
+  
+  
+
   const extractPhotoDateFromUrl = (url: string) => {
     const regex = /X-Amz-Date=(\d{8})T/;
     const match = url.match(regex);
-
     if (match) {
       const dateStr = match[1];
       const year = dateStr.substring(0, 4);
@@ -60,13 +81,12 @@ const PhotosBackend: React.FC = () => {
       const day = dateStr.substring(6, 8);
       return `${day}/${month}/${year}`;
     }
-
     return 'Fecha desconocida';
   };
 
-
   return (
-    <div className="photos-backend-container">
+    <div className="photo-doc-summary">
+      <p>Número de Auditoría: {numeroAuditoria}</p>
       <h4>
         Incidencias Guardadas{' '}
         <span className="text-info">
@@ -81,7 +101,6 @@ const PhotosBackend: React.FC = () => {
             <p>Número de Auditoría: {extractAuditNumber(photo.key)}</p>
             <p>Fecha: {extractPhotoDateFromUrl(photo.url)}</p>
             <p>Pregunta: {extractPhotoName(photo.key)}</p>
-
             <button
               className="delete-photo-button"
               onClick={() => handleDelete(photo.key)}
@@ -93,6 +112,6 @@ const PhotosBackend: React.FC = () => {
       </div>
     </div>
   );
-};
+}
 
-export default PhotosBackend;
+export default PhotoDocSummary;

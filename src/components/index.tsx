@@ -32,6 +32,7 @@ export { default as BPMDetailsSummary } from './BPMDetailsSummary/BPMDetailsSumm
 export { default as ETADetailsSymary } from './ETADetailsSymary/ETADetailsSymary'
 export { default as LUMDetailsSummary } from './LUMDetailsSummary/LUMDetailsSummary'
 export { default as DetailsAverageSummary } from './DetailsAverageSummary/DetailsAverageSummary'
+export { default as PhotoDocSummary } from './PhotoDocSummary/PhotoDocSummary'
 
 
 
