@@ -101,6 +101,7 @@ const AuditSheet: React.FC = () => {
     numeroAuditoria: auditCount.toString(),
     gerenteEstablecimiento: '',
     administradorEstablecimiento: '',
+    supervisorEstablecimiento: '',
     auditorEmail: '',
     fechaAuditoria: getCurrentDate()
   });
@@ -192,6 +193,18 @@ const AuditSheet: React.FC = () => {
             id="administrador-establecimiento"
             name="administradorEstablecimiento"
             value={formValues.administradorEstablecimiento}
+            onChange={handleChange}
+          />
+        </div>
+
+        <div className="form-group">
+          <label htmlFor="supervisor-establecimiento">Supervisor de Establecimiento:</label>
+          <input
+            type="text"
+            className="form-control"
+            id="supervisor-establecimiento"
+            name="supervisorEstablecimiento"
+            value={formValues.supervisorEstablecimiento}
             onChange={handleChange}
           />
         </div>
