@@ -5,7 +5,7 @@ import HighchartsReact from 'highcharts-react-official';
 import { useContext, useEffect, useState } from 'react';
 import { AppContext } from '../../context/GlobalState';
 import { getTablaDetailsByNumeroAuditoria } from '../../utils/apiDetails';
-import { getColorByPercentage, getColorByPercentageFilas  } from '../../utils/utils';
+import { getColorByPercentage, getColorByPercentageFilas } from '../../utils/utils';
 import { getAuditSheetByUsername } from '../../utils/apiAuditSheet';
 
 interface TablaDetail {
@@ -134,7 +134,7 @@ const BPMDetailsSummary: React.FC<TableDetailsSummaryProps> = ({ numeroAuditoria
   ];
   const maModules = ['MA'];
   const docModules = ['doc'];
-  const lumModules = ['poes-superficies'];
+
   const traModules = [
     'poes-higiene-empleados', 'poe-preelaboraciones', 'poe-elaboracion',
     'poe-mantencion', 'poe-transporte', 'poe-servicio', 'doc',
@@ -149,31 +149,48 @@ const BPMDetailsSummary: React.FC<TableDetailsSummaryProps> = ({ numeroAuditoria
     tra: 21,
   };
 
-  // Función para calcular el promedio de un grupo o asignar 100% si no hay datos válidos
+
   const calcularPromedioGrupo = (modulos: string[]) => {
     const modulosDelGrupo = tablaDetails.filter((mod) => modulos.includes(mod.field2));
 
     const validItems = modulosDelGrupo.filter((mod) => mod.field4 !== null && mod.field4 !== 'N/A');
 
-    // Sumar solo los valores válidos
     const total = validItems.reduce((acc, curr) => acc + parseFloat(curr.field4), 0);
 
     return validItems.length > 0 ? total / validItems.length : 100;
   };
 
+  const lumQuestion = 'LUM 21. Toma de muestra y uso de luminómetro';
 
-  // Agrupación de datos por módulos
+  const matchedDetails = tablaDetails.filter(detail =>
+    detail.field3 && detail.field3.toLowerCase().includes(lumQuestion.toLowerCase().trim())
+  );
+
+
+
+  const uniqueMatchedDetails = matchedDetails.filter(
+    (detail, index, self) =>
+      index === self.findIndex((d) => d.field3 === detail.field3)
+  );
+
+  const lumNA = uniqueMatchedDetails.map(detail => parseFloat(detail.field4.replace('%', '')) || 'N/A');
+
+
+  const numericValues = lumNA.filter((value): value is number => typeof value === 'number');
+  const lumAverage = numericValues.length > 0
+    ? numericValues.reduce((acc, value) => acc + value, 0) / numericValues.length
+    : 0;
+
   const groupedData = [
     { groupName: 'BPM', nombreCompleto: 'INFRAESTRUCTURA Y REQUERIMIENTOS LEGALES', percentage: ponderaciones.bpm, average: calcularPromedioGrupo(bpmModules) },
     { groupName: 'POES', nombreCompleto: 'PROCEDIMIENTOS OP. DE SANITIZACION', percentage: ponderaciones.poes, average: calcularPromedioGrupo(poesModules) },
     { groupName: 'POE', nombreCompleto: 'PROCEDIMIENTOS OP. DEL PROCESO', percentage: ponderaciones.poe, average: calcularPromedioGrupo(poeModules) },
     { groupName: 'MA', nombreCompleto: 'MANEJO AMBIENTAL', percentage: ponderaciones.ma, average: calcularPromedioGrupo(maModules) },
     { groupName: 'DOC', nombreCompleto: 'DOCUMENTACION', percentage: ponderaciones.doc, average: calcularPromedioGrupo(docModules) },
-    { groupName: 'LUM', nombreCompleto: 'LUMINOMETRIA', percentage: ponderaciones.lum, average: calcularPromedioGrupo(lumModules) },
+    { groupName: 'LUM', nombreCompleto: 'LUMINOMETRIA', percentage: ponderaciones.lum, average: lumAverage },
     { groupName: 'TRAZ', nombreCompleto: 'TRAZADORES DE POSIBLE BROTE ETA', percentage: ponderaciones.tra, average: calcularPromedioGrupo(traModules) },
   ];
 
-  // Calcular el promedio general excluyendo valores `null`
   const validGroupAverages = groupedData.filter(group => group.average !== null);
   const overallAverage = validGroupAverages.length > 0
     ? validGroupAverages.reduce((acc, curr) => acc + curr.average, 0) / validGroupAverages.length
@@ -189,8 +206,8 @@ const BPMDetailsSummary: React.FC<TableDetailsSummaryProps> = ({ numeroAuditoria
 
 
 
-  // Definir los colores de las barras, omitimos los valores `null` en el color también
   const barColors = groupAverages.map((avg) => avg !== null ? getColorByPercentage(avg) : 'transparent');
+
 
   // Opciones del gráfico
   const chartOptions = {
