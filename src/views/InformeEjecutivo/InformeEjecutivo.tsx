@@ -133,7 +133,7 @@ const InformeEjecutivo: React.FC = () => {
         <button onClick={handleGoDoc}>volver</button>
         <button className="bg-primary" onClick={handleScreenshot}>Capturar Pantalla</button>
       </div>
-    </div>
+    </div>   
   );
 };
 

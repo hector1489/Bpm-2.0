@@ -30,7 +30,6 @@ const getColorByPercentageIETrazadores = (percentage: number) => {
 };
 
 const IETrazadores: React.FC<IETrazadoresProps> = ({ tablaDetails }) => {
-
   if (!tablaDetails || tablaDetails.length === 0) {
     return <div>No hay datos disponibles para mostrar.</div>;
   }
@@ -51,17 +50,15 @@ const IETrazadores: React.FC<IETrazadoresProps> = ({ tablaDetails }) => {
 
   const filteredData = categories.map(category => {
     const found = tablaDetails.find(detail => extractPrefix(detail.field3) === category);
-
     const value = found ? parseInt(found.field4, 10) : 0;
     return isNaN(value) ? 0 : value;
   });
 
-  // Validar que `filteredData` no esté vacío
-  if (filteredData.length === 0) {
+  // Verificar que `filteredData` contiene al menos un valor válido
+  if (filteredData.length === 0 || filteredData.every(value => value === 0)) {
     return <div>No hay datos disponibles para mostrar.</div>;
   }
 
-  // Cálculo del promedio
   const total = filteredData.reduce((sum, value) => sum + value, 0);
   const average = filteredData.length > 0 ? (total / filteredData.length).toFixed(2) : 'N/A';
 
@@ -70,9 +67,9 @@ const IETrazadores: React.FC<IETrazadoresProps> = ({ tablaDetails }) => {
     color: getColorByPercentageIETrazadores(value)
   }));
 
-  // Evitar problemas con `plotLines` si no hay datos válidos
+  // Verificar la existencia de `plotLineValue` y datos válidos para renderizar `plotLines`
   const plotLineValue = 90;
-  const shouldRenderPlotLine = filteredData.some(value => value > 0);
+  const shouldRenderPlotLine = filteredData.some(value => value > 0) && plotLineValue !== undefined;
 
   const options = {
     chart: {
@@ -188,3 +185,6 @@ const IETrazadores: React.FC<IETrazadoresProps> = ({ tablaDetails }) => {
 }
 
 export default IETrazadores;
+
+
+
