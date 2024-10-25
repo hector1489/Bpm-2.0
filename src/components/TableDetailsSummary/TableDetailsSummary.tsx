@@ -1,14 +1,14 @@
-import './TableDetailsSummary.css'
-import { useContext, useEffect, useState } from 'react'
-import { AppContext } from '../../context/GlobalState'
-import { getTablaDetailsByNumeroAuditoria } from '../../utils/apiDetails'
+import './TableDetailsSummary.css';
+import { useContext, useEffect, useState } from 'react';
+import { AppContext } from '../../context/GlobalState';
+import { getTablaDetailsByNumeroAuditoria } from '../../utils/apiDetails';
 
 interface TablaDetail {
   numero_auditoria: string;
   field1: string;  // ID Pregunta
   field2: string;  // Módulo
   field3: string;  // Pregunta
-  field4: string;  // Desviación
+  field4: string;  // Desviación (asumimos que es un valor numérico para calcular el promedio)
 }
 
 interface TableDetailsSummaryProps {
@@ -34,7 +34,7 @@ const TableDetailsSummary: React.FC<TableDetailsSummaryProps> = ({ numeroAuditor
 
       try {
         const data = await getTablaDetailsByNumeroAuditoria(numeroAuditoria);
-        // Agrupar los detalles por el campo `field2` (Módulo) y filtrar las preguntas duplicadas por `field1`
+        // Agrupar los detalles por el campo `field2` (Módulo) y filtrar preguntas duplicadas por `field1`
         const groupedData = data.reduce((acc: { [key: string]: TablaDetail[] }, detail: TablaDetail) => {
           const module = detail.field2;  // Agrupamos por Módulo
           if (!acc[module]) {
@@ -69,6 +69,15 @@ const TableDetailsSummary: React.FC<TableDetailsSummaryProps> = ({ numeroAuditor
     return <p>{error}</p>;
   }
 
+  // Función para calcular el promedio de desviaciones de un módulo
+  const calculateModuleAverage = (moduleData: TablaDetail[]) => {
+    const desviaciones = moduleData
+      .map((detail) => parseFloat(detail.field4))
+      .filter((desviacion) => !isNaN(desviacion));  // Filtramos valores no numéricos
+    const total = desviaciones.reduce((acc, desviacion) => acc + desviacion, 0);
+    return desviaciones.length > 0 ? (total / desviaciones.length).toFixed(2) : 'N/A';
+  };
+
   return (
     <div className='table-details-summary'>
       <h3>Detalles de la Auditoría</h3>
@@ -89,18 +98,29 @@ const TableDetailsSummary: React.FC<TableDetailsSummaryProps> = ({ numeroAuditor
             <tbody>
               {Object.keys(tablaDetails).map((modulo) => {
                 const moduloData = tablaDetails[modulo];
-                return moduloData.map((detail, index) => (
-                  <tr key={detail.numero_auditoria + detail.field1}>
-                    {/* Solo mostrar el nombre del módulo en la primera fila del grupo */}
-                    {index === 0 && (
-                      <td rowSpan={moduloData.length}>{modulo}</td>
-                    )}
-                    <td>{detail.numero_auditoria}</td>
-                    <td>{detail.field1}</td>
-                    <td>{detail.field3}</td>
-                    <td>{detail.field4}</td>
-                  </tr>
-                ));
+                const moduleAverage = calculateModuleAverage(moduloData); // Calculamos el promedio del módulo
+
+                return (
+                  <>
+                    {moduloData.map((detail, index) => (
+                      <tr key={detail.numero_auditoria + detail.field1}>
+                        {/* Solo mostrar el nombre del módulo en la primera fila del grupo */}
+                        {index === 0 && (
+                          <td rowSpan={moduloData.length + 1}>{modulo}</td>
+                        )}
+                        <td>{detail.numero_auditoria}</td>
+                        <td>{detail.field1}</td>
+                        <td>{detail.field3}</td>
+                        <td>{detail.field4}</td>
+                      </tr>
+                    ))}
+                    {/* Fila para el promedio del módulo */}
+                    <tr className="TableDetailsSummary-module-average">
+                      <td colSpan={3} style={{ fontWeight: 'bold', textAlign: 'right' }}>Promedio del Módulo:</td>
+                      <td style={{ fontWeight: 'bold' }}>{moduleAverage}</td>
+                    </tr>
+                  </>
+                );
               })}
             </tbody>
           </table>

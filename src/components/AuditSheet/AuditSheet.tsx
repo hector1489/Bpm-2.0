@@ -101,7 +101,6 @@ const AuditSheet: React.FC = () => {
     numeroAuditoria: auditCount.toString(),
     gerenteEstablecimiento: '',
     administradorEstablecimiento: '',
-    supervisorEstablecimiento: '',
     auditorEmail: '',
     fechaAuditoria: getCurrentDate()
   });
@@ -116,7 +115,6 @@ const AuditSheet: React.FC = () => {
       formValues.nombreEstablecimiento !== '' &&
       formValues.gerenteEstablecimiento !== '' &&
       formValues.administradorEstablecimiento !== '' &&
-      formValues.supervisorEstablecimiento !== '' &&
       formValues.auditorEmail !== '' &&
       formValues.fechaAuditoria !== ''
     );
@@ -197,20 +195,7 @@ const AuditSheet: React.FC = () => {
             onChange={handleChange}
           />
         </div>
-        <div className="form-group">
-          <label htmlFor="supervisor-establecimiento">Responsable del Problema:</label>
-          <select
-            className="form-control"
-            id="supervisor-establecimiento"
-            name="supervisorEstablecimiento"
-            value={formValues.supervisorEstablecimiento}
-            onChange={handleChange}
-          >
-            <option value="gerente-contrato">Responsable 1</option>
-            <option value="administrador">Responsable 2</option>
-            <option value="supervisor-mantencion">Auditor</option>
-          </select>
-        </div>
+        
         <div className="form-group">
           <label htmlFor="auditor-email">Email:</label>
           <input

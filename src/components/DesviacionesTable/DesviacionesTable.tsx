@@ -133,7 +133,8 @@ const DesviacionesTable: React.FC = () => {
     tableBody.querySelectorAll('tr').forEach(async (row, rowIndex) => {
       row.querySelectorAll('td').forEach(async (cell, cellIndex) => {
         const emailColumnIndex = 14;
-  
+        const responsableColumnIndex = 4; // Índice para la columna "Responsable"
+        
         if (cellIndex === 10) {
           const selectEstado = crearSelectEstado();
           selectEstado.value = localDesviaciones[rowIndex].estado || 'Abierto';
@@ -167,6 +168,22 @@ const DesviacionesTable: React.FC = () => {
           };
           cell.innerHTML = '';
           cell.appendChild(selectAcciones);
+        } else if (cellIndex === responsableColumnIndex) {
+          // Input de texto para "Responsable"
+          const input = document.createElement('input');
+          input.type = 'text';
+          input.placeholder = 'Responsable...';
+  
+          const currentValue = localDesviaciones[rowIndex].responsable_problema;
+          input.value = currentValue !== undefined && currentValue !== null ? String(currentValue) : '';
+  
+          input.onblur = (e) => {
+            const value = (e.target as HTMLInputElement).value;
+            handleInputChange(rowIndex, 'responsable_problema', value);
+          };
+  
+          cell.innerHTML = '';
+          cell.appendChild(input);
         } else if (cellIndex === emailColumnIndex || cell.textContent === 'N/A' || cell.textContent === DEFAULT_ANSWER) {
           const field = getFieldFromCellIndex(cellIndex);
           const input = document.createElement('input');
@@ -189,8 +206,9 @@ const DesviacionesTable: React.FC = () => {
       });
     });
   };
-  
 
+  
+  
   const handleGoToHome = () => {
     navigate('/home');
   };

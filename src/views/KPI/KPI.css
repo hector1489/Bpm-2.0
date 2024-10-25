@@ -15,6 +15,11 @@
   padding: 20px;
 }
 
+.BPMDetailsSummary-data {
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+}
 
 .kpi-view-buttons {
   width: 100%;

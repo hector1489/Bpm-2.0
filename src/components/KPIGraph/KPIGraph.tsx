@@ -13,17 +13,6 @@ if (typeof Highcharts === 'object') {
 }
 
 const KPIGraph: React.FC<BPMGraphProps> = ({ moduleData }) => {
-  // Define los módulos por categoría
-  const Transporte = [
-    'poes-higiene-empleados', 'poe-preelaboraciones', 'poe-elaboracion',
-    'poe-mantencion', 'poe-transporte', 'poe-servicio', 'doc'
-  ];
-  const Servicios = [
-    'poe-recepcion', 'poe-almacenamiento', 'poe-preelaboraciones', 'poe-elaboracion', 'poe-mantencion',
-    'poe-transporte', 'poe-servicio', 'poe-lavado-ollas-vajilla', 'poe-control-calidad', 'poe-ppt'
-  ];
-  const Documentos = ['doc'];
-
   // Función para extraer el porcentaje de la respuesta, si la respuesta es "N/A" devuelve null
   const extractPercentageFromAnswer = (answer: string): number | null => {
     if (answer === 'N/A') return null;
@@ -31,7 +20,51 @@ const KPIGraph: React.FC<BPMGraphProps> = ({ moduleData }) => {
     return match ? parseInt(match[1]) : null;
   };
 
-  // Buscar CAP 101
+  // Preguntas del bloque de BPM (INF y RL)
+  const bpmQuestions = [
+    "INF 1. Separaciones de áreas mínimas y condiciones de mantención de esta:",
+    "INF 2. Equipos mínimos de cocción y frío (quemadores, refrigeradores, mantenedores, otros):",
+    "INF 3. Cuenta con servicios básicos (agua potable, desagües, ventilación, luminarias, vestuarios, otros):",
+    "RL 4. Es factible realizar trazabilidad de producto:",
+    "RL 5. Mantención de registros de control de proceso, 90 días:",
+    "RL 6. Cuenta con registros de mantención correctiva de equipos:",
+    "RL 7. Inducción y entrenamiento al personal, en calidad y medio ambiente (registros e interrogar al personal):"
+  ];
+
+  // Función para calcular el promedio de un grupo de preguntas
+  const calculateGroupAverage = (questions: string[]) => {
+    const percentages = questions
+      .map((question) => {
+        const detail = moduleData.find((module) => module.question === question);
+        return detail ? extractPercentageFromAnswer(detail.answer) : null;
+      })
+      .filter((percentage) => percentage !== null); // Excluir los valores nulos
+
+    if (percentages.length === 0) return null;
+
+    const total = percentages.reduce((acc, percentage) => acc + (percentage ?? 0), 0);
+    return total / percentages.length;
+  };
+
+  // Calcular el promedio de BPM
+  const bpmPercentage = calculateGroupAverage(bpmQuestions);
+
+  // Buscar y extraer los porcentajes de las preguntas específicas
+  const doc97Detail = moduleData.find((module) =>
+    module.question === 'DOC 97. Informes de muestreo microbiológico/luminometría. Planes de acción, charlas al personal si corresponde:'
+  );
+  const doc97Percentage = doc97Detail ? extractPercentageFromAnswer(doc97Detail.answer) : null;
+
+  const csh31Detail = moduleData.find((module) =>
+    module.question === 'TRA CSH 31. Exámenes de todos los manipuladores, ecónomos y administradores. Ausencia de malestares o infecciones (Art. 52, 53):'
+  );
+  const csh31Percentage = csh31Detail ? extractPercentageFromAnswer(csh31Detail.answer) : null;
+
+  const ser71Detail = moduleData.find((module) =>
+    module.question === 'SER 71. Variedad de alternativas instaladas en línea autoservicio, según menú (fondos, ensaladas y postres, otros):'
+  );
+  const ser71Percentage = ser71Detail ? extractPercentageFromAnswer(ser71Detail.answer) : null;
+
   const cap101Detail = moduleData.find((module) =>
     module.question === 'CAP 101. Existe un programa escrito y con sus registros correspondientes de capacitación del personal en materia de manipulación higiénica de los alimentos e higiene personal. (Art. 52, 69)'
   );
@@ -45,37 +78,15 @@ const KPIGraph: React.FC<BPMGraphProps> = ({ moduleData }) => {
     return 'red';
   };
 
-  // Filtrar los datos por módulo
-  const filterByModules = (modules: string[]) =>
-    moduleData.filter((module) => modules.includes(module.moduleName));
-
-  // Calcula el promedio de los porcentajes, excluyendo los `null`
-  const calculateAverage = (data: { moduleName: string, percentage: number | null }[]) => {
-    const validData = data.filter((module) => module.percentage !== null);
-    const total = validData.reduce((acc, module) => acc + (module.percentage ?? 0), 0);
-    return validData.length > 0 ? total / validData.length : null;
-  };
-
-  // Filtrar y calcular promedios para cada categoría
-  const transporteData = filterByModules(Transporte);
-  const serviciosData = filterByModules(Servicios);
-  const documentosData = filterByModules(Documentos);
-
-  const transporteAvg = calculateAverage(transporteData);
-  const serviciosAvg = calculateAverage(serviciosData);
-  const documentosAvg = calculateAverage(documentosData);
-
-  // Calcular el promedio general incluyendo CAP 101 si está presente, excluyendo `null`
-  const validAverages = [transporteAvg, serviciosAvg, documentosAvg, cap101Percentage].filter(avg => avg !== null);
+  // Calcular el promedio general, excluyendo valores `null`
+  const validAverages = [bpmPercentage, doc97Percentage, csh31Percentage, ser71Percentage, cap101Percentage].filter(avg => avg !== null);
   const promedioGeneral = validAverages.length > 0 ? validAverages.reduce((acc, avg) => acc + (avg ?? 0), 0) / validAverages.length : null;
 
-  // Configurar nombres de los módulos, porcentajes y pesos
-  const moduleNames = ['Transporte', 'Servicios', 'Documentos'];
-  const percentages = [transporteAvg, serviciosAvg, documentosAvg];
-  const itemWeights = ['25%', '25%', '25%'];
-
-  // Asignar colores a las barras según el porcentaje
-  const barColors = [...percentages.map(getColorByPercentage), getColorByPercentage(cap101Percentage)];
+  // Configurar nombres de los indicadores, porcentajes y colores
+  const indicatorNames = ['BPM', 'DOC 97', 'TRA CSH 31', 'SER 71', 'CAP 101'];
+  const percentages = [bpmPercentage, doc97Percentage, csh31Percentage, ser71Percentage, cap101Percentage];
+  const itemWeights = ['25%', '25%', '25%', '25%', '25%'];
+  const barColors = percentages.map(getColorByPercentage);
 
   // Opciones del gráfico de Highcharts
   const chartOptions = {
@@ -100,15 +111,7 @@ const KPIGraph: React.FC<BPMGraphProps> = ({ moduleData }) => {
       },
     },
     xAxis: {
-      categories: [...moduleNames, 'CAP 101'],
-      title: {
-        text: '',
-        style: {
-          fontSize: '14px',
-          fontWeight: 'bold',
-          color: '#333333',
-        },
-      },
+      categories: indicatorNames,
       lineColor: '#cccccc',
       tickColor: '#cccccc',
     },
@@ -131,7 +134,7 @@ const KPIGraph: React.FC<BPMGraphProps> = ({ moduleData }) => {
     series: [
       {
         name: 'Promedio',
-        data: [...percentages, cap101Percentage],
+        data: percentages,
         colorByPoint: true,
         colors: barColors,
       },
@@ -152,11 +155,9 @@ const KPIGraph: React.FC<BPMGraphProps> = ({ moduleData }) => {
 
   return (
     <div className="kpi-graph-container">
-      <h3>KPI</h3>
       <div className="kpi-graph-graph">
         <HighchartsReact highcharts={Highcharts} options={chartOptions} />
       </div>
-     
       <div className="kpi-graph-table">
         <table id="kpi-percentage-table">
           <thead>
@@ -167,26 +168,13 @@ const KPIGraph: React.FC<BPMGraphProps> = ({ moduleData }) => {
             </tr>
           </thead>
           <tbody>
-            {moduleNames.map((name, index) => (
+            {indicatorNames.map((name, index) => (
               <tr key={name}>
                 <td>{name}</td>
                 <td>{itemWeights[index]}</td>
                 <td>{percentages[index] !== null ? percentages[index]?.toFixed(2) + '%' : 'N/A'}</td>
               </tr>
             ))}
-            {cap101Percentage !== null ? (
-              <tr>
-                <td>CAP 101</td>
-                <td>25%</td>
-                <td>{cap101Percentage?.toFixed(2)}%</td>
-              </tr>
-            ) : (
-              <tr>
-                <td>CAP 101</td>
-                <td>25%</td>
-                <td>N/A</td>
-              </tr>
-            )}
             <tr className="bg-warning">
               <td><strong>TOTAL ALIMENTACIÓN</strong></td>
               <td><strong>100%</strong></td>

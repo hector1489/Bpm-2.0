@@ -278,6 +278,90 @@ const BPMDetailsSummary: React.FC<TableDetailsSummaryProps> = ({ numeroAuditoria
     <div className="BPMDetailsSummary-container">
       <h3>Gráfico BPM Auditoría: {numeroAuditoria}</h3>
 
+      <div className="BPMDetailsSummary-data">
+
+        <div className="BPMDetailsSummary-data-table">
+          <table>
+            <thead>
+              <tr>
+                <th>Nombre del Establecimiento:</th>
+                <td>{filteredAuditSheet?.field1 || 'N/A'}</td>
+              </tr>
+              <tr>
+                <th>Número de Auditoría:</th>
+                <td>{filteredAuditSheet?.numero_auditoria || 'N/A'}</td>
+              </tr>
+              <tr>
+                <th>Gerente del Establecimiento:</th>
+                <td>{filteredAuditSheet?.field2 || 'N/A'}</td>
+              </tr>
+              <tr>
+                <th>Administrador del Establecimiento:</th>
+                <td>{filteredAuditSheet?.field3 || 'N/A'}</td>
+              </tr>
+              <tr>
+                <th>Supervisor del Establecimiento:</th>
+                <td>{filteredAuditSheet?.field4 || 'N/A'}</td>
+              </tr>
+              <tr>
+                <th>Auditor Email:</th>
+                <td>{filteredAuditSheet?.field5 || 'N/A'}</td>
+              </tr>
+              <tr>
+                <th>Fecha de Auditoría:</th>
+                <td>{filteredAuditSheet?.field6 || 'N/A'}</td>
+              </tr>
+            </thead>
+          </table>
+
+        </div>
+
+        <div className='BPMDetailsSummary-cumplimientos'>
+          <div
+            style={{
+              backgroundColor: 'green',
+              padding: '5px',
+              border: '1px solid black',
+              width: '100%',
+              borderRadius: '5px',
+              textAlign: 'center',
+              color: 'white',
+              fontWeight: 'bold',
+            }}>
+            CUMPLE 90% - 100%
+          </div>
+          <div
+            style={{
+              backgroundColor: 'yellow',
+              padding: '5px',
+              border: '1px solid black',
+              marginTop: '5px',
+              width: '100%',
+              borderRadius: '5px',
+              textAlign: 'center',
+              color: 'black',
+              fontWeight: 'bold',
+            }}>
+            EN ALERTA 75% - 89%
+          </div>
+          <div
+            style={{
+              backgroundColor: 'red',
+              padding: '5px',
+              border: '1px solid black',
+              marginTop: '5px',
+              width: '100%',
+              borderRadius: '5px',
+              textAlign: 'center',
+              color: 'white',
+              fontWeight: 'bold',
+            }}>
+            CRITICO 0% - 74%
+          </div>
+        </div>
+
+      </div>
+
       <div className="BPMDetailsSummary-graph">
         <HighchartsReact
           highcharts={Highcharts}
@@ -288,7 +372,6 @@ const BPMDetailsSummary: React.FC<TableDetailsSummaryProps> = ({ numeroAuditoria
 
       <table className="BPMDetailsSummary-table">
         <thead>
-          {/* Encabezados de la tabla */}
         </thead>
         <tbody>
           {groupedData.map((group) => (
