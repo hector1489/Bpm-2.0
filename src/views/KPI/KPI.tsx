@@ -122,6 +122,67 @@ const KPI: React.FC = () => {
     navigate('/documentacion');
   };
 
+
+  const extractPercentageFromAnswer = (answer: string): number | null => {
+    if (answer === 'N/A') return null;
+    const match = answer.match(/(\d+)%/);
+    return match ? parseInt(match[1]) : null;
+  };
+
+  // Preguntas del bloque de BPM (INF y RL)
+  const bpmQuestions = [
+    "INF 1. Separaciones de áreas mínimas y condiciones de mantención de esta:",
+    "INF 2. Equipos mínimos de cocción y frío (quemadores, refrigeradores, mantenedores, otros):",
+    "INF 3. Cuenta con servicios básicos (agua potable, desagües, ventilación, luminarias, vestuarios, otros):",
+    "RL 4. Es factible realizar trazabilidad de producto:",
+    "RL 5. Mantención de registros de control de proceso, 90 días:",
+    "RL 6. Cuenta con registros de mantención correctiva de equipos:",
+    "RL 7. Inducción y entrenamiento al personal, en calidad y medio ambiente (registros e interrogar al personal):"
+  ];
+
+  // Función para calcular el promedio de un grupo de preguntas
+  const calculateGroupAverage = (questions: string[]) => {
+    const percentages = questions
+      .map((question) => {
+        const detail = moduleData.find((module) => module.question === question);
+        return detail ? extractPercentageFromAnswer(detail.answer) : null;
+      })
+      .filter((percentage) => percentage !== null);
+
+    if (percentages.length === 0) return null;
+
+    const total = percentages.reduce((acc, percentage) => acc + (percentage ?? 0), 0);
+    return total / percentages.length;
+  };
+
+  // Calcular el promedio de BPM
+  const bpmPercentage = calculateGroupAverage(bpmQuestions);
+
+  // Buscar y extraer los porcentajes de las preguntas específicas
+  const doc97Detail = moduleData.find((module) =>
+    module.question === 'DOC 97. Informes de muestreo microbiológico/luminometría. Planes de acción, charlas al personal si corresponde:'
+  );
+  const doc97Percentage = doc97Detail ? extractPercentageFromAnswer(doc97Detail.answer) : null;
+
+  const csh31Detail = moduleData.find((module) =>
+    module.question === 'TRA CSH 31. Exámenes de todos los manipuladores, ecónomos y administradores. Ausencia de malestares o infecciones (Art. 52, 53):'
+  );
+  const csh31Percentage = csh31Detail ? extractPercentageFromAnswer(csh31Detail.answer) : null;
+
+  const ser71Detail = moduleData.find((module) =>
+    module.question === 'SER 71. Variedad de alternativas instaladas en línea autoservicio, según menú (fondos, ensaladas y postres, otros):'
+  );
+  const ser71Percentage = ser71Detail ? extractPercentageFromAnswer(ser71Detail.answer) : null;
+
+  const cap101Detail = moduleData.find((module) =>
+    module.question === 'CAP 101. Existe un programa escrito y con sus registros correspondientes de capacitación del personal en materia de manipulación higiénica de los alimentos e higiene personal. (Art. 52, 69)'
+  );
+  const cap101Percentage = cap101Detail ? extractPercentageFromAnswer(cap101Detail.answer) : null;
+  
+ // Calcular el promedio general, excluyendo valores `null`
+ const validAverages = [bpmPercentage, doc97Percentage, csh31Percentage, ser71Percentage, cap101Percentage].filter(avg => avg !== null);
+ const promedioGeneral = validAverages.length > 0 ? validAverages.reduce((acc, avg) => acc + (avg ?? 0), 0) / validAverages.length : null;
+
   return (
     <div className="kpi-view">
       <div className="kpi-container">
@@ -214,6 +275,10 @@ const KPI: React.FC = () => {
                 CRITICO 0% - 74%
               </div>
             </div>
+
+            <p className="kpi-general-average">
+              Promedio General : <strong>{promedioGeneral !== null ? promedioGeneral.toFixed(2) + '%' : 'N/A'} </strong>
+            </p>
 
           </div>
 

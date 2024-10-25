@@ -1,3 +1,4 @@
+import React from 'react';
 import './TableDetailsSummary.css';
 import { useContext, useEffect, useState } from 'react';
 import { AppContext } from '../../context/GlobalState';
@@ -5,10 +6,10 @@ import { getTablaDetailsByNumeroAuditoria } from '../../utils/apiDetails';
 
 interface TablaDetail {
   numero_auditoria: string;
-  field1: string;  // ID Pregunta
-  field2: string;  // Módulo
-  field3: string;  // Pregunta
-  field4: string;  // Desviación (asumimos que es un valor numérico para calcular el promedio)
+  field1: string;
+  field2: string;
+  field3: string;
+  field4: string;
 }
 
 interface TableDetailsSummaryProps {
@@ -46,7 +47,7 @@ const TableDetailsSummary: React.FC<TableDetailsSummaryProps> = ({ numeroAuditor
           if (!exists) {
             acc[module].push(detail);
           }
-          
+
           return acc;
         }, {});
 
@@ -98,13 +99,12 @@ const TableDetailsSummary: React.FC<TableDetailsSummaryProps> = ({ numeroAuditor
             <tbody>
               {Object.keys(tablaDetails).map((modulo) => {
                 const moduloData = tablaDetails[modulo];
-                const moduleAverage = calculateModuleAverage(moduloData); // Calculamos el promedio del módulo
+                const moduleAverage = calculateModuleAverage(moduloData);
 
                 return (
-                  <>
+                  <React.Fragment key={modulo}>
                     {moduloData.map((detail, index) => (
                       <tr key={detail.numero_auditoria + detail.field1}>
-                        {/* Solo mostrar el nombre del módulo en la primera fila del grupo */}
                         {index === 0 && (
                           <td rowSpan={moduloData.length + 1}>{modulo}</td>
                         )}
@@ -114,14 +114,14 @@ const TableDetailsSummary: React.FC<TableDetailsSummaryProps> = ({ numeroAuditor
                         <td>{detail.field4}</td>
                       </tr>
                     ))}
-                    {/* Fila para el promedio del módulo */}
-                    <tr className="TableDetailsSummary-module-average">
+                    <tr className="TableDetailsSummary-module-average" key={`${modulo}-average`}>
                       <td colSpan={3} style={{ fontWeight: 'bold', textAlign: 'right' }}>Promedio del Módulo:</td>
                       <td style={{ fontWeight: 'bold' }}>{moduleAverage}</td>
                     </tr>
-                  </>
+                  </React.Fragment>
                 );
               })}
+
             </tbody>
           </table>
         </div>

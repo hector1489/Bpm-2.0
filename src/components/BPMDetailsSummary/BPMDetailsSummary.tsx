@@ -358,7 +358,14 @@ const BPMDetailsSummary: React.FC<TableDetailsSummaryProps> = ({ numeroAuditoria
             }}>
             CRITICO 0% - 74%
           </div>
+
+          <p className="BPMDetailsSummary-general-average">
+            Promedio General : <strong>{overallAverage.toFixed(2)}</strong>
+          </p>
+
         </div>
+
+
 
       </div>
 

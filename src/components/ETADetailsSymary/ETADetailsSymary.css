@@ -16,7 +16,9 @@
   justify-content: space-around;
 }
 
-
+.ETADetailsSummary-general-average {
+  margin-top: 20px;
+}
 
 .ETADetailsSummary-data-table th,
 .ETADetailsSummary-data-table td {

@@ -111,6 +111,10 @@
 }
 
 
+.BPMDetailsSummary-general-average {
+  margin-top: 20px;
+}
+
 
 /* Estilos responsive para pantallas pequeñas */
 @media screen and (max-width: 767px) {

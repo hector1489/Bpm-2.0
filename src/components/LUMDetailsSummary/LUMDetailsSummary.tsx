@@ -281,6 +281,11 @@ const LUMDetailsSummary: React.FC<TableDetailsSummaryProps> = ({ numeroAuditoria
             >
               CRITICO 0% - 74%
             </div>
+
+            <p className="LUMDetailsSummary-general-average">
+              Promedio General : <strong>{lumNA} %</strong>
+            </p>
+
           </div>
 
         </div>
@@ -288,8 +293,7 @@ const LUMDetailsSummary: React.FC<TableDetailsSummaryProps> = ({ numeroAuditoria
       </div>
 
       <div className="LUMDetailsSummary-graph">
-      <HighchartsReact highcharts={Highcharts} options={chartOptions} />
-      <p>Luminometria fue auditada como : {lumNA}</p>
+        <HighchartsReact highcharts={Highcharts} options={chartOptions} />
       </div>
 
 

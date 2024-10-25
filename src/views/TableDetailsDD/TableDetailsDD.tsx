@@ -1,13 +1,23 @@
-import { DetailsAverageSummary, TableDetailsSummary } from '../../components'
-import './TableDetailsDD.css'
-import { AppContext } from '../../context/GlobalState'
+import './TableDetailsDD.css';
+import { DetailsAverageSummary, TableDetailsSummary } from '../../components';
+import { AppContext } from '../../context/GlobalState';
 import { useLocation } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useState, useCallback,  useMemo } from 'react';
 import { getAuditSheetByUsername } from '../../utils/apiAuditSheet';
+import { getTablaDetailsByNumeroAuditoria } from '../../utils/apiDetails';
+
+interface TablaDetail {
+  numero_auditoria: string;
+  field1: string;
+  field2: string;
+  field3: string;
+  field4: string;
+}
 
 const TableDetailsDD: React.FC = () => {
   const context = useContext(AppContext);
+  const [tablaDetails, setTablaDetails] = useState<TablaDetail[]>([]);
   const location = useLocation();
   const navigate = useNavigate();
   const numeroAuditoria = location.state?.numero_requerimiento;
@@ -22,6 +32,23 @@ const TableDetailsDD: React.FC = () => {
   }
 
   const { state } = context;
+
+  // Función para obtener los detalles de la tabla
+  const fetchTablaDetails = useCallback(async () => {
+    if (!numeroAuditoria) return;
+
+    setLoading(true);
+    setError(null);
+
+    try {
+      const data = await getTablaDetailsByNumeroAuditoria(numeroAuditoria);
+      setTablaDetails(data);
+    } catch (err) {
+      setError('Error al obtener los datos de la tabla');
+    } finally {
+      setLoading(false);
+    }
+  }, [numeroAuditoria]);
 
   const handleGoToDoc = () => {
     navigate('/documentacion');
@@ -60,6 +87,66 @@ const TableDetailsDD: React.FC = () => {
   useEffect(() => {
     bpmFilteredAuditSheet();
   }, [auditSheetDetails, numeroAuditoria]);
+
+  useEffect(() => {
+    fetchTablaDetails();
+  }, [fetchTablaDetails]);
+
+ // Función para extraer el porcentaje del campo field4
+ const extractPercentage = (answer: string): number => {
+  const match = answer.match(/(\d+)%/);
+  return match ? parseInt(match[1], 10) : 0;
+};
+
+// Preparar datos del módulo
+const moduleData = useMemo(() => {
+  return tablaDetails.map((detail) => ({
+    moduleName: detail.field2,
+    percentage: extractPercentage(detail.field4),
+  }));
+}, [tablaDetails]);
+
+
+// Grupos de módulos
+const moduleGroups = {
+  BPM: ['infraestructura', 'legales'],
+  POES: [
+    'poes-control-productos', 'Agua', 'poes-superficies', 'contaminacion-cruzada',
+    'poes-sustancias-adulterantes', 'poes-higiene-empleados', 'poes-control-plagas', 'poes-instalaciones'
+  ],
+  POE: [
+    'poe-recepcion', 'poe-almacenamiento', 'poe-preelaboraciones', 'poe-elaboracion', 'poe-mantencion',
+    'poe-transporte', 'poe-servicio', 'poe-lavado-ollas-vajilla', 'poe-control-calidad', 'poe-ppt'
+  ],
+  MA: ['MA'],
+  DOC: ['doc'],
+  LUM: ['poes-superficies'],
+  TRA: [
+    'poes-higiene-empleados', 'poe-preelaboraciones', 'poe-elaboracion',
+    'poe-mantencion', 'poe-transporte', 'poe-servicio', 'doc'
+  ]
+};
+
+// Calcular promedio por grupo de módulos
+const calculateGroupAverage = useCallback((modules: string[]): number => {
+  const relevantModules = moduleData.filter((mod) => modules.includes(mod.moduleName));
+  const totalPercentage = relevantModules.reduce((acc, curr) => acc + curr.percentage, 0);
+  return relevantModules.length > 0 ? totalPercentage / relevantModules.length : 100;
+}, [moduleData]);
+
+// Datos agrupados
+const groupedData = useMemo(() => {
+  return Object.entries(moduleGroups).map(([groupName, modules]) => ({
+    groupName,
+    average: calculateGroupAverage(modules).toFixed(2),
+  }));
+}, [calculateGroupAverage]);
+
+// Promedio final de todos los grupos
+const finalAverage = useMemo(() => {
+  const totalPercentage = groupedData.reduce((acc, group) => acc + parseFloat(group.average), 0);
+  return (totalPercentage / groupedData.length).toFixed(2);
+}, [groupedData]);
 
   if (loading) {
     return <p>Cargando datos...</p>;
@@ -115,6 +202,7 @@ const TableDetailsDD: React.FC = () => {
         </div>
 
         <div className="BPMDetailsSummary-data-promedio">
+
           <div style={{ fontSize: 'smaller', marginTop: '10px' }}>
             <div
               style={{
@@ -161,11 +249,21 @@ const TableDetailsDD: React.FC = () => {
               CRITICO 0% - 74%
             </div>
           </div>
+
+          <p className="TableDetailsDD-general-average">
+            Promedio General : <strong>{finalAverage}</strong>
+          </p>
+
+
         </div>
+
+
       </div>
 
       <TableDetailsSummary numeroAuditoria={numeroAuditoria} />
       <DetailsAverageSummary numeroAuditoria={numeroAuditoria} />
+
+
 
       <div className="TableDetailsDD-buttons">
         <button onClick={handleGoToDoc}>Volver</button>

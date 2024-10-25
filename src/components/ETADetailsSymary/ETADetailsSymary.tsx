@@ -231,6 +231,15 @@ const ETADetailsSymary: React.FC<ETADetailsSymaryProps> = ({ numeroAuditoria }) 
     },
   };
 
+  // Función para calcular el promedio de los porcentajes
+  const calculateGeneralAverage = () => {
+    const total = percentages.reduce((acc, percentage) => acc + percentage, 0);
+    return percentages.length > 0 ? (total / percentages.length).toFixed(2) : 'N/A';
+  };
+
+  // Calcula el promedio general una vez que `percentages` esté disponible
+  const generalAverage = calculateGeneralAverage();
+
   return (
     <div className="ETADetailsSymary-container">
       <h4>ETA</h4>
@@ -316,6 +325,11 @@ const ETADetailsSymary: React.FC<ETADetailsSymaryProps> = ({ numeroAuditoria }) 
             }}>
             CRITICO 0% - 74%
           </div>
+
+          <p className="ETADetailsSummary-general-average">
+            Promedio General : <strong>{generalAverage} </strong>
+          </p>
+
         </div>
 
       </div>
