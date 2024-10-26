@@ -26,6 +26,8 @@ const TableDetailsSummary: React.FC<TableDetailsSummaryProps> = ({ numeroAuditor
     return <div>Error al cargar el contexto</div>;
   }
 
+  console.log(tablaDetails);
+
   useEffect(() => {
     const fetchTablaDetails = async () => {
       if (!numeroAuditoria) return;
@@ -68,6 +70,8 @@ const TableDetailsSummary: React.FC<TableDetailsSummaryProps> = ({ numeroAuditor
   if (error) {
     return <p>{error}</p>;
   }
+
+  
 
   // Función para calcular el promedio de desviaciones de un módulo
   const calculateModuleAverage = (moduleData: TablaDetail[]) => {

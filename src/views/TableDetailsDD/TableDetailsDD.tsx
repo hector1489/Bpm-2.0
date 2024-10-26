@@ -92,6 +92,8 @@ const TableDetailsDD: React.FC = () => {
     fetchTablaDetails();
   }, [fetchTablaDetails]);
 
+ 
+
   // Función para extraer el porcentaje del campo field4
   const extractPercentage = (answer: string): number => {
     const match = answer.match(/(\d+)%/);
