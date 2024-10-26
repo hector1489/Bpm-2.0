@@ -20,6 +20,8 @@ const BPMGraph: React.FC<BPMGraphProps> = ({ moduleData }) => {
   if (!context) {
     return <div>Error al cargar el contexto</div>;
   }
+  
+  const { state } = context;
 
   const bpmModules = ['infraestructura', 'legales'];
   const poesModules = [
@@ -32,18 +34,17 @@ const BPMGraph: React.FC<BPMGraphProps> = ({ moduleData }) => {
   ];
   const maModules = ['MA'];
   const docModules = ['doc'];
-  const lumModules = ['poes-superficies'];
+
   const traModules = [
     'poes-higiene-empleados', 'poe-preelaboraciones', 'poe-elaboracion',
     'poe-mantencion', 'poe-transporte', 'poe-servicio', 'doc'
   ];
 
-  // Calcular el promedio de un grupo y manejar valores no aplicables
   const calcularPromedioGrupo = (modulos: string[]) => {
     const modulosDelGrupo = moduleData.filter((mod) => modulos.includes(mod.moduleName));
     
     const nonApplicable = modulosDelGrupo
-      .filter((mod) => mod.percentage === null)  // Solo comparar con null
+      .filter((mod) => mod.percentage === null)
       .map((mod) => mod.moduleName);
     
     if (nonApplicable.length > 0) {
@@ -60,23 +61,50 @@ const BPMGraph: React.FC<BPMGraphProps> = ({ moduleData }) => {
     return 'red';
   };
 
+  const lumQuestion = ['LUM 21. Toma de muestra y uso de luminómetro:'];
+
+  const lumData = state.IsHero
+    .filter((question) => lumQuestion.includes(question.question))
+    .map((question) => {
+      const answer = question.answer ?? '';
+      let percentage = 0;
+
+      if (answer !== 'N/A' && answer !== null) {
+        const percentageMatch = answer.match(/^\d+/);
+        percentage = percentageMatch ? parseInt(percentageMatch[0], 10) : 0;
+      }
+
+      return {
+        question: question.question,
+        shortQuestion: 'LUM 21',
+        percentage,
+        isNotApplicable: answer === 'N/A' || answer === null,
+      };
+    });
+
+  const percentagesLum = lumData.map((data) => data.percentage);
+  const lumAverage = percentagesLum.length > 0
+    ? percentagesLum.reduce((acc, value) => acc + value, 0) / percentagesLum.length
+    : 100;
+
   const groupedData = useMemo(() => [
     { groupName: 'BPM', average: calcularPromedioGrupo(bpmModules) },
     { groupName: 'POES', average: calcularPromedioGrupo(poesModules) },
     { groupName: 'POE', average: calcularPromedioGrupo(poeModules) },
     { groupName: 'MA', average: calcularPromedioGrupo(maModules) },
     { groupName: 'DOC', average: calcularPromedioGrupo(docModules) },
-    { groupName: 'LUM', average: calcularPromedioGrupo(lumModules) },
+    { groupName: 'LUM', average: lumAverage },
     { groupName: 'TRA', average: calcularPromedioGrupo(traModules) },
   ], [moduleData]);
 
   const overallAverage = useMemo(() => {
-    return moduleData.reduce((acc, curr) => acc + (curr.percentage ?? 100), 0) / moduleData.length;
+    const applicableModules = moduleData.filter((mod) => mod.percentage !== null);
+    return applicableModules.reduce((acc, curr) => acc + (curr.percentage ?? 100), 0) / applicableModules.length;
   }, [moduleData]);
 
   const groupNames = groupedData.map((group) => group.groupName).concat('PROM');
   const groupAverages = groupedData.map((group) => group.average).concat(overallAverage);
-  const barColors = groupAverages.map((avg) => getColorByPercentage(avg));
+  const barColors = groupAverages.slice(0, -1).map((avg) => getColorByPercentage(avg)).concat(getColorByPercentage(overallAverage));
 
   const chartOptions = {
     chart: {
@@ -181,7 +209,3 @@ const BPMGraph: React.FC<BPMGraphProps> = ({ moduleData }) => {
 };
 
 export default BPMGraph;
-
-
-
-
