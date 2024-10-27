@@ -2,11 +2,17 @@ import './BPMDetailsSummary.css';
 import Highcharts from 'highcharts';
 import Highcharts3D from 'highcharts/highcharts-3d';
 import HighchartsReact from 'highcharts-react-official';
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useState, useMemo, useCallback } from 'react';
 import { AppContext } from '../../context/GlobalState';
 import { getTablaDetailsByNumeroAuditoria } from '../../utils/apiDetails';
 import { getColorByPercentage, getColorByPercentageFilas } from '../../utils/utils';
 import { getAuditSheetByUsername } from '../../utils/apiAuditSheet';
+
+if (typeof Highcharts === 'object') {
+  Highcharts3D(Highcharts);
+}
+
+type ModuleGroupName = 'BPM' | 'POES' | 'POE' | 'MA' | 'DOC' | 'LUM' | 'TRA';
 
 interface TablaDetail {
   numero_auditoria: string;
@@ -31,10 +37,6 @@ interface AuditSheet {
   field6: string;
 }
 
-if (typeof Highcharts === 'object') {
-  Highcharts3D(Highcharts);
-}
-
 const BPMDetailsSummary: React.FC<TableDetailsSummaryProps> = ({ numeroAuditoria }) => {
   const context = useContext(AppContext);
   const [tablaDetails, setTablaDetails] = useState<TablaDetail[]>([]);
@@ -42,18 +44,34 @@ const BPMDetailsSummary: React.FC<TableDetailsSummaryProps> = ({ numeroAuditoria
   const [filteredAuditSheet, setFilteredAuditSheet] = useState<AuditSheet | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
-  const [nonApplicableModules, setNonApplicableModules] = useState<string[]>([]);
 
-  if (!context) {
+  if (!context?.state) {
     return <div>Error al cargar el contexto</div>;
   }
 
-  const { state } = context;
+  const moduleGroups: Record<ModuleGroupName, string[]> = {
+    BPM: ['infraestructura', 'legales'],
+    POES: ['poes-control-productos', 'Agua', 'poes-superficies', 'contaminacion-cruzada', 'poes-sustancias-adulterantes', 'poes-higiene-empleados', 'poes-control-plagas', 'poes-instalaciones'],
+    POE: ['poe-recepcion', 'poe-almacenamiento', 'poe-preelaboraciones', 'poe-elaboracion', 'poe-mantencion', 'poe-transporte', 'poe-servicio', 'poe-lavado-ollas-vajilla', 'poe-control-calidad', 'poe-ppt'],
+    MA: ['MA'],
+    DOC: ['doc'],
+    LUM: ['LUM 21. Toma de muestra y uso de luminómetro'],
+    TRA: ['poes-higiene-empleados', 'poe-preelaboraciones', 'poe-elaboracion', 'poe-mantencion', 'poe-transporte', 'poe-servicio', 'doc']
+  };
+
+  const ponderaciones: Record<ModuleGroupName, number> = {
+    BPM: 4,
+    POES: 25,
+    POE: 25,
+    MA: 4,
+    DOC: 10,
+    LUM: 10,
+    TRA: 21
+  };
 
   useEffect(() => {
     const fetchTablaDetails = async () => {
       if (!numeroAuditoria) return;
-
       setLoading(true);
       setError(null);
 
@@ -70,26 +88,26 @@ const BPMDetailsSummary: React.FC<TableDetailsSummaryProps> = ({ numeroAuditoria
     fetchTablaDetails();
   }, [numeroAuditoria]);
 
-  const fetchAuditSheetDetails = async () => {
-    const username = state?.userName;
-    if (!username) return;
-
-    setLoading(true);
-    setError(null);
-
-    try {
-      const auditSheetData = await getAuditSheetByUsername(username);
-      setAuditSheetDetails(auditSheetData);
-    } catch (err) {
-      setError('Error al obtener los datos del audit sheet');
-    } finally {
-      setLoading(false);
-    }
-  };
-
   useEffect(() => {
+    const fetchAuditSheetDetails = async () => {
+      const username = context.state?.userName;
+      if (!username) return;
+
+      setLoading(true);
+      setError(null);
+
+      try {
+        const auditSheetData = await getAuditSheetByUsername(username);
+        setAuditSheetDetails(auditSheetData);
+      } catch (err) {
+        setError('Error al obtener los datos del audit sheet');
+      } finally {
+        setLoading(false);
+      }
+    };
+
     fetchAuditSheetDetails();
-  }, [state?.userName]);
+  }, [context.state?.userName]);
 
   useEffect(() => {
     if (numeroAuditoria && auditSheetDetails) {
@@ -100,120 +118,59 @@ const BPMDetailsSummary: React.FC<TableDetailsSummaryProps> = ({ numeroAuditoria
     }
   }, [auditSheetDetails, numeroAuditoria]);
 
-  // Cálculo del promedio y módulos no aplicables en un efecto separado
-  useEffect(() => {
-    if (tablaDetails.length > 0) {
-      const nonApplicable = tablaDetails
-        .filter((mod) => mod.field4 === null || mod.field4 === 'N/A')
-        .map((mod) => mod.field2);
-      setNonApplicableModules(nonApplicable);
-    }
+  const moduleData = useMemo(() => {
+    return tablaDetails.map((detail) => ({
+      moduleName: detail.field2,
+      percentage: parseFloat(detail.field4) || 0,
+    }));
   }, [tablaDetails]);
 
-  if (loading) {
-    return <p>Cargando datos...</p>;
-  }
-
-  if (error) {
-    return <p>{error}</p>;
-  }
-
-  if (!filteredAuditSheet) {
-    return <p>No se encontraron detalles para la auditoría {numeroAuditoria}</p>;
-  }
-
-  // Definición de los módulos
-  const bpmModules = ['infraestructura', 'legales'];
-  const poesModules = [
-    'poes-control-productos', 'Agua', 'poes-superficies', 'contaminacion-cruzada',
-    'poes-sustancias-adulterantes', 'poes-higiene-empleados', 'poes-control-plagas', 'poes-instalaciones',
-  ];
-  const poeModules = [
-    'poe-recepcion', 'poe-almacenamiento', 'poe-preelaboraciones', 'poe-elaboracion', 'poe-mantencion',
-    'poe-transporte', 'poe-servicio', 'poe-lavado-ollas-vajilla', 'poe-control-calidad', 'poe-ppt',
-  ];
-  const maModules = ['MA'];
-  const docModules = ['doc'];
-
-  const traModules = [
-    'poes-higiene-empleados', 'poe-preelaboraciones', 'poe-elaboracion',
-    'poe-mantencion', 'poe-transporte', 'poe-servicio', 'doc',
-  ];
-  const ponderaciones = {
-    bpm: 4,
-    poes: 25,
-    poe: 25,
-    ma: 4,
-    doc: 10,
-    lum: 10,
-    tra: 21,
-  };
-
-
-  const calcularPromedioGrupo = (modulos: string[]) => {
-    const modulosDelGrupo = tablaDetails.filter((mod) => modulos.includes(mod.field2));
-
-    const validItems = modulosDelGrupo.filter((mod) => mod.field4 !== null && mod.field4 !== 'N/A');
-
-    const total = validItems.reduce((acc, curr) => acc + parseFloat(curr.field4), 0);
-
-    return validItems.length > 0 ? total / validItems.length : 100;
-  };
-
-  const lumQuestion = 'LUM 21. Toma de muestra y uso de luminómetro';
-
-  const matchedDetails = tablaDetails.filter(detail =>
-    detail.field3 && detail.field3.toLowerCase().includes(lumQuestion.toLowerCase().trim())
+  const calculateGroupAverage = useCallback(
+    (modules: string[]): number => {
+      const relevantModules = moduleData.filter((mod) => modules.includes(mod.moduleName));
+      const totalPercentage = relevantModules.reduce((acc, curr) => acc + curr.percentage, 0);
+      return relevantModules.length > 0 ? totalPercentage / relevantModules.length : 100;
+    },
+    [moduleData]
   );
 
+  const nombreCompletoPorGrupo: Record<ModuleGroupName, string> = {
+    BPM: 'Buenas Prácticas de Manufactura',
+    POES: 'Procedimientos Operacionales Estandarizados de Saneamiento',
+    POE: 'Procedimientos Operacionales Estandarizados',
+    MA: 'Medio Ambiente',
+    DOC: 'Documentación',
+    LUM: 'Luminometría',
+    TRA: 'Transporte'
+  };
 
+  const groupedData = useMemo(() => {
+    const unsortedData = Object.entries(moduleGroups).map(([groupName, modules]) => ({
+      groupName: groupName as ModuleGroupName,
+      nombreCompleto: nombreCompletoPorGrupo[groupName as ModuleGroupName],
+      average: calculateGroupAverage(modules as string[]),
+      percentage: ponderaciones[groupName as ModuleGroupName]
+    }));
 
-  const uniqueMatchedDetails = matchedDetails.filter(
-    (detail, index, self) =>
-      index === self.findIndex((d) => d.field3 === detail.field3)
+    const order: ModuleGroupName[] = ["BPM", "POES", "POE", "MA", "DOC", "TRA", "LUM"];
+    return unsortedData.sort((a, b) => order.indexOf(a.groupName) - order.indexOf(b.groupName));
+  }, [calculateGroupAverage]);
+
+  const finalAverage = useMemo(() => {
+    const weightedSum = groupedData.reduce(
+      (acc, group) => acc + (group.average * group.percentage) / 100,
+      0
+    );
+    return weightedSum.toFixed(2);
+  }, [groupedData]);
+
+  const nonApplicableModules = Object.keys(moduleGroups).filter(
+    (group) => !groupedData.some((data) => data.groupName === group)
   );
 
-  const lumNA = uniqueMatchedDetails.map(detail => parseFloat(detail.field4.replace('%', '')) || 'N/A');
-
-
-  const numericValues = lumNA.filter((value): value is number => typeof value === 'number');
-  const lumAverage = numericValues.length > 0
-    ? numericValues.reduce((acc, value) => acc + value, 0) / numericValues.length
-    : 0;
-
-  const groupedData = [
-    { groupName: 'BPM', nombreCompleto: 'INFRAESTRUCTURA Y REQUERIMIENTOS LEGALES', percentage: ponderaciones.bpm, average: calcularPromedioGrupo(bpmModules) },
-    { groupName: 'POES', nombreCompleto: 'PROCEDIMIENTOS OP. DE SANITIZACION', percentage: ponderaciones.poes, average: calcularPromedioGrupo(poesModules) },
-    { groupName: 'POE', nombreCompleto: 'PROCEDIMIENTOS OP. DEL PROCESO', percentage: ponderaciones.poe, average: calcularPromedioGrupo(poeModules) },
-    { groupName: 'MA', nombreCompleto: 'MANEJO AMBIENTAL', percentage: ponderaciones.ma, average: calcularPromedioGrupo(maModules) },
-    { groupName: 'DOC', nombreCompleto: 'DOCUMENTACION', percentage: ponderaciones.doc, average: calcularPromedioGrupo(docModules) },
-    { groupName: 'LUM', nombreCompleto: 'LUMINOMETRIA', percentage: ponderaciones.lum, average: lumAverage },
-    { groupName: 'TRAZ', nombreCompleto: 'TRAZADORES DE POSIBLE BROTE ETA', percentage: ponderaciones.tra, average: calcularPromedioGrupo(traModules) },
-  ];
-
-  const validGroupAverages = groupedData.filter(group => group.average !== null);
-  const overallAverage = validGroupAverages.length > 0
-    ? validGroupAverages.reduce((acc, curr) => acc + curr.average, 0) / validGroupAverages.length
-    : 0;
-
-  // Obtener los nombres de los grupos
-  const groupNames = groupedData.map((group) => group.groupName).concat('PROM');
-
-  // Filtrar promedios y evitar incluir `null` en los promedios del gráfico
-  const groupAverages = groupedData.map((group) => {
-    return group.average !== null ? group.average : null;
-  }).concat(overallAverage);
-
-
-
-  const barColors = groupAverages.map((avg) => avg !== null ? getColorByPercentage(avg) : 'transparent');
-
-
-  // Opciones del gráfico
   const chartOptions = {
     chart: {
       type: 'column',
-      renderTo: 'container',
       options3d: {
         enabled: true,
         alpha: 15,
@@ -223,176 +180,103 @@ const BPMDetailsSummary: React.FC<TableDetailsSummaryProps> = ({ numeroAuditoria
       },
       reflow: true,
     },
-    title: {
-      text: 'Promedios por Módulo',
-    },
+    title: { text: 'Promedios por Módulo' },
     xAxis: {
-      categories: groupNames,
-      title: {
-        text: '',
-      },
+      categories: [...groupedData.map(g => g.groupName), 'PROM']
     },
-    yAxis: {
-      title: {
-        text: 'Porcentaje (%)',
-      },
-    },
+    yAxis: { title: { text: 'Porcentaje (%)' } },
     series: [
       {
         name: 'Promedio',
-        // Filtrar los valores `null`
-        data: groupAverages.filter(avg => avg !== null),
+        data: [...groupedData.map(g => g.average), parseFloat(finalAverage)],
         colorByPoint: true,
-        colors: barColors,
+        colors: groupedData.map(g => getColorByPercentage(g.average)),
         dataLabels: {
           enabled: true,
           format: '{y:.1f}%',
           inside: false,
-          style: {
-            fontWeight: 'bold',
-            color: 'black',
-          },
+          style: { fontWeight: 'bold', color: 'black' },
         },
       },
     ],
-    plotOptions: {
-      column: {
-        depth: 25,
-      },
-      series: {
-        dataLabels: {
-          enabled: true,
-        },
-      },
-    },
-    responsive: {
-      rules: [
-        {
-          condition: {
-            maxWidth: 500,
-          },
-          chartOptions: {
-            chart: {
-              options3d: {
-                depth: 30,
-              },
-            },
-            yAxis: {
-              title: {
-                text: null,
-              },
-            },
-            legend: {
-              enabled: false,
-            },
-          },
-        },
-      ],
-    },
   };
 
-  const backgroundColor = getColorByPercentageFilas(parseFloat(overallAverage.toFixed(2)));
+  const backgroundColor = getColorByPercentageFilas(parseFloat(finalAverage));
+  const textColor = backgroundColor === 'red' ? 'white' : 'black';
 
-  let textColor = 'black';
-  if (backgroundColor === 'red') {
-    textColor = 'white';
-  } else if (backgroundColor === 'yellow') {
-    textColor = 'black';
-  }
+  if (loading) return <p>Cargando datos...</p>;
+  if (error) return <p>{error}</p>;
+  if (!filteredAuditSheet) return <p>No se encontraron detalles para la auditoría {numeroAuditoria}</p>;
 
   return (
     <div className="BPMDetailsSummary-container">
       <h3>Gráfico BPM Auditoría: {numeroAuditoria}</h3>
 
       <div className="BPMDetailsSummary-data">
-
         <div className="BPMDetailsSummary-data-table">
           <table>
             <thead>
-              <tr>
-                <th>Nombre del Establecimiento:</th>
-                <td>{filteredAuditSheet?.field1 || 'N/A'}</td>
-              </tr>
-              <tr>
-                <th>Número de Auditoría:</th>
-                <td>{filteredAuditSheet?.numero_auditoria || 'N/A'}</td>
-              </tr>
-              <tr>
-                <th>Gerente del Establecimiento:</th>
-                <td>{filteredAuditSheet?.field2 || 'N/A'}</td>
-              </tr>
-              <tr>
-                <th>Administrador del Establecimiento:</th>
-                <td>{filteredAuditSheet?.field3 || 'N/A'}</td>
-              </tr>
-              <tr>
-                <th>Supervisor del Establecimiento:</th>
-                <td>{filteredAuditSheet?.field4 || 'N/A'}</td>
-              </tr>
-              <tr>
-                <th>Auditor Email:</th>
-                <td>{filteredAuditSheet?.field5 || 'N/A'}</td>
-              </tr>
-              <tr>
-                <th>Fecha de Auditoría:</th>
-                <td>{filteredAuditSheet?.field6 || 'N/A'}</td>
-              </tr>
+              <tr><th>Nombre del Establecimiento:</th><td>{filteredAuditSheet?.field1 || 'N/A'}</td></tr>
+              <tr><th>Número de Auditoría:</th><td>{filteredAuditSheet?.numero_auditoria || 'N/A'}</td></tr>
+              <tr><th>Gerente del Establecimiento:</th><td>{filteredAuditSheet?.field2 || 'N/A'}</td></tr>
+              <tr><th>Administrador del Establecimiento:</th><td>{filteredAuditSheet?.field3 || 'N/A'}</td></tr>
+              <tr><th>Supervisor del Establecimiento:</th><td>{filteredAuditSheet?.field4 || 'N/A'}</td></tr>
+              <tr><th>Auditor Email:</th><td>{filteredAuditSheet?.field5 || 'N/A'}</td></tr>
+              <tr><th>Fecha de Auditoría:</th><td>{filteredAuditSheet?.field6 || 'N/A'}</td></tr>
             </thead>
           </table>
-
         </div>
 
-        <div className='BPMDetailsSummary-cumplimientos'>
-          <div
-            style={{
-              backgroundColor: 'green',
-              padding: '5px',
-              border: '1px solid black',
-              width: '100%',
-              borderRadius: '5px',
-              textAlign: 'center',
-              color: 'white',
-              fontWeight: 'bold',
-            }}>
-            CUMPLE 90% - 100%
-          </div>
-          <div
-            style={{
-              backgroundColor: 'yellow',
-              padding: '5px',
-              border: '1px solid black',
-              marginTop: '5px',
-              width: '100%',
-              borderRadius: '5px',
-              textAlign: 'center',
-              color: 'black',
-              fontWeight: 'bold',
-            }}>
-            EN ALERTA 75% - 89%
-          </div>
-          <div
-            style={{
-              backgroundColor: 'red',
-              padding: '5px',
-              border: '1px solid black',
-              marginTop: '5px',
-              width: '100%',
-              borderRadius: '5px',
-              textAlign: 'center',
-              color: 'white',
-              fontWeight: 'bold',
-            }}>
-            CRITICO 0% - 74%
+        <div className="BPMDetailsSummary-cumplimientos" >
+          <div style={{ fontSize: 'smaller', marginTop: '10px' }}>
+            <div
+              style={{
+                backgroundColor: 'green',
+                padding: '5px',
+                border: '1px solid black',
+                width: '100%',
+                borderRadius: '5px',
+                textAlign: 'center',
+                color: 'white',
+                fontWeight: 'bold',
+              }}
+            >
+              CUMPLE 90% - 100%
+            </div>
+            <div
+              style={{
+                backgroundColor: 'yellow',
+                padding: '5px',
+                border: '1px solid black',
+                marginTop: '5px',
+                width: '100%',
+                borderRadius: '5px',
+                textAlign: 'center',
+                color: 'black',
+                fontWeight: 'bold',
+              }}
+            >
+              EN ALERTA 75% - 89%
+            </div>
+            <div
+              style={{
+                backgroundColor: 'red',
+                padding: '5px',
+                border: '1px solid black',
+                marginTop: '5px',
+                width: '100%',
+                borderRadius: '5px',
+                textAlign: 'center',
+                color: 'white',
+                fontWeight: 'bold',
+              }}
+            >
+              CRITICO 0% - 74%
+            </div>
           </div>
 
-          <p className="BPMDetailsSummary-general-average" style={{ backgroundColor, color: textColor }}>
-            Promedio General : <strong>{overallAverage.toFixed(2)}</strong>
-          </p>
-
+          <p className="TableDetailsDD-general-average"  style={{ backgroundColor, color: textColor }} >Promedio General : <strong>{finalAverage}%</strong></p>
         </div>
-
-
-
       </div>
 
       <div className="BPMDetailsSummary-graph">
@@ -404,21 +288,19 @@ const BPMDetailsSummary: React.FC<TableDetailsSummaryProps> = ({ numeroAuditoria
       </div>
 
       <table className="BPMDetailsSummary-table">
-        <thead>
-        </thead>
         <tbody>
           {groupedData.map((group) => (
             <tr key={group.groupName}>
               <td>{group.groupName}</td>
               <td>{group.nombreCompleto}</td>
               <td>{group.percentage}%</td>
-              <td>{group.average !== null ? group.average.toFixed(2) : 'N/A'}%</td>
-              <td>{group.average !== null ? ((group.average * group.percentage) / 100).toFixed(1) : 'N/A'}%</td>
+              <td>{group.average.toFixed(2)}%</td>
+              <td>{((group.average * group.percentage) / 100).toFixed(1)}%</td>
             </tr>
           ))}
           <tr className="bg-warning">
             <td colSpan={4}><strong>PROMEDIO FINAL PONDERADO</strong></td>
-            <td>{overallAverage.toFixed(2)}%</td>
+            <td>{finalAverage}%</td>
           </tr>
         </tbody>
       </table>

@@ -15,6 +15,17 @@ interface TablaDetail {
   field4: string;
 }
 
+// Definición de ponderaciones para cada grupo de módulos
+const ponderaciones: Record<string, number> = {
+  BPM: 4,
+  POES: 25,
+  POE: 25,
+  MA: 4,
+  DOC: 10,
+  LUM: 10,
+  TRA: 21
+};
+
 const TableDetailsDD: React.FC = () => {
   const context = useContext(AppContext);
   const [tablaDetails, setTablaDetails] = useState<TablaDetail[]>([]);
@@ -122,7 +133,7 @@ const TableDetailsDD: React.FC = () => {
     ],
     MA: ['MA'],
     DOC: ['doc'],
-    LUM: ['poes-superficies'],
+    LUM: ['LUM 21. Toma de muestra y uso de luminómetro'],
     TRA: [
       'poes-higiene-empleados', 'poe-preelaboraciones', 'poe-elaboracion',
       'poe-mantencion', 'poe-transporte', 'poe-servicio', 'doc'
@@ -146,10 +157,13 @@ const TableDetailsDD: React.FC = () => {
 
   // Promedio final de todos los grupos
   const finalAverage = useMemo(() => {
-    const totalPercentage = groupedData.reduce((acc, group) => acc + parseFloat(group.average), 0);
-    return (totalPercentage / groupedData.length).toFixed(2);
+    const weightedSum = groupedData.reduce(
+      (acc, group) => acc + (parseFloat(group.average) * ponderaciones[group.groupName]) / 100,
+      0
+    );
+    return weightedSum.toFixed(2);
   }, [groupedData]);
-
+  
   if (loading) {
     return <p>Cargando datos...</p>;
   }

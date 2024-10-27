@@ -11,6 +11,8 @@ interface TablaDetail {
   field4: string;
 }
 
+type ModuleGroupName = 'BPM' | 'POES' | 'POE' | 'MA' | 'DOC' | 'LUM' | 'TRA';
+
 interface DetailsAverageSummaryProps {
   numeroAuditoria: string | undefined;
 }
@@ -25,7 +27,31 @@ const DetailsAverageSummary: React.FC<DetailsAverageSummaryProps> = ({ numeroAud
     return <div>Error al cargar el contexto</div>;
   }
 
-  // Fetch tabla details
+  const moduleGroups: Record<ModuleGroupName, string[]> = {
+    BPM: ['infraestructura', 'legales'],
+    POES: ['poes-control-productos', 'Agua', 'poes-superficies', 'contaminacion-cruzada', 
+           'poes-sustancias-adulterantes', 'poes-higiene-empleados', 'poes-control-plagas', 
+           'poes-instalaciones'],
+    POE: ['poe-recepcion', 'poe-almacenamiento', 'poe-preelaboraciones', 'poe-elaboracion', 
+          'poe-mantencion', 'poe-transporte', 'poe-servicio', 'poe-lavado-ollas-vajilla', 
+          'poe-control-calidad', 'poe-ppt'],
+    MA: ['MA'],
+    DOC: ['doc'],
+    TRA: ['poes-higiene-empleados', 'poe-preelaboraciones', 'poe-elaboracion', 'poe-mantencion', 
+          'poe-transporte', 'poe-servicio', 'doc'],
+    LUM: ['LUM 21. Toma de muestra y uso de luminómetro'],
+  };
+
+  const ponderaciones: Record<ModuleGroupName, number> = {
+    BPM: 4,
+    POES: 25,
+    POE: 25,
+    MA: 4,
+    DOC: 10,
+    LUM: 10,
+    TRA: 21
+  };
+
   const fetchTablaDetails = useCallback(async () => {
     if (!numeroAuditoria) return;
 
@@ -46,13 +72,12 @@ const DetailsAverageSummary: React.FC<DetailsAverageSummaryProps> = ({ numeroAud
     fetchTablaDetails();
   }, [fetchTablaDetails]);
 
-  // Helper function to extract percentage from answer string
   const extractPercentage = (answer: string): number => {
-    const match = answer.match(/(\d+)%/);
-    return match ? parseInt(match[1], 10) : 0;
+    const match = answer.match(/(\d+(\.\d+)?)%/);
+    return match ? parseFloat(match[1]) : 0;
   };
+  
 
-  // Prepare module data
   const moduleData = useMemo(() => {
     return tablaDetails.map((detail) => ({
       moduleName: detail.field2,
@@ -60,53 +85,31 @@ const DetailsAverageSummary: React.FC<DetailsAverageSummaryProps> = ({ numeroAud
     }));
   }, [tablaDetails]);
 
-  // Calculate average for a group of modules
-  const calculateGroupAverage = useCallback((modules: string[]): number => {
-    const relevantModules = moduleData.filter((mod) => modules.includes(mod.moduleName));
-    const totalPercentage = relevantModules.reduce((acc, curr) => acc + curr.percentage, 0);
-    return relevantModules.length > 0 ? totalPercentage / relevantModules.length : 100;
-  }, [moduleData]);
+  const calculateGroupAverage = useCallback(
+    (modules: string[]): number => {
+      const relevantModules = moduleData.filter((mod) => modules.includes(mod.moduleName));
+      const totalPercentage = relevantModules.reduce((acc, curr) => acc + curr.percentage, 0);
+      return relevantModules.length > 0 ? totalPercentage / relevantModules.length : 100;
+    },
+    [moduleData]
+  );
 
-  // Define module groups
-  const moduleGroups = {
-    BPM: ['infraestructura', 'legales'],
-    POES: [
-      'poes-control-productos', 'Agua', 'poes-superficies', 'contaminacion-cruzada',
-      'poes-sustancias-adulterantes', 'poes-higiene-empleados', 'poes-control-plagas', 'poes-instalaciones'
-    ],
-    POE: [
-      'poe-recepcion', 'poe-almacenamiento', 'poe-preelaboraciones', 'poe-elaboracion', 'poe-mantencion',
-      'poe-transporte', 'poe-servicio', 'poe-lavado-ollas-vajilla', 'poe-control-calidad', 'poe-ppt'
-    ],
-    MA: ['MA'],
-    DOC: ['doc'],
-    TRA: [
-      'poes-higiene-empleados', 'poe-preelaboraciones', 'poe-elaboracion',
-      'poe-mantencion', 'poe-transporte', 'poe-servicio', 'doc'
-    ],
-    LUM: ['poes-superficies']
-  };
+  const groupedData = useMemo(() => {
+    const unsortedData = Object.entries(moduleGroups).map(([groupName, modules]) => ({
+      groupName: groupName as ModuleGroupName,
+      average: calculateGroupAverage(modules as string[]).toFixed(2),
+    }));
 
-  // Prepare the grouped data with memoization
-  // Prepare the grouped data with memoization
-const groupedData = useMemo(() => {
-  const unsortedData = Object.entries(moduleGroups).map(([groupName, modules]) => ({
-    groupName,
-    average: calculateGroupAverage(modules).toFixed(2),
-  }));
-  
-  // Define the desired order
-  const order = ["BPM", "POES", "POE", "MA", "DOC", "TRA", "LUM"];
-  
-  // Sort the data based on the predefined order
-  return unsortedData.sort((a, b) => order.indexOf(a.groupName) - order.indexOf(b.groupName));
-}, [calculateGroupAverage]);
+    const order: ModuleGroupName[] = ["BPM", "POES", "POE", "MA", "DOC", "TRA", "LUM"];
+    return unsortedData.sort((a, b) => order.indexOf(a.groupName) - order.indexOf(b.groupName));
+  }, [calculateGroupAverage]);
 
-
-  // Final average of all groups
   const finalAverage = useMemo(() => {
-    const totalPercentage = groupedData.reduce((acc, group) => acc + parseFloat(group.average), 0);
-    return (totalPercentage / groupedData.length).toFixed(2);
+    const weightedSum = groupedData.reduce(
+      (acc, group) => acc + (parseFloat(group.average) * ponderaciones[group.groupName as ModuleGroupName]) / 100,
+      0
+    );
+    return weightedSum.toFixed(2);
   }, [groupedData]);
 
   if (loading) {
