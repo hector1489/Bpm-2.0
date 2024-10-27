@@ -80,20 +80,28 @@ const DetailsAverageSummary: React.FC<DetailsAverageSummaryProps> = ({ numeroAud
     ],
     MA: ['MA'],
     DOC: ['doc'],
-    LUM: ['poes-superficies'],
     TRA: [
       'poes-higiene-empleados', 'poe-preelaboraciones', 'poe-elaboracion',
       'poe-mantencion', 'poe-transporte', 'poe-servicio', 'doc'
-    ]
+    ],
+    LUM: ['poes-superficies']
   };
 
   // Prepare the grouped data with memoization
-  const groupedData = useMemo(() => {
-    return Object.entries(moduleGroups).map(([groupName, modules]) => ({
-      groupName,
-      average: calculateGroupAverage(modules).toFixed(2),
-    }));
-  }, [calculateGroupAverage]);
+  // Prepare the grouped data with memoization
+const groupedData = useMemo(() => {
+  const unsortedData = Object.entries(moduleGroups).map(([groupName, modules]) => ({
+    groupName,
+    average: calculateGroupAverage(modules).toFixed(2),
+  }));
+  
+  // Define the desired order
+  const order = ["BPM", "POES", "POE", "MA", "DOC", "TRA", "LUM"];
+  
+  // Sort the data based on the predefined order
+  return unsortedData.sort((a, b) => order.indexOf(a.groupName) - order.indexOf(b.groupName));
+}, [calculateGroupAverage]);
+
 
   // Final average of all groups
   const finalAverage = useMemo(() => {
