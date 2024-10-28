@@ -2,10 +2,14 @@
 
 export const bpmModules = ['infraestructura', 'legales'];
 
+export const aguaModules = ['agua'];
+
 export const poesModules = [
     'poes-control-productos', 'poes-control-agua', 'poes-superficies', 'poes-contaminacion-cruzada',
     'poes-sustancias-adulterantes', 'poes-higiene-empleados', 'poes-control-plagas', 'poes-instalaciones'
 ];
+
+export const contaminacionMoudles = ['contaminacion-cruzada'];
 
 export const poeModules = [
     'poe-recepcion', 'poe-almacenamiento', 'poe-preelaboraciones', 'poe-elaboracion', 'poe-mantencion',

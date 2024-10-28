@@ -110,8 +110,6 @@ const DetailsAverageSummary: React.FC<DetailsAverageSummaryProps> = ({ numeroAud
       .filter(([key]) => key !== "TRA" && key !== "LUM")
       .reduce((acc, [, peso]) => acc + peso, 0);
   
-    console.log(totalPonderacion);
-  
     // Retorna el total de ponderaciones como promedio final
     return totalPonderacion.toFixed(2);
   }, []);
