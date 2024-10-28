@@ -155,18 +155,16 @@ const TableDetailsDD: React.FC = () => {
     }));
   }, [calculateGroupAverage]);
 
-  // Promedio final de todos los grupos
+  // Promedio final ponderado de todos los grupos excluyendo TRA y LUM
   const finalAverage = useMemo(() => {
+    // Calcula el total de ponderación excluyendo TRA y LUM
+    const totalPonderacion = Object.entries(ponderaciones)
+      .filter(([key]) => key !== "TRA" && key !== "LUM")
+      .reduce((acc, [, peso]) => acc + peso, 0);
 
-    const totalPonderacion = Object.values(ponderaciones).reduce((acc, peso) => acc + peso, 0);
-
-    const weightedSum = groupedData.reduce(
-      (acc, group) => acc + (parseFloat(group.average) * ponderaciones[group.groupName]) / totalPonderacion,
-      0
-    );
-
-    return weightedSum.toFixed(2);
+    return totalPonderacion.toFixed(2);
   }, [groupedData]);
+
 
 
   if (loading) {

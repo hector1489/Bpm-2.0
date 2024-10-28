@@ -29,16 +29,16 @@ const DetailsAverageSummary: React.FC<DetailsAverageSummaryProps> = ({ numeroAud
 
   const moduleGroups: Record<ModuleGroupName, string[]> = {
     BPM: ['infraestructura', 'legales'],
-    POES: ['poes-control-productos', 'Agua', 'poes-superficies', 'contaminacion-cruzada', 
-           'poes-sustancias-adulterantes', 'poes-higiene-empleados', 'poes-control-plagas', 
-           'poes-instalaciones'],
-    POE: ['poe-recepcion', 'poe-almacenamiento', 'poe-preelaboraciones', 'poe-elaboracion', 
-          'poe-mantencion', 'poe-transporte', 'poe-servicio', 'poe-lavado-ollas-vajilla', 
-          'poe-control-calidad', 'poe-ppt'],
+    POES: ['poes-control-productos', 'Agua', 'poes-superficies', 'contaminacion-cruzada',
+      'poes-sustancias-adulterantes', 'poes-higiene-empleados', 'poes-control-plagas',
+      'poes-instalaciones'],
+    POE: ['poe-recepcion', 'poe-almacenamiento', 'poe-preelaboraciones', 'poe-elaboracion',
+      'poe-mantencion', 'poe-transporte', 'poe-servicio', 'poe-lavado-ollas-vajilla',
+      'poe-control-calidad', 'poe-ppt'],
     MA: ['MA'],
     DOC: ['doc'],
-    TRA: ['poes-higiene-empleados', 'poe-preelaboraciones', 'poe-elaboracion', 'poe-mantencion', 
-          'poe-transporte', 'poe-servicio', 'doc'],
+    TRA: ['poes-higiene-empleados', 'poe-preelaboraciones', 'poe-elaboracion', 'poe-mantencion',
+      'poe-transporte', 'poe-servicio', 'doc'],
     LUM: ['LUM 21. Toma de muestra y uso de luminómetro'],
   };
 
@@ -76,7 +76,7 @@ const DetailsAverageSummary: React.FC<DetailsAverageSummaryProps> = ({ numeroAud
     const match = answer.match(/(\d+(\.\d+)?)%/);
     return match ? parseFloat(match[1]) : 0;
   };
-  
+
 
   const moduleData = useMemo(() => {
     return tablaDetails.map((detail) => ({
@@ -105,16 +105,20 @@ const DetailsAverageSummary: React.FC<DetailsAverageSummaryProps> = ({ numeroAud
   }, [calculateGroupAverage]);
 
   const finalAverage = useMemo(() => {
-    const totalPonderacion = Object.values(ponderaciones).reduce((acc, peso) => acc + peso, 0);
+    // Calcula el peso total excluyendo TRA y LUM
+    const totalPonderacion = Object.entries(ponderaciones)
+      .filter(([key]) => key !== "TRA" && key !== "LUM")
+      .reduce((acc, [, peso]) => acc + peso, 0);
   
-    const weightedSum = groupedData.reduce(
-      (acc, group) => acc + (parseFloat(group.average) * ponderaciones[group.groupName as ModuleGroupName]) / totalPonderacion,
-      0
-    );
-    
-    return weightedSum.toFixed(2);
-  }, [groupedData]);
+    console.log(totalPonderacion);
   
+    // Retorna el total de ponderaciones como promedio final
+    return totalPonderacion.toFixed(2);
+  }, []);
+  
+
+
+
 
   if (loading) {
     return <p>Cargando datos...</p>;

@@ -157,14 +157,14 @@ const BPMDetailsSummary: React.FC<TableDetailsSummaryProps> = ({ numeroAuditoria
   }, [calculateGroupAverage]);
 
   const finalAverage = useMemo(() => {
-    const totalPonderacion = Object.values(ponderaciones).reduce((acc, peso) => acc + peso, 0);
-    const weightedSum = groupedData.reduce(
-      (acc, group) => acc + (group.average * group.percentage) / totalPonderacion,
-      0
-    );
+    // Calcula la ponderación total excluyendo TRA y LUM
+    const totalPonderacion = Object.entries(ponderaciones)
+      .filter(([key]) => key !== "TRA" && key !== "LUM")
+      .reduce((acc, [, peso]) => acc + peso, 0);
   
-    return weightedSum.toFixed(2);
+      return totalPonderacion.toFixed(2);
   }, [groupedData]);
+  
   
 
   const nonApplicableModules = Object.keys(moduleGroups).filter(
