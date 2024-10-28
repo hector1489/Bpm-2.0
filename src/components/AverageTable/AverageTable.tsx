@@ -40,7 +40,7 @@ const AverageTable: React.FC = () => {
   ];
   const maModules = ['MA'];
   const docModules = ['doc'];
-  const lumModules = ['poes-superficies'];
+  const lumModules = ['LUM 21. Toma de muestra y uso de luminómetro:'];
   const traModules = [
     'poes-higiene-empleados', 'poe-preelaboraciones', 'poe-elaboracion',
     'poe-mantencion', 'poe-transporte', 'poe-servicio', 'doc'
@@ -52,20 +52,35 @@ const AverageTable: React.FC = () => {
     return modulosDelGrupo.length > 0 ? total / modulosDelGrupo.length : 100;
   };
 
+  const ponderaciones = {
+    BPM: 4,
+    POES: 25,
+    POE: 25,
+    MA: 4,
+    DOC: 10,
+    TRA: 10,
+    LUM: 21,
+  };
+
   const groupedData = [
-    { groupName: 'BPM', average: calcularPromedioGrupo(bpmModules).toFixed(2) },
-    { groupName: 'POES', average: calcularPromedioGrupo(poesModules).toFixed(2) },
-    { groupName: 'POE', average: calcularPromedioGrupo(poeModules).toFixed(2) },
-    { groupName: 'MA', average: calcularPromedioGrupo(maModules).toFixed(2) },
-    { groupName: 'DOC', average: calcularPromedioGrupo(docModules).toFixed(2) },
-    { groupName: 'LUM', average: calcularPromedioGrupo(lumModules).toFixed(2) },
-    { groupName: 'TRA', average: calcularPromedioGrupo(traModules).toFixed(2) },
+    { groupName: 'BPM', average: calcularPromedioGrupo(bpmModules).toFixed(2), weighing: ponderaciones.BPM },
+    { groupName: 'POES', average: calcularPromedioGrupo(poesModules).toFixed(2), weighing: ponderaciones.POES },
+    { groupName: 'POE', average: calcularPromedioGrupo(poeModules).toFixed(2), weighing: ponderaciones.POE },
+    { groupName: 'MA', average: calcularPromedioGrupo(maModules).toFixed(2), weighing: ponderaciones.MA },
+    { groupName: 'DOC', average: calcularPromedioGrupo(docModules).toFixed(2), weighing: ponderaciones.DOC },
+    { groupName: 'TRA', average: calcularPromedioGrupo(traModules).toFixed(2), weighing: ponderaciones.TRA },
+    { groupName: 'LUM', average: calcularPromedioGrupo(lumModules).toFixed(2), weighing: ponderaciones.LUM },
   ];
 
   const finalAverage = useMemo(() => {
-    const totalPercentage = state.modules.reduce((acc, module) => acc + calculatePercentage(module.id), 0);
-    return (totalPercentage / state.modules.length).toFixed(2);
-  }, [state.modules]);
+    const totalWeighing = Object.values(ponderaciones).reduce((acc, peso) => acc + peso, 0);
+    const weightedSum = groupedData.reduce(
+      (acc, group) => acc + (parseFloat(group.average) * group.weighing) / totalWeighing,
+      0
+    );
+
+    return weightedSum.toFixed(2);
+  }, [groupedData]);
 
   const getRowClass = (average: number) => {
     if (average >= 90) return 'bg-success-light';
@@ -92,8 +107,8 @@ const AverageTable: React.FC = () => {
               </tr>
             ))}
           </tbody>
-          <tfoot id='tfood-average-table'>
-            <tr className='bg-warning'>
+          <tfoot id="tfood-average-table">
+            <tr className="bg-warning">
               <td data-label="PROMEDIO FINAL PONDERADO">PROMEDIO FINAL PONDERADO</td>
               <td data-label="PORCENTAJE (%)">{finalAverage}%</td>
             </tr>

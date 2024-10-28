@@ -49,6 +49,7 @@ const TableDetailsSummary: React.FC<TableDetailsSummaryProps> = ({ numeroAuditor
           else if (poeModules.map(mod => mod.toLowerCase()).includes(module)) section = 'POE';
           else if (maModules.map(mod => mod.toLowerCase()).includes(module)) section = 'MA';
           else if (docModules.map(mod => mod.toLowerCase()).includes(module)) section = 'DOC';
+  
 
 
           if (!section) return acc;
@@ -95,7 +96,7 @@ const TableDetailsSummary: React.FC<TableDetailsSummaryProps> = ({ numeroAuditor
     POES: poesModules,
     POE: poeModules,
     MA: maModules,
-    DOC: docModules
+    DOC: docModules,
   };
 
   return (

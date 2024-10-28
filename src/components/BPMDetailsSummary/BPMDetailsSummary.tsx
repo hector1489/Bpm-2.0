@@ -140,8 +140,8 @@ const BPMDetailsSummary: React.FC<TableDetailsSummaryProps> = ({ numeroAuditoria
     POE: 'Procedimientos Operacionales Estandarizados',
     MA: 'Medio Ambiente',
     DOC: 'Documentación',
+    TRA: 'Transporte',
     LUM: 'Luminometría',
-    TRA: 'Transporte'
   };
 
   const groupedData = useMemo(() => {
@@ -157,12 +157,15 @@ const BPMDetailsSummary: React.FC<TableDetailsSummaryProps> = ({ numeroAuditoria
   }, [calculateGroupAverage]);
 
   const finalAverage = useMemo(() => {
+    const totalPonderacion = Object.values(ponderaciones).reduce((acc, peso) => acc + peso, 0);
     const weightedSum = groupedData.reduce(
-      (acc, group) => acc + (group.average * group.percentage) / 100,
+      (acc, group) => acc + (group.average * group.percentage) / totalPonderacion,
       0
     );
+  
     return weightedSum.toFixed(2);
   }, [groupedData]);
+  
 
   const nonApplicableModules = Object.keys(moduleGroups).filter(
     (group) => !groupedData.some((data) => data.groupName === group)

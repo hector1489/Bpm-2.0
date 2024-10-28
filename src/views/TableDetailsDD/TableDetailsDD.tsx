@@ -103,7 +103,7 @@ const TableDetailsDD: React.FC = () => {
     fetchTablaDetails();
   }, [fetchTablaDetails]);
 
- 
+
 
   // Función para extraer el porcentaje del campo field4
   const extractPercentage = (answer: string): number => {
@@ -157,13 +157,18 @@ const TableDetailsDD: React.FC = () => {
 
   // Promedio final de todos los grupos
   const finalAverage = useMemo(() => {
+
+    const totalPonderacion = Object.values(ponderaciones).reduce((acc, peso) => acc + peso, 0);
+
     const weightedSum = groupedData.reduce(
-      (acc, group) => acc + (parseFloat(group.average) * ponderaciones[group.groupName]) / 100,
+      (acc, group) => acc + (parseFloat(group.average) * ponderaciones[group.groupName]) / totalPonderacion,
       0
     );
+
     return weightedSum.toFixed(2);
   }, [groupedData]);
-  
+
+
   if (loading) {
     return <p>Cargando datos...</p>;
   }

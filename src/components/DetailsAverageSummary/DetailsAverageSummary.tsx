@@ -105,12 +105,16 @@ const DetailsAverageSummary: React.FC<DetailsAverageSummaryProps> = ({ numeroAud
   }, [calculateGroupAverage]);
 
   const finalAverage = useMemo(() => {
+    const totalPonderacion = Object.values(ponderaciones).reduce((acc, peso) => acc + peso, 0);
+  
     const weightedSum = groupedData.reduce(
-      (acc, group) => acc + (parseFloat(group.average) * ponderaciones[group.groupName as ModuleGroupName]) / 100,
+      (acc, group) => acc + (parseFloat(group.average) * ponderaciones[group.groupName as ModuleGroupName]) / totalPonderacion,
       0
     );
+    
     return weightedSum.toFixed(2);
   }, [groupedData]);
+  
 
   if (loading) {
     return <p>Cargando datos...</p>;

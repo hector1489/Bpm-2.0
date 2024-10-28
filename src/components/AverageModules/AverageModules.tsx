@@ -40,7 +40,7 @@ const AverageModules: React.FC = () => {
   ];
   const maModules = ['MA'];
   const docModules = ['doc'];
-  const lumModules = ['poes-superficies'];
+  const lumModules = ['LUM 21. Toma de muestra y uso de luminómetro:'];
   const traModules = [
     'poes-higiene-empleados', 'poe-preelaboraciones', 'poe-elaboracion',
     'poe-mantencion', 'poe-transporte', 'poe-servicio', 'doc'
@@ -53,56 +53,62 @@ const AverageModules: React.FC = () => {
   };
 
   const groupedData = [
-    { groupName: 'BPM', aspectsEvaluated: 'INFRAESTRUCTURA Y REQUERIMIENTOS LEGALES', weighing: '4%', average: calcularPromedioGrupo(bpmModules).toFixed(2) },
-    { groupName: 'POES', aspectsEvaluated: 'PROCEDIMIENTOS OP. DE SANITIZACION', weighing: '25%', average: calcularPromedioGrupo(poesModules).toFixed(2) },
-    { groupName: 'POE', aspectsEvaluated: 'PROCEDIMIENTOS OP. DEL PROCESO', weighing: '25%', average: calcularPromedioGrupo(poeModules).toFixed(2) },
-    { groupName: 'MA', aspectsEvaluated: 'MANEJO AMBIENTAL', weighing: '4%', average: calcularPromedioGrupo(maModules).toFixed(2) },
-    { groupName: 'DOC', aspectsEvaluated: 'DOCUMENTACION', weighing: '10%', average: calcularPromedioGrupo(docModules).toFixed(2) },
-    { groupName: 'LUM', aspectsEvaluated: 'TRAZADORES DE POSIBLE BROTE ETA', weighing: '21%', average: calcularPromedioGrupo(lumModules).toFixed(2) },
-    { groupName: 'TRA', aspectsEvaluated: 'LUMINOMETRIA', weighing: '10%', average: calcularPromedioGrupo(traModules).toFixed(2) },
+    { groupName: 'BPM', aspectsEvaluated: 'INFRAESTRUCTURA Y REQUERIMIENTOS LEGALES', weighing: 4, average: calcularPromedioGrupo(bpmModules).toFixed(2) },
+    { groupName: 'POES', aspectsEvaluated: 'PROCEDIMIENTOS OP. DE SANITIZACION', weighing: 25, average: calcularPromedioGrupo(poesModules).toFixed(2) },
+    { groupName: 'POE', aspectsEvaluated: 'PROCEDIMIENTOS OP. DEL PROCESO', weighing: 25, average: calcularPromedioGrupo(poeModules).toFixed(2) },
+    { groupName: 'MA', aspectsEvaluated: 'MANEJO AMBIENTAL', weighing: 4, average: calcularPromedioGrupo(maModules).toFixed(2) },
+    { groupName: 'DOC', aspectsEvaluated: 'DOCUMENTACION', weighing: 10, average: calcularPromedioGrupo(docModules).toFixed(2) },
+    { groupName: 'TRA', aspectsEvaluated: 'LUMINOMETRIA', weighing: 10, average: calcularPromedioGrupo(traModules).toFixed(2) },
+    { groupName: 'LUM', aspectsEvaluated: 'TRAZADORES DE POSIBLE BROTE ETA', weighing: 21, average: calcularPromedioGrupo(lumModules).toFixed(2) },
   ];
 
   const finalAverage = useMemo(() => {
-    const totalPercentage = state.modules.reduce((acc, module) => acc + calculatePercentage(module.id), 0);
-    return (totalPercentage / state.modules.length).toFixed(2);
-  }, [state.modules])
+    // Suma total de las ponderaciones
+    const totalWeighing = groupedData.reduce((acc, group) => acc + group.weighing, 0);
+
+    // Cálculo del promedio ponderado ajustado
+    const weightedSum = groupedData.reduce(
+      (acc, group) => acc + (parseFloat(group.average) * group.weighing) / totalWeighing,
+      0
+    );
+
+    return weightedSum.toFixed(2);
+  }, [groupedData]);
 
   return (
     <div className="audit-summary">
-  <div className="table-responsive-audit">
-    <table id="tabla-auditoria" className="audit-table">
-      <thead>
-        <tr>
-          <th>N°</th>
-          <th>MODULO</th>
-          <th>ASPECTOS EVALUADOS</th>
-          <th>PONDERACIÓN (%)</th>
-          <th>PORCENTAJE (%)</th>
-        </tr>
-      </thead>
-      <tbody id="audit-table-body">
-        {groupedData.map((group, index) => (
-          <tr key={group.groupName} className="group-row">
-            <td data-label="N°">{index + 1}</td>
-            <td data-label="MODULO">{group.groupName}</td>
-            <td data-label="ASPECTOS EVALUADOS">{group.aspectsEvaluated}</td>
-            <td data-label="PONDERACIÓN (%)">{group.weighing}</td>
-            <td data-label="PORCENTAJE (%)">{group.average}%</td>
-          </tr>
-        ))}
-      </tbody>
-      <tfoot className="bg-warning">
-        <tr>
-          <td colSpan={4}>PROMEDIO FINAL PONDERADO</td>
-          <td>{finalAverage}%</td>
-        </tr>
-      </tfoot>
-    </table>
-  </div>
-</div>
-
-  
-  )
+      <div className="table-responsive-audit">
+        <table id="tabla-auditoria" className="audit-table">
+          <thead>
+            <tr>
+              <th>N°</th>
+              <th>MODULO</th>
+              <th>ASPECTOS EVALUADOS</th>
+              <th>PONDERACIÓN (%)</th>
+              <th>PORCENTAJE (%)</th>
+            </tr>
+          </thead>
+          <tbody id="audit-table-body">
+            {groupedData.map((group, index) => (
+              <tr key={group.groupName} className="group-row">
+                <td data-label="N°">{index + 1}</td>
+                <td data-label="MODULO">{group.groupName}</td>
+                <td data-label="ASPECTOS EVALUADOS">{group.aspectsEvaluated}</td>
+                <td data-label="PONDERACIÓN (%)">{group.weighing}%</td>
+                <td data-label="PORCENTAJE (%)">{group.average}%</td>
+              </tr>
+            ))}
+          </tbody>
+          <tfoot className="bg-warning">
+            <tr>
+              <td colSpan={4}>PROMEDIO FINAL PONDERADO</td>
+              <td>{finalAverage}%</td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+    </div>
+  );
 }
 
 export default AverageModules;
