@@ -6,7 +6,15 @@ import { useContext, useEffect, useState, useCallback, useMemo } from 'react';
 import { getAuditSheetByUsername } from '../../utils/apiAuditSheet';
 import { getTablaDetailsByNumeroAuditoria } from '../../utils/apiDetails';
 import { getColorByPercentageFilas } from '../../utils/utils'
-import { questionsBPM, questionsPOES, questionsPOE, questionsMA, questionsDOC, questionsTra, questionLum } from '../../utils/ConstModules';
+import {
+  questionsBPM,
+  questionsPOES,
+  questionsPOE,
+  questionsMA,
+  questionsDOC,
+  questionsTra,
+  questionLum
+} from '../../utils/ConstModules';
 
 interface TablaDetail {
   numero_auditoria: string;

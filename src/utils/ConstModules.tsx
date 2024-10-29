@@ -48,11 +48,11 @@ export const questionsPOES = [
     "CS 14. Limpieza y desengrasado de equipos (cocina, horno, freidora, marmita, campana y otros):",
     "CS 15. Limpieza y desincrustación de máquinas de jugo, baño maría, vitrinas y hervidores (sin sarro):",
     "CS 16. Higiene de mesas y sillas de comedor:",
-    "TRA CS 17. Aplicacion y eficiencia del programa de higiene, publicado e implementado por áreas (Art. 41, 43, 44, 64, 69):",
+    
     "CS 18. Aplicación de alarma sanitaria (equipo), durante la auditoría, con frecuencia y responsable definido (si aplica):",
     "CS 19. Los registros generados son coherentes con lo especificado en el programa (Art. 69):",
     "CS 20. Se adoptan las medidas necesarias para evitar la contaminación de los equipos después de limpiarse y desinfectarse (Art. 42):",
-    "LUM 21. Toma de muestra y uso de luminómetro:",
+   
     "CC 22. Separación de utensilios por área, y separación alimentos (cocido - crudo - sucio, otros):",
     "CC 23. Ubicación de equipos y mobiliarios se mantienen correctamente (basureros, mesones, lavadero sanitizado):",
     "CSA 24. Pulverizadores de productos químicos separados de las materias primas-preparaciones en producción (Art. 50, 51):",
@@ -60,9 +60,9 @@ export const questionsPOES = [
     "CSA 26. Consultar al personal por metodo de proteccion, previa a la aplicacion del control de plagas",
     "CSH 27. Uniforme completo de todos, limpio y en buen estado - Sin accesorios adicionales (reloj, joyas, celular, otros) (Art.56):",
     "CSH 28. Cubre-pelo (gorro o cofia), mascarilla y guantes usados correctamente (Art.56):",
-    "TRA CSH 29. Lavado y sanitizado correcto de manos y uñas:",
+   
     "CSH 30. Manos sin heridas desprotegidas, uñas cortas y sin esmalte:",
-    "TRA CSH 31. Exámenes de todos los manipuladores, ecónomos y administradores. Ausencia de malestares o infecciones (Art. 52, 53):",
+   
     "CSH 32. Existe un programa de higiene del personal y sus registros correspondientes. (Art. 55, 56, 60, 69)",
     "CP 33. Barreras físicas para ingreso de vectores y/o plagas (puertas, ventanas, grietas, desagües, otros):",
     "CP 34. Revisar programa y evaluar eficacia y eficiencia (certificados 3 meses atrás e inspección visual) (Art. 47, 69):",
@@ -89,7 +89,7 @@ export const questionsPOE = [
     "ALM 49. Mantención de productos sobre nivel de piso:",
     "ALM 50. Separación materias primas, desechables, productos químicos:",
     "ALM 51. Verificar entrega correcta a la producción (verificación de cantidad, calidad y disponibilidad):",
-    "TRA PRE 52. Verificar descongelación en equipos de refrigeración, en agua corriendo sólo en caso de emergencias:",
+    
     "PRE 53. Pre-elaborados en refrigeración, en envases originales sellados y apilados correctamente:",
     "PRE 54. Materias primas ya procesadas en recipientes o envases lavables y tapadas:",
     "PRE 55. Se separan productos por tipo y/o riesgo de contaminación:",
@@ -97,19 +97,17 @@ export const questionsPOE = [
     "ELB 57. Recepción y mantención de materias primas en envases limpios y protegidos:",
     "ELB 58. Orden, limpieza y T° correcta en todos los equipos de frío. Termómetro interno:",
     "ELB 59. Productos en tránsito y/o producto terminado, correctamente rotulado según tiempos definidos:",
-    "TRA ELB 60. Respetan las T° y los tiempos correctos de cocción y enfriamiento (fríos y calientes):",
+    
     "ELB 61. Uso correcto de equipos de frío, elaboración y mantención:",
     "ELB 62. Sistema de extracción e inyección de aire, en correcto funcionamiento, limpio y con registro de limpieza de ducto:",
     "ELB 63. Estantes sin óxido, sin sobrecarga y ordenados (materias primas y especies - desechables - utensilios):",
     "ELB 64. Especieros limpios, rotulados, tapados y ordenados. Envases de material lavable:",
     "ELB 65. Montajes rápidos, por lote de producto y mice and place completa (mantención cadena frío):",
-    "TRA ELB 66. Tiempo entre elaboración y consumo:",
-    "TRA MA 67. Control de tiempo y Tº del equipo, al inicio y término de la mantención en frío o caliente:",
-    "TRA TPO 68. Traslado de alimentos cumpliendo; protección, rotulación, estiba y registros al inicio y término:",
+    
     "TPO 69. Vehículo cerrado, limpio y en correctas condiciones. Con autorización sanitaria:",
     "SER 70. Verificar mantención en baño maría caliente o mantenedor eléctrico:",
     "SER 71. Variedad de alternativas instaladas en línea autoservicio, según menú (fondos, ensaladas y postres, otros):",
-    "TRA SER 72. Equipos suficientes para la correcta mantención de productos calientes y fríos:",
+    
     "SER 73. Reposición continua de las preparaciones frías y calientes:",
     "SER 74. Vajilla, bandejas y cubiertos en cantidad correcta, limpios y secos:",
     "LVA 75. Desconche de ollas y vajilla limpio, ordenado, separado lo limpio de lo sucio. No hay contaminación cruzada:",
@@ -142,8 +140,7 @@ export const questionsDOC = [
     "DOC 95. Autorizaciones Sanitarias (casino y verduras crudas):",
     "DOC 96. Libro de inspección SEREMI Salud o Archivador con actas dejadas por la autoridad:",
     "DOC 97. Informes de muestreo microbiológico/luminometría. Planes de acción, charlas al personal si corresponde:",
-    "TRA DOC 98. Informes de auditoría sanitaria, plan de acción, verificación de cumplimiento, por Administrador:",
-    "TRA DOC 99. Registros del cumplimiento al 100% del programa de charlas en Calidad y Medio Ambiente:",
+   
     "DOC 100. Reporte de proveedor productos químicos:"
 ]
 
