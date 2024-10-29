@@ -24,5 +24,7 @@ export const lumModules = ['lum'];
 
 export const traModules = ['tra'];
 
+export const capModules = ['cap']
+
 
 

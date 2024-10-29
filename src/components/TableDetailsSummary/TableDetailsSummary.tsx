@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import './TableDetailsSummary.css';
 import { AppContext } from '../../context/GlobalState';
 import { getTablaDetailsByNumeroAuditoria } from '../../utils/apiDetails';
-import { bpmModules, poesModules, poeModules, maModules, docModules, aguaModules, contaminacionMoudles } from '../../utils/ConstModules';
+import { bpmModules, poesModules, poeModules, maModules, docModules, aguaModules, contaminacionMoudles, capModules } from '../../utils/ConstModules';
 
 interface TablaDetail {
   numero_auditoria: string;
@@ -51,6 +51,7 @@ const TableDetailsSummary: React.FC<TableDetailsSummaryProps> = ({ numeroAuditor
           else if (poeModules.map(mod => mod.toLowerCase()).includes(module)) section = 'POE';
           else if (maModules.map(mod => mod.toLowerCase()).includes(module)) section = 'MA';
           else if (docModules.map(mod => mod.toLowerCase()).includes(module)) section = 'DOC';
+          else if (capModules.map(mod => mod.toLowerCase()).includes(module)) section = 'CAP';
   
 
 
@@ -101,6 +102,7 @@ const TableDetailsSummary: React.FC<TableDetailsSummaryProps> = ({ numeroAuditor
     POE: poeModules,
     MA: maModules,
     DOC: docModules,
+    CAP: capModules
   };
 
   return (
