@@ -20,7 +20,7 @@ export const maModules = ['ma'];
 
 export const docModules = ['doc'];
 
-export const lumModules = ['lum'];
+export const lumModules = ['LUM 21. Toma de muestra y uso de luminómetro:'];
 
 export const traModules = ['tra'];
 

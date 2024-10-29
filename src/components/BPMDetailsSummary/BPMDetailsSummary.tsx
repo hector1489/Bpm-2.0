@@ -56,7 +56,19 @@ const BPMDetailsSummary: React.FC<TableDetailsSummaryProps> = ({ numeroAuditoria
     MA: ['MA'],
     DOC: ['doc'],
     LUM: ['LUM 21. Toma de muestra y uso de luminómetro'],
-    TRA: ['poes-higiene-empleados', 'poe-preelaboraciones', 'poe-elaboracion', 'poe-mantencion', 'poe-transporte', 'poe-servicio', 'doc']
+    TRA: [
+      'TRA CS 17. Aplicacion y eficiencia del programa de higiene, publicado e implementado por áreas (Art. 41, 43, 44, 64, 69):',
+      'TRA TPO 68. Traslado de alimentos cumpliendo; protección, rotulación, estiba y registros al inicio y término:',
+      'TRA DOC 98. Informes de auditoría sanitaria, plan de acción, verificación de cumplimiento, por Administrador:',
+      'TRA CSH 29. Lavado y sanitizado correcto de manos y uñas:',
+      'TRA DOC 99. Registros del cumplimiento al 100% del programa de charlas en Calidad y Medio Ambiente:',
+      'TRA ELB 60. Respetan las T° y los tiempos correctos de cocción y enfriamiento (fríos y calientes):',
+      'TRA CSH 31. Exámenes de todos los manipuladores, ecónomos y administradores. Ausencia de malestares o infecciones (Art. 52, 53):',
+      'TRA PRE 52. Verificar descongelación en equipos de refrigeración, en agua corriendo sólo en caso de emergencias:',
+      'TRA SER 72. Equipos suficientes para la correcta mantención de productos calientes y fríos:',
+      'TRA MA 67. Control de tiempo y Tº del equipo, al inicio y término de la mantención en frío o caliente:',
+      'TRA ELB 66. Tiempo entre elaboración y consumo'
+    ]
   };
 
   const ponderaciones: Record<ModuleGroupName, number> = {
@@ -121,15 +133,23 @@ const BPMDetailsSummary: React.FC<TableDetailsSummaryProps> = ({ numeroAuditoria
   const moduleData = useMemo(() => {
     return tablaDetails.map((detail) => ({
       moduleName: detail.field2,
-      percentage: parseFloat(detail.field4) || 0,
+      field3: detail.field3,
+      percentage: isNaN(parseFloat(detail.field4)) ? 0 : parseFloat(detail.field4),
     }));
-  }, [tablaDetails]);
+  }, [tablaDetails])
 
   const calculateGroupAverage = useCallback(
-    (modules: string[]): number => {
-      const relevantModules = moduleData.filter((mod) => modules.includes(mod.moduleName));
+    (modules: string[], specificModule?: ModuleGroupName): number => {
+      const relevantModules = moduleData.filter((mod) => {
+        if (specificModule === 'LUM' || specificModule === 'TRA') {
+          const specificQuestions = moduleGroups[specificModule];
+          return modules.includes(mod.moduleName) && specificQuestions.includes(mod.field3) && mod.percentage > 0;
+        }
+        return modules.includes(mod.moduleName) && mod.percentage > 0;
+      });
+
       const totalPercentage = relevantModules.reduce((acc, curr) => acc + curr.percentage, 0);
-      return relevantModules.length > 0 ? totalPercentage / relevantModules.length : 100;
+      return relevantModules.length > 0 ? totalPercentage / relevantModules.length : 0;
     },
     [moduleData]
   );
@@ -144,28 +164,117 @@ const BPMDetailsSummary: React.FC<TableDetailsSummaryProps> = ({ numeroAuditoria
     LUM: 'Luminometría',
   };
 
-  const groupedData = useMemo(() => {
-    const unsortedData = Object.entries(moduleGroups).map(([groupName, modules]) => ({
+  // question modules
+  const questionsEta = [
+    "TRA CS 17. Aplicacion y eficiencia del programa de higiene, publicado e implementado por áreas (Art. 41, 43, 44, 64, 69):",
+    "TRA CSH 29. Lavado y sanitizado correcto de manos y uñas:",
+    "TRA CSH 31. Exámenes de todos los manipuladores, ecónomos y administradores. Ausencia de malestares o infecciones (Art. 52, 53):",
+    "TRA PRE 52. Verificar descongelación en equipos de refrigeración, en agua corriendo sólo en caso de emergencias:",
+    "TRA ELB 60. Respetan las T° y los tiempos correctos de cocción y enfriamiento (fríos y calientes):",
+    "TRA ELB 66. Tiempo entre elaboración y consumo:",
+    "TRA MA 67. Control de tiempo y Tº del equipo, al inicio y término de la mantención en frío o caliente:",
+    "TRA TPO 68. Traslado de alimentos cumpliendo; protección, rotulación, estiba y registros al inicio y término:",
+    "TRA SER 72. Equipos suficientes para la correcta mantención de productos calientes y fríos:",
+    "TRA DOC 98. Informes de auditoría sanitaria, plan de acción, verificación de cumplimiento, por Administrador:",
+    "TRA DOC 99. Registros del cumplimiento al 100% del programa de charlas en Calidad y Medio Ambiente:",
+  ];
+
+  const questionLum = ['LUM 21. Toma de muestra y uso de luminómetro:']
+
+
+
+  const matchedDetailsForQuestionsTRA = tablaDetails
+    .filter(detail => questionsEta.includes(detail.field3))
+    // Filtrar preguntas duplicadas basadas en 'field3'
+    .filter((detail, index, self) =>
+      index === self.findIndex((d) => d.field3 === detail.field3)
+    );
+
+    const uniqueMatchedDetailsTRA = matchedDetailsForQuestionsTRA.filter(
+      (detail, index, self) =>
+        index === self.findIndex((d) => d.field3 === detail.field3)
+    );
+  
+
+  const traNA = uniqueMatchedDetailsTRA.map(detail => parseFloat(detail.field4.replace('%', '')) || 'N/A');
+ 
+  const numericValuesTra = traNA.filter((value): value is number => typeof value === 'number');
+const traAverage = numericValuesTra.length > 0
+  ? numericValuesTra.reduce((acc, value) => acc + value, 0) / numericValuesTra.length
+  : 0;
+  
+
+  const matchedDetailsForQuestionsLUM = tablaDetails
+    .filter(detail => questionLum.includes(detail.field3))
+    // Filtrar preguntas duplicadas basadas en 'field3'
+    .filter((detail, index, self) =>
+      index === self.findIndex((d) => d.field3 === detail.field3)
+    );
+
+  const uniqueMatchedDetailsLUM = matchedDetailsForQuestionsLUM.filter(
+    (detail, index, self) =>
+      index === self.findIndex((d) => d.field3 === detail.field3)
+  );
+
+  const lumNA = uniqueMatchedDetailsLUM.map(detail => parseFloat(detail.field4.replace('%', '')) || 'N/A');
+
+   // Filtrar valores numéricos y calcular el promedio
+const numericValues = lumNA.filter((value): value is number => typeof value === 'number');
+const lumAverage = numericValues.length > 0
+  ? numericValues.reduce((acc, value) => acc + value, 0) / numericValues.length
+  : 0;
+
+  console.log( traAverage);
+  console.log(lumAverage);
+
+// Calcular promedio específico para TRA
+const calculateTRAAverage = useCallback(() => {
+  const traModules = moduleGroups.TRA;
+  const matchedDetailsTRA = tablaDetails
+    .filter((detail) => traModules.includes(detail.field3))
+    .map((detail) => parseFloat(detail.field4.replace('%', '')) || 0)
+    .filter((percentage) => !isNaN(percentage));
+
+  return matchedDetailsTRA.length > 0
+    ? matchedDetailsTRA.reduce((acc, curr) => acc + curr, 0) / matchedDetailsTRA.length
+    : 0;
+}, [tablaDetails]);
+
+// Obtener porcentaje específico para LUM
+const getLUMPercentage = useCallback(() => {
+  const lumDetail = tablaDetails.find((detail) => detail.field3 === questionLum[0]);
+  return lumDetail ? parseFloat(lumDetail.field4.replace('%', '')) || 0 : 0;
+}, [tablaDetails]);
+
+// Agrupación de datos para la tabla y gráfico
+const groupedData = useMemo(() => {
+  const unsortedData = Object.entries(moduleGroups).map(([groupName, modules]) => {
+    let average = calculateGroupAverage(modules as string[], groupName as ModuleGroupName);
+    
+    // Asignar los valores específicos de TRA y LUM
+    if (groupName === 'TRA') average = calculateTRAAverage();
+    if (groupName === 'LUM') average = getLUMPercentage();
+
+    return {
       groupName: groupName as ModuleGroupName,
       nombreCompleto: nombreCompletoPorGrupo[groupName as ModuleGroupName],
-      average: calculateGroupAverage(modules as string[]),
-      percentage: ponderaciones[groupName as ModuleGroupName]
-    }));
+      average,
+      percentage: ponderaciones[groupName as ModuleGroupName],
+    };
+  });
 
-    const order: ModuleGroupName[] = ["BPM", "POES", "POE", "MA", "DOC", "TRA", "LUM"];
-    return unsortedData.sort((a, b) => order.indexOf(a.groupName) - order.indexOf(b.groupName));
-  }, [calculateGroupAverage]);
+  const order: ModuleGroupName[] = ["BPM", "POES", "POE", "MA", "DOC", "TRA", "LUM"];
+  return unsortedData.sort((a, b) => order.indexOf(a.groupName) - order.indexOf(b.groupName));
+}, [calculateGroupAverage, calculateTRAAverage, getLUMPercentage]);
 
   const finalAverage = useMemo(() => {
-    // Calcula la ponderación total excluyendo TRA y LUM
-    const totalPonderacion = Object.entries(ponderaciones)
-      .filter(([key]) => key !== "TRA" && key !== "LUM")
-      .reduce((acc, [, peso]) => acc + peso, 0);
-  
-      return totalPonderacion.toFixed(2);
+    const averages = groupedData
+      .filter((group) => group.groupName !== "TRA" && group.groupName !== "LUM")
+      .map((group) => group.average);
+    return (averages.reduce((acc, avg) => acc + avg, 0) / averages.length).toFixed(2);
   }, [groupedData]);
-  
-  
+
+
 
   const nonApplicableModules = Object.keys(moduleGroups).filter(
     (group) => !groupedData.some((data) => data.groupName === group)
@@ -278,7 +387,7 @@ const BPMDetailsSummary: React.FC<TableDetailsSummaryProps> = ({ numeroAuditoria
             </div>
           </div>
 
-          <p className="TableDetailsDD-general-average"  style={{ backgroundColor, color: textColor }} >Promedio General : <strong>{finalAverage}%</strong></p>
+          <p className="TableDetailsDD-general-average" style={{ backgroundColor, color: textColor }} >Promedio General : <strong>{finalAverage}%</strong></p>
         </div>
       </div>
 
@@ -291,6 +400,15 @@ const BPMDetailsSummary: React.FC<TableDetailsSummaryProps> = ({ numeroAuditoria
       </div>
 
       <table className="BPMDetailsSummary-table">
+        <thead>
+          <tr>
+            <th>Modulo</th>
+            <th>Nombre</th>
+            <th>Ponderacion</th>
+            <th>Promedio</th>
+            <th>Puntaje</th>
+          </tr>
+        </thead>
         <tbody>
           {groupedData.map((group) => (
             <tr key={group.groupName}>
