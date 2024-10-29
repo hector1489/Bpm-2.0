@@ -60,9 +60,7 @@ export const questionsPOES = [
     "CSA 26. Consultar al personal por metodo de proteccion, previa a la aplicacion del control de plagas",
     "CSH 27. Uniforme completo de todos, limpio y en buen estado - Sin accesorios adicionales (reloj, joyas, celular, otros) (Art.56):",
     "CSH 28. Cubre-pelo (gorro o cofia), mascarilla y guantes usados correctamente (Art.56):",
-
     "CSH 30. Manos sin heridas desprotegidas, uñas cortas y sin esmalte:",
-
     "CSH 32. Existe un programa de higiene del personal y sus registros correspondientes. (Art. 55, 56, 60, 69)",
     "CP 33. Barreras físicas para ingreso de vectores y/o plagas (puertas, ventanas, grietas, desagües, otros):",
     "CP 34. Revisar programa y evaluar eficacia y eficiencia (certificados 3 meses atrás e inspección visual) (Art. 47, 69):",
