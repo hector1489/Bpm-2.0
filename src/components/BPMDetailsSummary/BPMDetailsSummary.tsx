@@ -2,7 +2,7 @@ import './BPMDetailsSummary.css';
 import Highcharts from 'highcharts';
 import Highcharts3D from 'highcharts/highcharts-3d';
 import HighchartsReact from 'highcharts-react-official';
-import { useContext, useEffect, useState, useMemo, useCallback } from 'react';
+import { useContext, useEffect, useState, useMemo } from 'react';
 import { AppContext } from '../../context/GlobalState';
 import { getTablaDetailsByNumeroAuditoria } from '../../utils/apiDetails';
 import { getAuditSheetByUsername } from '../../utils/apiAuditSheet';
@@ -49,16 +49,6 @@ const BPMDetailsSummary: React.FC<TableDetailsSummaryProps> = ({ numeroAuditoria
   if (!context?.state) {
     return <div>Error al cargar el contexto</div>;
   }
-
-  const moduleQuestions: Record<ModuleGroupName, string[]> = {
-    BPM: questionsBPM,
-    POES: questionsPOES,
-    POE: questionsPOE,
-    MA: questionsMA,
-    DOC: questionsDOC,
-    LUM: questionLum,
-    TRA: questionsTra,
-  };
 
   const nombreCompletoPorGrupo: Record<ModuleGroupName, string> = {
     BPM: 'Buenas Prácticas de Manufactura',
@@ -129,42 +119,50 @@ const BPMDetailsSummary: React.FC<TableDetailsSummaryProps> = ({ numeroAuditoria
     }
   }, [auditSheetDetails, numeroAuditoria]);
 
-  const moduleData = useMemo(() => {
-    return tablaDetails.map((detail) => ({
-      moduleName: detail.field2,
-      question: detail.field3,
-      percentage: isNaN(parseFloat(detail.field4)) ? 0 : parseFloat(detail.field4),
-    }));
-  }, [tablaDetails]);
+  // Filter for each module
+  const filterModuleDetails = (questions: string[]) => {
+    return tablaDetails
+      .filter(detail => questions.includes(detail.field3))
+      .filter((detail, index, self) =>
+        index === self.findIndex(d => d.field3 === detail.field3)
+      )
+      .map(detail => parseFloat(detail.field4.replace('%', '')) || 0);
+  };
 
-  const calculateGroupAverage = useCallback(
-    (moduleName: ModuleGroupName): number => {
-      const questions = moduleQuestions[moduleName];
-      const relevantDetails = moduleData.filter(detail => questions.includes(detail.question) && detail.percentage > 0);
 
-      const totalPercentage = relevantDetails.reduce((acc, curr) => acc + curr.percentage, 0);
-      return relevantDetails.length > 0 ? totalPercentage / relevantDetails.length : 0;
-    },
-    [moduleData]
-  );
+  const calculateGeneralAverage = (percentages: number[]) => {
+    const total = percentages.reduce((acc, percentage) => acc + percentage, 0);
+    return percentages.length > 0 ? (total / percentages.length).toFixed(2) : 'N/A';
+  };
+
+
+  // Module-specific data extraction and average calculations
+  const calculateBPM = () => calculateGeneralAverage(filterModuleDetails(questionsBPM));
+  const calculatePOES = () => calculateGeneralAverage(filterModuleDetails(questionsPOES));
+  const calculatePOE = () => calculateGeneralAverage(filterModuleDetails(questionsPOE));
+  const calculateMA = () => calculateGeneralAverage(filterModuleDetails(questionsMA));
+  const calculateDOC = () => calculateGeneralAverage(filterModuleDetails(questionsDOC));
+  const calculateLUM = () => calculateGeneralAverage(filterModuleDetails(questionLum));
+  const calculateTRA = () => calculateGeneralAverage(filterModuleDetails(questionsTra));
+
 
   const groupedData = useMemo(() => {
-    return Object.keys(moduleQuestions).map((groupName) => {
-      const moduleName = groupName as ModuleGroupName;
-      const average = calculateGroupAverage(moduleName);
-      return {
-        groupName: moduleName,
-        nombreCompleto: nombreCompletoPorGrupo[moduleName],
-        average: average.toFixed(2),
-        percentage: ponderaciones[moduleName],
-      };
-    });
-  }, [calculateGroupAverage]);
+    return [
+      { groupName: 'BPM', nombreCompleto: nombreCompletoPorGrupo['BPM'],percentage: ponderaciones.BPM, average: calculateBPM(), ponderacion: ponderaciones['BPM'] },
+      { groupName: 'POES', nombreCompleto: nombreCompletoPorGrupo['POES'],percentage: ponderaciones.POES, average: calculatePOES(), ponderacion: ponderaciones['POES'] },
+      { groupName: 'POE', nombreCompleto: nombreCompletoPorGrupo['POE'],percentage: ponderaciones.POE, average: calculatePOE(), ponderacion: ponderaciones['POE'] },
+      { groupName: 'MA', nombreCompleto: nombreCompletoPorGrupo['MA'],percentage: ponderaciones.MA, average: calculateMA(), ponderacion: ponderaciones['MA'] },
+      { groupName: 'DOC', nombreCompleto: nombreCompletoPorGrupo['DOC'],percentage: ponderaciones.DOC, average: calculateDOC(), ponderacion: ponderaciones['DOC'] },
+      { groupName: 'LUM', nombreCompleto: nombreCompletoPorGrupo['LUM'],percentage: ponderaciones.LUM ,average: calculateLUM(), ponderacion: ponderaciones['LUM'] },
+      { groupName: 'TRA', nombreCompleto: nombreCompletoPorGrupo['TRA'],percentage: ponderaciones.TRA ,average: calculateTRA(), ponderacion: ponderaciones['TRA'] },
+    ];
+  }, [tablaDetails]);
+  
 
   const finalAverage = useMemo(() => {
     const weightedSum = groupedData
       .filter(group => group.groupName !== 'TRA' && group.groupName !== 'LUM')
-      .reduce((acc, group) => acc + parseFloat(group.average) * group.percentage, 0);
+      .reduce((acc, group) => acc + parseFloat(group.average) * group.ponderacion, 0);
 
     const totalWeight = Object.keys(ponderaciones)
       .filter(key => key !== 'TRA' && key !== 'LUM')

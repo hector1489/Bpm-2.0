@@ -6,6 +6,7 @@ import { useContext, useEffect, useState, useCallback, useMemo } from 'react';
 import { getAuditSheetByUsername } from '../../utils/apiAuditSheet';
 import { getTablaDetailsByNumeroAuditoria } from '../../utils/apiDetails';
 import { getColorByPercentageFilas } from '../../utils/utils'
+import { questionsBPM, questionsPOES, questionsPOE, questionsMA, questionsDOC, questionsTra, questionLum } from '../../utils/ConstModules';
 
 interface TablaDetail {
   numero_auditoria: string;
@@ -14,6 +15,8 @@ interface TablaDetail {
   field3: string;
   field4: string;
 }
+
+type ModuleGroupName = 'BPM' | 'POES' | 'POE' | 'MA' | 'DOC' | 'LUM' | 'TRA';
 
 // Definición de ponderaciones para cada grupo de módulos
 const ponderaciones: Record<string, number> = {
@@ -105,64 +108,53 @@ const TableDetailsDD: React.FC = () => {
 
 
 
-  // Función para extraer el porcentaje del campo field4
-  const extractPercentage = (answer: string): number => {
-    const match = answer.match(/(\d+)%/);
-    return match ? parseInt(match[1], 10) : 0;
+  // Filter for each module
+  const filterModuleDetails = (questions: string[]) => {
+    return tablaDetails
+      .filter(detail => questions.includes(detail.field3))
+      .filter((detail, index, self) =>
+        index === self.findIndex(d => d.field3 === detail.field3)
+      )
+      .map(detail => parseFloat(detail.field4.replace('%', '')) || 0);
   };
 
-  // Preparar datos del módulo
-  const moduleData = useMemo(() => {
-    return tablaDetails.map((detail) => ({
-      moduleName: detail.field2,
-      percentage: extractPercentage(detail.field4),
-    }));
+  // Individual module calculations
+  const calculateGeneralAverage = (percentages: number[]) => {
+    const total = percentages.reduce((acc, percentage) => acc + percentage, 0);
+    return percentages.length > 0 ? (total / percentages.length).toFixed(2) : 'N/A';
+  };
+
+  // Module-specific data extraction and average calculations
+  const calculateBPM = () => calculateGeneralAverage(filterModuleDetails(questionsBPM));
+  const calculatePOES = () => calculateGeneralAverage(filterModuleDetails(questionsPOES));
+  const calculatePOE = () => calculateGeneralAverage(filterModuleDetails(questionsPOE));
+  const calculateMA = () => calculateGeneralAverage(filterModuleDetails(questionsMA));
+  const calculateDOC = () => calculateGeneralAverage(filterModuleDetails(questionsDOC));
+  const calculateLUM = () => calculateGeneralAverage(filterModuleDetails(questionLum));
+  const calculateTRA = () => calculateGeneralAverage(filterModuleDetails(questionsTra));
+
+  const groupedData = useMemo(() => {
+    return [
+      { groupName: 'BPM', average: calculateBPM(), ponderacion: ponderaciones['BPM'] },
+      { groupName: 'POES', average: calculatePOES(), ponderacion: ponderaciones['POES'] },
+      { groupName: 'POE', average: calculatePOE(), ponderacion: ponderaciones['POE'] },
+      { groupName: 'MA', average: calculateMA(), ponderacion: ponderaciones['MA'] },
+      { groupName: 'DOC', average: calculateDOC(), ponderacion: ponderaciones['DOC'] },
+      { groupName: 'LUM', average: calculateLUM(), ponderacion: ponderaciones['LUM'] },
+      { groupName: 'TRA', average: calculateTRA(), ponderacion: ponderaciones['TRA'] },
+    ];
   }, [tablaDetails]);
 
-
-  // Grupos de módulos
-  const moduleGroups = {
-    BPM: ['infraestructura', 'legales'],
-    POES: [
-      'poes-control-productos', 'Agua', 'poes-superficies', 'contaminacion-cruzada',
-      'poes-sustancias-adulterantes', 'poes-higiene-empleados', 'poes-control-plagas', 'poes-instalaciones'
-    ],
-    POE: [
-      'poe-recepcion', 'poe-almacenamiento', 'poe-preelaboraciones', 'poe-elaboracion', 'poe-mantencion',
-      'poe-transporte', 'poe-servicio', 'poe-lavado-ollas-vajilla', 'poe-control-calidad', 'poe-ppt'
-    ],
-    MA: ['MA'],
-    DOC: ['doc'],
-    LUM: ['LUM 21. Toma de muestra y uso de luminómetro'],
-    TRA: [
-      'poes-higiene-empleados', 'poe-preelaboraciones', 'poe-elaboracion',
-      'poe-mantencion', 'poe-transporte', 'poe-servicio', 'doc'
-    ]
-  };
-
-  // Calcular promedio por grupo de módulos
-  const calculateGroupAverage = useCallback((modules: string[]): number => {
-    const relevantModules = moduleData.filter((mod) => modules.includes(mod.moduleName));
-    const totalPercentage = relevantModules.reduce((acc, curr) => acc + curr.percentage, 0);
-    return relevantModules.length > 0 ? totalPercentage / relevantModules.length : 100;
-  }, [moduleData]);
-
-  // Datos agrupados
-  const groupedData = useMemo(() => {
-    return Object.entries(moduleGroups).map(([groupName, modules]) => ({
-      groupName,
-      average: calculateGroupAverage(modules).toFixed(2),
-    }));
-  }, [calculateGroupAverage]);
-
-  // Promedio final ponderado de todos los grupos excluyendo TRA y LUM
   const finalAverage = useMemo(() => {
-    // Calcula el total de ponderación excluyendo TRA y LUM
-    const totalPonderacion = Object.entries(ponderaciones)
-      .filter(([key]) => key !== "TRA" && key !== "LUM")
-      .reduce((acc, [, peso]) => acc + peso, 0);
+    const weightedSum = groupedData
+      .filter(group => group.groupName !== 'TRA' && group.groupName !== 'LUM')
+      .reduce((acc, group) => acc + parseFloat(group.average) * group.ponderacion, 0);
 
-    return totalPonderacion.toFixed(2);
+    const totalWeight = Object.keys(ponderaciones)
+      .filter(key => key !== 'TRA' && key !== 'LUM')
+      .reduce((acc, key) => acc + ponderaciones[key as ModuleGroupName], 0);
+
+    return (weightedSum / totalWeight).toFixed(2);
   }, [groupedData]);
 
 
@@ -188,7 +180,6 @@ const TableDetailsDD: React.FC = () => {
   } else if (backgroundColor === 'yellow') {
     textColor = 'black';
   }
-
 
   return (
     <div className="TableDetailsDD-container">
