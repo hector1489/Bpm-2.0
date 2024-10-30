@@ -7,14 +7,21 @@ import { getAuditSheetByUsername } from '../../utils/apiAuditSheet';
 import { getTablaDetailsByNumeroAuditoria } from '../../utils/apiDetails';
 import { getColorByPercentageFilas } from '../../utils/utils'
 import {
-  questionsPOES,
   questionsPOE,
   questionsMA,
   questionsDOC,
   questionsTra,
   questionLum,
   infraestructuraQuestions,
-  legalesQuestions
+  legalesQuestions,
+  poesControlProductosQuestion,
+  poesAguaQuestion,
+  poesSuperficiesQuestions,
+  poesContaminacionCruzadaQuestions,
+  poesSustanciasAdulterantes,
+  poesHigieneEmpleadosQuestions,
+  poesControlPlagas,
+  poesInstalacionesQuestions 
 } from '../../utils/ConstModules';
 
 interface TablaDetail {
@@ -151,7 +158,20 @@ const TableDetailsDD: React.FC = () => {
 
     return ((infraAverage + legalesAverage) / 2).toFixed(2);
   };
-  const calculatePOES = () => calculateGeneralAverage(filterModuleDetails(questionsPOES));
+
+  const calculatePOES = () => {
+    const poesControlAverage = parseFloat(calculateSubmoduleAverage(poesControlProductosQuestion));
+    const poesAguaAverage = parseFloat(calculateSubmoduleAverage(poesAguaQuestion));
+    const poesSuperficiesAverage = parseFloat(calculateSubmoduleAverage(poesSuperficiesQuestions));
+    const poesContaminacionCruzadaAverage = parseFloat(calculateSubmoduleAverage(poesContaminacionCruzadaQuestions));
+    const poesSustanciasAverage = parseFloat(calculateSubmoduleAverage( poesSustanciasAdulterantes));
+    const poesHigieneEmpleadosAverage =  parseFloat(calculateSubmoduleAverage(poesHigieneEmpleadosQuestions));
+    const poesControlPlagasAverage = parseFloat(calculateSubmoduleAverage(poesControlPlagas));
+    const poesInstalacionesAverage = parseFloat(calculateSubmoduleAverage(poesInstalacionesQuestions));
+    
+    return ((poesControlAverage + poesAguaAverage + poesSuperficiesAverage + poesContaminacionCruzadaAverage + poesSustanciasAverage + poesHigieneEmpleadosAverage + poesControlPlagasAverage + poesInstalacionesAverage) / 8).toFixed(2);
+  };
+
   const calculatePOE = () => calculateGeneralAverage(filterModuleDetails(questionsPOE));
   const calculateMA = () => calculateGeneralAverage(filterModuleDetails(questionsMA));
   const calculateDOC = () => calculateGeneralAverage(filterModuleDetails(questionsDOC));

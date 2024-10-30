@@ -2,7 +2,23 @@ import './DetailsAverageSummary.css';
 import { useContext, useEffect, useState, useMemo } from 'react';
 import { AppContext } from '../../context/GlobalState';
 import { getTablaDetailsByNumeroAuditoria } from '../../utils/apiDetails';
-import { questionsPOES, questionsPOE, questionsMA, questionsDOC, questionsTra, questionLum, infraestructuraQuestions, legalesQuestions } from '../../utils/ConstModules';
+import {
+  questionsPOE,
+  questionsMA,
+  questionsDOC,
+  questionsTra,
+  questionLum,
+  infraestructuraQuestions,
+  legalesQuestions,
+  poesControlProductosQuestion,
+  poesAguaQuestion,
+  poesSuperficiesQuestions,
+  poesContaminacionCruzadaQuestions,
+  poesSustanciasAdulterantes,
+  poesHigieneEmpleadosQuestions,
+  poesControlPlagas,
+  poesInstalacionesQuestions 
+} from '../../utils/ConstModules';
 
 interface TablaDetail {
   numero_auditoria: string;
@@ -91,7 +107,20 @@ const DetailsAverageSummary: React.FC<DetailsAverageSummaryProps> = ({ numeroAud
 
     return ((infraAverage + legalesAverage) / 2).toFixed(2);
   };
-  const calculatePOES = () => calculateGeneralAverage(filterModuleDetails(questionsPOES));
+
+  const calculatePOES = () => {
+    const poesControlAverage = parseFloat(calculateSubmoduleAverage(poesControlProductosQuestion));
+    const poesAguaAverage = parseFloat(calculateSubmoduleAverage(poesAguaQuestion));
+    const poesSuperficiesAverage = parseFloat(calculateSubmoduleAverage(poesSuperficiesQuestions));
+    const poesContaminacionCruzadaAverage = parseFloat(calculateSubmoduleAverage(poesContaminacionCruzadaQuestions));
+    const poesSustanciasAverage = parseFloat(calculateSubmoduleAverage( poesSustanciasAdulterantes));
+    const poesHigieneEmpleadosAverage =  parseFloat(calculateSubmoduleAverage(poesHigieneEmpleadosQuestions));
+    const poesControlPlagasAverage = parseFloat(calculateSubmoduleAverage(poesControlPlagas));
+    const poesInstalacionesAverage = parseFloat(calculateSubmoduleAverage(poesInstalacionesQuestions));
+    
+    return ((poesControlAverage + poesAguaAverage + poesSuperficiesAverage + poesContaminacionCruzadaAverage + poesSustanciasAverage + poesHigieneEmpleadosAverage + poesControlPlagasAverage + poesInstalacionesAverage) / 8).toFixed(2);
+  };
+
   const calculatePOE = () => calculateGeneralAverage(filterModuleDetails(questionsPOE));
   const calculateMA = () => calculateGeneralAverage(filterModuleDetails(questionsMA));
   const calculateDOC = () => calculateGeneralAverage(filterModuleDetails(questionsDOC));

@@ -172,6 +172,8 @@ export const questionsTra = [
 export const questionLum = ['LUM 21. Toma de muestra y uso de luminómetro:']
 
 // Preguntas de los submódulos
+
+// BPM
 export const infraestructuraQuestions = [
   "INF 1. Separaciones de áreas mínimas y condiciones de mantención de esta:",
   "INF 2. Equipos mínimos de cocción y frío (quemadores, refrigeradores, mantenedores, otros):",
@@ -184,4 +186,67 @@ export const legalesQuestions = [
   "RL 6. Cuenta con registros de mantención correctiva de equipos:",
   "RL 7. Inducción y entrenamiento al personal, en calidad y medio ambiente (registros e interrogar al personal):"
 ];
+
+
+// POES
+export const poesControlProductosQuestion =
+  [
+    "CQA 8. Almacenamiento de productos químicos según PH, con hojas de seguridad y EPP disponibles:",
+    "CQA 9. Rotulación correcta, indicando nombre producto y área de uso:",
+    "CQA 10. Productos químicos y utensilios de aseo en cantidad y limpieza adecuada:"
+  ]
+
+export const poesAguaQuestion = [
+  "CA 11. Agua potable suministrada por empresa sanitaria u otra fuente autorizada, con registro sanitario (evidencia):"
+]
+
+export const poesSuperficiesQuestions = [
+  "CS 12. Aplicación de procedimiento de higiene de tablas, cuchillos y mesones:",
+  "CS 13. Limpieza y desinfección de equipos de proceso (máquina universal, juguera, amasadora, otros):",
+  "CS 14. Limpieza y desengrasado de equipos (cocina, horno, freidora, marmita, campana y otros):",
+  "CS 15. Limpieza y desincrustación de máquinas de jugo, baño maría, vitrinas y hervidores (sin sarro):",
+  "CS 16. Higiene de mesas y sillas de comedor:",
+  "TRA CS 17. Aplicacion y eficiencia del programa de higiene, publicado e implementado por áreas (Art. 41, 43, 44, 64, 69):",
+  "CS 18. Aplicación de alarma sanitaria (equipo), durante la auditoría, con frecuencia y responsable definido (si aplica):",
+  "CS 19. Los registros generados son coherentes con lo especificado en el programa (Art. 69):",
+  "CS 20. Se adoptan las medidas necesarias para evitar la contaminación de los equipos después de limpiarse y desinfectarse (Art. 42):",
+  "LUM 21. Toma de muestra y uso de luminómetro:"
+]
+
+
+
+export const poesContaminacionCruzadaQuestions = [
+  "CC 22. Separación de utensilios por área, y separación alimentos (cocido - crudo - sucio, otros):",
+  "CC 23. Ubicación de equipos y mobiliarios se mantienen correctamente (basureros, mesones, lavadero sanitizado):"
+]
+
+
+export const poesSustanciasAdulterantes = [
+  "CSA 24. Pulverizadores de productos químicos separados de las materias primas-preparaciones en producción (Art. 50, 51):",
+  "CSA 25. Protección de materias primas, producto terminado y utensilios:",
+  "CSA 26. Consultar al personal por metodo de proteccion, previa a la aplicacion del control de plagas"
+]
+
+
+export const poesHigieneEmpleadosQuestions = [
+  "CSH 27. Uniforme completo de todos, limpio y en buen estado - Sin accesorios adicionales (reloj, joyas, celular, otros) (Art.56):",
+  "CSH 28. Cubre-pelo (gorro o cofia), mascarilla y guantes usados correctamente (Art.56):",
+  "TRA CSH 29. Lavado y sanitizado correcto de manos y uñas:",
+  "CSH 30. Manos sin heridas desprotegidas, uñas cortas y sin esmalte:",
+  "TRA CSH 31. Exámenes de todos los manipuladores, ecónomos y administradores. Ausencia de malestares o infecciones (Art. 52, 53):",
+  "CSH 32. Existe un programa de higiene del personal y sus registros correspondientes. (Art. 55, 56, 60, 69)"
+]
+
+export const poesControlPlagas = [
+  "CP 33. Barreras físicas para ingreso de vectores y/o plagas (puertas, ventanas, grietas, desagües, otros):",
+  "CP 34. Revisar programa y evaluar eficacia y eficiencia (certificados 3 meses atrás e inspección visual) (Art. 47, 69):",
+  "CP 35. La empresa a cargo del programa de aplicación de agentes químicos o biológicos para el control de plagas cuenta con Autorización sanitaria. (Art. 48):",
+  "CP 36. Los desechos se disponen de forma de impedir el acceso y proliferación de plagas. (Art. 40):"
+]
+
+export const poesInstalacionesQuestions = [
+  "CIS 37. Lavamanos suficientes en áreas de manipulación, limpios, dispensador de papel y señalética publicada:",
+  "CIS 38. Servicios higiénicos y sala vestuario, en buenas condiciones, limpios, con agua caliente, jabón y papel:"
+]
+
 
