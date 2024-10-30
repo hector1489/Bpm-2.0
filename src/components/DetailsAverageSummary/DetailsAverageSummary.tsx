@@ -2,7 +2,7 @@ import './DetailsAverageSummary.css';
 import { useContext, useEffect, useState, useMemo } from 'react';
 import { AppContext } from '../../context/GlobalState';
 import { getTablaDetailsByNumeroAuditoria } from '../../utils/apiDetails';
-import { questionsBPM, questionsPOES, questionsPOE, questionsMA, questionsDOC, questionsTra, questionLum } from '../../utils/ConstModules';
+import { questionsPOES, questionsPOE, questionsMA, questionsDOC, questionsTra, questionLum, infraestructuraQuestions, legalesQuestions } from '../../utils/ConstModules';
 
 interface TablaDetail {
   numero_auditoria: string;
@@ -73,8 +73,24 @@ const DetailsAverageSummary: React.FC<DetailsAverageSummaryProps> = ({ numeroAud
     return percentages.length > 0 ? (total / percentages.length).toFixed(2) : 'N/A';
   };
 
+  // Función para filtrar y calcular el promedio de un submódulo específico
+  const calculateSubmoduleAverage = (submoduleQuestions: string[]) => {
+    const submoduleData = tablaDetails
+      .filter(detail => submoduleQuestions.includes(detail.field3))
+      .map(detail => parseFloat(detail.field4.replace('%', '')) || 0);
+
+    const total = submoduleData.reduce((acc, percentage) => acc + percentage, 0);
+    return submoduleData.length > 0 ? (total / submoduleData.length).toFixed(2) : 'N/A';
+  };
+
+
   // Module-specific data extraction and average calculations
-  const calculateBPM = () => calculateGeneralAverage(filterModuleDetails(questionsBPM));
+  const calculateBPM = () => {
+    const infraAverage = parseFloat(calculateSubmoduleAverage(infraestructuraQuestions));
+    const legalesAverage = parseFloat(calculateSubmoduleAverage(legalesQuestions));
+
+    return ((infraAverage + legalesAverage) / 2).toFixed(2);
+  };
   const calculatePOES = () => calculateGeneralAverage(filterModuleDetails(questionsPOES));
   const calculatePOE = () => calculateGeneralAverage(filterModuleDetails(questionsPOE));
   const calculateMA = () => calculateGeneralAverage(filterModuleDetails(questionsMA));
@@ -136,7 +152,7 @@ const DetailsAverageSummary: React.FC<DetailsAverageSummaryProps> = ({ numeroAud
                 </tr>
               </tfoot>
             </table>
-          </div> 
+          </div>
         </div>
       </div>
     </div>
