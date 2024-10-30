@@ -20,7 +20,7 @@ export const maModules = ['ma'];
 
 export const docModules = ['doc'];
 
-export const lumModules = ['LUM 21. Toma de muestra y uso de luminómetro:'];
+export const lumModules = ['lum'];
 
 export const traModules = ['tra'];
 
@@ -69,8 +69,15 @@ export const questionsPOES = [
     "CIS 37. Lavamanos suficientes en áreas de manipulación, limpios, dispensador de papel y señalética publicada:",
     "CIS 38. Servicios higiénicos y sala vestuario, en buenas condiciones, limpios, con agua caliente, jabón y papel:",
 
+]
 
+export const questionsAGUA = [
+    "CA 11. Agua potable suministrada por empresa sanitaria u otra fuente autorizada, con registro sanitario (evidencia):"
+]
 
+export const questionsCONTAMINACION = [
+    "CC 22. Separación de utensilios por área, y separación alimentos (cocido - crudo - sucio, otros):",
+    "CC 23. Ubicación de equipos y mobiliarios se mantienen correctamente (basureros, mesones, lavadero sanitizado):",
 ]
 
 export const questionsPOE = [
@@ -139,6 +146,11 @@ export const questionsDOC = [
     "DOC 96. Libro de inspección SEREMI Salud o Archivador con actas dejadas por la autoridad:",
     "DOC 97. Informes de muestreo microbiológico/luminometría. Planes de acción, charlas al personal si corresponde:",
     "DOC 100. Reporte de proveedor productos químicos:",
+    "CAP 101. Existe un programa escrito y con sus registros correspondientes de capacitación del personal en materia de manipulación higiénica de los alimentos e higiene personal. (Art. 52, 69)",
+    "CAP 102. Existe un programa escrito de capacitación del personal de aseo en técnicas de limpieza y sus registros correspondientes. (Art. 41, 69)"
+]
+
+export const questionsCAP = [
     "CAP 101. Existe un programa escrito y con sus registros correspondientes de capacitación del personal en materia de manipulación higiénica de los alimentos e higiene personal. (Art. 52, 69)",
     "CAP 102. Existe un programa escrito de capacitación del personal de aseo en técnicas de limpieza y sus registros correspondientes. (Art. 41, 69)"
 ]

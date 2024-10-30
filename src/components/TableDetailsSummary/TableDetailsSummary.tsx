@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import './TableDetailsSummary.css';
 import { AppContext } from '../../context/GlobalState';
 import { getTablaDetailsByNumeroAuditoria } from '../../utils/apiDetails';
-import { bpmModules, poesModules, poeModules, maModules, docModules, aguaModules, contaminacionMoudles, capModules } from '../../utils/ConstModules';
+import { bpmModules, poesModules, poeModules, maModules, docModules, aguaModules, contaminacionMoudles, capModules, traModules, lumModules } from '../../utils/ConstModules';
 
 interface TablaDetail {
   numero_auditoria: string;
@@ -29,46 +29,60 @@ const TableDetailsSummary: React.FC<TableDetailsSummaryProps> = ({ numeroAuditor
   useEffect(() => {
     const fetchTablaDetails = async () => {
       if (!numeroAuditoria) return;
-
+  
       setLoading(true);
       setError(null);
-
+  
       try {
         const data = await getTablaDetailsByNumeroAuditoria(numeroAuditoria);
-
-
-        // Agrupa los datos por sección y módulo
+        const lumQuestion = 'LUM 21. Toma de muestra y uso de luminómetro:';
+  
+        // Group data by section and module
         const groupedData = data.reduce((acc: { [key: string]: { [key: string]: TablaDetail[] } }, detail: TablaDetail) => {
           let section = '';
-          const module = detail.field2.toLowerCase().trim();
-
-
-          // Determina la sección en función del módulo
-          if (bpmModules.map(mod => mod.toLowerCase()).includes(module)) section = 'BPM';
-          else if (aguaModules.map(mod => mod.toLowerCase()).includes(module)) section = 'AGUA';
-          else if (poesModules.map(mod => mod.toLowerCase()).includes(module)) section = 'POES';
-          else if (contaminacionMoudles.map(mod => mod.toLowerCase()).includes(module)) section = 'CONTAMINACION';
-          else if (poeModules.map(mod => mod.toLowerCase()).includes(module)) section = 'POE';
-          else if (maModules.map(mod => mod.toLowerCase()).includes(module)) section = 'MA';
-          else if (docModules.map(mod => mod.toLowerCase()).includes(module)) section = 'DOC';
-          else if (capModules.map(mod => mod.toLowerCase()).includes(module)) section = 'CAP';
+          let module = detail.field2.toLowerCase().trim();
   
-
-
+          // Debugging - log each detail's fields
+          console.log("Processing detail:", detail.field3);
+  
+          // Assign section and module based on question type
+          if (detail.field3 === lumQuestion) {
+            section = 'LUM';
+            module = 'lum';
+          } else if (detail.field3.startsWith('TRA')) {
+            section = 'TRA';
+            module = 'tra';
+          } else {
+            if (bpmModules.map(mod => mod.toLowerCase()).includes(module)) section = 'BPM';
+            else if (aguaModules.map(mod => mod.toLowerCase()).includes(module)) section = 'AGUA';
+            else if (poesModules.map(mod => mod.toLowerCase()).includes(module)) section = 'POES';
+            else if (contaminacionMoudles.map(mod => mod.toLowerCase()).includes(module)) section = 'CONTAMINACION';
+            else if (capModules.map(mod => mod.toLowerCase()).includes(module)) section = 'CAP';
+            else if (poeModules.map(mod => mod.toLowerCase()).includes(module)) section = 'POE';
+            else if (maModules.map(mod => mod.toLowerCase()).includes(module)) section = 'MA';
+            else if (docModules.map(mod => mod.toLowerCase()).includes(module)) section = 'DOC';
+            else if (traModules.map(mod => mod.toLowerCase()).includes(module)) section = 'TRA';
+          }
+  
           if (!section) return acc;
-
-          // Inicializa la sección y el módulo si no existen
+  
+          // Debugging - log section and module assignment
+          console.log(`Assigned section: ${section}, module: ${module}`);
+  
+          // Initialize section and module if not already present
           if (!acc[section]) acc[section] = {};
           if (!acc[section][module]) acc[section][module] = [];
-
-          // Filtrar duplicados basado en el ID Pregunta (`field1`)
+  
+          // Avoid duplicates based on `field1` (ID Pregunta)
           const exists = acc[section][module].some(item => item.field1 === detail.field1);
           if (!exists) acc[section][module].push(detail);
-
+  
           return acc;
         }, {});
-
-
+  
+        // Debugging - log final grouped data structure
+        console.log("Grouped data:", groupedData);
+  
         setTablaDetails(groupedData);
       } catch (err) {
         setError('Error al obtener los datos de la tabla');
@@ -76,9 +90,11 @@ const TableDetailsSummary: React.FC<TableDetailsSummaryProps> = ({ numeroAuditor
         setLoading(false);
       }
     };
-
+  
     fetchTablaDetails();
   }, [numeroAuditoria]);
+  
+  
 
   if (loading) {
     return <p>Cargando datos...</p>;
@@ -99,10 +115,13 @@ const TableDetailsSummary: React.FC<TableDetailsSummaryProps> = ({ numeroAuditor
     AGUA: aguaModules,
     POES: poesModules,
     CONTAMINACION: contaminacionMoudles,
+    CAP: capModules,
     POE: poeModules,
     MA: maModules,
     DOC: docModules,
-    CAP: capModules
+    TRA: traModules,
+    LUM: lumModules
+   
   };
 
   return (
