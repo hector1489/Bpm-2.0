@@ -206,7 +206,7 @@ export const poesSuperficiesQuestions = [
   "CS 14. Limpieza y desengrasado de equipos (cocina, horno, freidora, marmita, campana y otros):",
   "CS 15. Limpieza y desincrustación de máquinas de jugo, baño maría, vitrinas y hervidores (sin sarro):",
   "CS 16. Higiene de mesas y sillas de comedor:",
-  "TRA CS 17. Aplicacion y eficiencia del programa de higiene, publicado e implementado por áreas (Art. 41, 43, 44, 64, 69):",
+
   "CS 18. Aplicación de alarma sanitaria (equipo), durante la auditoría, con frecuencia y responsable definido (si aplica):",
   "CS 19. Los registros generados son coherentes con lo especificado en el programa (Art. 69):",
   "CS 20. Se adoptan las medidas necesarias para evitar la contaminación de los equipos después de limpiarse y desinfectarse (Art. 42):",
@@ -231,9 +231,9 @@ export const poesSustanciasAdulterantes = [
 export const poesHigieneEmpleadosQuestions = [
   "CSH 27. Uniforme completo de todos, limpio y en buen estado - Sin accesorios adicionales (reloj, joyas, celular, otros) (Art.56):",
   "CSH 28. Cubre-pelo (gorro o cofia), mascarilla y guantes usados correctamente (Art.56):",
-  "TRA CSH 29. Lavado y sanitizado correcto de manos y uñas:",
+
   "CSH 30. Manos sin heridas desprotegidas, uñas cortas y sin esmalte:",
-  "TRA CSH 31. Exámenes de todos los manipuladores, ecónomos y administradores. Ausencia de malestares o infecciones (Art. 52, 53):",
+
   "CSH 32. Existe un programa de higiene del personal y sus registros correspondientes. (Art. 55, 56, 60, 69)"
 ]
 
@@ -248,5 +248,89 @@ export const poesInstalacionesQuestions = [
   "CIS 37. Lavamanos suficientes en áreas de manipulación, limpios, dispensador de papel y señalética publicada:",
   "CIS 38. Servicios higiénicos y sala vestuario, en buenas condiciones, limpios, con agua caliente, jabón y papel:"
 ]
+
+// POE 
+
+export const poeRecepcionQuestions = [
+  "REC 39. Verificar registro recepción materias primas, inventario, ordenes de compra y guías de despacho (Art. 61, 69) :",
+  "REC 40. Balanza en buen estado, limpia y utilizada frecuentemente:",
+  "REC 41. Verificar tiempo de exposición de materias primas a Tª adecuada:",
+  "REC 42. Las materias primas utilizadas provienen de establecimientos autorizados y debidamente rotuladas y/o identificadas. (Art. 61, 96)",
+  "REC 43. Se cuenta con las especificaciones escritas para cada materia prima (condiciones de almacenamiento, duración, uso, etc.)",
+
+]
+
+
+export const poeAlamacenaminetoQuestions = [
+  "ALM 44. Verificar prácticas higiénicas en el trasvasije de envases - Evitar contacto directo entre diferentes tipos de carne (Art.62):",
+  "ALM 45. Identificación de áreas y estantes, por familias de productos:",
+  "ALM 46. Receptáculos (bandejas) suficientes, limpios y ordenados:",
+  "ALM 47. Cumplimiento del sistema FIFO o FEFO, según corresponda:",
+  "ALM 48. Productos No Conforme, manejo correcto (art. 105 DS977):",
+  "ALM 49. Mantención de productos sobre nivel de piso:",
+  "ALM 50. Separación materias primas, desechables, productos químicos:",
+  "ALM 51. Verificar entrega correcta a la producción (verificación de cantidad, calidad y disponibilidad):"
+]
+
+export const poePreelaboracionesQuestions = [
+  "TRA PRE 52. Verificar descongelación en equipos de refrigeración, en agua corriendo sólo en caso de emergencias:",
+  "PRE 53. Pre-elaborados en refrigeración, en envases originales sellados y apilados correctamente:",
+  "PRE 54. Materias primas ya procesadas en recipientes o envases lavables y tapadas:",
+  "PRE 55. Se separan productos por tipo y/o riesgo de contaminación:",
+  "PRE 56. Sanitizado con concentración y tiempo correctos. Verificar registro si aplica:"
+]
+
+export const poeElaboracionesQuestions = [
+  "ELB 57. Recepción y mantención de materias primas en envases limpios y protegidos:",
+  "ELB 58. Orden, limpieza y T° correcta en todos los equipos de frío. Termómetro interno:",
+  "ELB 59. Productos en tránsito y/o producto terminado, correctamente rotulado según tiempos definidos:",
+  "TRA ELB 60. Respetan las T° y los tiempos correctos de cocción y enfriamiento (fríos y calientes):",
+  "ELB 61. Uso correcto de equipos de frío, elaboración y mantención:",
+  "ELB 62. Sistema de extracción e inyección de aire, en correcto funcionamiento, limpio y con registro de limpieza de ducto:",
+  "ELB 63. Estantes sin óxido, sin sobrecarga y ordenados (materias primas y especies - desechables - utensilios):",
+  "ELB 64. Especieros limpios, rotulados, tapados y ordenados. Envases de material lavable:",
+  "ELB 65. Montajes rápidos, por lote de producto y mice and place completa (mantención cadena frío):",
+  "TRA ELB 66. Tiempo entre elaboración y consumo:"
+]
+
+export const poeMantencionQuestions = [
+  "TRA MA 67. Control de tiempo y Tº del equipo, al inicio y término de la mantención en frío o caliente:"
+]
+
+export const poeTransporteQuestions = [
+  "TRA TPO 68. Traslado de alimentos cumpliendo; protección, rotulación, estiba y registros al inicio y término:",
+  "TPO 69. Vehículo cerrado, limpio y en correctas condiciones. Con autorización sanitaria:"
+]
+
+export const poeServicioQuestions = [
+  "SER 70. Verificar mantención en baño maría caliente o mantenedor eléctrico:",
+      "SER 71. Variedad de alternativas instaladas en línea autoservicio, según menú (fondos, ensaladas y postres, otros):",
+      "TRA SER 72. Equipos suficientes para la correcta mantención de productos calientes y fríos:",
+      "SER 73. Reposición continua de las preparaciones frías y calientes:",
+      "SER 74. Vajilla, bandejas y cubiertos en cantidad correcta, limpios y secos:"
+]
+
+export const poeLavadoOllasQuestions = [
+  "LVA 75. Desconche de ollas y vajilla limpio, ordenado, separado lo limpio de lo sucio. No hay contaminación cruzada:",
+  "LVA 76. Procedimiento de higiene de vajilla y utensilios, en tres etapas (lavado, enjuague, sanitizado) - Disposición de agua caliente:",
+  "LVA 77. Orden general del área:",
+]
+
+export const poeControlCalidadQiestions = [
+  "QQ 78. Termómetros y balanzas suficientes, en correcto estado y limpios:",
+  "QQ 79. Verificar monitoreo de controles de proceso y verificación por la supervisión (en degustación debe revisar planillas):",
+  "QQ 80. Verificar aplicación y verificación (firmas) de acciones correctivas en registros de días anteriores:",
+  "QQ 81. Verificar registro y toma de contramuestras, considerar menú y gramaje (100 a 200 gramos):",
+]
+
+export const poePptQuestions = [
+  "PPT 82. El flujo del personal, vehículos y de materias primas en las distintas etapas del proceso, es ordenado y conocido por todos los que participan en la elaboración, para evitar contaminación cruzada. (Art. 63)",
+  "PPT 83. Se cuenta con procedimientos escritos de los procesos (Formulación del producto, flujos de operación, procesos productivos). (Art. 3, 11, 63, 66, 69, 132)",
+  "PPT 84. Los productos se almacenan en condiciones que eviten su deterioro y contaminación (envases, temperatura, humedad, etc.). (Art.11, 67)",
+  "PPT 85. La distribución de los productos terminados se realiza en vehículos autorizados, limpios y en buen estado. (Art. 11, 68)",
+  "PPT 86. Para envasar los productos se utilizan materiales adecuados, los cuales son mantenidos en condiciones que eviten su contaminación. (Art. 11, 123)",
+  "PPT 87. Los productos se etiquetan de acuerdo a las exigencias reglamentarias. (Art. 107 al 121)",
+]
+
 
 

@@ -7,7 +7,6 @@ import { getAuditSheetByUsername } from '../../utils/apiAuditSheet';
 import { getTablaDetailsByNumeroAuditoria } from '../../utils/apiDetails';
 import { getColorByPercentageFilas } from '../../utils/utils'
 import {
-  questionsPOE,
   questionsMA,
   questionsDOC,
   questionsTra,
@@ -21,7 +20,17 @@ import {
   poesSustanciasAdulterantes,
   poesHigieneEmpleadosQuestions,
   poesControlPlagas,
-  poesInstalacionesQuestions 
+  poesInstalacionesQuestions,
+  poeRecepcionQuestions,
+  poeAlamacenaminetoQuestions,
+  poePreelaboracionesQuestions,
+  poeElaboracionesQuestions,
+  poeMantencionQuestions,
+  poeTransporteQuestions,
+  poeServicioQuestions,
+  poeLavadoOllasQuestions,
+  poeControlCalidadQiestions,
+  poePptQuestions,
 } from '../../utils/ConstModules';
 
 interface TablaDetail {
@@ -172,7 +181,21 @@ const TableDetailsDD: React.FC = () => {
     return ((poesControlAverage + poesAguaAverage + poesSuperficiesAverage + poesContaminacionCruzadaAverage + poesSustanciasAverage + poesHigieneEmpleadosAverage + poesControlPlagasAverage + poesInstalacionesAverage) / 8).toFixed(2);
   };
 
-  const calculatePOE = () => calculateGeneralAverage(filterModuleDetails(questionsPOE));
+  const calculatePOE = () => {
+    const poeRecepcionAverage = parseFloat(calculateSubmoduleAverage(poeRecepcionQuestions));
+    const poeAlamacenaminetoAverage = parseFloat(calculateSubmoduleAverage(poeAlamacenaminetoQuestions));
+    const poePreelaboracionesAverage = parseFloat(calculateSubmoduleAverage(poePreelaboracionesQuestions));
+    const poeElaboracionesAverage = parseFloat(calculateSubmoduleAverage(poeElaboracionesQuestions));
+    const poeMantencionAverage = parseFloat(calculateSubmoduleAverage(poeMantencionQuestions));
+    const poeTransporteAverage = parseFloat(calculateSubmoduleAverage(poeTransporteQuestions));
+    const poeServicioAverage = parseFloat(calculateSubmoduleAverage(poeServicioQuestions));
+    const poeLavadoOllasAverage = parseFloat(calculateSubmoduleAverage(poeLavadoOllasQuestions));
+    const poeControlCalidadAverage = parseFloat(calculateSubmoduleAverage(poeControlCalidadQiestions));
+    const poePptAverage = parseFloat(calculateSubmoduleAverage( poePptQuestions));
+  
+      return (( poeRecepcionAverage + poeAlamacenaminetoAverage + poePreelaboracionesAverage + poeElaboracionesAverage + poeMantencionAverage + poeTransporteAverage + poeServicioAverage + poeLavadoOllasAverage + poeControlCalidadAverage + poePptAverage ) / 10).toFixed(2);
+    };
+
   const calculateMA = () => calculateGeneralAverage(filterModuleDetails(questionsMA));
   const calculateDOC = () => calculateGeneralAverage(filterModuleDetails(questionsDOC));
   const calculateLUM = () => calculateGeneralAverage(filterModuleDetails(questionLum));
