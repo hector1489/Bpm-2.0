@@ -153,8 +153,8 @@ const BPMDetailsSummary: React.FC<TableDetailsSummaryProps> = ({ numeroAuditoria
       { groupName: 'POE', nombreCompleto: nombreCompletoPorGrupo['POE'],percentage: ponderaciones.POE, average: calculatePOE(), ponderacion: ponderaciones['POE'] },
       { groupName: 'MA', nombreCompleto: nombreCompletoPorGrupo['MA'],percentage: ponderaciones.MA, average: calculateMA(), ponderacion: ponderaciones['MA'] },
       { groupName: 'DOC', nombreCompleto: nombreCompletoPorGrupo['DOC'],percentage: ponderaciones.DOC, average: calculateDOC(), ponderacion: ponderaciones['DOC'] },
-      { groupName: 'LUM', nombreCompleto: nombreCompletoPorGrupo['LUM'],percentage: ponderaciones.LUM ,average: calculateLUM(), ponderacion: ponderaciones['LUM'] },
       { groupName: 'TRA', nombreCompleto: nombreCompletoPorGrupo['TRA'],percentage: ponderaciones.TRA ,average: calculateTRA(), ponderacion: ponderaciones['TRA'] },
+      { groupName: 'LUM', nombreCompleto: nombreCompletoPorGrupo['LUM'],percentage: ponderaciones.LUM ,average: calculateLUM(), ponderacion: ponderaciones['LUM'] },
     ];
   }, [tablaDetails]);
   

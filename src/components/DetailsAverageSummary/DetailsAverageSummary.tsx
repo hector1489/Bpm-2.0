@@ -89,8 +89,8 @@ const DetailsAverageSummary: React.FC<DetailsAverageSummaryProps> = ({ numeroAud
       { groupName: 'POE', average: calculatePOE(), ponderacion: ponderaciones['POE'] },
       { groupName: 'MA', average: calculateMA(), ponderacion: ponderaciones['MA'] },
       { groupName: 'DOC', average: calculateDOC(), ponderacion: ponderaciones['DOC'] },
-      { groupName: 'LUM', average: calculateLUM(), ponderacion: ponderaciones['LUM'] },
       { groupName: 'TRA', average: calculateTRA(), ponderacion: ponderaciones['TRA'] },
+      { groupName: 'LUM', average: calculateLUM(), ponderacion: ponderaciones['LUM'] },
     ];
   }, [tablaDetails]);
 
@@ -136,7 +136,7 @@ const DetailsAverageSummary: React.FC<DetailsAverageSummaryProps> = ({ numeroAud
                 </tr>
               </tfoot>
             </table>
-          </div>
+          </div> 
         </div>
       </div>
     </div>
