@@ -2,6 +2,7 @@ import Highcharts from 'highcharts';
 import Highcharts3D from 'highcharts/highcharts-3d';
 import HighchartsReact from 'highcharts-react-official';
 import './KPIGraph.css';
+import { infraestructuraQuestions, legalesQuestions } from '../../utils/ConstModules'
 
 interface BPMGraphProps {
   moduleData: { moduleName: string, question: string, answer: string, percentage: number | null }[];
@@ -13,43 +14,35 @@ if (typeof Highcharts === 'object') {
 }
 
 const KPIGraph: React.FC<BPMGraphProps> = ({ moduleData }) => {
-  // Función para extraer el porcentaje de la respuesta, si la respuesta es "N/A" devuelve null
   const extractPercentageFromAnswer = (answer: string): number | null => {
     if (answer === 'N/A') return null;
     const match = answer.match(/(\d+)%/);
     return match ? parseInt(match[1]) : null;
   };
 
-  // Preguntas del bloque de BPM (INF y RL)
-  const bpmQuestions = [
-    "INF 1. Separaciones de áreas mínimas y condiciones de mantención de esta:",
-    "INF 2. Equipos mínimos de cocción y frío (quemadores, refrigeradores, mantenedores, otros):",
-    "INF 3. Cuenta con servicios básicos (agua potable, desagües, ventilación, luminarias, vestuarios, otros):",
-    "RL 4. Es factible realizar trazabilidad de producto:",
-    "RL 5. Mantención de registros de control de proceso, 90 días:",
-    "RL 6. Cuenta con registros de mantención correctiva de equipos:",
-    "RL 7. Inducción y entrenamiento al personal, en calidad y medio ambiente (registros e interrogar al personal):"
-  ];
 
-  // Función para calcular el promedio de un grupo de preguntas
-  const calculateGroupAverage = (questions: string[]) => {
-    const percentages = questions
-      .map((question) => {
-        const detail = moduleData.find((module) => module.question === question);
-        return detail ? extractPercentageFromAnswer(detail.answer) : null;
-      })
-      .filter((percentage) => percentage !== null); // Excluir los valores nulos
+  console.log(moduleData)
+  // Function to calculate a specific submodule's average with error handling
+  const calculateSubmoduleAverageBpm = (submoduleQuestions: string[]) => {
+    const submoduleData = moduleData
+      .filter(moduleData => submoduleQuestions.includes(moduleData.question))
+      .map(moduleData => parseFloat(moduleData.answer.replace('%', '')) || 0);
 
-    if (percentages.length === 0) return null;
-
-    const total = percentages.reduce((acc, percentage) => acc + (percentage ?? 0), 0);
-    return total / percentages.length;
+    const total = submoduleData.reduce((acc, percentage) => acc + percentage, 0);
+    return submoduleData.length > 0 ? (total / submoduleData.length).toFixed(2) : 'N/A';
   };
 
-  // Calcular el promedio de BPM
-  const bpmPercentage = calculateGroupAverage(bpmQuestions);
+  // Updated calculateBPM to handle cases where averages might be NaN
+  const calculateBPM = () => {
+    const infraAverage = parseFloat(calculateSubmoduleAverageBpm(infraestructuraQuestions));
+    const legalesAverage = parseFloat(calculateSubmoduleAverageBpm(legalesQuestions));
 
-  // Buscar y extraer los porcentajes de las preguntas específicas
+    return ((infraAverage + legalesAverage) / 2).toFixed(2);
+  };
+
+  const bpmPercentage = calculateBPM();
+
+
   const doc97Detail = moduleData.find((module) =>
     module.question === 'DOC 97. Informes de muestreo microbiológico/luminometría. Planes de acción, charlas al personal si corresponde:'
   );
@@ -70,7 +63,6 @@ const KPIGraph: React.FC<BPMGraphProps> = ({ moduleData }) => {
   );
   const cap101Percentage = cap101Detail ? extractPercentageFromAnswer(cap101Detail.answer) : null;
 
-  // Función para determinar el color basado en el porcentaje
   const getColorByPercentage = (percentage: number | null) => {
     if (percentage === null) return 'grey';
     if (percentage >= 90) return 'green';
@@ -78,15 +70,26 @@ const KPIGraph: React.FC<BPMGraphProps> = ({ moduleData }) => {
     return 'red';
   };
 
-  // Calcular el promedio general, excluyendo valores `null`
-  const validAverages = [bpmPercentage, doc97Percentage, csh31Percentage, ser71Percentage, cap101Percentage].filter(avg => avg !== null);
-  const promedioGeneral = validAverages.length > 0 ? validAverages.reduce((acc, avg) => acc + (avg ?? 0), 0) / validAverages.length : null;
+  const validAverages = [bpmPercentage, doc97Percentage, csh31Percentage, ser71Percentage, cap101Percentage]
+    .filter((avg) => avg !== null)
+    .map((avg) => typeof avg === 'string' ? parseFloat(avg) : avg);
 
-  // Configurar nombres de los indicadores, porcentajes y colores
+  // Calcular el promedio general de los valores filtrados
+  const promedioGeneral = validAverages.length > 0
+    ? (validAverages.reduce((acc, avg) => acc + (avg ?? 0), 0) / validAverages.length)
+    : null;
+
+
   const indicatorNames = ['BPM', 'DOC 97', 'TRA CSH 31', 'SER 71', 'CAP 101'];
-  const percentages = [bpmPercentage, doc97Percentage, csh31Percentage, ser71Percentage, cap101Percentage];
-  const itemWeights = ['25%', '25%', '25%', '25%', '25%'];
-  const barColors = percentages.map(getColorByPercentage);
+
+  const itemWeights = ['25%', '25%', '25%', '25%', '25%']
+  // Filter and map `percentages` to ensure only number | null values are passed
+  const percentages = [bpmPercentage, doc97Percentage, csh31Percentage, ser71Percentage, cap101Percentage]
+    .map((value) => (typeof value === 'string' ? parseFloat(value) : value)); // Convert string values to number
+
+  const barColors = percentages.map((percentage) => getColorByPercentage(percentage));
+
+
 
   // Opciones del gráfico de Highcharts
   const chartOptions = {

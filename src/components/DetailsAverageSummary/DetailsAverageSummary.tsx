@@ -109,8 +109,6 @@ const DetailsAverageSummary: React.FC<DetailsAverageSummaryProps> = ({ numeroAud
   };
 
   
-
-
   // Module-specific data extraction and average calculations
   const calculateBPM = () => {
     const infraAverage = parseFloat(calculateSubmoduleAverage(infraestructuraQuestions));
@@ -119,7 +117,6 @@ const DetailsAverageSummary: React.FC<DetailsAverageSummaryProps> = ({ numeroAud
     return ((infraAverage + legalesAverage) / 2).toFixed(2);
   };
 
-  
 
   const calculatePOES = () => {
     const poesAverages = [
@@ -134,7 +131,7 @@ const DetailsAverageSummary: React.FC<DetailsAverageSummaryProps> = ({ numeroAud
     ]
     .map((avg, index) => {
       const value = parseFloat(avg);
-      console.log(`Promedio del submódulo ${index + 1}:`, value); // Log para cada submódulo
+      console.log(`Promedio del submódulo ${index + 1}:`, value);
       return value;
     })
     .filter(avg => !isNaN(avg));
@@ -142,7 +139,7 @@ const DetailsAverageSummary: React.FC<DetailsAverageSummaryProps> = ({ numeroAud
     const total = poesAverages.reduce((acc, avg) => acc + avg, 0);
     const promedioPOES = poesAverages.length > 0 ? (total / poesAverages.length).toFixed(2) : 'N/A';
   
-    console.log("Promedio POES final:", promedioPOES); // Log del promedio final
+    console.log("Promedio POES final:", promedioPOES);
     return promedioPOES;
   };
   
@@ -179,6 +176,7 @@ const DetailsAverageSummary: React.FC<DetailsAverageSummaryProps> = ({ numeroAud
       { groupName: 'LUM', average: calculateLUM(), ponderacion: ponderaciones['LUM'] },
     ];
   }, [tablaDetails]);
+
 
   const finalAverage = useMemo(() => {
     const sum = groupedData.reduce((acc, group) => acc + parseFloat(group.average), 0);

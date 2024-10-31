@@ -4,8 +4,9 @@ import { useContext, useState, useEffect } from 'react';
 import { AppContext } from '../../context/GlobalState';
 import { getTablaDetailsByNumeroAuditoria } from '../../utils/apiDetails';
 import { getAuditSheetByUsername } from '../../utils/apiAuditSheet';
-import { getColorByPercentageFilas  } from '../../utils/utils'
+import { getColorByPercentageFilas } from '../../utils/utils'
 import './KPI.css';
+import { infraestructuraQuestions, legalesQuestions } from '../../utils/ConstModules'
 
 
 interface TablaDetail {
@@ -94,7 +95,7 @@ const KPI: React.FC = () => {
 
   useEffect(() => {
     fetchAuditSheetDetails();
-  }, [context?.state?.userName]); 
+  }, [context?.state?.userName]);
 
   useEffect(() => {
     bpmFilteredAuditSheet();
@@ -130,34 +131,26 @@ const KPI: React.FC = () => {
     return match ? parseInt(match[1]) : null;
   };
 
-  // Preguntas del bloque de BPM (INF y RL)
-  const bpmQuestions = [
-    "INF 1. Separaciones de áreas mínimas y condiciones de mantención de esta:",
-    "INF 2. Equipos mínimos de cocción y frío (quemadores, refrigeradores, mantenedores, otros):",
-    "INF 3. Cuenta con servicios básicos (agua potable, desagües, ventilación, luminarias, vestuarios, otros):",
-    "RL 4. Es factible realizar trazabilidad de producto:",
-    "RL 5. Mantención de registros de control de proceso, 90 días:",
-    "RL 6. Cuenta con registros de mantención correctiva de equipos:",
-    "RL 7. Inducción y entrenamiento al personal, en calidad y medio ambiente (registros e interrogar al personal):"
-  ];
+  // Function to calculate a specific submodule's average with error handling
+  const calculateSubmoduleAverage = (submoduleQuestions: string[]) => {
+    const submoduleData = tablaDetails
+      .filter(detail => submoduleQuestions.includes(detail.field3))
+      .map(detail => parseFloat(detail.field4.replace('%', '')) || 0);
 
-  // Función para calcular el promedio de un grupo de preguntas
-  const calculateGroupAverage = (questions: string[]) => {
-    const percentages = questions
-      .map((question) => {
-        const detail = moduleData.find((module) => module.question === question);
-        return detail ? extractPercentageFromAnswer(detail.answer) : null;
-      })
-      .filter((percentage) => percentage !== null);
-
-    if (percentages.length === 0) return null;
-
-    const total = percentages.reduce((acc, percentage) => acc + (percentage ?? 0), 0);
-    return total / percentages.length;
+    const total = submoduleData.reduce((acc, percentage) => acc + percentage, 0);
+    return submoduleData.length > 0 ? (total / submoduleData.length).toFixed(2) : 'N/A';
   };
 
-  // Calcular el promedio de BPM
-  const bpmPercentage = calculateGroupAverage(bpmQuestions);
+  // Updated calculateBPM to handle cases where averages might be NaN
+  const calculateBPM = () => {
+    const infraAverage = parseFloat(calculateSubmoduleAverage(infraestructuraQuestions));
+    const legalesAverage = parseFloat(calculateSubmoduleAverage(legalesQuestions));
+
+    return ((infraAverage + legalesAverage) / 2).toFixed(2);
+  };
+
+  const bpmPercentage = calculateBPM();
+
 
   // Buscar y extraer los porcentajes de las preguntas específicas
   const doc97Detail = moduleData.find((module) =>
@@ -179,21 +172,29 @@ const KPI: React.FC = () => {
     module.question === 'CAP 101. Existe un programa escrito y con sus registros correspondientes de capacitación del personal en materia de manipulación higiénica de los alimentos e higiene personal. (Art. 52, 69)'
   );
   const cap101Percentage = cap101Detail ? extractPercentageFromAnswer(cap101Detail.answer) : null;
-  
- // Calcular el promedio general, excluyendo valores `null`
- const validAverages = [bpmPercentage, doc97Percentage, csh31Percentage, ser71Percentage, cap101Percentage].filter(avg => avg !== null);
- const promedioGeneral = validAverages.length > 0 ? validAverages.reduce((acc, avg) => acc + (avg ?? 0), 0) / validAverages.length : null;
 
 
- const backgroundColor = getColorByPercentageFilas(promedioGeneral ?? 0);
+  console.log(bpmPercentage);
+  // Actualización de validAverages para asegurar que todos los elementos sean números
+  const validAverages = [bpmPercentage, doc97Percentage, csh31Percentage, ser71Percentage, cap101Percentage]
+    .filter((avg) => avg !== null)
+    .map((avg) => typeof avg === 'string' ? parseFloat(avg) : avg);
+
+  // Calcular el promedio general de los valores filtrados
+  const promedioGeneral = validAverages.length > 0
+    ? (validAverages.reduce((acc, avg) => acc + (avg ?? 0), 0) / validAverages.length)
+    : null;
 
 
- let textColor = 'black';
- if (backgroundColor === 'red') {
-   textColor = 'white';
- } else if (backgroundColor === 'yellow') {
-   textColor = 'black';
- }
+  const backgroundColor = getColorByPercentageFilas(promedioGeneral ?? 0);
+
+
+  let textColor = 'black';
+  if (backgroundColor === 'red') {
+    textColor = 'white';
+  } else if (backgroundColor === 'yellow') {
+    textColor = 'black';
+  }
 
   return (
     <div className="kpi-view">
@@ -205,36 +206,36 @@ const KPI: React.FC = () => {
           <div className="BPMDetailsSummary-data-table">
 
             <table>
-            <thead>
-              <tr>
-                <th>Nombre del Establecimiento:</th>
-                <td>{filteredAuditSheet?.field1 || 'N/A'}</td>
-              </tr>
-              <tr>
-                <th>Número de Auditoría:</th>
-                <td>{filteredAuditSheet?.numero_auditoria || 'N/A'}</td>
-              </tr>
-              <tr>
-                <th>Gerente del Establecimiento:</th>
-                <td>{filteredAuditSheet?.field2 || 'N/A'}</td>
-              </tr>
-              <tr>
-                <th>Administrador del Establecimiento:</th>
-                <td>{filteredAuditSheet?.field3 || 'N/A'}</td>
-              </tr>
-              <tr>
-                <th>Supervisor del Establecimiento:</th>
-                <td>{filteredAuditSheet?.field4 || 'N/A'}</td>
-              </tr>
-              <tr>
-                <th>Auditor Email:</th>
-                <td>{filteredAuditSheet?.field5 || 'N/A'}</td>
-              </tr>
-              <tr>
-                <th>Fecha de Auditoría:</th>
-                <td>{filteredAuditSheet?.field6 || 'N/A'}</td>
-              </tr>
-            </thead>
+              <thead>
+                <tr>
+                  <th>Nombre del Establecimiento:</th>
+                  <td>{filteredAuditSheet?.field1 || 'N/A'}</td>
+                </tr>
+                <tr>
+                  <th>Número de Auditoría:</th>
+                  <td>{filteredAuditSheet?.numero_auditoria || 'N/A'}</td>
+                </tr>
+                <tr>
+                  <th>Gerente del Establecimiento:</th>
+                  <td>{filteredAuditSheet?.field2 || 'N/A'}</td>
+                </tr>
+                <tr>
+                  <th>Administrador del Establecimiento:</th>
+                  <td>{filteredAuditSheet?.field3 || 'N/A'}</td>
+                </tr>
+                <tr>
+                  <th>Supervisor del Establecimiento:</th>
+                  <td>{filteredAuditSheet?.field4 || 'N/A'}</td>
+                </tr>
+                <tr>
+                  <th>Auditor Email:</th>
+                  <td>{filteredAuditSheet?.field5 || 'N/A'}</td>
+                </tr>
+                <tr>
+                  <th>Fecha de Auditoría:</th>
+                  <td>{filteredAuditSheet?.field6 || 'N/A'}</td>
+                </tr>
+              </thead>
             </table>
 
           </div>
@@ -295,7 +296,7 @@ const KPI: React.FC = () => {
           </div>
 
         </div>
-        
+
         {loading && <p>Cargando datos...</p>}
         {error && <p>{error}</p>}
         {!loading && !error && (
