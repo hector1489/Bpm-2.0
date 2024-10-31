@@ -41,7 +41,6 @@ interface TablaDetail {
   field4: string;
 }
 
-type ModuleGroupName = 'BPM' | 'POES' | 'POE' | 'MA' | 'DOC' | 'LUM' | 'TRA';
 
 // Definición de ponderaciones para cada grupo de módulos
 const ponderaciones: Record<string, number> = {
