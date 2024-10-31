@@ -51,8 +51,6 @@ const DesviacionesTable: React.FC = () => {
         return isAuditorMatch && isRequirementMatch;
       });
 
-      console.log('Desviaciones filtradas:', filteredDesviaciones);
-
       setLocalDesviaciones(filteredDesviaciones);
     }
   }, [desviaciones, numero_requerimiento, context?.state?.userName, reloadData]);
@@ -133,7 +131,7 @@ const DesviacionesTable: React.FC = () => {
     tableBody.querySelectorAll('tr').forEach(async (row, rowIndex) => {
       row.querySelectorAll('td').forEach(async (cell, cellIndex) => {
         const emailColumnIndex = 14;
-        const responsableColumnIndex = 4; // Índice para la columna "Responsable"
+        const responsableColumnIndex = 4;
         
         if (cellIndex === 10) {
           const selectEstado = crearSelectEstado();

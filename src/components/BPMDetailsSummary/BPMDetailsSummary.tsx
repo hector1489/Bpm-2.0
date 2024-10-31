@@ -227,16 +227,12 @@ const BPMDetailsSummary: React.FC<TableDetailsSummaryProps> = ({ numeroAuditoria
 
 
   const finalAverage = useMemo(() => {
-    const weightedSum = groupedData
-      .filter(group => group.groupName !== 'TRA' && group.groupName !== 'LUM')
-      .reduce((acc, group) => acc + parseFloat(group.average) * group.ponderacion, 0);
-
-    const totalWeight = Object.keys(ponderaciones)
-      .filter(key => key !== 'TRA' && key !== 'LUM')
-      .reduce((acc, key) => acc + ponderaciones[key as ModuleGroupName], 0);
-
-    return (weightedSum / totalWeight).toFixed(2);
+    const sum = groupedData.reduce((acc, group) => acc + parseFloat(group.average), 0);
+    const count = groupedData.length;
+  
+    return count ? (sum / count).toFixed(2) : '0.00';
   }, [groupedData]);
+  
 
   const chartOptions = {
     chart: {

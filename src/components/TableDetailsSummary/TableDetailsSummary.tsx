@@ -42,9 +42,6 @@ const TableDetailsSummary: React.FC<TableDetailsSummaryProps> = ({ numeroAuditor
           let section = '';
           let module = detail.field2.toLowerCase().trim();
   
-          // Debugging - log each detail's fields
-          console.log("Processing detail:", detail.field3);
-  
           // Assign section and module based on question type
           if (detail.field3 === lumQuestion) {
             section = 'LUM';
@@ -66,9 +63,6 @@ const TableDetailsSummary: React.FC<TableDetailsSummaryProps> = ({ numeroAuditor
   
           if (!section) return acc;
   
-          // Debugging - log section and module assignment
-          console.log(`Assigned section: ${section}, module: ${module}`);
-  
           // Initialize section and module if not already present
           if (!acc[section]) acc[section] = {};
           if (!acc[section][module]) acc[section][module] = [];
@@ -79,9 +73,6 @@ const TableDetailsSummary: React.FC<TableDetailsSummaryProps> = ({ numeroAuditor
   
           return acc;
         }, {});
-  
-        // Debugging - log final grouped data structure
-        console.log("Grouped data:", groupedData);
   
         setTablaDetails(groupedData);
       } catch (err) {
