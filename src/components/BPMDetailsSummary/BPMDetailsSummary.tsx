@@ -202,7 +202,7 @@ const BPMDetailsSummary: React.FC<TableDetailsSummaryProps> = ({ numeroAuditoria
     const poeControlCalidadAverage = parseFloat(calculateSubmoduleAverage(poeControlCalidadQiestions));
     const poePptAverage = parseFloat(calculateSubmoduleAverage( poePptQuestions));
   
-      return (( poeRecepcionAverage + poeAlamacenaminetoAverage + poePreelaboracionesAverage + poeElaboracionesAverage + poeTransporteAverage + poeServicioAverage + poeLavadoOllasAverage + poeControlCalidadAverage + poePptAverage ) / 10).toFixed(2);
+      return (( poeRecepcionAverage + poeAlamacenaminetoAverage + poePreelaboracionesAverage + poeElaboracionesAverage + poeTransporteAverage + poeServicioAverage + poeLavadoOllasAverage + poeControlCalidadAverage + poePptAverage ) / 9).toFixed(2);
     };
 
   const calculateMA = () => calculateGeneralAverage(filterModuleDetails(questionsMA));
