@@ -2,7 +2,15 @@ import React, { useContext, useEffect, useState } from 'react';
 import './TableDetailsSummary.css';
 import { AppContext } from '../../context/GlobalState';
 import { getTablaDetailsByNumeroAuditoria } from '../../utils/apiDetails';
-import { bpmModules, poesModules, poeModules, maModules, docModules, aguaModules, contaminacionMoudles, capModules, traModules, lumModules } from '../../utils/ConstModules';
+import {
+  bpmModules,
+  poesModules,
+  poeModules,
+  maModules,
+  docModules,
+  traModules,
+  lumModules
+} from '../../utils/ConstModules';
 
 interface TablaDetail {
   numero_auditoria: string;
@@ -51,10 +59,7 @@ const TableDetailsSummary: React.FC<TableDetailsSummaryProps> = ({ numeroAuditor
             module = 'tra';
           } else {
             if (bpmModules.map(mod => mod.toLowerCase()).includes(module)) section = 'BPM';
-            else if (aguaModules.map(mod => mod.toLowerCase()).includes(module)) section = 'AGUA';
             else if (poesModules.map(mod => mod.toLowerCase()).includes(module)) section = 'POES';
-            else if (contaminacionMoudles.map(mod => mod.toLowerCase()).includes(module)) section = 'CONTAMINACION';
-            else if (capModules.map(mod => mod.toLowerCase()).includes(module)) section = 'CAP';
             else if (poeModules.map(mod => mod.toLowerCase()).includes(module)) section = 'POE';
             else if (maModules.map(mod => mod.toLowerCase()).includes(module)) section = 'MA';
             else if (docModules.map(mod => mod.toLowerCase()).includes(module)) section = 'DOC';
@@ -103,10 +108,7 @@ const TableDetailsSummary: React.FC<TableDetailsSummaryProps> = ({ numeroAuditor
 
   const sectionsOrder = {
     BPM: bpmModules,
-    AGUA: aguaModules,
     POES: poesModules,
-    CONTAMINACION: contaminacionMoudles,
-    CAP: capModules,
     POE: poeModules,
     MA: maModules,
     DOC: docModules,

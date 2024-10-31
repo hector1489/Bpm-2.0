@@ -5,8 +5,8 @@ export const bpmModules = ['infraestructura', 'legales'];
 export const aguaModules = ['agua'];
 
 export const poesModules = [
-  'poes-control-productos', 'poes-control-agua', 'poes-superficies', 'poes-contaminacion-cruzada',
-  'poes-sustancias-adulterantes', 'poes-higiene-empleados', 'poes-control-plagas', 'poes-instalaciones'
+  'poes-control-productos', 'poes-control-agua', 'poes-superficies', 'poes-contaminacion-cruzada','contaminacion-cruzada',
+  'poes-sustancias-adulterantes', 'poes-higiene-empleados', 'poes-control-plagas', 'poes-instalaciones', 'agua'
 ];
 
 export const contaminacionMoudles = ['contaminacion-cruzada'];
@@ -18,7 +18,7 @@ export const poeModules = [
 
 export const maModules = ['ma'];
 
-export const docModules = ['doc'];
+export const docModules = ['doc', 'cap'];
 
 export const lumModules = ['lum'];
 
