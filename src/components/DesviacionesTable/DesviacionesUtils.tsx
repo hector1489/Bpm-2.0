@@ -9,22 +9,29 @@ const prioridades = [
 
 export const calcularFechaSolucionProgramada = (fechaIngreso: string, criticidad: string): string => {
   const prioridad = prioridades.find(p => p.valor === criticidad);
-  
   if (!prioridad) return fechaIngreso;
 
-  const [dd, mm, yyyy] = fechaIngreso.split('/').map(Number);
+  // Validar y convertir la fecha de ingreso en formato yyyy-mm-dd
+  const [yyyy, mm, dd] = fechaIngreso.split('-').map(Number);
+  if (isNaN(dd) || isNaN(mm) || isNaN(yyyy)) {
+    console.error('Fecha de ingreso inválida:', fechaIngreso);
+    return fechaIngreso;
+  }
+
   const fecha = new Date(yyyy, mm - 1, dd);
+  fecha.setDate(fecha.getDate() + prioridad.diasFechaSolucion);
 
-  fecha.setDate(fecha.getDate() + prioridad.diasFechaSolucion)
-
+  // Formatear la fecha en el formato yyyy-mm-dd
   const nuevaFecha = [
-    String(fecha.getDate()).padStart(2, '0'),
+    fecha.getFullYear(),
     String(fecha.getMonth() + 1).padStart(2, '0'),
-    fecha.getFullYear()
-  ].join('/');
+    String(fecha.getDate()).padStart(2, '0')
+  ].join('-');
 
   return nuevaFecha;
 };
+
+
 
 
 export const replaceNA = (value: string) => (value === 'N/A' ? '' : value);
