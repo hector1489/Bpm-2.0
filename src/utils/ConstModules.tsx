@@ -272,7 +272,6 @@ export const poeAlamacenaminetoQuestions = [
 ]
 
 export const poePreelaboracionesQuestions = [
-  "TRA PRE 52. Verificar descongelación en equipos de refrigeración, en agua corriendo sólo en caso de emergencias:",
   "PRE 53. Pre-elaborados en refrigeración, en envases originales sellados y apilados correctamente:",
   "PRE 54. Materias primas ya procesadas en recipientes o envases lavables y tapadas:",
   "PRE 55. Se separan productos por tipo y/o riesgo de contaminación:",
@@ -283,7 +282,6 @@ export const poeElaboracionesQuestions = [
   "ELB 57. Recepción y mantención de materias primas en envases limpios y protegidos:",
   "ELB 58. Orden, limpieza y T° correcta en todos los equipos de frío. Termómetro interno:",
   "ELB 59. Productos en tránsito y/o producto terminado, correctamente rotulado según tiempos definidos:",
-  "TRA ELB 60. Respetan las T° y los tiempos correctos de cocción y enfriamiento (fríos y calientes):",
   "ELB 61. Uso correcto de equipos de frío, elaboración y mantención:",
   "ELB 62. Sistema de extracción e inyección de aire, en correcto funcionamiento, limpio y con registro de limpieza de ducto:",
   "ELB 63. Estantes sin óxido, sin sobrecarga y ordenados (materias primas y especies - desechables - utensilios):",
@@ -297,7 +295,6 @@ export const poeMantencionQuestions = [
 ]
 
 export const poeTransporteQuestions = [
-  "TRA TPO 68. Traslado de alimentos cumpliendo; protección, rotulación, estiba y registros al inicio y término:",
   "TPO 69. Vehículo cerrado, limpio y en correctas condiciones. Con autorización sanitaria:"
 ]
 
