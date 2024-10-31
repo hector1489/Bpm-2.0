@@ -14,7 +14,8 @@ import {
   crearSelectEstado,
   crearSelectCriticidad,
   crearSelectAcciones,
-  calcularDiasRestantes
+  calcularDiasRestantes,
+  calcularFechaSolucionProgramada,
 } from './DesviacionesUtils'
 
 const DEFAULT_ANSWER = "Sin respuesta";
@@ -126,12 +127,12 @@ const DesviacionesTable: React.FC = () => {
     const authToken = context.state.authToken ?? '';
     const tableBody = document.querySelector('#tabla-desviaciones tbody');
     if (!tableBody) return;
-  
+
     tableBody.querySelectorAll('tr').forEach(async (row, rowIndex) => {
       row.querySelectorAll('td').forEach(async (cell, cellIndex) => {
         const emailColumnIndex = 14;
         const responsableColumnIndex = 4;
-        
+
         if (cellIndex === 10) {
           const selectEstado = crearSelectEstado();
           selectEstado.value = localDesviaciones[rowIndex].estado || 'Abierto';
@@ -147,6 +148,11 @@ const DesviacionesTable: React.FC = () => {
           selectCriticidad.onchange = (e) => {
             const value = (e.target as HTMLSelectElement).value;
             handleInputChange(rowIndex, 'criticidad', value);
+  
+            // Aquí se actualiza la fecha de solución programada solo cuando cambia la criticidad
+            const fechaIngreso = localDesviaciones[rowIndex].fecha_recepcion_solicitud || getCurrentDate();
+            const fechaSolucionProgramada = calcularFechaSolucionProgramada(fechaIngreso, value);
+            handleInputChange(rowIndex, 'fecha_solucion_programada', fechaSolucionProgramada);
           };
           cell.innerHTML = '';
           cell.appendChild(selectCriticidad);
@@ -161,14 +167,19 @@ const DesviacionesTable: React.FC = () => {
           cell.innerHTML = '';
           cell.appendChild(selectAcciones);
         } else if (cellIndex === responsableColumnIndex) {
+          // Input de texto para "Responsable"
           const input = document.createElement('input');
           input.type = 'text';
           input.placeholder = 'Responsable...';
-          input.value = localDesviaciones[rowIndex].responsable_problema || '';
+  
+          const currentValue = localDesviaciones[rowIndex].responsable_problema;
+          input.value = currentValue !== undefined && currentValue !== null ? String(currentValue) : '';
+  
           input.onblur = (e) => {
             const value = (e.target as HTMLInputElement).value;
             handleInputChange(rowIndex, 'responsable_problema', value);
           };
+  
           cell.innerHTML = '';
           cell.appendChild(input);
         } else if (cellIndex === emailColumnIndex || cell.textContent === 'N/A' || cell.textContent === DEFAULT_ANSWER) {
@@ -176,18 +187,24 @@ const DesviacionesTable: React.FC = () => {
           const input = document.createElement('input');
           input.type = 'text';
           input.placeholder = 'Text ...';
-          input.value = String(localDesviaciones[rowIndex][field] || '');
+  
+          const currentValue = localDesviaciones[rowIndex][field];
+          input.value = currentValue !== undefined && currentValue !== null ? String(currentValue) : '';
+  
+          input.id = `input-${rowIndex}-${cellIndex}`;
+  
           input.onblur = (e) => {
             const value = (e.target as HTMLInputElement).value;
             handleInputChange(rowIndex, field, value);
           };
+  
           cell.innerHTML = '';
           cell.appendChild(input);
         }
       });
     });
   };
-  
+
   
   
   const handleGoToHome = () => {
