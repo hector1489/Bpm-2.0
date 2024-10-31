@@ -26,7 +26,6 @@ import {
   poeAlamacenaminetoQuestions,
   poePreelaboracionesQuestions,
   poeElaboracionesQuestions,
-  poeMantencionQuestions,
   poeTransporteQuestions,
   poeServicioQuestions,
   poeLavadoOllasQuestions,
@@ -197,14 +196,13 @@ const BPMDetailsSummary: React.FC<TableDetailsSummaryProps> = ({ numeroAuditoria
     const poeAlamacenaminetoAverage = parseFloat(calculateSubmoduleAverage(poeAlamacenaminetoQuestions));
     const poePreelaboracionesAverage = parseFloat(calculateSubmoduleAverage(poePreelaboracionesQuestions));
     const poeElaboracionesAverage = parseFloat(calculateSubmoduleAverage(poeElaboracionesQuestions));
-    const poeMantencionAverage = parseFloat(calculateSubmoduleAverage(poeMantencionQuestions));
     const poeTransporteAverage = parseFloat(calculateSubmoduleAverage(poeTransporteQuestions));
     const poeServicioAverage = parseFloat(calculateSubmoduleAverage(poeServicioQuestions));
     const poeLavadoOllasAverage = parseFloat(calculateSubmoduleAverage(poeLavadoOllasQuestions));
     const poeControlCalidadAverage = parseFloat(calculateSubmoduleAverage(poeControlCalidadQiestions));
     const poePptAverage = parseFloat(calculateSubmoduleAverage( poePptQuestions));
   
-      return (( poeRecepcionAverage + poeAlamacenaminetoAverage + poePreelaboracionesAverage + poeElaboracionesAverage + poeMantencionAverage + poeTransporteAverage + poeServicioAverage + poeLavadoOllasAverage + poeControlCalidadAverage + poePptAverage ) / 10).toFixed(2);
+      return (( poeRecepcionAverage + poeAlamacenaminetoAverage + poePreelaboracionesAverage + poeElaboracionesAverage + poeTransporteAverage + poeServicioAverage + poeLavadoOllasAverage + poeControlCalidadAverage + poePptAverage ) / 10).toFixed(2);
     };
 
   const calculateMA = () => calculateGeneralAverage(filterModuleDetails(questionsMA));
