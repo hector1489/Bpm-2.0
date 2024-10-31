@@ -58,7 +58,6 @@ const TableDetailsDD: React.FC = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const numeroAuditoria = location.state?.numero_requerimiento;
-
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [auditSheetDetails, setAuditSheetDetails] = useState<any[]>([]);
@@ -70,7 +69,6 @@ const TableDetailsDD: React.FC = () => {
 
   const { state } = context;
 
-  // Función para obtener los detalles de la tabla
   const fetchTablaDetails = useCallback(async () => {
     if (!numeroAuditoria) return;
 
@@ -129,106 +127,89 @@ const TableDetailsDD: React.FC = () => {
     fetchTablaDetails();
   }, [fetchTablaDetails]);
 
-
-
-  // Filter for each module
   const filterModuleDetails = (questions: string[]) => {
     return tablaDetails
       .filter(detail => questions.includes(detail.field3))
-      .filter((detail, index, self) =>
-        index === self.findIndex(d => d.field3 === detail.field3)
-      )
-      .map(detail => parseFloat(detail.field4.replace('%', '')) || 0);
+      .map(detail => parseFloat(detail.field4.replace('%', '')))
+      .filter(value => !isNaN(value));
   };
 
-  // Individual module calculations
   const calculateGeneralAverage = (percentages: number[]) => {
-    const total = percentages.reduce((acc, percentage) => acc + percentage, 0);
-    return percentages.length > 0 ? (total / percentages.length).toFixed(2) : 'N/A';
+    const validPercentages = percentages.filter(value => !isNaN(value));
+    const total = validPercentages.reduce((acc, percentage) => acc + percentage, 0);
+    return validPercentages.length > 0 ? (total / validPercentages.length).toFixed(2) : 'N/A';
   };
 
-   // Función para filtrar y calcular el promedio de un submódulo específico
-   const calculateSubmoduleAverage = (submoduleQuestions: string[]) => {
-    const submoduleData = tablaDetails
-      .filter(detail => submoduleQuestions.includes(detail.field3))
-      .map(detail => parseFloat(detail.field4.replace('%', '')) || 0);
-
-    const total = submoduleData.reduce((acc, percentage) => acc + percentage, 0);
-    return submoduleData.length > 0 ? (total / submoduleData.length).toFixed(2) : 'N/A';
+  const calculateSubmoduleAverage = (submoduleQuestions: string[]) => {
+    const submoduleData = filterModuleDetails(submoduleQuestions);
+    return calculateGeneralAverage(submoduleData);
   };
 
-
-  // Module-specific data extraction and average calculations
   const calculateBPM = () => {
     const infraAverage = parseFloat(calculateSubmoduleAverage(infraestructuraQuestions));
     const legalesAverage = parseFloat(calculateSubmoduleAverage(legalesQuestions));
-
-    return ((infraAverage + legalesAverage) / 2).toFixed(2);
+    const validAverages = [infraAverage, legalesAverage].filter(avg => !isNaN(avg));
+    const total = validAverages.reduce((acc, avg) => acc + avg, 0);
+    return validAverages.length > 0 ? (total / validAverages.length).toFixed(2) : 'N/A';
   };
 
   const calculatePOES = () => {
-    const poesControlAverage = parseFloat(calculateSubmoduleAverage(poesControlProductosQuestion));
-    const poesAguaAverage = parseFloat(calculateSubmoduleAverage(poesAguaQuestion));
-    const poesSuperficiesAverage = parseFloat(calculateSubmoduleAverage(poesSuperficiesQuestions));
-    const poesContaminacionCruzadaAverage = parseFloat(calculateSubmoduleAverage(poesContaminacionCruzadaQuestions));
-    const poesSustanciasAverage = parseFloat(calculateSubmoduleAverage( poesSustanciasAdulterantes));
-    const poesHigieneEmpleadosAverage =  parseFloat(calculateSubmoduleAverage(poesHigieneEmpleadosQuestions));
-    const poesControlPlagasAverage = parseFloat(calculateSubmoduleAverage(poesControlPlagas));
-    const poesInstalacionesAverage = parseFloat(calculateSubmoduleAverage(poesInstalacionesQuestions));
-    
-    return ((poesControlAverage + poesAguaAverage + poesSuperficiesAverage + poesContaminacionCruzadaAverage + poesSustanciasAverage + poesHigieneEmpleadosAverage + poesControlPlagasAverage + poesInstalacionesAverage) / 8).toFixed(2);
+    const poesAverages = [
+      calculateSubmoduleAverage(poesControlProductosQuestion),
+      calculateSubmoduleAverage(poesAguaQuestion),
+      calculateSubmoduleAverage(poesSuperficiesQuestions),
+      calculateSubmoduleAverage(poesContaminacionCruzadaQuestions),
+      calculateSubmoduleAverage(poesSustanciasAdulterantes),
+      calculateSubmoduleAverage(poesHigieneEmpleadosQuestions),
+      calculateSubmoduleAverage(poesControlPlagas),
+      calculateSubmoduleAverage(poesInstalacionesQuestions),
+    ].map(avg => parseFloat(avg)).filter(avg => !isNaN(avg));
+
+    const total = poesAverages.reduce((acc, avg) => acc + avg, 0);
+    return poesAverages.length > 0 ? (total / poesAverages.length).toFixed(2) : 'N/A';
   };
 
   const calculatePOE = () => {
-    const poeRecepcionAverage = parseFloat(calculateSubmoduleAverage(poeRecepcionQuestions));
-    const poeAlamacenaminetoAverage = parseFloat(calculateSubmoduleAverage(poeAlamacenaminetoQuestions));
-    const poePreelaboracionesAverage = parseFloat(calculateSubmoduleAverage(poePreelaboracionesQuestions));
-    const poeElaboracionesAverage = parseFloat(calculateSubmoduleAverage(poeElaboracionesQuestions));
-    const poeTransporteAverage = parseFloat(calculateSubmoduleAverage(poeTransporteQuestions));
-    const poeServicioAverage = parseFloat(calculateSubmoduleAverage(poeServicioQuestions));
-    const poeLavadoOllasAverage = parseFloat(calculateSubmoduleAverage(poeLavadoOllasQuestions));
-    const poeControlCalidadAverage = parseFloat(calculateSubmoduleAverage(poeControlCalidadQiestions));
-    const poePptAverage = parseFloat(calculateSubmoduleAverage( poePptQuestions));
-  
-      return (( poeRecepcionAverage + poeAlamacenaminetoAverage + poePreelaboracionesAverage + poeElaboracionesAverage + poeTransporteAverage + poeServicioAverage + poeLavadoOllasAverage + poeControlCalidadAverage + poePptAverage ) / 9).toFixed(2);
-    };
+    const poeAverages = [
+      calculateSubmoduleAverage(poeRecepcionQuestions),
+      calculateSubmoduleAverage(poeAlamacenaminetoQuestions),
+      calculateSubmoduleAverage(poePreelaboracionesQuestions),
+      calculateSubmoduleAverage(poeElaboracionesQuestions),
+      calculateSubmoduleAverage(poeTransporteQuestions),
+      calculateSubmoduleAverage(poeServicioQuestions),
+      calculateSubmoduleAverage(poeLavadoOllasQuestions),
+      calculateSubmoduleAverage(poeControlCalidadQiestions),
+      calculateSubmoduleAverage(poePptQuestions),
+    ].map(avg => parseFloat(avg)).filter(avg => !isNaN(avg));
+
+    const total = poeAverages.reduce((acc, avg) => acc + avg, 0);
+    return poeAverages.length > 0 ? (total / poeAverages.length).toFixed(2) : 'N/A';
+  };
 
   const calculateMA = () => calculateGeneralAverage(filterModuleDetails(questionsMA));
   const calculateDOC = () => calculateGeneralAverage(filterModuleDetails(questionsDOC));
   const calculateLUM = () => calculateGeneralAverage(filterModuleDetails(questionLum));
   const calculateTRA = () => calculateGeneralAverage(filterModuleDetails(questionsTra));
 
-  const groupedData = useMemo(() => {
-    return [
-      { groupName: 'BPM', average: calculateBPM(), ponderacion: ponderaciones['BPM'] },
-      { groupName: 'POES', average: calculatePOES(), ponderacion: ponderaciones['POES'] },
-      { groupName: 'POE', average: calculatePOE(), ponderacion: ponderaciones['POE'] },
-      { groupName: 'MA', average: calculateMA(), ponderacion: ponderaciones['MA'] },
-      { groupName: 'DOC', average: calculateDOC(), ponderacion: ponderaciones['DOC'] },
-      { groupName: 'LUM', average: calculateLUM(), ponderacion: ponderaciones['LUM'] },
-      { groupName: 'TRA', average: calculateTRA(), ponderacion: ponderaciones['TRA'] },
-    ];
-  }, [tablaDetails]);
+  const groupedData = useMemo(() => [
+    { groupName: 'BPM', average: calculateBPM(), ponderacion: ponderaciones['BPM'] },
+    { groupName: 'POES', average: calculatePOES(), ponderacion: ponderaciones['POES'] },
+    { groupName: 'POE', average: calculatePOE(), ponderacion: ponderaciones['POE'] },
+    { groupName: 'MA', average: calculateMA(), ponderacion: ponderaciones['MA'] },
+    { groupName: 'DOC', average: calculateDOC(), ponderacion: ponderaciones['DOC'] },
+    { groupName: 'LUM', average: calculateLUM(), ponderacion: ponderaciones['LUM'] },
+    { groupName: 'TRA', average: calculateTRA(), ponderacion: ponderaciones['TRA'] },
+  ], [tablaDetails]);
 
   const finalAverage = useMemo(() => {
-    const sum = groupedData.reduce((acc, group) => acc + parseFloat(group.average), 0);
-    const count = groupedData.length;
-  
-    return count ? (sum / count).toFixed(2) : '0.00';
+    const validAverages = groupedData.map(group => parseFloat(group.average)).filter(avg => !isNaN(avg));
+    const total = validAverages.reduce((acc, avg) => acc + avg, 0);
+    return validAverages.length > 0 ? (total / validAverages.length).toFixed(2) : 'N/A';
   }, [groupedData]);
-  
 
-  if (loading) {
-    return <p>Cargando datos...</p>;
-  }
-
-  if (error) {
-    return <p>{error}</p>;
-  }
-
-  if (!filteredAuditSheet) {
-    return <p>No se encontraron detalles para la auditoría {numeroAuditoria}</p>;
-  }
+  if (loading) return <p>Cargando datos...</p>;
+  if (error) return <p>{error}</p>;
+  if (!filteredAuditSheet) return <p>No se encontraron detalles para la auditoría {numeroAuditoria}</p>;
 
 
   const backgroundColor = getColorByPercentageFilas(parseFloat(finalAverage));
