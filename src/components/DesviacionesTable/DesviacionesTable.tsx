@@ -14,7 +14,6 @@ import {
   crearSelectEstado,
   crearSelectCriticidad,
   crearSelectAcciones,
-  calcularFechaSolucionProgramada,
   calcularDiasRestantes
 } from './DesviacionesUtils'
 
@@ -148,11 +147,6 @@ const DesviacionesTable: React.FC = () => {
           selectCriticidad.onchange = (e) => {
             const value = (e.target as HTMLSelectElement).value;
             handleInputChange(rowIndex, 'criticidad', value);
-  
-            // Aquí se actualiza la fecha de solución programada solo cuando cambia la criticidad
-            const fechaIngreso = localDesviaciones[rowIndex].fecha_recepcion_solicitud || getCurrentDate();
-            const fechaSolucionProgramada = calcularFechaSolucionProgramada(fechaIngreso, value);
-            handleInputChange(rowIndex, 'fecha_solucion_programada', fechaSolucionProgramada);
           };
           cell.innerHTML = '';
           cell.appendChild(selectCriticidad);
@@ -167,19 +161,14 @@ const DesviacionesTable: React.FC = () => {
           cell.innerHTML = '';
           cell.appendChild(selectAcciones);
         } else if (cellIndex === responsableColumnIndex) {
-          // Input de texto para "Responsable"
           const input = document.createElement('input');
           input.type = 'text';
           input.placeholder = 'Responsable...';
-  
-          const currentValue = localDesviaciones[rowIndex].responsable_problema;
-          input.value = currentValue !== undefined && currentValue !== null ? String(currentValue) : '';
-  
+          input.value = localDesviaciones[rowIndex].responsable_problema || '';
           input.onblur = (e) => {
             const value = (e.target as HTMLInputElement).value;
             handleInputChange(rowIndex, 'responsable_problema', value);
           };
-  
           cell.innerHTML = '';
           cell.appendChild(input);
         } else if (cellIndex === emailColumnIndex || cell.textContent === 'N/A' || cell.textContent === DEFAULT_ANSWER) {
@@ -187,24 +176,18 @@ const DesviacionesTable: React.FC = () => {
           const input = document.createElement('input');
           input.type = 'text';
           input.placeholder = 'Text ...';
-  
-          const currentValue = localDesviaciones[rowIndex][field];
-          input.value = currentValue !== undefined && currentValue !== null ? String(currentValue) : '';
-  
-          input.id = `input-${rowIndex}-${cellIndex}`;
-  
+          input.value = String(localDesviaciones[rowIndex][field] || '');
           input.onblur = (e) => {
             const value = (e.target as HTMLInputElement).value;
             handleInputChange(rowIndex, field, value);
           };
-  
           cell.innerHTML = '';
           cell.appendChild(input);
         }
       });
     });
   };
-
+  
   
   
   const handleGoToHome = () => {
