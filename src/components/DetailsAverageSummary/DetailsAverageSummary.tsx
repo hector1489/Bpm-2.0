@@ -108,6 +108,8 @@ const DetailsAverageSummary: React.FC<DetailsAverageSummaryProps> = ({ numeroAud
     return submoduleData.length > 0 ? (total / submoduleData.length).toFixed(2) : 'N/A';
   };
 
+  
+
 
   // Module-specific data extraction and average calculations
   const calculateBPM = () => {
@@ -117,18 +119,34 @@ const DetailsAverageSummary: React.FC<DetailsAverageSummaryProps> = ({ numeroAud
     return ((infraAverage + legalesAverage) / 2).toFixed(2);
   };
 
+  
+
   const calculatePOES = () => {
-    const poesControlAverage = parseFloat(calculateSubmoduleAverage(poesControlProductosQuestion));
-    const poesAguaAverage = parseFloat(calculateSubmoduleAverage(poesAguaQuestion));
-    const poesSuperficiesAverage = parseFloat(calculateSubmoduleAverage(poesSuperficiesQuestions));
-    const poesContaminacionCruzadaAverage = parseFloat(calculateSubmoduleAverage(poesContaminacionCruzadaQuestions));
-    const poesSustanciasAverage = parseFloat(calculateSubmoduleAverage( poesSustanciasAdulterantes));
-    const poesHigieneEmpleadosAverage =  parseFloat(calculateSubmoduleAverage(poesHigieneEmpleadosQuestions));
-    const poesControlPlagasAverage = parseFloat(calculateSubmoduleAverage(poesControlPlagas));
-    const poesInstalacionesAverage = parseFloat(calculateSubmoduleAverage(poesInstalacionesQuestions));
-    
-    return ((poesControlAverage + poesAguaAverage + poesSuperficiesAverage + poesContaminacionCruzadaAverage + poesSustanciasAverage + poesHigieneEmpleadosAverage + poesControlPlagasAverage + poesInstalacionesAverage) / 8).toFixed(2);
+    const poesAverages = [
+      calculateSubmoduleAverage(poesControlProductosQuestion),
+      calculateSubmoduleAverage(poesAguaQuestion),
+      calculateSubmoduleAverage(poesSuperficiesQuestions),
+      calculateSubmoduleAverage(poesContaminacionCruzadaQuestions),
+      calculateSubmoduleAverage(poesSustanciasAdulterantes),
+      calculateSubmoduleAverage(poesHigieneEmpleadosQuestions),
+      calculateSubmoduleAverage(poesControlPlagas),
+      calculateSubmoduleAverage(poesInstalacionesQuestions),
+    ]
+    .map((avg, index) => {
+      const value = parseFloat(avg);
+      console.log(`Promedio del submódulo ${index + 1}:`, value); // Log para cada submódulo
+      return value;
+    })
+    .filter(avg => !isNaN(avg));
+  
+    const total = poesAverages.reduce((acc, avg) => acc + avg, 0);
+    const promedioPOES = poesAverages.length > 0 ? (total / poesAverages.length).toFixed(2) : 'N/A';
+  
+    console.log("Promedio POES final:", promedioPOES); // Log del promedio final
+    return promedioPOES;
   };
+  
+  
 
   const calculatePOE = () => {
   const poeRecepcionAverage = parseFloat(calculateSubmoduleAverage(poeRecepcionQuestions));
