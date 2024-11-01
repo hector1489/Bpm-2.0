@@ -93,7 +93,9 @@ export const getColorByPercentage = (percentage: number) => {
   if (percentage >= 90) return 'green';
   if (percentage >= 75) return 'yellow';
   return 'red';
-}
+};
+
+
 
 export const getColorByPercentageFilas = (percentage: number) => {
   if (percentage >= 90) return 'green';

@@ -250,10 +250,14 @@ const BPMDetailsSummary: React.FC<TableDetailsSummaryProps> = ({ numeroAuditoria
       name: 'Promedio',
       data: [...groupedData.map(g => parseFloat(g.average)), parseFloat(finalAverage)],
       colorByPoint: true,
-      colors: groupedData.map(g => getColorByPercentage(parseFloat(g.average))),
+      colors: [
+        ...groupedData.map(g => getColorByPercentage(parseFloat(g.average))), 
+        getColorByPercentage(parseFloat(finalAverage))
+      ],
       dataLabels: { enabled: true, format: '{y:.1f}%', style: { fontWeight: 'bold', color: 'black' } },
     }],
   };
+  
 
   const backgroundColor = getColorByPercentageFilas(parseFloat(finalAverage));
   const textColor = backgroundColor === 'red' ? 'white' : 'black';
