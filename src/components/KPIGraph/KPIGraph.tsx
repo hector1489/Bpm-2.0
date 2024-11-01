@@ -23,22 +23,30 @@ const KPIGraph: React.FC<BPMGraphProps> = ({ moduleData }) => {
 
   console.log(moduleData)
   // Function to calculate a specific submodule's average with error handling
-  const calculateSubmoduleAverageBpm = (submoduleQuestions: string[]) => {
-    const submoduleData = moduleData
-      .filter(moduleData => submoduleQuestions.includes(moduleData.question))
-      .map(moduleData => parseFloat(moduleData.answer.replace('%', '')) || 0);
-
-    const total = submoduleData.reduce((acc, percentage) => acc + percentage, 0);
-    return submoduleData.length > 0 ? (total / submoduleData.length).toFixed(2) : 'N/A';
+  const calculateGeneralAverage = (percentages: number[]): string => {
+    const validPercentages = percentages.filter(value => !isNaN(value));
+    const total = validPercentages.reduce((acc, percentage) => acc + percentage, 0);
+    return validPercentages.length > 0 ? (total / validPercentages.length).toFixed(2) : 'N/A';
   };
 
-  // Updated calculateBPM to handle cases where averages might be NaN
-  const calculateBPM = () => {
+  // Filtra y convierte datos de un submódulo específico
+  const calculateSubmoduleAverageBpm = (submoduleQuestions: string[]): string => {
+    const submoduleData = moduleData
+      .filter(data => submoduleQuestions.includes(data.question))
+      .map(data => parseFloat(data.answer.replace('%', '')) || 0);
+    return calculateGeneralAverage(submoduleData);
+  };
+
+  // Calcula el promedio de BPM, manejando posibles valores NaN
+  const calculateBPM = (): string => {
     const infraAverage = parseFloat(calculateSubmoduleAverageBpm(infraestructuraQuestions));
     const legalesAverage = parseFloat(calculateSubmoduleAverageBpm(legalesQuestions));
 
-    return ((infraAverage + legalesAverage) / 2).toFixed(2);
+    const validAverages = [infraAverage, legalesAverage].filter(avg => !isNaN(avg));
+    const total = validAverages.reduce((acc, avg) => acc + avg, 0);
+    return validAverages.length > 0 ? (total / validAverages.length).toFixed(2) : 'N/A';
   };
+
 
   const bpmPercentage = calculateBPM();
 
