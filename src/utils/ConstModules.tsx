@@ -5,7 +5,7 @@ export const bpmModules = ['infraestructura', 'legales'];
 export const aguaModules = ['agua'];
 
 export const poesModules = [
-  'poes-control-productos', 'poes-control-agua', 'poes-superficies', 'poes-contaminacion-cruzada','contaminacion-cruzada',
+  'poes-control-productos', 'poes-control-agua', 'poes-superficies', 'poes-contaminacion-cruzada', 'contaminacion-cruzada',
   'poes-sustancias-adulterantes', 'poes-higiene-empleados', 'poes-control-plagas', 'poes-instalaciones', 'agua'
 ];
 
@@ -300,10 +300,9 @@ export const poeTransporteQuestions = [
 
 export const poeServicioQuestions = [
   "SER 70. Verificar mantención en baño maría caliente o mantenedor eléctrico:",
-      "SER 71. Variedad de alternativas instaladas en línea autoservicio, según menú (fondos, ensaladas y postres, otros):",
-      "TRA SER 72. Equipos suficientes para la correcta mantención de productos calientes y fríos:",
-      "SER 73. Reposición continua de las preparaciones frías y calientes:",
-      "SER 74. Vajilla, bandejas y cubiertos en cantidad correcta, limpios y secos:"
+  "SER 71. Variedad de alternativas instaladas en línea autoservicio, según menú (fondos, ensaladas y postres, otros):",
+  "SER 73. Reposición continua de las preparaciones frías y calientes:",
+  "SER 74. Vajilla, bandejas y cubiertos en cantidad correcta, limpios y secos:"
 ]
 
 export const poeLavadoOllasQuestions = [
