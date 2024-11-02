@@ -204,6 +204,8 @@ const backgroundColor = getColorByPercentageFilas(lumAverage);
     textColor = 'white';
   } else if (backgroundColor === 'yellow') {
     textColor = 'black';
+  } else if (backgroundColor === 'green') {
+    textColor = 'white';
   }
 
   return (

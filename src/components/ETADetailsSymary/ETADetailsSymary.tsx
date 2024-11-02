@@ -247,6 +247,8 @@ const ETADetailsSymary: React.FC<ETADetailsSymaryProps> = ({ numeroAuditoria }) 
     textColor = 'white';
   } else if (backgroundColor === 'yellow') {
     textColor = 'black';
+  } else if (backgroundColor === 'green') {
+    textColor = 'white';
   }
 
   return (
