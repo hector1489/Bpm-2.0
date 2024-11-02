@@ -2,7 +2,32 @@ import Highcharts from 'highcharts';
 import Highcharts3D from 'highcharts/highcharts-3d';
 import HighchartsReact from 'highcharts-react-official';
 import './KPIGraph.css';
-import { infraestructuraQuestions, legalesQuestions } from '../../utils/ConstModules'
+import { useMemo } from 'react';
+import {
+  questionsMA,
+  questionsDOC,
+  questionsTra,
+  questionLum,
+  infraestructuraQuestions,
+  legalesQuestions,
+  poesControlProductosQuestion,
+  poesAguaQuestion,
+  poesSuperficiesQuestions,
+  poesContaminacionCruzadaQuestions,
+  poesSustanciasAdulterantes,
+  poesHigieneEmpleadosQuestions,
+  poesControlPlagas,
+  poesInstalacionesQuestions,
+  poeRecepcionQuestions,
+  poeAlamacenaminetoQuestions,
+  poePreelaboracionesQuestions,
+  poeElaboracionesQuestions,
+  poeTransporteQuestions,
+  poeServicioQuestions,
+  poeLavadoOllasQuestions,
+  poeControlCalidadQiestions,
+  poePptQuestions,
+} from '../../utils/ConstModules'
 
 interface BPMGraphProps {
   moduleData: { moduleName: string, question: string, answer: string, percentage: number | null }[];
@@ -13,7 +38,21 @@ if (typeof Highcharts === 'object') {
   Highcharts3D(Highcharts);
 }
 
+type ModuleGroupName = 'BPM' | 'POES' | 'POE' | 'MA' | 'DOC' | 'LUM' | 'TRA';
+
 const KPIGraph: React.FC<BPMGraphProps> = ({ moduleData }) => {
+
+  const ponderaciones: Record<ModuleGroupName, number> = {
+    BPM: 4,
+    POES: 25,
+    POE: 25,
+    MA: 4,
+    DOC: 10,
+    LUM: 10,
+    TRA: 21
+  };
+
+
   const extractPercentageFromAnswer = (answer: string): number | null => {
     if (answer === 'N/A') return null;
     const match = answer.match(/(\d+)%/);
@@ -35,7 +74,22 @@ const KPIGraph: React.FC<BPMGraphProps> = ({ moduleData }) => {
     return calculateGeneralAverage(submoduleData);
   };
 
-  // Calcula el promedio de BPM, manejando posibles valores NaN
+  const filterModuleData = (questions: string[]): number[] => {
+    return moduleData
+      .filter(data => questions.includes(data.question))
+      .map(data => {
+        const percentage = parseFloat(data.answer.replace('%', ''));
+        return isNaN(percentage) ? NaN : percentage;
+      })
+      .filter(value => !isNaN(value));
+  };
+
+  const calculateSubmoduleAverage = (submoduleQuestions: string[]) => {
+    const submoduleData = filterModuleData(submoduleQuestions);
+    return calculateGeneralAverage(submoduleData);
+  };
+  
+
   const calculateBPM = (): string => {
     const infraAverage = parseFloat(calculateSubmoduleAverageBpm(infraestructuraQuestions));
     const legalesAverage = parseFloat(calculateSubmoduleAverageBpm(legalesQuestions));
@@ -45,8 +99,65 @@ const KPIGraph: React.FC<BPMGraphProps> = ({ moduleData }) => {
     return validAverages.length > 0 ? (total / validAverages.length).toFixed(2) : 'N/A';
   };
 
+  const calculatePOES = () => {
+    const poesAverages = [
+      calculateSubmoduleAverage(poesControlProductosQuestion),
+      calculateSubmoduleAverage(poesAguaQuestion),
+      calculateSubmoduleAverage(poesSuperficiesQuestions),
+      calculateSubmoduleAverage(poesContaminacionCruzadaQuestions),
+      calculateSubmoduleAverage(poesSustanciasAdulterantes),
+      calculateSubmoduleAverage(poesHigieneEmpleadosQuestions),
+      calculateSubmoduleAverage(poesControlPlagas),
+      calculateSubmoduleAverage(poesInstalacionesQuestions),
+    ].map(avg => parseFloat(avg)).filter(avg => !isNaN(avg));
 
-  const bpmPercentage = calculateBPM();
+    const total = poesAverages.reduce((acc, avg) => acc + avg, 0);
+    return poesAverages.length > 0 ? (total / poesAverages.length).toFixed(2) : 'N/A';
+  };
+
+
+  const calculatePOE = () => {
+    const poeAverages = [
+      calculateSubmoduleAverageBpm(poeRecepcionQuestions),
+      calculateSubmoduleAverageBpm(poeAlamacenaminetoQuestions),
+      calculateSubmoduleAverageBpm(poePreelaboracionesQuestions),
+      calculateSubmoduleAverageBpm(poeElaboracionesQuestions),
+      calculateSubmoduleAverageBpm(poeTransporteQuestions),
+      calculateSubmoduleAverageBpm(poeServicioQuestions),
+      calculateSubmoduleAverageBpm(poeLavadoOllasQuestions),
+      calculateSubmoduleAverageBpm(poeControlCalidadQiestions),
+      calculateSubmoduleAverageBpm(poePptQuestions)
+    ].map(avg => parseFloat(avg)).filter(avg => !isNaN(avg));
+
+    const total = poeAverages.reduce((acc, avg) => acc + avg, 0);
+    return poeAverages.length > 0 ? (total / poeAverages.length).toFixed(2) : 'N/A';
+  };
+
+  const calculateMA = () => calculateGeneralAverage(filterModuleData(questionsMA));
+  const calculateDOC = () => calculateGeneralAverage(filterModuleData(questionsDOC));
+  const calculateLUM = () => calculateGeneralAverage(filterModuleData(questionLum));
+  const calculateTRA = () => calculateGeneralAverage(filterModuleData(questionsTra));
+
+  const groupedData = useMemo(() => [
+    { groupName: 'BPM', percentage: ponderaciones.BPM, average: calculateBPM(), ponderacion: ponderaciones['BPM'] },
+    { groupName: 'POES',  percentage: ponderaciones.POES, average: calculatePOES(), ponderacion: ponderaciones['POES'] },
+    { groupName: 'POE', percentage: ponderaciones.POE, average: calculatePOE(), ponderacion: ponderaciones['POE'] },
+    { groupName: 'MA', percentage: ponderaciones.MA, average: calculateMA(), ponderacion: ponderaciones['MA'] },
+    { groupName: 'DOC', percentage: ponderaciones.DOC, average: calculateDOC(), ponderacion: ponderaciones['DOC'] },
+    { groupName: 'TRA', percentage: ponderaciones.TRA, average: calculateTRA(), ponderacion: ponderaciones['TRA'] },
+    { groupName: 'LUM', percentage: ponderaciones.LUM, average: calculateLUM(), ponderacion: ponderaciones['LUM'] },
+  ], [moduleData]);
+
+  const finalAverageBPM = useMemo(() => {
+    const validAverages = groupedData.map(group => parseFloat(group.average)).filter(avg => !isNaN(avg));
+    console.log(validAverages);
+    const total = validAverages.reduce((acc, avg) => acc + avg, 0);
+    return validAverages.length > 0 ? (total / validAverages.length).toFixed(2) : 'N/A';
+  }, [groupedData]);
+
+
+
+  const bpmPercentage = finalAverageBPM;
 
 
   const doc97Detail = moduleData.find((module) =>
