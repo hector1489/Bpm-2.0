@@ -137,7 +137,13 @@ const ETADetailsSymary: React.FC<ETADetailsSymaryProps> = ({ numeroAuditoria }) 
       index === self.findIndex((d) => d.field3 === detail.field3)
     );
 
-  const questionNames = matchedDetails.map(detail => detail.field3);
+  const extractPrefix = (field3: string) => {
+    const match = field3.match(/^TRA [A-Z]+ \d+/);
+    return match ? match[0] : '';
+  };
+
+
+  const questionPrefixes = matchedDetails.map(detail => extractPrefix(detail.field3));
   const percentages = matchedDetails.map(detail => parseFloat(detail.field4.replace('%', '')) || 0);
   const barColors = percentages.map(getColorByPercentage);
 
@@ -147,6 +153,7 @@ const ETADetailsSymary: React.FC<ETADetailsSymaryProps> = ({ numeroAuditoria }) 
     const match = pregunta.match(/^TRA \w+ \d+/);
     return match ? match[0] : 'N/A';
   };
+
 
   const chartOptions = {
     chart: {
@@ -164,7 +171,7 @@ const ETADetailsSymary: React.FC<ETADetailsSymaryProps> = ({ numeroAuditoria }) 
       text: 'Porcentaje de Cumplimiento por Pregunta',
     },
     xAxis: {
-      categories: questionNames,
+      categories: questionPrefixes,
       title: {
         text: '',
       },
@@ -205,7 +212,7 @@ const ETADetailsSymary: React.FC<ETADetailsSymaryProps> = ({ numeroAuditoria }) 
       rules: [
         {
           condition: {
-            maxWidth: 500,
+            maxWidth: 600,
           },
           chartOptions: {
             chart: {
@@ -231,6 +238,11 @@ const ETADetailsSymary: React.FC<ETADetailsSymaryProps> = ({ numeroAuditoria }) 
     },
   };
 
+  const parsePercentage = (field4: string) => {
+    const [percentage] = field4.split(':');
+    return parseFloat(percentage.replace('%', '').trim()) || 0;
+  };
+
   // Función para calcular el promedio de los porcentajes
   const calculateGeneralAverage = () => {
     const total = percentages.reduce((acc, percentage) => acc + percentage, 0);
@@ -253,7 +265,7 @@ const ETADetailsSymary: React.FC<ETADetailsSymaryProps> = ({ numeroAuditoria }) 
 
   return (
     <div className="ETADetailsSymary-container">
-      <h4>ETA</h4>
+      <h4> Indicadores de riesgo de enfermedades de transmicion alimentaria (ETA's)</h4>
       <p>Número de Auditoría: {numeroAuditoria}</p>
 
       <div className="ETADetailsSummary-data">
@@ -347,9 +359,16 @@ const ETADetailsSymary: React.FC<ETADetailsSymaryProps> = ({ numeroAuditoria }) 
 
       <div className="ETADetailsSummary-graph">
         <HighchartsReact highcharts={Highcharts} options={chartOptions} />
+        <div className="ETADetailsSummary-cards-graph">
+          {matchedDetails.map((detail, index) => (
+            <div key={index} className="ETADetailsSummary-card-graph">
+              <p>{detail.field3}</p>
+            </div>
+          ))}
+        </div>
       </div>
 
-      <table className="ETADetailsSummary-table">
+      <table id="ETADetailsSummary-table">
         <thead>
           <tr style={{ backgroundColor: 'skyblue', color: 'black' }}>
             <th className='fw-bold text-uppercase'>Módulo</th>
@@ -358,13 +377,18 @@ const ETADetailsSymary: React.FC<ETADetailsSymaryProps> = ({ numeroAuditoria }) 
           </tr>
         </thead>
         <tbody>
-          {matchedDetails.map((detail, index) => (
-            <tr key={index} style={{ backgroundColor: barColors[index], color: 'white' }}>
-              <td>{extractModulo(detail.field3)}</td>
-              <td>{detail.field3}</td>
-              <td>{detail.field4}</td>
-            </tr>
-          ))}
+          {matchedDetails.map((detail, index) => {
+            const backgroundColor = barColors[index];
+            const textColor = backgroundColor === 'red' ? 'white' : backgroundColor === 'yellow' ? 'black' : 'white';
+
+            return (
+              <tr key={index} style={{ backgroundColor, color: textColor }}>
+                <td>{extractModulo(detail.field3)}</td>
+                <td>{detail.field3}</td>
+                <td className='text-center'>{parsePercentage(detail.field4)} %</td>
+              </tr>
+            );
+          })}
         </tbody>
       </table>
 

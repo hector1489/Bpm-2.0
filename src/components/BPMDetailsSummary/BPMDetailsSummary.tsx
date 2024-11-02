@@ -260,11 +260,21 @@ const BPMDetailsSummary: React.FC<TableDetailsSummaryProps> = ({ numeroAuditoria
   
 
   const backgroundColor = getColorByPercentageFilas(parseFloat(finalAverage));
-  const textColor = backgroundColor === 'red' ? 'white' : 'black';
+  let textColor = 'black';
+  if (backgroundColor === 'red') {
+    textColor = 'white';
+  } else if (backgroundColor === 'yellow') {
+    textColor = 'black';
+  } else if (backgroundColor === 'green') {
+    textColor = 'white';
+  }
 
   if (loading) return <p>Cargando datos...</p>;
   if (error) return <p>{error}</p>;
   if (!filteredAuditSheet) return <p>No se encontraron detalles para la auditoría {numeroAuditoria}</p>;
+
+
+
 
   return (
     <div className="BPMDetailsSummary-container">

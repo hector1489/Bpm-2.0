@@ -64,6 +64,11 @@ tbody tr:hover {
   background-color: #e9ecef;
 }
 
+.TableDetailsSummary-module-average {
+  background-color: #007bff;
+  color: white;
+}
+
 /* Responsive table */
 @media screen and (max-width: 768px) {
   table, thead, tbody, th, td, tr {
@@ -102,6 +107,8 @@ p {
   color: #555;
   margin-top: 15px;
 }
+
+
 
 @media screen and (max-width: 480px) {
   div {

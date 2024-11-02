@@ -183,7 +183,7 @@ const TableDetailsDD: React.FC = () => {
     ].map(avg => parseFloat(avg)).filter(avg => !isNaN(avg));
 
     const total = poeAverages.reduce((acc, avg) => acc + avg, 0);
-    console.log('total poe', total);
+
     return poeAverages.length > 0 ? (total / poeAverages.length).toFixed(2) : 'N/A';
   };
 

@@ -10,6 +10,12 @@
   align-items: center;
 }
 
+.ETADetailsSymary-container h4 {
+  font-size: 18px;
+  text-transform: uppercase;
+  font-weight: bold;
+}
+
 .ETADetailsSummary-data {
   width: 100%;
   display: flex;
@@ -24,6 +30,7 @@
   font-weight: bold;
 }
 
+
 .ETADetailsSummary-data-table th,
 .ETADetailsSummary-data-table td {
   border: 1px solid #ddd;
@@ -31,6 +38,7 @@
   text-align: left;
   white-space: nowrap;
 }
+
 
 .ETADetailsSummary-graph {
   width: 100%;
@@ -48,10 +56,50 @@
   justify-content: center;
 }
 
-.ETADetailsSummary-table {
+#ETADetailsSummary-table {
   width: 100%;
-  margin-top: 40px;
-  overflow: auto;
-  font-weight: bold;
+  border-collapse: collapse;
+  margin-top: 100px;
 }
+
+#ETADetailsSummary-table th, #ETADetailsSummary-table td {
+  padding: 8px;
+  text-align: center;
+  border: 1px solid #ddd;
+}
+
+#ETADetailsSummary-table th {
+  background-color: skyblue;
+  color: black;
+}
+
+.ETADetailsSummary-cards-graph {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 5px;
+  overflow-y: auto;
+  margin-top: 20px;
+  padding: 5px;
+  border-top: 1px solid #ddd;
+  
+}
+
+.ETADetailsSummary-card-graph {
+  max-width: 180px;
+  background-color: #2e86c1 ;
+  border: 1px solid #ccc;
+  border-radius: 5px 25px;
+  padding: 5px;
+  flex: 1 1 calc(33.333% - 10px);
+  text-align: center;
+  
+}
+
+.ETADetailsSummary-card-graph p {
+  font-size: 12px;
+  font-weight: bold;
+  color: white;
+}
+
 

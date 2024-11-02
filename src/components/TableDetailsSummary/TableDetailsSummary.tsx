@@ -37,19 +37,19 @@ const TableDetailsSummary: React.FC<TableDetailsSummaryProps> = ({ numeroAuditor
   useEffect(() => {
     const fetchTablaDetails = async () => {
       if (!numeroAuditoria) return;
-  
+
       setLoading(true);
       setError(null);
-  
+
       try {
         const data = await getTablaDetailsByNumeroAuditoria(numeroAuditoria);
         const lumQuestion = 'LUM 21. Toma de muestra y uso de luminómetro:';
-  
+
         // Group data by section and module
         const groupedData = data.reduce((acc: { [key: string]: { [key: string]: TablaDetail[] } }, detail: TablaDetail) => {
           let section = '';
           let module = detail.field2.toLowerCase().trim();
-  
+
           // Assign section and module based on question type
           if (detail.field3 === lumQuestion) {
             section = 'LUM';
@@ -65,20 +65,20 @@ const TableDetailsSummary: React.FC<TableDetailsSummaryProps> = ({ numeroAuditor
             else if (docModules.map(mod => mod.toLowerCase()).includes(module)) section = 'DOC';
             else if (traModules.map(mod => mod.toLowerCase()).includes(module)) section = 'TRA';
           }
-  
+
           if (!section) return acc;
-  
+
           // Initialize section and module if not already present
           if (!acc[section]) acc[section] = {};
           if (!acc[section][module]) acc[section][module] = [];
-  
+
           // Avoid duplicates based on `field1` (ID Pregunta)
           const exists = acc[section][module].some(item => item.field1 === detail.field1);
           if (!exists) acc[section][module].push(detail);
-  
+
           return acc;
         }, {});
-  
+
         setTablaDetails(groupedData);
       } catch (err) {
         setError('Error al obtener los datos de la tabla');
@@ -86,11 +86,11 @@ const TableDetailsSummary: React.FC<TableDetailsSummaryProps> = ({ numeroAuditor
         setLoading(false);
       }
     };
-  
+
     fetchTablaDetails();
   }, [numeroAuditoria]);
-  
-  
+
+
 
   if (loading) {
     return <p>Cargando datos...</p>;
@@ -114,7 +114,7 @@ const TableDetailsSummary: React.FC<TableDetailsSummaryProps> = ({ numeroAuditor
     DOC: docModules,
     TRA: traModules,
     LUM: lumModules
-   
+
   };
 
   return (
@@ -140,14 +140,17 @@ const TableDetailsSummary: React.FC<TableDetailsSummaryProps> = ({ numeroAuditor
                   {modulesOrder.map((module) => {
                     const moduleData = tablaDetails[section]?.[module.toLowerCase()];
                     if (!moduleData) return null;
-                    
-                    const moduleAverage = calculateModuleAverage(moduleData);
+
+                    // Sort moduleData by field3 in ascending order
+                    const sortedModuleData = [...moduleData].sort((a, b) => a.field3.localeCompare(b.field3));
+                    const moduleAverage = calculateModuleAverage(sortedModuleData);
+
                     return (
                       <React.Fragment key={module}>
-                        {moduleData.map((detail, index) => (
+                        {sortedModuleData.map((detail, index) => (
                           <tr key={detail.numero_auditoria + detail.field1}>
                             {index === 0 && (
-                              <td rowSpan={moduleData.length + 1}>{module}</td>
+                              <td rowSpan={sortedModuleData.length + 1}>{module}</td>
                             )}
                             <td>{detail.numero_auditoria}</td>
                             <td>{detail.field1}</td>
@@ -155,14 +158,17 @@ const TableDetailsSummary: React.FC<TableDetailsSummaryProps> = ({ numeroAuditor
                             <td>{detail.field4}</td>
                           </tr>
                         ))}
-                        <tr className="TableDetailsSummary-module-average" key={`${module}-average`}>
-                          <td colSpan={3} style={{ fontWeight: 'bold', textAlign: 'right' }}>Promedio del Módulo:</td>
-                          <td style={{ fontWeight: 'bold' }}>{moduleAverage}</td>
+                        <tr key={`${module}-average`}>
+                          <td className="TableDetailsSummary-module-average" colSpan={3} style={{ fontWeight: 'bold', textAlign: 'right' }}>
+                            Promedio del Módulo:
+                          </td>
+                          <td className="TableDetailsSummary-module-average" style={{ fontWeight: 'bold' }}>{moduleAverage}</td>
                         </tr>
                       </React.Fragment>
                     );
                   })}
                 </tbody>
+
               </table>
             </div>
           ))}
