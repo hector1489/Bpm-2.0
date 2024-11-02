@@ -30,6 +30,9 @@ const DesviacionesTable: React.FC = () => {
 
   const [localDesviaciones, setLocalDesviaciones] = useState<DesviacionResponse[]>([]);
   const [reloadData, setReloadData] = useState(false);
+  const [selectedIds, setSelectedIds] = useState<number[]>([]);
+  
+
 
   if (!context) {
     return <div>Error: Context is not available.</div>;
@@ -38,9 +41,9 @@ const DesviacionesTable: React.FC = () => {
   useEffect(() => {
     if (desviaciones) {
       const formatDate = (dateString: string | null | undefined): string => {
-        return dateString ? dateString.split('T')[0] : DEFAULT_ANSWER;
+        return dateString ? dateString.split('T')[0] : getCurrentDate();
       };
-
+  
       const filteredDesviaciones = desviaciones.map(desviacion => ({
         ...desviacion,
         fecha_recepcion_solicitud: formatDate(desviacion.fecha_recepcion_solicitud),
@@ -50,11 +53,10 @@ const DesviacionesTable: React.FC = () => {
         const isRequirementMatch = numero_requerimiento ? desviacion.numero_requerimiento === numero_requerimiento : true;
         return isAuditorMatch && isRequirementMatch;
       });
-
+  
       setLocalDesviaciones(filteredDesviaciones);
     }
   }, [desviaciones, numero_requerimiento, context?.state?.userName, reloadData]);
-
 
   const eliminarFila = async (id: number) => {
     const confirmDelete = window.confirm("¿Estás seguro de que deseas eliminar esta fila?");
@@ -68,6 +70,43 @@ const DesviacionesTable: React.FC = () => {
       }
     }
   };
+  
+  const toggleSelectRow = (id: number) => {
+    setSelectedIds(prevSelectedIds => 
+      prevSelectedIds.includes(id) 
+        ? prevSelectedIds.filter(selectedId => selectedId !== id) 
+        : [...prevSelectedIds, id]
+    );
+  };
+  
+
+  const eliminarFilasSeleccionadas = async () => {
+    if (selectedIds.length === 0) {
+      alert("No hay filas seleccionadas para eliminar.");
+      return;
+    }
+  
+    const confirmDelete = window.confirm("¿Estás seguro de que deseas eliminar las filas seleccionadas?");
+    
+    if (confirmDelete && context.state.authToken) {
+      try {
+  
+        await Promise.all(
+          selectedIds.map(id => desviacionDelete(id, context.state.authToken as string))
+        );
+  
+    
+        setLocalDesviaciones(prevDesviaciones => prevDesviaciones.filter(desviacion => !selectedIds.includes(desviacion.id)));
+        setSelectedIds([]);
+  
+        alert("Filas seleccionadas eliminadas correctamente.");
+      } catch (error) {
+        console.error('Error eliminando las desviaciones:', error);
+        alert('Error al eliminar las desviaciones. Por favor, inténtalo de nuevo.');
+      }
+    }
+  };
+  
 
   const handleSaveChanges = async () => {
     const authToken = context.state.authToken ?? '';
@@ -148,7 +187,7 @@ const DesviacionesTable: React.FC = () => {
           selectCriticidad.onchange = (e) => {
             const value = (e.target as HTMLSelectElement).value;
             handleInputChange(rowIndex, 'criticidad', value);
-  
+
             // Aquí se actualiza la fecha de solución programada solo cuando cambia la criticidad
             const fechaIngreso = localDesviaciones[rowIndex].fecha_recepcion_solicitud || getCurrentDate();
             const fechaSolucionProgramada = calcularFechaSolucionProgramada(fechaIngreso, value);
@@ -171,15 +210,15 @@ const DesviacionesTable: React.FC = () => {
           const input = document.createElement('input');
           input.type = 'text';
           input.placeholder = 'Responsable...';
-  
+
           const currentValue = localDesviaciones[rowIndex].responsable_problema;
           input.value = currentValue !== undefined && currentValue !== null ? String(currentValue) : '';
-  
+
           input.onblur = (e) => {
             const value = (e.target as HTMLInputElement).value;
             handleInputChange(rowIndex, 'responsable_problema', value);
           };
-  
+
           cell.innerHTML = '';
           cell.appendChild(input);
         } else if (cellIndex === emailColumnIndex || cell.textContent === 'N/A' || cell.textContent === DEFAULT_ANSWER) {
@@ -187,17 +226,17 @@ const DesviacionesTable: React.FC = () => {
           const input = document.createElement('input');
           input.type = 'text';
           input.placeholder = 'Text ...';
-  
+
           const currentValue = localDesviaciones[rowIndex][field];
           input.value = currentValue !== undefined && currentValue !== null ? String(currentValue) : '';
-  
+
           input.id = `input-${rowIndex}-${cellIndex}`;
-  
+
           input.onblur = (e) => {
             const value = (e.target as HTMLInputElement).value;
             handleInputChange(rowIndex, field, value);
           };
-  
+
           cell.innerHTML = '';
           cell.appendChild(input);
         }
@@ -205,8 +244,8 @@ const DesviacionesTable: React.FC = () => {
     });
   };
 
-  
-  
+
+
   const handleGoToHome = () => {
     navigate('/home');
   };
@@ -249,55 +288,66 @@ const DesviacionesTable: React.FC = () => {
             <th>EMAIL</th>
             <th>DÍAS RESTANTES</th>
             <th>ELIMINAR FILA</th>
+            <th>
+              Eliminar Filas Marcadas
+              <button className='bg-danger' onClick={() => eliminarFilasSeleccionadas()}>Eliminar</button>
+            </th>
           </tr>
         </thead>
         <tbody>
-  {localDesviaciones.length > 0 ? (
-    localDesviaciones.map((desviacion, index) => {
-      const backgroundColor = getColorByCriticidad(desviacion.criticidad || DEFAULT_ANSWER);
-      const diasRestantes = calcularDiasRestantes(desviacion.fecha_recepcion_solicitud || getCurrentDate(), desviacion.criticidad || 'Leve');
+          {localDesviaciones.length > 0 ? (
+            localDesviaciones.map((desviacion, index) => {
+              const backgroundColor = getColorByCriticidad(desviacion.criticidad || DEFAULT_ANSWER);
+              const diasRestantes = calcularDiasRestantes(desviacion.fecha_recepcion_solicitud || getCurrentDate(), desviacion.criticidad || 'Leve');
+          
+              let textColor = 'black';
+              if (backgroundColor === 'red') {
+                textColor = 'white';
+              } else if (backgroundColor === 'yellow') {
+                textColor = 'black';
+              }
 
-      let textColor = 'black';
-      if (backgroundColor === 'red') {
-        textColor = 'white';
-      } else if (backgroundColor === 'yellow') {
-        textColor = 'black';
-      }
-
-      return (
-        <tr key={index} style={{ backgroundColor, color: textColor }}>
-          <td>{desviacion.id || DEFAULT_ANSWER}</td>
-          <td>{desviacion.numero_requerimiento || DEFAULT_ANSWER}</td>
-          <td>{desviacion.preguntas_auditadas || DEFAULT_ANSWER}</td>
-          <td>{desviacion.desviacion_o_criterio || DEFAULT_ANSWER}</td>
-          <td>{desviacion.responsable_problema || DEFAULT_ANSWER}</td>
-          <td>{desviacion.local || DEFAULT_ANSWER}</td>
-          <td>{desviacion.criticidad || DEFAULT_ANSWER}</td>
-          <td>{desviacion.acciones_correctivas || DEFAULT_ANSWER}</td>
-          <td>{desviacion.fecha_recepcion_solicitud || DEFAULT_ANSWER}</td>
-          <td>{desviacion.fecha_solucion_programada || DEFAULT_ANSWER}</td>
-          <td>{desviacion.estado || DEFAULT_ANSWER}</td>
-          <td>{desviacion.contacto_clientes || DEFAULT_ANSWER}</td>
-          <td>{desviacion.evidencia_fotografica || DEFAULT_ANSWER}</td>
-          <td>{desviacion.auditor || DEFAULT_ANSWER}</td>
-          <td>{desviacion.correo || DEFAULT_ANSWER}</td>
-          <td>
-            <p className='desviaciones-diasRestantes' style={{ color: textColor }}>
-              🚨{diasRestantes}
-            </p>
-          </td>
-          <td>
-            <button onClick={() => eliminarFila(desviacion.id)}>Eliminar</button>
-          </td>
-        </tr>
-      );
-    })
-  ) : (
-    <tr>
-      <td colSpan={16}>No hay desviaciones disponibles.</td>
-    </tr>
-  )}
-</tbody>
+              return (
+                <tr key={index} style={{ backgroundColor, color: textColor }}>
+                  <td>{desviacion.id || DEFAULT_ANSWER}</td>
+                  <td>{desviacion.numero_requerimiento || DEFAULT_ANSWER}</td>
+                  <td>{desviacion.preguntas_auditadas || DEFAULT_ANSWER}</td>
+                  <td>{desviacion.desviacion_o_criterio || DEFAULT_ANSWER}</td>
+                  <td>{desviacion.responsable_problema || DEFAULT_ANSWER}</td>
+                  <td>{desviacion.local || DEFAULT_ANSWER}</td>
+                  <td>{desviacion.criticidad || DEFAULT_ANSWER}</td>
+                  <td>{desviacion.acciones_correctivas || DEFAULT_ANSWER}</td>
+                  <td>{desviacion.fecha_recepcion_solicitud || DEFAULT_ANSWER}</td>
+                  <td>{desviacion.fecha_solucion_programada || DEFAULT_ANSWER}</td>
+                  <td>{desviacion.estado || DEFAULT_ANSWER}</td>
+                  <td>{desviacion.contacto_clientes || DEFAULT_ANSWER}</td>
+                  <td>{desviacion.evidencia_fotografica || DEFAULT_ANSWER}</td>
+                  <td>{desviacion.auditor || DEFAULT_ANSWER}</td>
+                  <td>{desviacion.correo || DEFAULT_ANSWER}</td>
+                  <td>
+                    <p className='desviaciones-diasRestantes' style={{ color: textColor }}>
+                      🚨{diasRestantes}
+                    </p>
+                  </td>
+                  <td>
+                  <button onClick={() => eliminarFila(desviacion.id)}>Eliminar</button>
+                  </td>
+                  <td>
+                    <input 
+                      type="checkbox" 
+                      checked={selectedIds.includes(desviacion.id)}
+                      onChange={() => toggleSelectRow(desviacion.id)} 
+                    />
+                  </td>
+                </tr>
+              );
+            })
+          ) : (
+            <tr>
+              <td colSpan={16}>No hay desviaciones disponibles.</td>
+            </tr>
+          )}
+        </tbody>
 
 
       </table>

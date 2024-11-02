@@ -173,8 +173,6 @@ const KPI: React.FC = () => {
   );
   const cap101Percentage = cap101Detail ? extractPercentageFromAnswer(cap101Detail.answer) : null;
 
-
-  console.log(bpmPercentage);
   // Actualización de validAverages para asegurar que todos los elementos sean números
   const validAverages = [bpmPercentage, doc97Percentage, csh31Percentage, ser71Percentage, cap101Percentage]
     .filter((avg) => avg !== null)

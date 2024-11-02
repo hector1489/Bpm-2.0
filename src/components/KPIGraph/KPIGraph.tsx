@@ -20,8 +20,6 @@ const KPIGraph: React.FC<BPMGraphProps> = ({ moduleData }) => {
     return match ? parseInt(match[1]) : null;
   };
 
-
-  console.log(moduleData)
   // Function to calculate a specific submodule's average with error handling
   const calculateGeneralAverage = (percentages: number[]): string => {
     const validPercentages = percentages.filter(value => !isNaN(value));
