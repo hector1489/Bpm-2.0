@@ -195,6 +195,8 @@ const ETADetailsSymary: React.FC<ETADetailsSymaryProps> = ({ numeroAuditoria }) 
           label: {
             text: 'Meta 90%',
             align: 'right',
+          verticalAlign: 'middle',
+          x: +55,
             style: {
               color: 'black',
               fontWeight: 'bold',

@@ -3,7 +3,7 @@ import Highcharts from 'highcharts'
 import HighchartsReact from 'highcharts-react-official'
 import Highcharts3D from 'highcharts/highcharts-3d'
 import { AppContext } from '../../context/GlobalState'
-import { getColorByPercentage, getColorByPercentageFilas  } from '../../utils/utils'
+import { getColorByPercentage, getColorByPercentageFilas } from '../../utils/utils'
 import { getTablaDetailsByNumeroAuditoria } from '../../utils/apiDetails'
 import { useContext, useEffect, useState } from 'react'
 import { getAuditSheetByUsername } from '../../utils/apiAuditSheet';
@@ -133,7 +133,14 @@ const LUMDetailsSummary: React.FC<TableDetailsSummaryProps> = ({ numeroAuditoria
       index === self.findIndex((d) => d.field3 === detail.field3)
   );
 
-  const questionNames = uniqueMatchedDetails.map(detail => detail.field3);
+  
+  const trimLumName = (name: string): string => {
+    const match = name.match(/^(LUM \d+)/);
+    return match ? match[0] : name;
+  };
+
+
+  const questionNames = uniqueMatchedDetails.map(detail => trimLumName(detail.field3));
   const percentages = uniqueMatchedDetails.map(detail => parseFloat(detail.field4.replace('%', '')) || 0);
   const barColors = percentages.map(getColorByPercentage);
   const lumNA = uniqueMatchedDetails.map(detail => parseFloat(detail.field4.replace('%', '')) || 'N/A');
@@ -188,15 +195,15 @@ const LUMDetailsSummary: React.FC<TableDetailsSummaryProps> = ({ numeroAuditoria
       },
     },
   };
-  
-  // Filtrar valores numéricos y calcular el promedio
-const numericValues = lumNA.filter((value): value is number => typeof value === 'number');
-const lumAverage = numericValues.length > 0
-  ? numericValues.reduce((acc, value) => acc + value, 0) / numericValues.length
-  : 0;
 
-// Usar el promedio para obtener el color de fondo
-const backgroundColor = getColorByPercentageFilas(lumAverage);
+  // Filtrar valores numéricos y calcular el promedio
+  const numericValues = lumNA.filter((value): value is number => typeof value === 'number');
+  const lumAverage = numericValues.length > 0
+    ? numericValues.reduce((acc, value) => acc + value, 0) / numericValues.length
+    : 0;
+
+  // Usar el promedio para obtener el color de fondo
+  const backgroundColor = getColorByPercentageFilas(lumAverage);
 
 
   let textColor = 'black';

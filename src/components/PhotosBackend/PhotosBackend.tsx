@@ -41,12 +41,17 @@ const PhotosBackend: React.FC = () => {
     const regex = /photos\/[^_]+_([^_]+)_/;
     const match = key.match(regex);
     return match ? match[1] : 'N/A';
-  };
+  }; 
 
   const extractPhotoName = (key: string) => {
     const regex = /photos\/[^_]+_[^_]+_(.+)\.png$/;
     const match = key.match(regex);
-    return match ? match[1].replace(/_/g, ' ') : key;
+    if (match) {
+      const fullText = match[1].replace(/_/g, ' ');
+      const truncatedText = fullText.split(' ').slice(0, 2).join(' ');
+      return truncatedText;
+    }
+    return key;
   };
 
   const extractPhotoDateFromUrl = (url: string) => {
