@@ -139,7 +139,10 @@ const IECriticalFindings: React.FC<IECriticalFindingsProps> = ({ detallesFiltrad
                     <span className="question">{detalle.field3}</span>
                   </div>
                   <div className="bar yellow" style={{ width: `${porcentaje !== 'NA' ? porcentaje : 0}%` }}>
-                    <span className="percentage">{porcentaje !== 'NA' ? `${porcentaje}%` : 'NA'}</span>
+                    <span className="question">{detalle.field4}</span>
+                  </div>
+                  <div className="bar red" style={{ width: `${porcentaje !== 'NA' ? porcentaje : 0}%` }}>
+                    CRITICO
                   </div>
                 </div>
               </div>

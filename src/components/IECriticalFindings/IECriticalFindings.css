@@ -83,6 +83,9 @@
 
 .bar {
   height: 25px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   color: white;
   text-align: center;
   padding: 5px;
@@ -94,6 +97,7 @@
   white-space: nowrap;
   text-overflow: ellipsis;
 }
+
 
 .bar span {
   display: inline-block;

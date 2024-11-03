@@ -90,7 +90,7 @@ const InformeEjecutivo: React.FC = () => {
        <div className="logo-fungi">
         <img src={logoFungi} alt="logo" />
       </div>
-      <h3>Informe Ejecutivo</h3>
+      <h3>Informe De Gerencia</h3>
       {id && <p>ID: {id}</p>}
       {numero_requerimiento && <p>Auditoria : {numero_requerimiento}</p>}
 
