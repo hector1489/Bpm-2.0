@@ -111,7 +111,10 @@ const IEIndicadoresClave: React.FC<IEIndicadoresClaveProps> = ({ tablaDetails })
       },
       width: chartWidth,
     },
-    xAxis: { categories: ['BPM', 'MINUTA', 'EXÁMENES', 'INAPTITUD', 'CAPACITACIONES'] },
+    title: {
+      text: '',
+    },
+    xAxis: { categories: ['BPM', 'MINUTA', 'EXÁMENES', 'INAPTITUD MICROBIOLOGICA', 'CAPACITACIONES'] },
     yAxis: { min: 0, title: { text: 'Porcentaje' } },
     series: [{
       name: 'Indicadores',
@@ -131,7 +134,7 @@ const IEIndicadoresClave: React.FC<IEIndicadoresClaveProps> = ({ tablaDetails })
       </div>
       <div className="indicadores-footer">
         <div className="indicadores-circular">
-          {['BPM', 'MINUTA', 'EXÁMENES', 'INAPTITUD', 'CAPACITACIONES'].map((label, index) => (
+          {['BPM', 'MINUTA', 'EXÁMENES', 'INAPTITUD MICROBIOLOGICA', 'CAPACITACIONES'].map((label, index) => (
             <div className={`circular graph ${['black', 'green', 'red', 'yellow', 'blue'][index]}`} key={label}>
               <p>{label}</p>
               <p>{[bpmPercentage, ser71Percentage, csh31Percentage, doc97Percentage, cap101Percentage][index] || 'NA'}%</p>

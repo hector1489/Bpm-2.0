@@ -34,11 +34,20 @@
 }
 
 .card-evaluation {
-  padding: 15px;
+  padding: 8px;
   border-radius: 5px;
   color: white;
   text-align: center;
+}
+
+.card-evaluation h5 {
+  font-size: 12px;
   font-weight: bold;
+}
+
+.card-evaluation p {
+  font-size: 10px;
+  color: white;
 }
 
 .green {

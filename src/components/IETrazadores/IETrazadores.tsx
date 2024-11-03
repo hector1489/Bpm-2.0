@@ -51,25 +51,23 @@ const IETrazadores: React.FC<IETrazadoresProps> = ({ tablaDetails }) => {
   const filteredData = categories.map(category => {
     const found = tablaDetails.find(detail => extractPrefix(detail.field3) === category);
     const value = found ? parseInt(found.field4, 10) : 0;
-    return isNaN(value) ? 0 : value;
+    return { category, value, fullField3: found ? found.field3 : '' };
   });
 
-  // Verificar que `filteredData` contiene al menos un valor válido
-  if (filteredData.length === 0 || filteredData.every(value => value === 0)) {
+  if (filteredData.every(({ value }) => value === 0)) {
     return <div>No hay datos disponibles para mostrar.</div>;
   }
 
-  const total = filteredData.reduce((sum, value) => sum + value, 0);
+  const total = filteredData.reduce((sum, { value }) => sum + value, 0);
   const average = filteredData.length > 0 ? (total / filteredData.length).toFixed(2) : 'N/A';
 
-  const dataWithColors = filteredData.map(value => ({
+  const dataWithColors = filteredData.map(({ value }) => ({
     y: value,
     color: getColorByPercentageIETrazadores(value)
   }));
 
-  // Verificar la existencia de `plotLineValue` y datos válidos para renderizar `plotLines`
   const plotLineValue = 90;
-  const shouldRenderPlotLine = filteredData.some(value => value > 0) && plotLineValue !== undefined;
+  const shouldRenderPlotLine = filteredData.some(({ value }) => value > 0) && plotLineValue !== undefined;
 
   const options = {
     chart: {
@@ -112,7 +110,9 @@ const IETrazadores: React.FC<IETrazadoresProps> = ({ tablaDetails }) => {
         zIndex: 5,
         label: {
           text: `Meta ${plotLineValue}%`,
-          align: 'left',
+          align: 'right',
+          verticalAlign: 'middle',
+          x: +60,
           style: {
             color: 'black',
             fontWeight: 'bold'
@@ -169,10 +169,10 @@ const IETrazadores: React.FC<IETrazadoresProps> = ({ tablaDetails }) => {
       </div>
 
       <div className="cards-trazadores">
-        {categories.map((category, index) => (
+        {filteredData.map(({  value, fullField3 }, index) => (
           <div key={index} className="card-trazadores">
-            <h3>{category}</h3>
-            <p>Porcentaje: {filteredData[index]}%</p>
+            <h5>{fullField3}</h5>
+            <p>Porcentaje: {value}%</p>
           </div>
         ))}
       </div>
@@ -185,6 +185,3 @@ const IETrazadores: React.FC<IETrazadoresProps> = ({ tablaDetails }) => {
 }
 
 export default IETrazadores;
-
-
-

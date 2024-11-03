@@ -29,7 +29,7 @@ const InformeEjecutivo: React.FC = () => {
   const filtrarDetallesInferiorA100 = (tablaDetails: TablaDetail[]): TablaDetail[] => {
     return tablaDetails.filter((detail) => {
       const porcentaje = parseInt(detail.field4);
-      return porcentaje < 100;
+      return porcentaje < 75;
     });
   };
 
@@ -108,10 +108,10 @@ const InformeEjecutivo: React.FC = () => {
       <h5>2.- EVALUACIONES CRITICAS</h5>
       <IECriticalEvaluation tablaDetails={tablaDetails} />
 
-      <h5>3. TRAZADORES</h5>
+      <h5>3. TRAZADORES ETA'S</h5>
       <IETrazadores tablaDetails={tablaDetails}/>
 
-     <h5>4.- INDICADORES CLAVES DE GESTION</h5>
+     <h5>4.- INDICADORES CLAVES DE GESTION (ALIMENTACION)</h5>
       <IEIndicadoresClave tablaDetails={tablaDetails}/>
 
       <h5>5,. HIGIENE INSTALACIONES/ALIMENTOS</h5>

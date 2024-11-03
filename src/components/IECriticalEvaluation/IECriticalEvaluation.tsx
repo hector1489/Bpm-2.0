@@ -65,7 +65,7 @@ const IECriticalEvaluation: React.FC<IECriticalEvaluationProps> = ({ tablaDetail
 
     return {
       name: item.name,
-      y: averagePercentage === 'NA' ? 0 : averagePercentage, // Asigna 0 si es NA para evitar errores en el gráfico
+      y: averagePercentage === 'NA' ? 0 : averagePercentage,
       color: item.color,
       label: averagePercentage === 'NA' ? 'NA' : `${averagePercentage.toFixed(1)}%`
     };
@@ -104,7 +104,7 @@ const IECriticalEvaluation: React.FC<IECriticalEvaluationProps> = ({ tablaDetail
         {
           name: 'Evaluación Crítica',
           colorByPoint: true,
-          data: evaluationData.filter((d) => typeof d.y === 'number' && d.y > 0), // Filtra solo los valores válidos
+          data: evaluationData.filter((d) => typeof d.y === 'number' && d.y > 0),
         },
       ],
     };
@@ -120,7 +120,8 @@ const IECriticalEvaluation: React.FC<IECriticalEvaluationProps> = ({ tablaDetail
         <div className="cards-evaluation">
           {IECriticalEvaluationData.map((item, index) => (
             <div key={index} className={`card-evaluation`} style={{ backgroundColor: item.color }}>
-              {item.name}
+              <h5>{item.name}</h5>
+              <p>{item.category}</p>
             </div>
           ))}
         </div>
