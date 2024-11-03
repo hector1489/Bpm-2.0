@@ -154,6 +154,7 @@ const ETADetailsSymary: React.FC<ETADetailsSymaryProps> = ({ numeroAuditoria }) 
     return match ? match[0] : 'N/A';
   };
 
+  
 
   const chartOptions = {
     chart: {
@@ -185,6 +186,23 @@ const ETADetailsSymary: React.FC<ETADetailsSymaryProps> = ({ numeroAuditoria }) 
       title: {
         text: 'Porcentaje (%)',
       },
+      max: 100,
+      plotLines: [
+        {
+          color: 'black',
+          width: 2,
+          value: 90,
+          label: {
+            text: 'Meta 90%',
+            align: 'right',
+            style: {
+              color: 'black',
+              fontWeight: 'bold',
+            },
+          },
+          zIndex: 5,
+        },
+      ],
     },
     series: [
       {
@@ -237,6 +255,7 @@ const ETADetailsSymary: React.FC<ETADetailsSymaryProps> = ({ numeroAuditoria }) 
       ],
     },
   };
+  
 
   const parsePercentage = (field4: string) => {
     const [percentage] = field4.split(':');
