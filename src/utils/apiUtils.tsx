@@ -13,6 +13,7 @@ export const obtenerTodasLasAccionesDesdeAPI = async (authToken: string) => {
         'Authorization': `Bearer ${authToken}`,
       },
     });
+
     return response.data;
   } catch (error) {
     console.error('Error:', error);

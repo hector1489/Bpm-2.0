@@ -57,6 +57,7 @@ const DesviacionesTable: React.FC = () => {
       setLocalDesviaciones(filteredDesviaciones);
     }
   }, [desviaciones, numero_requerimiento, context?.state?.userName, reloadData]);
+  
 
   const eliminarFila = async (id: number) => {
     const confirmDelete = window.confirm("¿Estás seguro de que deseas eliminar esta fila?");

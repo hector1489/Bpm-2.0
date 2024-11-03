@@ -129,12 +129,13 @@ const AppProvider: React.FC<IAppProviderProps> = ({ children }) => {
       setState(prevState => ({
         ...prevState,
         desviaciones: desviaciones,
+       
       }));
     } catch (error) {
       console.error('Error al cargar desviaciones por auditor:', error);
     }
   };
-
+ 
   const contextValue = useMemo(
     () => ({
       state,
