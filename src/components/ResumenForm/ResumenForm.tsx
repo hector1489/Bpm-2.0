@@ -140,8 +140,9 @@ const ResumenForm: React.FC = () => {
   };
 
   const handleGoToKPI = () => {
+    
     navigate('/kpi', {
-      state: { numero_requerimiento: numeroRequerimiento },
+      state: { numero_requerimiento: numeroRequerimiento, userName: state.userName },
     });
   }
 

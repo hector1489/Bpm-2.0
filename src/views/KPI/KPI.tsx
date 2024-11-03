@@ -1,12 +1,36 @@
 import { KPIGraph } from '../../components';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { useContext, useState, useEffect } from 'react';
+import { useContext, useState, useEffect, useMemo } from 'react';
 import { AppContext } from '../../context/GlobalState';
 import { getTablaDetailsByNumeroAuditoria } from '../../utils/apiDetails';
 import { getAuditSheetByUsername } from '../../utils/apiAuditSheet';
 import { getColorByPercentageFilas } from '../../utils/utils'
 import './KPI.css';
-import { infraestructuraQuestions, legalesQuestions } from '../../utils/ConstModules'
+import {
+  questionsMA,
+  questionsDOC,
+  questionsTra,
+  questionLum,
+  infraestructuraQuestions,
+  legalesQuestions,
+  poesControlProductosQuestion,
+  poesAguaQuestion,
+  poesSuperficiesQuestions,
+  poesContaminacionCruzadaQuestions,
+  poesSustanciasAdulterantes,
+  poesHigieneEmpleadosQuestions,
+  poesControlPlagas,
+  poesInstalacionesQuestions,
+  poeRecepcionQuestions,
+  poeAlamacenaminetoQuestions,
+  poePreelaboracionesQuestions,
+  poeElaboracionesQuestions,
+  poeTransporteQuestions,
+  poeServicioQuestions,
+  poeLavadoOllasQuestions,
+  poeControlCalidadQiestions,
+  poePptQuestions,
+} from '../../utils/ConstModules'
 
 
 interface TablaDetail {
@@ -28,10 +52,14 @@ interface AuditSheet {
   field6: string;
 }
 
+
+type ModuleGroupName = 'BPM' | 'POES' | 'POE' | 'MA' | 'DOC' | 'LUM' | 'TRA';
+
 const KPI: React.FC = () => {
-  const navigate = useNavigate();
-  const location = useLocation();
   const context = useContext(AppContext);
+  const location = useLocation();
+  const navigate = useNavigate();
+
   const [tablaDetails, setTablaDetails] = useState<TablaDetail[]>([]);
   const [auditSheetDetails, setAuditSheetDetails] = useState<AuditSheet[] | null>(null);
   const [filteredAuditSheet, setFilteredAuditSheet] = useState<AuditSheet | null>(null);
@@ -39,12 +67,17 @@ const KPI: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
 
   const numeroAuditoria = location.state?.numero_requerimiento || null;
+  const userName = location.state?.userName || null;
 
-  if (!context) {
-    return <div>Error: Context is not available.</div>;
-  }
-
-  const { state } = context;
+  const ponderaciones: Record<ModuleGroupName, number> = {
+    BPM: 4,
+    POES: 25,
+    POE: 25,
+    MA: 4,
+    DOC: 10,
+    LUM: 10,
+    TRA: 21
+  };
 
   useEffect(() => {
     const fetchTablaDetails = async () => {
@@ -66,40 +99,147 @@ const KPI: React.FC = () => {
     fetchTablaDetails();
   }, [numeroAuditoria]);
 
-  const fetchAuditSheetDetails = async () => {
-    const username = state?.userName;
-    if (!username) return;
-
-    setLoading(true);
-    setError(null);
-
-    try {
-      const auditSheetData = await getAuditSheetByUsername(username);
-      setAuditSheetDetails(auditSheetData);
-    } catch (err) {
-      setError('Error al obtener los datos del audit sheet');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  // useEffect para filtrar los datos por numero de auditoría
-  const bpmFilteredAuditSheet = () => {
-    if (numeroAuditoria && auditSheetDetails) {
-      const filteredData = auditSheetDetails.find(
-        (sheet) => sheet.numero_auditoria === numeroAuditoria
-      );
-      setFilteredAuditSheet(filteredData || null);
-    }
-  };
-
   useEffect(() => {
+    const fetchAuditSheetDetails = async () => {
+      const username = userName;
+      if (!username) return;
+
+      setLoading(true);
+      setError(null);
+
+      try {
+        const auditSheetData = await getAuditSheetByUsername(username);
+        setAuditSheetDetails(auditSheetData);
+      } catch (err) {
+        setError('Error al obtener los datos del audit sheet');
+      } finally {
+        setLoading(false);
+      }
+    };
+
     fetchAuditSheetDetails();
   }, [context?.state?.userName]);
 
   useEffect(() => {
+    const bpmFilteredAuditSheet = () => {
+      if (numeroAuditoria && auditSheetDetails) {
+        const filteredData = auditSheetDetails.find(
+          (sheet) => sheet.numero_auditoria === numeroAuditoria
+        );
+        setFilteredAuditSheet(filteredData || null);
+      }
+    };
     bpmFilteredAuditSheet();
   }, [auditSheetDetails, numeroAuditoria]);
+
+  const moduleData = tablaDetails.map((detail) => ({
+    question: detail.field3,
+    answer: detail.field4,
+    moduleName: detail.field2,
+    percentage: Number(detail.field4) || null,
+  }));
+
+  // Function to calculate a specific submodule's average with error handling
+  const calculateGeneralAverage = (percentages: number[]): string => {
+    const validPercentages = percentages.filter((value) => !isNaN(value));
+    const total = validPercentages.reduce((acc, percentage) => acc + percentage, 0);
+    return validPercentages.length > 0 ? (total / validPercentages.length).toFixed(2) : 'N/A';
+  };
+
+  // Filtra y convierte datos de un submódulo específico
+  const calculateSubmoduleAverageBpm = (submoduleQuestions: string[]): string => {
+    const submoduleData = moduleData
+      .filter(data => submoduleQuestions.includes(data.question))
+      .map(data => parseFloat(data.answer.replace('%', '')) || 0);
+    return calculateGeneralAverage(submoduleData);
+  };
+
+  const filterModuleData = (questions: string[]): number[] => {
+    return moduleData
+      .filter(data => questions.includes(data.question))
+      .map(data => {
+        const percentage = parseFloat(data.answer.replace('%', ''));
+        return isNaN(percentage) ? NaN : percentage;
+      })
+      .filter(value => !isNaN(value));
+  };
+
+  const calculateSubmoduleAverage = (submoduleQuestions: string[]) => {
+    const submoduleData = filterModuleData(submoduleQuestions);
+    return calculateGeneralAverage(submoduleData);
+  };
+
+
+  const calculateBPM = (): string => {
+    const infraAverage = parseFloat(calculateSubmoduleAverageBpm(infraestructuraQuestions));
+    const legalesAverage = parseFloat(calculateSubmoduleAverageBpm(legalesQuestions));
+
+    const validAverages = [infraAverage, legalesAverage].filter(avg => !isNaN(avg));
+    const total = validAverages.reduce((acc, avg) => acc + avg, 0);
+    return validAverages.length > 0 ? (total / validAverages.length).toFixed(2) : 'N/A';
+  };
+
+  const calculatePOES = () => {
+    const poesAverages = [
+      calculateSubmoduleAverage(poesControlProductosQuestion),
+      calculateSubmoduleAverage(poesAguaQuestion),
+      calculateSubmoduleAverage(poesSuperficiesQuestions),
+      calculateSubmoduleAverage(poesContaminacionCruzadaQuestions),
+      calculateSubmoduleAverage(poesSustanciasAdulterantes),
+      calculateSubmoduleAverage(poesHigieneEmpleadosQuestions),
+      calculateSubmoduleAverage(poesControlPlagas),
+      calculateSubmoduleAverage(poesInstalacionesQuestions),
+    ].map(avg => parseFloat(avg)).filter(avg => !isNaN(avg));
+
+    const total = poesAverages.reduce((acc, avg) => acc + avg, 0);
+    return poesAverages.length > 0 ? (total / poesAverages.length).toFixed(2) : 'N/A';
+  };
+
+
+  const calculatePOE = () => {
+    const poeAverages = [
+      calculateSubmoduleAverageBpm(poeRecepcionQuestions),
+      calculateSubmoduleAverageBpm(poeAlamacenaminetoQuestions),
+      calculateSubmoduleAverageBpm(poePreelaboracionesQuestions),
+      calculateSubmoduleAverageBpm(poeElaboracionesQuestions),
+      calculateSubmoduleAverageBpm(poeTransporteQuestions),
+      calculateSubmoduleAverageBpm(poeServicioQuestions),
+      calculateSubmoduleAverageBpm(poeLavadoOllasQuestions),
+      calculateSubmoduleAverageBpm(poeControlCalidadQiestions),
+      calculateSubmoduleAverageBpm(poePptQuestions)
+    ].map(avg => parseFloat(avg)).filter(avg => !isNaN(avg));
+
+    const total = poeAverages.reduce((acc, avg) => acc + avg, 0);
+    return poeAverages.length > 0 ? (total / poeAverages.length).toFixed(2) : 'N/A';
+  };
+
+  const calculateMA = () => calculateGeneralAverage(filterModuleData(questionsMA));
+  const calculateDOC = () => calculateGeneralAverage(filterModuleData(questionsDOC));
+  const calculateLUM = () => calculateGeneralAverage(filterModuleData(questionLum));
+  const calculateTRA = () => calculateGeneralAverage(filterModuleData(questionsTra));
+
+
+
+  const groupedData = useMemo(() => {
+    return [
+      { groupName: 'BPM', percentage: ponderaciones.BPM, average: calculateBPM() },
+      { groupName: 'POES', percentage: ponderaciones.POES, average: calculatePOES() },
+      { groupName: 'POE', percentage: ponderaciones.POE, average: calculatePOE() },
+      { groupName: 'MA', percentage: ponderaciones.MA, average: calculateMA() },
+      { groupName: 'DOC', percentage: ponderaciones.DOC, average: calculateDOC() },
+      { groupName: 'TRA', percentage: ponderaciones.TRA, average: calculateTRA() },
+      { groupName: 'LUM', percentage: ponderaciones.LUM, average: calculateLUM() },
+    ];
+  }, [moduleData]);
+
+  const finalAverageBPM = useMemo(() => {
+    const validAverages = groupedData
+      .map((group) => parseFloat(group.average))
+      .filter((avg) => !isNaN(avg));
+    const total = validAverages.reduce((acc, avg) => acc + avg, 0);
+    return validAverages.length > 0 ? (total / validAverages.length).toFixed(2) : 'N/A';
+  }, [groupedData]);
+
 
   if (loading) {
     return <p>Cargando datos...</p>;
@@ -113,12 +253,7 @@ const KPI: React.FC = () => {
     return <p>No se encontraron detalles para la auditoría {numeroAuditoria}</p>;
   }
 
-  const moduleData = tablaDetails.map((detail) => ({
-    question: detail.field3,
-    answer: detail.field4,
-    moduleName: detail.field2,
-    percentage: Number(detail.field4) || null,
-  }));
+
 
   const handleGoToDoc = () => {
     navigate('/documentacion');
@@ -131,25 +266,11 @@ const KPI: React.FC = () => {
     return match ? parseInt(match[1]) : null;
   };
 
-  // Function to calculate a specific submodule's average with error handling
-  const calculateSubmoduleAverage = (submoduleQuestions: string[]) => {
-    const submoduleData = tablaDetails
-      .filter(detail => submoduleQuestions.includes(detail.field3))
-      .map(detail => parseFloat(detail.field4.replace('%', '')) || 0);
 
-    const total = submoduleData.reduce((acc, percentage) => acc + percentage, 0);
-    return submoduleData.length > 0 ? (total / submoduleData.length).toFixed(2) : 'N/A';
-  };
 
-  // Updated calculateBPM to handle cases where averages might be NaN
-  const calculateBPM = () => {
-    const infraAverage = parseFloat(calculateSubmoduleAverage(infraestructuraQuestions));
-    const legalesAverage = parseFloat(calculateSubmoduleAverage(legalesQuestions));
 
-    return ((infraAverage + legalesAverage) / 2).toFixed(2);
-  };
 
-  const bpmPercentage = calculateBPM();
+  const bpmPercentage = finalAverageBPM;
 
 
   // Buscar y extraer los porcentajes de las preguntas específicas

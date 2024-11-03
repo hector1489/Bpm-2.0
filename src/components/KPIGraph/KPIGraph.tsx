@@ -150,7 +150,7 @@ const KPIGraph: React.FC<BPMGraphProps> = ({ moduleData }) => {
 
   const finalAverageBPM = useMemo(() => {
     const validAverages = groupedData.map(group => parseFloat(group.average)).filter(avg => !isNaN(avg));
-    console.log(validAverages);
+
     const total = validAverages.reduce((acc, avg) => acc + avg, 0);
     return validAverages.length > 0 ? (total / validAverages.length).toFixed(2) : 'N/A';
   }, [groupedData]);
