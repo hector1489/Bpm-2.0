@@ -74,7 +74,7 @@ export const enviarDatosAuditoria = async (desviaciones: any, authToken: string)
       evidenciaFotografica: desviacion.evidenciaFotografica || '',
       detalleFoto: desviacion.detalleFoto || '',
       auditor: desviacion.auditor || '',
-      email: desviacion.email || correo || '',
+      correo: desviacion.email || correo || '',
       fechaUltimaModificacion: desviacion.fechaModificacion || null,
       authToken: authToken || '',
       isNew: !('data-id' in desviacion),
