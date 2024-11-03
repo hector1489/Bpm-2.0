@@ -11,26 +11,26 @@ export const calcularFechaSolucionProgramada = (fechaIngreso: string, criticidad
   const prioridad = prioridades.find(p => p.valor === criticidad);
   if (!prioridad) return fechaIngreso;
 
-  // Validar y convertir la fecha de ingreso en formato yyyy-mm-dd
+  // Parse fechaIngreso in yyyy-mm-dd format
   const [yyyy, mm, dd] = fechaIngreso.split('-').map(Number);
   if (isNaN(dd) || isNaN(mm) || isNaN(yyyy)) {
     console.error('Fecha de ingreso inválida:', fechaIngreso);
     return fechaIngreso;
   }
 
+  // Create date object and add priority days
   const fecha = new Date(yyyy, mm - 1, dd);
   fecha.setDate(fecha.getDate() + prioridad.diasFechaSolucion);
 
-  // Formatear la fecha en el formato yyyy-mm-dd
+  // Format to yyyy-mm-dd
   const nuevaFecha = [
     fecha.getFullYear(),
-    String(fecha.getMonth() + 1).padStart(2, '0'),
-    String(fecha.getDate()).padStart(2, '0')
+    String(fecha.getMonth() + 1).padStart(2, '0'), // Ensure two digits for month
+    String(fecha.getDate()).padStart(2, '0')       // Ensure two digits for day
   ].join('-');
 
   return nuevaFecha;
 };
-
 
 
 
@@ -194,15 +194,19 @@ export const crearSelectFechaIngreso = (): HTMLSelectElement => {
   return select;
 };
 
-export const calcularDiasRestantes = (fechaIngreso: string, criticidad: string): number => {
-  if (!fechaIngreso || !criticidad) return 0;
+// Import criticidad or ensure it's accessible in this file
+export const calcularDiasRestantes = (fechaIngreso: string, criticidadValor: string): number => {
+  if (!fechaIngreso || !criticidadValor) return 0;
 
-  const prioridad = prioridades.find(p => p.valor === criticidad);
-  if (!prioridad) return 0;
+  console.log("fechaIngreso:", fechaIngreso, "criticidad:", criticidadValor);
+
+  // Use criticidad array to find the corresponding days
+  const criticidadItem = prioridades.find(c => c.valor === criticidadValor);
+  if (!criticidadItem) return 0;
 
   let dd, mm, yyyy;
 
-  // Detectamos si la fecha está en formato yyyy-mm-dd o dd/mm/yyyy
+  // Detect date format and parse (assuming it's yyyy-mm-dd)
   if (fechaIngreso.includes('-')) {
     [yyyy, mm, dd] = fechaIngreso.split('-').map(Number);
   } else if (fechaIngreso.includes('/')) {
@@ -211,23 +215,23 @@ export const calcularDiasRestantes = (fechaIngreso: string, criticidad: string):
     return 0;
   }
 
-  // Verifica que la fecha sea válida
+  // Ensure parsed date is valid
   if (isNaN(dd) || isNaN(mm) || isNaN(yyyy)) return 0;
 
   const fechaIngresoDate = new Date(yyyy, mm - 1, dd);
+  if (isNaN(fechaIngresoDate.getTime())) return 0;
 
-  // Sumamos los días correspondientes a la criticidad
-  fechaIngresoDate.setDate(fechaIngresoDate.getDate() + prioridad.diasFechaSolucion);
+  // Add days based on criticidad
+  fechaIngresoDate.setDate(fechaIngresoDate.getDate() + criticidadItem.diasFechaSolucion);
 
   const fechaActual = new Date();
 
+  // Calculate remaining days
   const diferenciaEnMilisegundos = fechaIngresoDate.getTime() - fechaActual.getTime();
   const diasRestantes = Math.ceil(diferenciaEnMilisegundos / (1000 * 60 * 60 * 24));
 
-  return isNaN(diasRestantes) ? 0 : diasRestantes;
+  return diasRestantes > 0 ? diasRestantes : 0;
 };
-
-
 
 
 
