@@ -113,7 +113,7 @@ const DocumentacionView: React.FC = () => {
                         <i className="fa-solid fa-file"></i> Resumen Ejecutivo
                       </button>
                       <button onClick={() => goToRoute1(numeroAuditoria)}>
-                        <i className="fa-solid fa-file"></i> Informe Ejecutivo
+                        <i className="fa-solid fa-file"></i> Informe De Gerencia
                       </button>
                     </div>
                   )}
