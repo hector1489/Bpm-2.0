@@ -197,7 +197,7 @@ const KPIGraph: React.FC<BPMGraphProps> = ({ moduleData }) => {
     : null;
 
 
-  const indicatorNames = ['BPM', 'DOC 97', 'TRA CSH 31', 'SER 71', 'CAP 101'];
+  const indicatorNames = ['% BPM', '% Cumplimiento De Minuta', '% Cumplimiento de examanes', '% Inaptitud Microbiologica', '% Capacitaciones'];
 
   const itemWeights = ['25%', '25%', '25%', '25%', '25%']
   // Filter and map `percentages` to ensure only number | null values are passed
