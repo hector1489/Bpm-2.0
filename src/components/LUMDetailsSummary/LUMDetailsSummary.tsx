@@ -154,6 +154,7 @@ const LUMDetailsSummary: React.FC<TableDetailsSummaryProps> = ({ numeroAuditoria
         beta: 25,
         depth: 70,
       },
+      marginBottom: 50,
     },
     title: {
       text: '',
@@ -161,12 +162,16 @@ const LUMDetailsSummary: React.FC<TableDetailsSummaryProps> = ({ numeroAuditoria
     xAxis: {
       categories: questionNames,
       title: {
-        text: '',
+        text: 'Luminometria ( Control de residuos organicos en superficies ).',
+        margin: 20,
+      },
+      labels: {
+        y: 40, 
       },
     },
     yAxis: {
       title: {
-        text: 'Porcentaje (%)',
+        text: '',
       },
       max: 100,
     },
@@ -195,6 +200,7 @@ const LUMDetailsSummary: React.FC<TableDetailsSummaryProps> = ({ numeroAuditoria
       },
     },
   };
+  
 
   // Filtrar valores numéricos y calcular el promedio
   const numericValues = lumNA.filter((value): value is number => typeof value === 'number');
@@ -204,6 +210,7 @@ const LUMDetailsSummary: React.FC<TableDetailsSummaryProps> = ({ numeroAuditoria
 
   // Usar el promedio para obtener el color de fondo
   const backgroundColor = getColorByPercentageFilas(lumAverage);
+
 
 
   let textColor = 'black';
@@ -217,7 +224,7 @@ const LUMDetailsSummary: React.FC<TableDetailsSummaryProps> = ({ numeroAuditoria
 
   return (
     <div className="LUMDetailsSummary-container">
-      <p>LUMINOMETRIA</p>
+      <h3>luminometria ( control de residuos organicos en superficies )</h3>
       <p>Numero Auditoria: {numeroAuditoria}</p>
 
       <div className="BPMDetailsSummary-data">
@@ -336,7 +343,12 @@ const LUMDetailsSummary: React.FC<TableDetailsSummaryProps> = ({ numeroAuditoria
             </tr>
           </thead>
           <tbody>
-            <tr style={{ backgroundColor: '#99cc00' }}>
+            
+            <tr style={{
+              backgroundColor: '#99cc00',
+              border: lumAverage >= 84 && lumAverage === 100 ? '3px solid blue' : 'none'
+              }}
+            >
               <td data-label="URL">0-50</td>
               <td data-label="MEDICIÓN DE EQUIPO">I ≤ 2.2</td>
               <td data-label="PORCENTAJE">100%</td>
@@ -345,7 +357,7 @@ const LUMDetailsSummary: React.FC<TableDetailsSummaryProps> = ({ numeroAuditoria
               <td data-label="GRADO DE LIMPIEZA">MUY LIMPIO</td>
               <td data-label="CLASIFICACIÓN DEL RIESGO">SIN RIESGO</td>
             </tr>
-            <tr style={{ backgroundColor: '#99cc00' }}>
+            <tr style={{ backgroundColor: '#99cc00', border: lumAverage === 83 ? '3px solid blue' : 'none' }}>
               <td data-label="URL">51-150</td>
               <td data-label="MEDICIÓN DE EQUIPO">2.3</td>
               <td data-label="PORCENTAJE">83%</td>
@@ -354,7 +366,7 @@ const LUMDetailsSummary: React.FC<TableDetailsSummaryProps> = ({ numeroAuditoria
               <td data-label="GRADO DE LIMPIEZA">LIMPIO</td>
               <td data-label="CLASIFICACIÓN DEL RIESGO">SIN RIESGO</td>
             </tr>
-            <tr style={{ backgroundColor: '#99cc00' }}>
+            <tr style={{ backgroundColor: '#99cc00' , border: lumAverage === 83 ? '3px solid blue' : 'none' }}>
               <td data-label="URL">51-150</td>
               <td data-label="MEDICIÓN DE EQUIPO">2.4</td>
               <td data-label="PORCENTAJE">83%</td>
@@ -363,7 +375,11 @@ const LUMDetailsSummary: React.FC<TableDetailsSummaryProps> = ({ numeroAuditoria
               <td data-label="GRADO DE LIMPIEZA">LIMPIO</td>
               <td data-label="CLASIFICACIÓN DEL RIESGO">SIN RIESGO</td>
             </tr>
-            <tr style={{ backgroundColor: '#99cc00' }}>
+            <tr style={{
+              backgroundColor: '#99cc00',
+              border: lumAverage >= 70 && lumAverage === 83 ? '3px solid blue' : 'none'
+              }}
+            >
               <td data-label="URL">51-150</td>
               <td data-label="MEDICIÓN DE EQUIPO">2.5</td>
               <td data-label="PORCENTAJE">83%</td>
@@ -373,7 +389,11 @@ const LUMDetailsSummary: React.FC<TableDetailsSummaryProps> = ({ numeroAuditoria
               <td data-label="CLASIFICACIÓN DEL RIESGO">SIN RIESGO</td>
             </tr>
 
-            <tr style={{ backgroundColor: '#ffff00' }}>
+            <tr style={{
+              backgroundColor: '#ffff00',
+              border: lumAverage === 69 ? '3px solid blue' : 'none'
+              }}
+            >
               <td data-label="URL">151-250</td>
               <td data-label="MEDICIÓN DE EQUIPO">2.6</td>
               <td data-label="PORCENTAJE">69%</td>
@@ -382,7 +402,11 @@ const LUMDetailsSummary: React.FC<TableDetailsSummaryProps> = ({ numeroAuditoria
               <td data-label="GRADO DE LIMPIEZA">MEDIANAMENTE SUCIO</td>
               <td data-label="CLASIFICACIÓN DEL RIESGO">BAJO RIESGO</td>
             </tr>
-            <tr style={{ backgroundColor: '#ffff00' }}>
+            <tr style={{
+              backgroundColor: '#ffff00',
+              border: lumAverage >= 56 && lumAverage <= 69 ? '3px solid blue' : 'none'
+              }}
+            >
               <td data-label="URL">151-250</td>
               <td data-label="MEDICIÓN DE EQUIPO">2.7</td>
               <td data-label="PORCENTAJE">69%</td>
@@ -391,7 +415,11 @@ const LUMDetailsSummary: React.FC<TableDetailsSummaryProps> = ({ numeroAuditoria
               <td data-label="GRADO DE LIMPIEZA">MEDIANAMENTE SUCIO</td>
               <td data-label="CLASIFICACIÓN DEL RIESGO">BAJO RIESGO</td>
             </tr>
-            <tr style={{ backgroundColor: '#ffff00' }}>
+            <tr style={{
+              backgroundColor: '#ffff00',
+              border:  lumAverage === 55 ? '3px solid blue' : 'none'
+              }}
+            >
               <td data-label="URL">251-500</td>
               <td data-label="MEDICIÓN DE EQUIPO">2.8</td>
               <td data-label="PORCENTAJE">55%</td>
@@ -400,7 +428,11 @@ const LUMDetailsSummary: React.FC<TableDetailsSummaryProps> = ({ numeroAuditoria
               <td data-label="GRADO DE LIMPIEZA">ALERTA</td>
               <td data-label="CLASIFICACIÓN DEL RIESGO">RIESGO (LEVE)</td>
             </tr>
-            <tr style={{ backgroundColor: '#ffff00' }}>
+            <tr style={{
+              backgroundColor: '#ffff00',
+              border: lumAverage >= 43 && lumAverage <= 55 ? '3px solid blue' : 'none' 
+              }}
+            >
               <td data-label="URL">251-500</td>
               <td data-label="MEDICIÓN DE EQUIPO">2.9</td>
               <td data-label="PORCENTAJE">55%</td>
@@ -410,7 +442,12 @@ const LUMDetailsSummary: React.FC<TableDetailsSummaryProps> = ({ numeroAuditoria
               <td data-label="CLASIFICACIÓN DEL RIESGO">RIESGO (LEVE)</td>
             </tr>
 
-            <tr style={{ backgroundColor: '#ff0000', color: 'white' }}>
+            <tr style={{
+              backgroundColor: '#ff0000',
+              color: 'white',
+              border: lumAverage >= 29 && lumAverage <= 42 ? '3px solid blue' : 'none'
+              }}
+            >
               <td data-label="URL">501-1000</td>
               <td data-label="MEDICIÓN DE EQUIPO">3 ≤ l ≤ 4</td>
               <td data-label="PORCENTAJE">42%</td>
@@ -419,7 +456,12 @@ const LUMDetailsSummary: React.FC<TableDetailsSummaryProps> = ({ numeroAuditoria
               <td data-label="GRADO DE LIMPIEZA">SUCIO</td>
               <td data-label="CLASIFICACIÓN DEL RIESGO">MEDIANO RIESGO (GRAVE)</td>
             </tr>
-            <tr style={{ backgroundColor: '#ff0000', color: 'white' }}>
+            <tr style={{
+              backgroundColor: '#ff0000',
+              color: 'white',
+              border: lumAverage >= 15 && lumAverage <= 28 ? '3px solid blue' : 'none'
+              }}
+            >
               <td data-label="URL">1001-5000</td>
               <td data-label="MEDICIÓN DE EQUIPO">4.1 ≤ l ≤ 4.9</td>
               <td data-label="PORCENTAJE">28%</td>
@@ -428,7 +470,7 @@ const LUMDetailsSummary: React.FC<TableDetailsSummaryProps> = ({ numeroAuditoria
               <td data-label="GRADO DE LIMPIEZA">MUY SUCIO</td>
               <td data-label="CLASIFICACIÓN DEL RIESGO">ALTO RIESGO (MUY GRAVE)</td>
             </tr>
-            <tr style={{ backgroundColor: '#ff0000', color: 'white' }}>
+            <tr style={{ backgroundColor: '#ff0000', color: 'white', border: lumAverage <= 14 ? '3px solid blue' : 'none' }}>
               <td data-label="URL">5001-10000</td>
               <td data-label="MEDICIÓN DE EQUIPO">5 ≤ l</td>
               <td data-label="PORCENTAJE">14%</td>

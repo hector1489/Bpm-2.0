@@ -242,6 +242,8 @@ const KPIGraph: React.FC<BPMGraphProps> = ({ moduleData }) => {
       tickColor: '#cccccc',
     },
     yAxis: {
+      min: 0,
+      max: 100,
       title: {
         text: 'Porcentaje (%)',
         style: {
@@ -256,7 +258,26 @@ const KPIGraph: React.FC<BPMGraphProps> = ({ moduleData }) => {
           color: '#666666',
         },
       },
+      plotLines: [
+        {
+          color: 'black',
+          width: 2,
+          value: 95,
+          label: {
+            text: 'Meta 95%',
+            align: 'right',
+            verticalAlign: 'middle',
+            x: +55,
+            style: {
+              color: 'black',
+              fontWeight: 'bold',
+            },
+          },
+          zIndex: 5,
+        },
+      ],
     },
+    
     series: [
       {
         name: 'Promedio',

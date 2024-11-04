@@ -322,7 +322,7 @@ const KPI: React.FC = () => {
   return (
     <div className="kpi-view">
       <div className="kpi-container">
-        <h3>Resumen KPI</h3>
+        <h3>INDICADORES DE GESTION ALIMENTACION (KPI's)</h3>
         <p>Numero Auditoria: {numeroAuditoria}</p>
         <div className="BPMDetailsSummary-data">
 

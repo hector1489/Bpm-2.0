@@ -177,6 +177,7 @@ const ETADetailsSymary: React.FC<ETADetailsSymaryProps> = ({ numeroAuditoria }) 
         text: '',
       },
       labels: {
+        rotation: -90, // Coloca el texto en vertical
         style: {
           fontSize: window.innerWidth < 768 ? '10px' : '12px',
         },
@@ -195,8 +196,8 @@ const ETADetailsSymary: React.FC<ETADetailsSymaryProps> = ({ numeroAuditoria }) 
           label: {
             text: 'Meta 90%',
             align: 'right',
-          verticalAlign: 'middle',
-          x: +55,
+            verticalAlign: 'middle',
+            x: +55,
             style: {
               color: 'black',
               fontWeight: 'bold',
@@ -240,6 +241,7 @@ const ETADetailsSymary: React.FC<ETADetailsSymaryProps> = ({ numeroAuditoria }) 
             },
             xAxis: {
               labels: {
+                rotation: -90,
                 style: {
                   fontSize: '8px',
                 },
