@@ -1,5 +1,6 @@
 import { DesviacionResponse } from '../../interfaces/interfaces';
 import { obtenerTodasLasAccionesDesdeAPI } from '../../utils/apiUtils';
+import { getCurrentDate } from '../../utils/utils';
 
 const prioridades = [
   { valor: 'Leve', diasFechaSolucion: 45 },
@@ -83,6 +84,13 @@ export const getColorByCriticidad = (criticidad: string) => {
       return 'white'; 
   }
 };
+
+
+
+export const formatDate = (dateString: string | null | undefined): string => {
+  return dateString ? dateString.split('T')[0] : getCurrentDate();
+};
+
 
 export const crearSelectCriticidad = (): HTMLSelectElement => {
   const select = document.createElement('select');

@@ -16,6 +16,7 @@ import {
   crearSelectAcciones,
   calcularDiasRestantes,
   calcularFechaSolucionProgramada,
+  formatDate,
 } from './DesviacionesUtils'
 
 const DEFAULT_ANSWER = "Sin respuesta";
@@ -33,18 +34,13 @@ const DesviacionesTable: React.FC = () => {
   const [selectedIds, setSelectedIds] = useState<number[]>([]);
   const [allSelected, setAllSelected] = useState(false);
   
-
-
   if (!context) {
     return <div>Error: Context is not available.</div>;
   }
 
   useEffect(() => {
     if (desviaciones) {
-      const formatDate = (dateString: string | null | undefined): string => {
-        return dateString ? dateString.split('T')[0] : getCurrentDate();
-      };
-  
+      
       const filteredDesviaciones = desviaciones.map(desviacion => ({
         ...desviacion,
         fecha_recepcion_solicitud: formatDate(desviacion.fecha_recepcion_solicitud),

@@ -278,7 +278,8 @@ const BPMDetailsSummary: React.FC<TableDetailsSummaryProps> = ({ numeroAuditoria
 
   return (
     <div className="BPMDetailsSummary-container">
-      <h3>Gráfico BPM Auditoría: {numeroAuditoria}</h3>
+      <h3>REPORTE AUDITORIA BPM </h3>
+      <p>Auditoria : {numeroAuditoria} </p>
 
       <div className="BPMDetailsSummary-data">
         <div className="BPMDetailsSummary-data-table">

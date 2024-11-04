@@ -286,7 +286,7 @@ const ETADetailsSymary: React.FC<ETADetailsSymaryProps> = ({ numeroAuditoria }) 
 
   return (
     <div className="ETADetailsSymary-container">
-      <h4> Indicadores de riesgo de enfermedades de transmicion alimentaria (ETA's)</h4>
+      <h4> Indicadores de riesgo de enfermedades de transmisión alimentaria (ETA's)</h4>
       <p>Número de Auditoría: {numeroAuditoria}</p>
 
       <div className="ETADetailsSummary-data">
