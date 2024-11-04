@@ -141,18 +141,20 @@ const KPI: React.FC = () => {
 
   // Function to calculate a specific submodule's average with error handling
   const calculateGeneralAverage = (percentages: number[]): string => {
-    const validPercentages = percentages.filter((value) => !isNaN(value));
+    const validPercentages = percentages.filter((value) => !isNaN(value) && value !== null);
     const total = validPercentages.reduce((acc, percentage) => acc + percentage, 0);
     return validPercentages.length > 0 ? (total / validPercentages.length).toFixed(2) : 'N/A';
   };
+  
 
   // Filtra y convierte datos de un submódulo específico
   const calculateSubmoduleAverageBpm = (submoduleQuestions: string[]): string => {
     const submoduleData = moduleData
-      .filter(data => submoduleQuestions.includes(data.question))
-      .map(data => parseFloat(data.answer.replace('%', '')) || 0);
+      .filter((data) => submoduleQuestions.includes(data.question) && data.answer !== 'N/A')
+      .map((data) => parseFloat(data.answer.replace('%', '')) || 0);
     return calculateGeneralAverage(submoduleData);
   };
+  
 
   const filterModuleData = (questions: string[]): number[] => {
     return moduleData
@@ -173,12 +175,12 @@ const KPI: React.FC = () => {
   const calculateBPM = (): string => {
     const infraAverage = parseFloat(calculateSubmoduleAverageBpm(infraestructuraQuestions));
     const legalesAverage = parseFloat(calculateSubmoduleAverageBpm(legalesQuestions));
-
-    const validAverages = [infraAverage, legalesAverage].filter(avg => !isNaN(avg));
+  
+    const validAverages = [infraAverage, legalesAverage].filter((avg) => !isNaN(avg) && avg !== null);
     const total = validAverages.reduce((acc, avg) => acc + avg, 0);
     return validAverages.length > 0 ? (total / validAverages.length).toFixed(2) : 'N/A';
   };
-
+  
   const calculatePOES = () => {
     const poesAverages = [
       calculateSubmoduleAverage(poesControlProductosQuestion),
@@ -189,13 +191,12 @@ const KPI: React.FC = () => {
       calculateSubmoduleAverage(poesHigieneEmpleadosQuestions),
       calculateSubmoduleAverage(poesControlPlagas),
       calculateSubmoduleAverage(poesInstalacionesQuestions),
-    ].map(avg => parseFloat(avg)).filter(avg => !isNaN(avg));
-
+    ].map((avg) => parseFloat(avg)).filter((avg) => !isNaN(avg));
+  
     const total = poesAverages.reduce((acc, avg) => acc + avg, 0);
     return poesAverages.length > 0 ? (total / poesAverages.length).toFixed(2) : 'N/A';
   };
-
-
+  
   const calculatePOE = () => {
     const poeAverages = [
       calculateSubmoduleAverageBpm(poeRecepcionQuestions),
@@ -206,12 +207,13 @@ const KPI: React.FC = () => {
       calculateSubmoduleAverageBpm(poeServicioQuestions),
       calculateSubmoduleAverageBpm(poeLavadoOllasQuestions),
       calculateSubmoduleAverageBpm(poeControlCalidadQiestions),
-      calculateSubmoduleAverageBpm(poePptQuestions)
-    ].map(avg => parseFloat(avg)).filter(avg => !isNaN(avg));
-
+      calculateSubmoduleAverageBpm(poePptQuestions),
+    ].map((avg) => parseFloat(avg)).filter((avg) => !isNaN(avg));
+  
     const total = poeAverages.reduce((acc, avg) => acc + avg, 0);
     return poeAverages.length > 0 ? (total / poeAverages.length).toFixed(2) : 'N/A';
   };
+  
 
   const calculateMA = () => calculateGeneralAverage(filterModuleData(questionsMA));
   const calculateDOC = () => calculateGeneralAverage(filterModuleData(questionsDOC));
