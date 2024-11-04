@@ -31,6 +31,7 @@ const DesviacionesTable: React.FC = () => {
   const [localDesviaciones, setLocalDesviaciones] = useState<DesviacionResponse[]>([]);
   const [reloadData, setReloadData] = useState(false);
   const [selectedIds, setSelectedIds] = useState<number[]>([]);
+  const [allSelected, setAllSelected] = useState(false);
   
 
 
@@ -79,6 +80,14 @@ const DesviacionesTable: React.FC = () => {
     );
   };
   
+  const toggleSelectAllRows = () => {
+    if (allSelected) {
+      setSelectedIds([]);
+    } else {
+      setSelectedIds(localDesviaciones.map(desviacion => desviacion.id));
+    }
+    setAllSelected(!allSelected);
+  };
 
   const eliminarFilasSeleccionadas = async () => {
     if (selectedIds.length === 0) {
@@ -289,7 +298,9 @@ const DesviacionesTable: React.FC = () => {
             <th>DÍAS RESTANTES</th>
             <th>ELIMINAR FILA</th>
             <th>
-              Eliminar Filas Marcadas
+            <button onClick={toggleSelectAllRows}>
+                {allSelected ? "Deseleccionar Todas" : "Seleccionar Todas"}
+              </button>
               <button className='bg-danger' onClick={() => eliminarFilasSeleccionadas()}>Eliminar</button>
             </th>
           </tr>
