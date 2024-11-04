@@ -33,6 +33,13 @@ const DesviacionesTable: React.FC = () => {
   const [reloadData, setReloadData] = useState(false);
   const [selectedIds, setSelectedIds] = useState<number[]>([]);
   const [allSelected, setAllSelected] = useState(false);
+  const [responsableFilter, setResponsableFilter] = useState('');
+  const [criterioFilter, setCriterioFilter] = useState('');
+  const [auditoriaFilter, setAuditoriaFilter] = useState<number | null>(null);
+  const [preguntasFilter, setPreguntasFilter] = useState('');
+  const [establecimientoFilter, setEstablecimientoFilter] = useState('');
+  const [criticidadFilter, setCriticidadFilter] = useState('');
+  const [estadoFilter, setEstadoFilter] = useState('');
   
   if (!context) {
     return <div>Error: Context is not available.</div>;
@@ -40,7 +47,7 @@ const DesviacionesTable: React.FC = () => {
 
   useEffect(() => {
     if (desviaciones) {
-      
+      console.log(desviaciones)
       const filteredDesviaciones = desviaciones.map(desviacion => ({
         ...desviacion,
         fecha_recepcion_solicitud: formatDate(desviacion.fecha_recepcion_solicitud),
@@ -48,12 +55,66 @@ const DesviacionesTable: React.FC = () => {
       })).filter(desviacion => {
         const isAuditorMatch = desviacion.auditor === context?.state?.userName;
         const isRequirementMatch = numero_requerimiento ? desviacion.numero_requerimiento === numero_requerimiento : true;
-        return isAuditorMatch && isRequirementMatch;
+        const isResponsableMatch = responsableFilter ? desviacion.responsable_problema?.toLowerCase().includes(responsableFilter.toLowerCase()) : true;
+        const isPreguntaMatch = preguntasFilter ? desviacion.preguntas_auditadas?.toLowerCase().includes(preguntasFilter.toLowerCase()) : true;
+        const isCriterioMatch = criterioFilter ? desviacion.desviacion_o_criterio?.toLowerCase().includes(criterioFilter.toLowerCase()) : true;
+        const isAuditoriaMatch = auditoriaFilter !== null ? parseInt(desviacion.numero_requerimiento, 10) === auditoriaFilter : true;
+        const isEstablecimientoMatch = establecimientoFilter ? desviacion.local?.toLowerCase().includes(establecimientoFilter.toLowerCase()) : true;
+        const isCriticidadMatch = criticidadFilter ? desviacion.criticidad?.toLowerCase().includes(criticidadFilter.toLowerCase()) : true;
+        const isEstadoMatch = estadoFilter ? desviacion.estado?.toLowerCase().includes(estadoFilter.toLowerCase()) : true;
+
+        return isAuditorMatch && isRequirementMatch && isResponsableMatch && isCriterioMatch &&  isAuditoriaMatch && isPreguntaMatch && isEstablecimientoMatch && isCriticidadMatch && isEstadoMatch;
       });
   
       setLocalDesviaciones(filteredDesviaciones);
     }
-  }, [desviaciones, numero_requerimiento, context?.state?.userName, reloadData]);
+  }, [
+    desviaciones,
+    numero_requerimiento,
+    context?.state?.userName,
+    reloadData,
+    responsableFilter,
+    criterioFilter,
+    auditoriaFilter,
+    preguntasFilter,
+    establecimientoFilter,
+    criticidadFilter,
+    estadoFilter
+  ]);
+
+
+
+  const handleResponsableFilterChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setResponsableFilter(e.target.value);
+  };
+
+  const handlePreguntaFilterChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setPreguntasFilter(e.target.value);
+  };
+  
+  const handleCriterioFilterChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setCriterioFilter(e.target.value);
+  };
+  
+  const handleAuditoriaFilterChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setAuditoriaFilter(value ? parseInt(value) : null);
+  };
+
+  const handleEstablecimientoFilterChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setEstablecimientoFilter(e.target.value);
+  };
+
+  const handleCriticidadFilterChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setCriticidadFilter(e.target.value);
+  };
+
+  const handleEstadoFilterChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setEstadoFilter(e.target.value);
+  };
+  
+  
+  
 
   const eliminarFila = async (id: number) => {
     const confirmDelete = window.confirm("¿Estás seguro de que deseas eliminar esta fila?");
@@ -277,16 +338,72 @@ const DesviacionesTable: React.FC = () => {
         <thead>
           <tr>
             <th>N° DE REQUERIMIENTO</th>
-            <th>N° DE AUDITORIA</th>
-            <th>PREGUNTAS AUDITADAS</th>
-            <th>CRITERIO</th>
-            <th>RESPONSABLE</th>
-            <th>NOMBRE DEL ESTABLECIMIENTO</th>
-            <th>CRITICIDAD</th>
+            <th>
+              N° DE AUDITORIA
+              <input
+                type="number"
+                placeholder="Filtrar por Número Auditoria"
+                value={auditoriaFilter ?? ''}
+                onChange={handleAuditoriaFilterChange}
+              />
+            </th>
+            <th>
+              PREGUNTAS AUDITADAS
+              <input
+                type="text"
+                placeholder="Filtrar por Pregunta"
+                value={preguntasFilter}
+                onChange={handlePreguntaFilterChange}
+              />
+            </th>
+            <th>
+              CRITERIO
+              <input
+                type="text"
+                placeholder="Filtrar por Criterio"
+                value={criterioFilter}
+                onChange={handleCriterioFilterChange}
+              />
+            </th>
+            <th>
+              RESPONSABLE
+              <input
+                type="text"
+                placeholder="Filtrar por Responsable"
+                value={responsableFilter}
+                onChange={handleResponsableFilterChange}
+              />
+            </th>
+            <th>
+              NOMBRE DEL ESTABLECIMIENTO
+              <input
+                type="text"
+                placeholder="Filtrar por Establecimiento"
+                value={establecimientoFilter}
+                onChange={handleEstablecimientoFilterChange }
+              />
+            </th>
+            <th>
+              CRITICIDAD
+              <input
+                type="text"
+                placeholder="Filtrar por Criticidad"
+                value={criticidadFilter}
+                onChange={handleCriticidadFilterChange }
+              />
+            </th>
             <th>ACCIONES CORRECTIVAS</th>
             <th>FECHA DE INGRESO</th>
             <th>SOLUCION PROGRAMADA</th>
-            <th>ESTADO</th>
+            <th>
+              ESTADO
+              <input
+                type="text"
+                placeholder="Filtrar por Estado"
+                value={estadoFilter}
+                onChange={handleEstadoFilterChange }
+              />
+            </th>
             <th>CONTACTO CLIENTE</th>
             <th>EVIDENCIA FOTOGRAFICA</th>
             <th>AUDITOR</th>
