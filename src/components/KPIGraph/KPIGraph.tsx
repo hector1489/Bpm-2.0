@@ -69,10 +69,11 @@ const KPIGraph: React.FC<BPMGraphProps> = ({ moduleData }) => {
   // Filtra y convierte datos de un submódulo específico
   const calculateSubmoduleAverageBpm = (submoduleQuestions: string[]): string => {
     const submoduleData = moduleData
-      .filter(data => submoduleQuestions.includes(data.question))
+      .filter(data => submoduleQuestions.includes(data.question) && data.answer !== 'N/A')
       .map(data => parseFloat(data.answer.replace('%', '')) || 0);
     return calculateGeneralAverage(submoduleData);
   };
+  
 
   const filterModuleData = (questions: string[]): number[] => {
     return moduleData
@@ -93,11 +94,12 @@ const KPIGraph: React.FC<BPMGraphProps> = ({ moduleData }) => {
   const calculateBPM = (): string => {
     const infraAverage = parseFloat(calculateSubmoduleAverageBpm(infraestructuraQuestions));
     const legalesAverage = parseFloat(calculateSubmoduleAverageBpm(legalesQuestions));
-
+  
     const validAverages = [infraAverage, legalesAverage].filter(avg => !isNaN(avg));
     const total = validAverages.reduce((acc, avg) => acc + avg, 0);
     return validAverages.length > 0 ? (total / validAverages.length).toFixed(2) : 'N/A';
   };
+  
 
   const calculatePOES = () => {
     const poesAverages = [
@@ -208,6 +210,9 @@ const KPIGraph: React.FC<BPMGraphProps> = ({ moduleData }) => {
 
   const barColors = percentages.map((percentage) => getColorByPercentage(percentage));
 
+  const percentagesTable = [bpmPercentage, doc97Percentage, csh31Percentage, ser71Percentage, cap101Percentage]
+    .map((value) => (typeof value === 'string' ? parseFloat(value) : value));
+
 
   // Opciones del gráfico de Highcharts
   const chartOptions = {
@@ -293,7 +298,7 @@ const KPIGraph: React.FC<BPMGraphProps> = ({ moduleData }) => {
               <tr key={name}>
                 <td>{name}</td>
                 <td>{itemWeights[index]}</td>
-                <td>{percentages[index] !== null ? percentages[index]?.toFixed(2) + '%' : '%'}</td>
+                <td>{percentagesTable[index] !== null ? percentagesTable[index]?.toFixed(2) + '%' : '%'}</td>
               </tr>
             ))}
             <tr className="bg-warning">
