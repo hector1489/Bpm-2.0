@@ -80,7 +80,7 @@ export const calculateSolutionDate = (criticidad: string): string => {
   const mm = String(solutionDate.getMonth() + 1).padStart(2, '0');
   const yyyy = solutionDate.getFullYear();
 
-  return `${dd}/${mm}/${yyyy}`;
+  return `${yyyy}/${mm}/${dd}`;
 }
 
 export const getCriterioByColor = (criticidadColor: string) => {
@@ -128,6 +128,7 @@ interface TablaDetail {
 }
 
 export const extractPercentage = (answer: string): number => {
+  if (answer === 'N/A') return 100;
   const match = answer.match(/(\d+)%/);
   return match ? parseInt(match[1], 10) : 0;
 };

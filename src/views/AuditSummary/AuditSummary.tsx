@@ -93,14 +93,17 @@ const AuditSummary: React.FC = () => {
   const handleSendIncidencias = useCallback(async () => {
     const { auditSheetData, IsHero, photos, authToken } = state;
     const responsableDelProblema = auditSheetData.supervisorEstablecimiento;
-
+  
     if (!authToken) {
       console.error('No se puede enviar desviaciones: el token de autenticación es null.');
       return;
     }
-
+  
     const desviaciones = IsHero
-      .filter((hero) => extractPercentage(hero.answer ?? DEFAULT_ANSWER) < 100)
+      .filter((hero) => {
+        const porcentaje = extractPercentage(hero.answer ?? DEFAULT_ANSWER);
+        return porcentaje !== null && porcentaje < 100;
+      })
       .map((hero) => {
         const criticidadColor = getColorByPercentage(extractPercentage(hero.answer ?? DEFAULT_ANSWER));
         const solucionProgramada = calculateSolutionDate(criticidadColor);
@@ -110,7 +113,7 @@ const AuditSummary: React.FC = () => {
         const auditor = state.userName;
         const email = state.auditSheetData.auditorEmail;
         const criticidad = getCriterioByColor(criticidadColor);
-
+  
         return {
           numeroRequerimiento: numeroAuditoria,
           pregunta: hero.question,
@@ -128,7 +131,7 @@ const AuditSummary: React.FC = () => {
           criticidad
         };
       });
-
+  
     try {
       const result = await enviarDatosAuditoria(desviaciones, authToken);
       console.log('Incidencias enviadas exitosamente:', result);
@@ -136,6 +139,7 @@ const AuditSummary: React.FC = () => {
       console.error('Error al enviar las incidencias:', error);
     }
   }, [state]);
+  
 
 
 
