@@ -88,7 +88,7 @@ const KPIGraph: React.FC<BPMGraphProps> = ({ moduleData }) => {
     const submoduleData = filterModuleData(submoduleQuestions);
     return calculateGeneralAverage(submoduleData);
   };
-  
+
 
   const calculateBPM = (): string => {
     const infraAverage = parseFloat(calculateSubmoduleAverageBpm(infraestructuraQuestions));
@@ -140,7 +140,7 @@ const KPIGraph: React.FC<BPMGraphProps> = ({ moduleData }) => {
 
   const groupedData = useMemo(() => [
     { groupName: 'BPM', percentage: ponderaciones.BPM, average: calculateBPM(), ponderacion: ponderaciones['BPM'] },
-    { groupName: 'POES',  percentage: ponderaciones.POES, average: calculatePOES(), ponderacion: ponderaciones['POES'] },
+    { groupName: 'POES', percentage: ponderaciones.POES, average: calculatePOES(), ponderacion: ponderaciones['POES'] },
     { groupName: 'POE', percentage: ponderaciones.POE, average: calculatePOE(), ponderacion: ponderaciones['POE'] },
     { groupName: 'MA', percentage: ponderaciones.MA, average: calculateMA(), ponderacion: ponderaciones['MA'] },
     { groupName: 'DOC', percentage: ponderaciones.DOC, average: calculateDOC(), ponderacion: ponderaciones['DOC'] },
@@ -165,6 +165,7 @@ const KPIGraph: React.FC<BPMGraphProps> = ({ moduleData }) => {
   );
   const doc97Percentage = doc97Detail ? extractPercentageFromAnswer(doc97Detail.answer) : null;
 
+
   const csh31Detail = moduleData.find((module) =>
     module.question === 'TRA CSH 31. Exámenes de todos los manipuladores, ecónomos y administradores. Ausencia de malestares o infecciones (Art. 52, 53):'
   );
@@ -187,6 +188,7 @@ const KPIGraph: React.FC<BPMGraphProps> = ({ moduleData }) => {
     return 'red';
   };
 
+
   const validAverages = [bpmPercentage, doc97Percentage, csh31Percentage, ser71Percentage, cap101Percentage]
     .filter((avg) => avg !== null)
     .map((avg) => typeof avg === 'string' ? parseFloat(avg) : avg);
@@ -200,12 +202,11 @@ const KPIGraph: React.FC<BPMGraphProps> = ({ moduleData }) => {
   const indicatorNames = ['% BPM', '% Cumplimiento De Minuta', '% Cumplimiento de examanes', '% Inaptitud Microbiologica', '% Capacitaciones'];
 
   const itemWeights = ['25%', '25%', '25%', '25%', '25%']
-  // Filter and map `percentages` to ensure only number | null values are passed
+
   const percentages = [bpmPercentage, doc97Percentage, csh31Percentage, ser71Percentage, cap101Percentage]
-    .map((value) => (typeof value === 'string' ? parseFloat(value) : value)); // Convert string values to number
+    .map((value) => (typeof value === 'string' ? parseFloat(value) : value ?? 0.0));
 
   const barColors = percentages.map((percentage) => getColorByPercentage(percentage));
-
 
 
   // Opciones del gráfico de Highcharts
@@ -292,7 +293,7 @@ const KPIGraph: React.FC<BPMGraphProps> = ({ moduleData }) => {
               <tr key={name}>
                 <td>{name}</td>
                 <td>{itemWeights[index]}</td>
-                <td>{percentages[index] !== null ? percentages[index]?.toFixed(2) + '%' : 'N/A'}</td>
+                <td>{percentages[index] !== null ? percentages[index]?.toFixed(2) + '%' : '%'}</td>
               </tr>
             ))}
             <tr className="bg-warning">

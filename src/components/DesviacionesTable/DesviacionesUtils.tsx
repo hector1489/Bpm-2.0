@@ -25,8 +25,8 @@ export const calcularFechaSolucionProgramada = (fechaIngreso: string, criticidad
   // Format to yyyy-mm-dd
   const nuevaFecha = [
     fecha.getFullYear(),
-    String(fecha.getMonth() + 1).padStart(2, '0'), // Ensure two digits for month
-    String(fecha.getDate()).padStart(2, '0')       // Ensure two digits for day
+    String(fecha.getMonth() + 1).padStart(2, '0'),
+    String(fecha.getDate()).padStart(2, '0')
   ].join('-');
 
   return nuevaFecha;
@@ -198,7 +198,6 @@ export const crearSelectFechaIngreso = (): HTMLSelectElement => {
 export const calcularDiasRestantes = (fechaIngreso: string, criticidadValor: string): number => {
   if (!fechaIngreso || !criticidadValor) return 0;
 
-  console.log("fechaIngreso:", fechaIngreso, "criticidad:", criticidadValor);
 
   // Use criticidad array to find the corresponding days
   const criticidadItem = prioridades.find(c => c.valor === criticidadValor);
