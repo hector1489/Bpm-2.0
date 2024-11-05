@@ -40,6 +40,7 @@ const DesviacionesTable: React.FC = () => {
   const [establecimientoFilter, setEstablecimientoFilter] = useState('');
   const [criticidadFilter, setCriticidadFilter] = useState('');
   const [estadoFilter, setEstadoFilter] = useState('');
+  const [auditorFilter, setAuditorFilter] = useState('');
   
   if (!context) {
     return <div>Error: Context is not available.</div>;
@@ -62,8 +63,9 @@ const DesviacionesTable: React.FC = () => {
         const isEstablecimientoMatch = establecimientoFilter ? desviacion.local?.toLowerCase().includes(establecimientoFilter.toLowerCase()) : true;
         const isCriticidadMatch = criticidadFilter ? desviacion.criticidad?.toLowerCase().includes(criticidadFilter.toLowerCase()) : true;
         const isEstadoMatch = estadoFilter ? desviacion.estado?.toLowerCase().includes(estadoFilter.toLowerCase()) : true;
+        const isAuditoresMatch = auditorFilter? desviacion.auditor?.toLowerCase().includes(auditorFilter.toLowerCase()) : true;
 
-        return isAuditorMatch && isRequirementMatch && isResponsableMatch && isCriterioMatch &&  isAuditoriaMatch && isPreguntaMatch && isEstablecimientoMatch && isCriticidadMatch && isEstadoMatch;
+        return isAuditorMatch && isRequirementMatch && isResponsableMatch && isCriterioMatch &&  isAuditoriaMatch && isPreguntaMatch && isEstablecimientoMatch && isCriticidadMatch && isEstadoMatch && isAuditoresMatch;
       });
   
       setLocalDesviaciones(filteredDesviaciones);
@@ -79,7 +81,8 @@ const DesviacionesTable: React.FC = () => {
     preguntasFilter,
     establecimientoFilter,
     criticidadFilter,
-    estadoFilter
+    estadoFilter,
+    auditorFilter
   ]);
 
 
@@ -113,7 +116,9 @@ const DesviacionesTable: React.FC = () => {
     setEstadoFilter(e.target.value);
   };
   
-  
+  const handleAuditoresFilterChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setAuditorFilter(e.target.value);
+  };
   
 
   const eliminarFila = async (id: number) => {
@@ -272,7 +277,6 @@ const DesviacionesTable: React.FC = () => {
           cell.innerHTML = '';
           cell.appendChild(selectAcciones);
         } else if (cellIndex === responsableColumnIndex) {
-          // Input de texto para "Responsable"
           const input = document.createElement('input');
           input.type = 'text';
           input.placeholder = 'Responsable...';
@@ -406,7 +410,15 @@ const DesviacionesTable: React.FC = () => {
             </th>
             <th>CONTACTO CLIENTE</th>
             <th>EVIDENCIA FOTOGRAFICA</th>
-            <th>AUDITOR</th>
+            <th>
+              AUDITOR
+              <input
+                type="text"
+                placeholder="Filtrar por Auditor"
+                value={auditorFilter}
+                onChange={handleAuditoresFilterChange}
+              />
+            </th>
             <th>EMAIL</th>
             <th>DÍAS RESTANTES</th>
             <th>ELIMINAR FILA</th>
