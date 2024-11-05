@@ -155,7 +155,7 @@ const BPMDetailsSummary: React.FC<TableDetailsSummaryProps> = ({ numeroAuditoria
       })
       .filter(value => !isNaN(value));
   };
-
+ 
   const calculateGeneralAverage = (percentages: number[]) => {
     const validPercentages = percentages.filter(value => !isNaN(value));
     const total = validPercentages.reduce((acc, percentage) => acc + percentage, 0);

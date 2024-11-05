@@ -94,19 +94,12 @@ const IEIndicadoresClave: React.FC<IEIndicadoresClaveProps> = ({ tablaDetails })
   });
 
   // Function to calculate a specific submodule's average with error handling
-  const calculateGeneralAverage = (percentages: number[]): string => {
-    const validPercentages = percentages.filter(value => !isNaN(value));
+  const calculateGeneralAverage = (percentages: (number | 'NA')[]): string => {
+    const validPercentages = percentages.filter(value => typeof value === 'number');
     const total = validPercentages.reduce((acc, percentage) => acc + percentage, 0);
-    return validPercentages.length > 0 ? (total / validPercentages.length).toFixed(2) : 'N/A';
+    return validPercentages.length > 0 ? (total / validPercentages.length).toFixed(2) : 'NA';
   };
 
-  // Filtra y convierte datos de un submódulo específico
-  const calculateSubmoduleAverageBpm = (submoduleQuestions: string[]): string => {
-    const submoduleData = tablaDetails
-      .filter(data => submoduleQuestions.includes(data.field3))
-      .map(data => parseFloat(data.field3.replace('%', '')) || 0);
-    return calculateGeneralAverage(submoduleData);
-  };
 
   const filterModuleData = (questions: string[]): number[] => {
     return tablaDetails
@@ -125,14 +118,14 @@ const IEIndicadoresClave: React.FC<IEIndicadoresClaveProps> = ({ tablaDetails })
 
 
   const calculateBPM = (): string => {
-    const infraAverage = parseFloat(calculateSubmoduleAverageBpm(infraestructuraQuestions));
-    const legalesAverage = parseFloat(calculateSubmoduleAverageBpm(legalesQuestions));
-
+    const infraAverage = parseFloat(calculateSubmoduleAverage(infraestructuraQuestions));
+    const legalesAverage = parseFloat(calculateSubmoduleAverage(legalesQuestions));
+  
     const validAverages = [infraAverage, legalesAverage].filter(avg => !isNaN(avg));
     const total = validAverages.reduce((acc, avg) => acc + avg, 0);
     return validAverages.length > 0 ? (total / validAverages.length).toFixed(2) : 'N/A';
   };
-
+  
   const calculatePOES = () => {
     const poesAverages = [
       calculateSubmoduleAverage(poesControlProductosQuestion),
@@ -152,15 +145,15 @@ const IEIndicadoresClave: React.FC<IEIndicadoresClaveProps> = ({ tablaDetails })
 
   const calculatePOE = () => {
     const poeAverages = [
-      calculateSubmoduleAverageBpm(poeRecepcionQuestions),
-      calculateSubmoduleAverageBpm(poeAlamacenaminetoQuestions),
-      calculateSubmoduleAverageBpm(poePreelaboracionesQuestions),
-      calculateSubmoduleAverageBpm(poeElaboracionesQuestions),
-      calculateSubmoduleAverageBpm(poeTransporteQuestions),
-      calculateSubmoduleAverageBpm(poeServicioQuestions),
-      calculateSubmoduleAverageBpm(poeLavadoOllasQuestions),
-      calculateSubmoduleAverageBpm(poeControlCalidadQiestions),
-      calculateSubmoduleAverageBpm(poePptQuestions)
+      calculateSubmoduleAverage(poeRecepcionQuestions),
+      calculateSubmoduleAverage(poeAlamacenaminetoQuestions),
+      calculateSubmoduleAverage(poePreelaboracionesQuestions),
+      calculateSubmoduleAverage(poeElaboracionesQuestions),
+      calculateSubmoduleAverage(poeTransporteQuestions),
+      calculateSubmoduleAverage(poeServicioQuestions),
+      calculateSubmoduleAverage(poeLavadoOllasQuestions),
+      calculateSubmoduleAverage(poeControlCalidadQiestions),
+      calculateSubmoduleAverage(poePptQuestions)
     ].map(avg => parseFloat(avg)).filter(avg => !isNaN(avg));
 
     const total = poeAverages.reduce((acc, avg) => acc + avg, 0);
@@ -182,12 +175,17 @@ const IEIndicadoresClave: React.FC<IEIndicadoresClaveProps> = ({ tablaDetails })
     { groupName: 'LUM', percentage: ponderaciones.LUM, average: calculateLUM(), ponderacion: ponderaciones['LUM'] },
   ], [tablaDetails]);
 
+  
+
   const finalAverageBPM = useMemo(() => {
     const validAverages = groupedData.map(group => parseFloat(group.average)).filter(avg => !isNaN(avg));
-
+   
+    console.log(validAverages)
     const total = validAverages.reduce((acc, avg) => acc + avg, 0);
     return validAverages.length > 0 ? (total / validAverages.length).toFixed(2) : 'N/A';
   }, [groupedData]);
+
+
 
   const bpmPercentage = parseFloat(finalAverageBPM) || 0;
 
