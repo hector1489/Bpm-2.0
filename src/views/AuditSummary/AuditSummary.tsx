@@ -44,10 +44,10 @@ const AuditSummary: React.FC = () => {
         await sendEmail(
           emailAudit,
           'Número de Auditoría',
-          `BPM AUDITORIAS:
+          `Alerta CBPfood Auditoria bpm realizada:
         Se han ingresado nuevas desviaciones correspondientes al número de auditoría: ${numeroAuditoria}.
         Para ver más detalles, haz clic en el siguiente enlace:
-        <a href="https://frontend-svc7.onrender.com/" target="_blank">Ver detalles de la auditoría</a>
+        "https://frontend-svc7.onrender.com/"
         `,
         );
         console.log('Correo enviado exitosamente');
