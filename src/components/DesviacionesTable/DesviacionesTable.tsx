@@ -17,6 +17,7 @@ import {
   calcularDiasRestantes,
   calcularFechaSolucionProgramada,
   formatDate,
+  sendTableEmail
 } from './DesviacionesUtils'
 
 const DEFAULT_ANSWER = "Sin respuesta";
@@ -41,6 +42,7 @@ const DesviacionesTable: React.FC = () => {
   const [criticidadFilter, setCriticidadFilter] = useState('');
   const [estadoFilter, setEstadoFilter] = useState('');
   const [auditorFilter, setAuditorFilter] = useState('');
+  const [emailDestino, setEmailDestino] = useState('');
   
   if (!context) {
     return <div>Error: Context is not available.</div>;
@@ -314,7 +316,44 @@ const DesviacionesTable: React.FC = () => {
     });
   };
 
-
+  const desviacionesSendEmail = () => {
+    if (localDesviaciones.length === 0) {
+      alert("No hay desviaciones para enviar.");
+      return;
+    }
+  
+    const email = emailDestino || localDesviaciones[0].correo || DEFAULT_ANSWER;
+    const numeroAuditoria = localDesviaciones[0].numero_requerimiento || DEFAULT_ANSWER;
+  
+    const tableData = localDesviaciones.map(desviacion => ({
+      numeroRequerimiento: desviacion.numero_requerimiento || DEFAULT_ANSWER,
+      preguntasAuditadas: desviacion.preguntas_auditadas || DEFAULT_ANSWER,
+      criterio: desviacion.desviacion_o_criterio || DEFAULT_ANSWER,
+      responsable: desviacion.responsable_problema || DEFAULT_ANSWER,
+      establecimiento: desviacion.local || DEFAULT_ANSWER,
+      criticidad: desviacion.criticidad || DEFAULT_ANSWER,
+      accionesCorrectivas: desviacion.acciones_correctivas || DEFAULT_ANSWER,
+      fechaIngreso: desviacion.fecha_recepcion_solicitud || DEFAULT_ANSWER,
+      fechaSolucionProgramada: desviacion.fecha_solucion_programada || DEFAULT_ANSWER,
+      estado: desviacion.estado || DEFAULT_ANSWER,
+      contactoClientes: desviacion.contacto_clientes || DEFAULT_ANSWER,
+      evidenciaFotografica: desviacion.evidencia_fotografica || DEFAULT_ANSWER,
+      auditor: desviacion.auditor || DEFAULT_ANSWER,
+      correo: desviacion.correo || DEFAULT_ANSWER,
+      diasRestantes: calcularDiasRestantes(
+        desviacion.fecha_recepcion_solicitud || getCurrentDate(),
+        desviacion.criticidad || 'Leve'
+      ).toString(),
+    }));
+  
+    sendTableEmail(email, numeroAuditoria, tableData)
+      .then(() => alert("Email enviado exitosamente."))
+      .catch(error => {
+        console.error('Error al enviar el email:', error);
+        alert('Hubo un error al enviar el email. Por favor, inténtalo de nuevo.');
+      });
+  };
+  
 
   const handleGoToHome = () => {
     navigate('/home');
@@ -336,6 +375,17 @@ const DesviacionesTable: React.FC = () => {
         <button className='btn-desviaciones-table' onClick={handleSaveChanges}>
           <i className="fa-solid fa-envelopes-bulk"></i> Guardar Cambios
         </button>
+        <div className="desviaciones-table-email">
+        <input
+          type="email"
+          placeholder="Ingrese email de destino"
+          value={emailDestino}
+          onChange={(e) => setEmailDestino(e.target.value)}
+        />
+        <button className='btn-desviaciones-table' onClick={desviacionesSendEmail}>
+        <i className="fa-regular fa-envelope"></i> Enviar Tabla
+        </button>
+        </div>
       </div>
 
       <table id="tabla-desviaciones">

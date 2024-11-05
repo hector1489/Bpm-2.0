@@ -71,6 +71,18 @@
   font-weight: bold;
 }
 
+.desviaciones-table-email {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+}
+
+.desviaciones-table-email input {
+  width: 100%;
+  max-height: 70px;
+}
+
 @media (max-width: 768px) {
   #tabla-desviaciones {
     font-size: 12px;

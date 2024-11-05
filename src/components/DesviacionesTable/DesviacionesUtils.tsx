@@ -1,6 +1,7 @@
 import { DesviacionResponse } from '../../interfaces/interfaces';
 import { obtenerTodasLasAccionesDesdeAPI } from '../../utils/apiUtils';
 import { getCurrentDate } from '../../utils/utils';
+import { sendEmail } from '../../utils/apiUtils';
 
 
 const prioridades = [
@@ -239,6 +240,66 @@ export const calcularDiasRestantes = (fechaIngreso: string, criticidadValor: str
   const diasRestantes = Math.ceil(diferenciaEnMilisegundos / (1000 * 60 * 60 * 24));
 
   return diasRestantes > 0 ? diasRestantes : 0;
+};
+
+export const sendTableEmail = async (
+  emailAudit: string,
+  numeroAuditoria: string,
+  tableData: Array<{
+    numeroRequerimiento: string;
+    preguntasAuditadas: string;
+    criterio: string;
+    responsable: string;
+    establecimiento: string;
+    criticidad: string;
+    accionesCorrectivas: string;
+    fechaIngreso: string;
+    fechaSolucionProgramada: string;
+    estado: string;
+    contactoClientes: string;
+    evidenciaFotografica: string;
+    auditor: string;
+    correo: string;
+    diasRestantes: string;
+  }>
+): Promise<string> => {
+  try {
+    await sendEmail(
+      emailAudit,
+      'Número de Auditoría',
+      `Alerta CBPfood Auditoria BPM realizada:
+      Se han ingresado nuevas desviaciones correspondientes al número de auditoría: ${numeroAuditoria}.
+
+      Detalles de desviaciones:
+      ${tableData.map(desviacion => `
+      - Número de Requerimiento: ${desviacion.numeroRequerimiento}
+      - Preguntas Auditadas: ${desviacion.preguntasAuditadas}
+      - Criterio: ${desviacion.criterio}
+      - Responsable: ${desviacion.responsable}
+      - Establecimiento: ${desviacion.establecimiento}
+      - Criticidad: ${desviacion.criticidad}
+      - Acciones Correctivas: ${desviacion.accionesCorrectivas}
+      - Fecha de Ingreso: ${desviacion.fechaIngreso}
+      - Solución Programada: ${desviacion.fechaSolucionProgramada}
+      - Estado: ${desviacion.estado}
+      - Contacto Cliente: ${desviacion.contactoClientes}
+      - Evidencia Fotográfica: ${desviacion.evidenciaFotografica}
+      - Auditor: ${desviacion.auditor}
+      - Correo: ${desviacion.correo}
+      - Días Restantes: ${desviacion.diasRestantes}
+      `).join('\n')}
+      
+      Para ver más detalles, haz clic en el siguiente enlace:
+      https://frontend-svc7.onrender.com/
+      `
+    );
+
+    console.log('Correo enviado exitosamente');
+    return Promise.resolve("Email enviado exitosamente.");
+  } catch (error) {
+    console.error('Error al enviar el correo:', error);
+    return Promise.reject(error);
+  }
 };
 
 
