@@ -2,6 +2,7 @@ import { DesviacionResponse } from '../../interfaces/interfaces';
 import { obtenerTodasLasAccionesDesdeAPI } from '../../utils/apiUtils';
 import { getCurrentDate } from '../../utils/utils';
 
+
 const prioridades = [
   { valor: 'Leve', diasFechaSolucion: 45 },
   { valor: 'Moderado', diasFechaSolucion: 30 },
