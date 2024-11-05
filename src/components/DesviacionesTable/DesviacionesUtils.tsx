@@ -232,7 +232,7 @@ export const calcularDiasRestantes = (fechaIngreso: string, criticidadValor: str
   // Add days based on criticidad
   fechaIngresoDate.setDate(fechaIngresoDate.getDate() + criticidadItem.diasFechaSolucion);
 
-  const fechaActual = new Date();
+  const fechaActual = new Date(); 
 
   // Calculate remaining days
   const diferenciaEnMilisegundos = fechaIngresoDate.getTime() - fechaActual.getTime();

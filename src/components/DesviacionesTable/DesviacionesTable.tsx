@@ -429,7 +429,7 @@ const DesviacionesTable: React.FC = () => {
               <button className='bg-danger' onClick={() => eliminarFilasSeleccionadas()}>Eliminar</button>
             </th>
           </tr>
-        </thead>
+        </thead> 
         <tbody>
           {localDesviaciones.length > 0 ? (
             localDesviaciones.map((desviacion, index) => {

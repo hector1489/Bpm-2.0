@@ -63,18 +63,25 @@ export const getCurrentDate = (): string => {
   return `${dd}/${mm}/${yyyy}`;
 };
 
+const prioridades = [
+  { valor: 'green', diasFechaSolucion: 45 },
+  { valor: 'yellow', diasFechaSolucion: 30 },
+  { valor: 'red', diasFechaSolucion: 15 },
+];
+
 export const calculateSolutionDate = (criticidad: string): string => {
   const today = new Date();
-  let daysToAdd = 0;
-
-  if (criticidad === 'green') {
-    daysToAdd = 45;
-  } else if (criticidad === 'yellow') {
-    daysToAdd = 30;
-  } else if (criticidad === 'red') {
-    daysToAdd = 15;
+  
+  // Busca el elemento de criticidad en el array `prioridades`
+  const criticidadItem = prioridades.find(c => c.valor === criticidad);
+  if (!criticidadItem) {
+    console.error(`Error: Criticidad ${criticidad} no encontrada.`);
+    return '';
   }
 
+  const daysToAdd = criticidadItem.diasFechaSolucion;
+
+  // Crea una nueva fecha sumando los días de solución al día actual
   const solutionDate = new Date(today.getTime() + daysToAdd * 24 * 60 * 60 * 1000);
 
   const dd = String(solutionDate.getDate()).padStart(2, '0');
@@ -83,6 +90,7 @@ export const calculateSolutionDate = (criticidad: string): string => {
 
   return `${yyyy}/${mm}/${dd}`;
 };
+
 
 
 export const getCriterioByColor = (criticidadColor: string) => {
