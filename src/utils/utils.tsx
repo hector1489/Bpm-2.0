@@ -75,13 +75,15 @@ export const calculateSolutionDate = (criticidad: string): string => {
     daysToAdd = 15;
   }
 
-  const solutionDate = new Date(today.setDate(today.getDate() + daysToAdd));
+  const solutionDate = new Date(today.getTime() + daysToAdd * 24 * 60 * 60 * 1000);
+
   const dd = String(solutionDate.getDate()).padStart(2, '0');
   const mm = String(solutionDate.getMonth() + 1).padStart(2, '0');
   const yyyy = solutionDate.getFullYear();
 
   return `${yyyy}/${mm}/${dd}`;
-}
+};
+
 
 export const getCriterioByColor = (criticidadColor: string) => {
   if (criticidadColor == 'green') return 'Leve';
