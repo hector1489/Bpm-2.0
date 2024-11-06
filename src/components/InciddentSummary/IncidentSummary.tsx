@@ -236,7 +236,7 @@ const IncidentSummary: React.FC = () => {
             </div>
           </div>
 
-          <div className="card bg-red text-white bordered-box">
+          <div className="card bg-red  bordered-box">
             <div className="card-body">
               <h5><span id="fueraDePlazo">{fueraDePlazoCount}</span></h5>
               <p>Fuera de plazo</p>

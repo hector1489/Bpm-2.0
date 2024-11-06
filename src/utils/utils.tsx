@@ -11,11 +11,11 @@ export const criticidad = [
 
 export const calcularCriticidadConPuntaje = (question:string) => {
   const questionMinuscula = question.toLowerCase();
-  const resultado = preguntas.find(item => item.question.toLowerCase() === questionMinuscula);
+  const resultado = preguntas?.find(item => item.question?.toLowerCase() === questionMinuscula);
   
     
   if (resultado) {
-    const puntaje = resultado.puntaje || 0;
+    const puntaje = resultado?.puntaje || 0;
 
     if (puntaje >= 32 && puntaje <= 64) {
       return "Crítico";
