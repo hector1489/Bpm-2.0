@@ -1,6 +1,6 @@
 import './InformeEjecutivo.css';
 import { useNavigate, useLocation } from 'react-router-dom';
-import html2canvas from 'html2canvas';
+import html2canvas from 'html2canvas'; 
 import { useRef, useEffect, useState } from 'react';
 import { getTablaDetailsByNumeroAuditoria } from '../../utils/apiDetails';
 import { IEControlCalidad, IECriticalEvaluation, IECriticalFindings, IEEficienciaOp, IEHigiene, IEIndicadoresClave, IESatisfaccion, IESeguridad, IETrazadores } from '../../components';
