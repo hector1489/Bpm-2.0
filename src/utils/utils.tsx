@@ -24,7 +24,7 @@ export const calcularCriticidadConPuntaje = (question:string) => {
     } else if (puntaje >= 1 && puntaje <= 4) {
       return "Leve";
     } else {
-      return "Puntaje fuera de rango"; 
+      return "Crítico"; 
     }
   } else {
     return "La pregunta no existe.";
