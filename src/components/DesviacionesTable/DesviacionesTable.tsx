@@ -342,8 +342,10 @@ const DesviacionesTable: React.FC = () => {
       correo: desviacion.correo || DEFAULT_ANSWER,
       diasRestantes: calcularDiasRestantes(desviacion.fecha_recepcion_solicitud || DEFAULT_ANSWER, desviacion.criticidad || DEFAULT_ANSWER).toString(),
     }));
-  
-    sendTableEmail(email, numeroAuditoria, tableData)
+
+
+
+    sendTableEmail(email, numeroAuditoria, tableData, )
       .then(() => alert("Email enviado exitosamente."))
       .catch(error => {
         console.error('Error al enviar el email:', error);

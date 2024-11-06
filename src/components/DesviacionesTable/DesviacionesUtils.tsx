@@ -2,6 +2,7 @@ import { DesviacionResponse } from '../../interfaces/interfaces';
 import { obtenerTodasLasAccionesDesdeAPI } from '../../utils/apiUtils';
 import { getCurrentDate } from '../../utils/utils';
 import { sendEmail } from '../../utils/apiUtils';
+import html2canvas from 'html2canvas';
 import {
   calcularPuntaje,
   determinarCriticidad,
@@ -246,6 +247,23 @@ export const calcularDiasRestantes = (fechaIngreso: string, criticidadValor: str
 
   return diasRestantes > 0 ? diasRestantes : 0;
 };
+
+export const handleScreenshotTableDesviaciones = async () => {
+  const table = document.getElementById('tabla-desviaciones') as HTMLElement;
+
+  html2canvas(table, {
+    scale: 2,
+  }).then(canvas => {
+    const imgData = canvas.toDataURL('image/png');
+
+    const link = document.createElement('a');
+    link.download = 'desviaciones_tabla.png';
+    link.href = imgData;
+    link.click();
+  });
+};
+
+
 export const sendTableEmail = async (
   emailAudit: string,
   numeroAuditoria: string,
@@ -276,21 +294,23 @@ export const sendTableEmail = async (
 
       Detalles de desviaciones:
       ${tableData.map(desviacion => `
-      - Número de Requerimiento: ${desviacion.numeroRequerimiento}
-      - Preguntas Auditadas: ${desviacion.preguntasAuditadas}
-      - Criterio: ${desviacion.criterio}
-      - Responsable: ${desviacion.responsable}
-      - Establecimiento: ${desviacion.establecimiento}
-      - Criticidad: ${desviacion.criticidad}
-      - Acciones Correctivas: ${desviacion.accionesCorrectivas}
-      - Fecha de Ingreso: ${desviacion.fechaIngreso}
-      - Solución Programada: ${desviacion.fechaSolucionProgramada}
-      - Estado: ${desviacion.estado}
-      - Contacto Cliente: ${desviacion.contactoClientes}
-      - Evidencia Fotográfica: ${desviacion.evidenciaFotografica}
-      - Auditor: ${desviacion.auditor}
-      - Correo: ${desviacion.correo}
-      - Días Restantes: ${desviacion.diasRestantes}
+
+      - Número de Requerimiento:    ${desviacion.numeroRequerimiento}
+      - Preguntas Auditadas:         ${desviacion.preguntasAuditadas}
+      - Criterio:                              ${desviacion.criterio}
+      - Responsable:                        ${desviacion.responsable}
+      - Establecimiento:                ${desviacion.establecimiento}
+      - Criticidad:                          ${desviacion.criticidad}
+      - Acciones Correctivas:       ${desviacion.accionesCorrectivas}
+      - Fecha de Ingreso:                  ${desviacion.fechaIngreso}
+      - Solución Programada:    ${desviacion.fechaSolucionProgramada}
+      - Estado:                                  ${desviacion.estado}
+      - Contacto Cliente:              ${desviacion.contactoClientes}
+      - Evidencia Fotográfica:     ${desviacion.evidenciaFotografica}
+      - Auditor:                                ${desviacion.auditor}
+      - Correo:                                  ${desviacion.correo}
+      - Días Restantes:                   ${desviacion.diasRestantes}
+      _______________________________________________________________
       `).join('\n')}
       
       Para ver más detalles, haz clic en el siguiente enlace:
