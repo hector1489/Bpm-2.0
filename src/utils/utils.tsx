@@ -27,7 +27,7 @@ export const calcularCriticidadConPuntaje = (question:string) => {
       return "Crítico"; 
     }
   } else {
-    return "La pregunta no existe.";
+    return "Moderado";
   }
 }
 
