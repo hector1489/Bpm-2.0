@@ -69,6 +69,7 @@ const AuditForm: React.FC = () => {
       navigate('/resumen-auditoria');
     }
   };
+  console.log(formData)
 
   const openCamera = async () => {
     const constraints = {
