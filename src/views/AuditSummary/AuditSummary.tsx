@@ -3,7 +3,12 @@ import { AverageModules, BPMGraph, Summary } from '../../components/index';
 import { useContext, useCallback, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AppContext } from '../../context/GlobalState';
-import { extractPercentage, getCurrentDate, calculateSolutionDate, getColorByPercentage, getCriterioByColor } from '../../utils/utils';
+import {
+  extractPercentage,
+  getCurrentDate,
+  calcularCriticidadConPuntaje,
+  calcularDiasRestantesSummary
+} from '../../utils/utils';
 import { enviarDatosAuditoria, sendEmail } from '../../utils/apiUtils';
 import logos from '../../assets/img/index';
 
@@ -105,20 +110,21 @@ const AuditSummary: React.FC = () => {
         return porcentaje !== null && porcentaje < 100;
       })
       .map((hero) => {
-        const criticidadColor = getColorByPercentage(extractPercentage(hero.answer ?? DEFAULT_ANSWER));
-        const solucionProgramada = calculateSolutionDate(criticidadColor);
+        
         const nombreDelEstablecimiento = state.auditSheetData.nombreEstablecimiento;
         const photo = photos.find(photo => photo.question === hero.question);
         const numeroAuditoria = state.auditSheetData.numeroAuditoria;
         const auditor = state.userName;
         const email = state.auditSheetData.auditorEmail;
-        const criticidad = getCriterioByColor(criticidadColor);
+        const criticidad = calcularCriticidadConPuntaje(hero.question ?? DEFAULT_ANSWER);
+        const fechaAudit = getCurrentDate()
+        const solucionProgramada = calcularDiasRestantesSummary(fechaAudit , criticidad);
   
         return {
           numeroRequerimiento: numeroAuditoria,
           pregunta: hero.question,
           respuesta: hero.answer ?? DEFAULT_ANSWER,
-          fecha: getCurrentDate(),
+          fecha: fechaAudit ,
           auditor: auditor,
           nombreEstablecimiento: nombreDelEstablecimiento,
           responsableDelProblema,

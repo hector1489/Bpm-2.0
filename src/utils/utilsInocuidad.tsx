@@ -21,8 +21,8 @@ export const criticidadRangos = {
 } as const;
 
 // Tipos para asegurar valores específicos en los parámetros y retorno
-type Probabilidad = keyof typeof nivelesProbabilidad;
-type Consecuencia = keyof typeof nivelesConsecuencia;
+export type Probabilidad = keyof typeof nivelesProbabilidad;
+export type Consecuencia = keyof typeof nivelesConsecuencia;
 
 interface CriticidadInfo {
   nivel: string;

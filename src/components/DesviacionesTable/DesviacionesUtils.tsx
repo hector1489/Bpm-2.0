@@ -2,6 +2,12 @@ import { DesviacionResponse } from '../../interfaces/interfaces';
 import { obtenerTodasLasAccionesDesdeAPI } from '../../utils/apiUtils';
 import { getCurrentDate } from '../../utils/utils';
 import { sendEmail } from '../../utils/apiUtils';
+import {
+  calcularPuntaje,
+  determinarCriticidad,
+  Probabilidad,
+  Consecuencia,
+} from '../../utils/utilsInocuidad'
 
 
 const prioridades = [
@@ -301,6 +307,17 @@ export const sendTableEmail = async (
     return Promise.reject(error);
   }
 };
+
+
+// Función simplificada para obtener solo el nivel de criticidad
+export function obtenerNivelCriticidad(probabilidad: Probabilidad, consecuencia: Consecuencia): string {
+  const puntaje = calcularPuntaje(probabilidad, consecuencia);
+  const criticidad = determinarCriticidad(puntaje);
+  
+  return criticidad.nivel;
+}
+
+
 
 
 

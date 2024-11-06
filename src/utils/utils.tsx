@@ -1,4 +1,5 @@
-import moment from 'moment'; 
+import moment from 'moment';
+import preguntas from '../questionCriticidad.json'
 
 
 export const estados = ['Abierto', 'En Progreso', 'Cerrado'];
@@ -8,22 +9,73 @@ export const criticidad = [
   { valor: 'Crítico', clase: 'prioridad-critica', dias: 15 }
 ];
 
+export const calcularCriticidadConPuntaje = (question:string) => {
+  const questionMinuscula = question.toLowerCase();
+  const resultado = preguntas.find(item => item.question.toLowerCase() === questionMinuscula);
+  
+    
+  if (resultado) {
+    const puntaje = resultado.puntaje || 0;
+
+    if (puntaje >= 32 && puntaje <= 64) {
+      return "Crítico";
+    } else if (puntaje >= 8 && puntaje <= 16) {
+      return "Moderado";
+    } else if (puntaje >= 1 && puntaje <= 4) {
+      return "Leve";
+    } else {
+      return "Puntaje fuera de rango"; 
+    }
+  } else {
+    return "La pregunta no existe.";
+  }
+}
+
 
 export const calcularCriticidad = (nivelCriticidad: string) => {
   const nivel = criticidad.find(c => c.valor === nivelCriticidad);
-  
+
   if (nivel) {
     const diasParaSolucion = nivel.dias;
     const fechaSolucion = moment().add(diasParaSolucion, 'days').format('YYYY-MM-DD');
-    
+
     return {
       nivelCriticidad: nivel.valor,
       clase: nivel.clase,
       fechaSolucion
     };
   }
-  
+
   return { nivelCriticidad: '', clase: '', fechaSolucion: null };
+};
+
+
+
+export const calcularDiasRestantesSummary = (fechaIngreso: string, criticidadValor: string): string | null => {
+  const formatDate = (fecha: string | null) => {
+    if (!fecha) return null;
+    const dateObj = new Date(fecha);
+    return isNaN(dateObj.getTime()) ? null : dateObj.toISOString().split('T')[0];
+  };
+
+  if (!fechaIngreso || !criticidadValor) return null;
+
+  const criticidadItem = prioridades.find(c => c.valor === criticidadValor);
+  if (!criticidadItem) return null;
+
+  const fechaIngresoFormatted = formatDate(fechaIngreso);
+  if (!fechaIngresoFormatted) return null;
+
+  const fechaIngresoDate = new Date(fechaIngresoFormatted);
+  fechaIngresoDate.setDate(fechaIngresoDate.getDate() + criticidadItem.diasFechaSolucion);
+
+  const fechaActual = new Date();
+  const diferenciaEnMilisegundos = fechaIngresoDate.getTime() - fechaActual.getTime();
+
+  const fechaSolucionProgramada = new Date(fechaActual.getTime() + diferenciaEnMilisegundos);
+  const fechaSolucionComoCadena = fechaSolucionProgramada.toLocaleDateString('es-CL');
+
+  return fechaSolucionComoCadena;
 };
 
 
@@ -71,7 +123,7 @@ const prioridades = [
 
 export const calculateSolutionDate = (criticidad: string): string => {
   const today = new Date();
-  
+
   // Busca el elemento de criticidad en el array `prioridades`
   const criticidadItem = prioridades.find(c => c.valor === criticidad);
   if (!criticidadItem) {
