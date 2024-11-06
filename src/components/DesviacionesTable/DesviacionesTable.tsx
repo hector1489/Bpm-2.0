@@ -50,7 +50,7 @@ const DesviacionesTable: React.FC = () => {
 
   useEffect(() => {
     if (desviaciones) {
-      console.log(desviaciones)
+   
       const filteredDesviaciones = desviaciones.map(desviacion => ({
         ...desviacion,
         fecha_recepcion_solicitud: formatDate(desviacion.fecha_recepcion_solicitud),
@@ -340,10 +340,7 @@ const DesviacionesTable: React.FC = () => {
       evidenciaFotografica: desviacion.evidencia_fotografica || DEFAULT_ANSWER,
       auditor: desviacion.auditor || DEFAULT_ANSWER,
       correo: desviacion.correo || DEFAULT_ANSWER,
-      diasRestantes: calcularDiasRestantes(
-        desviacion.fecha_recepcion_solicitud || getCurrentDate(),
-        desviacion.criticidad || 'Leve'
-      ).toString(),
+      diasRestantes: calcularDiasRestantes(desviacion.fecha_recepcion_solicitud || DEFAULT_ANSWER, desviacion.criticidad || DEFAULT_ANSWER).toString(),
     }));
   
     sendTableEmail(email, numeroAuditoria, tableData)
@@ -484,7 +481,8 @@ const DesviacionesTable: React.FC = () => {
           {localDesviaciones.length > 0 ? (
             localDesviaciones.map((desviacion, index) => {
               const backgroundColor = getColorByCriticidad(desviacion.criticidad || DEFAULT_ANSWER);
-              const diasRestantes = calcularDiasRestantes(desviacion.fecha_recepcion_solicitud || getCurrentDate(), desviacion.criticidad || 'Leve');
+              const fechaSolucion = desviacion.fecha_recepcion_solicitud || DEFAULT_ANSWER;
+              const diasRestantes = calcularDiasRestantes( fechaSolucion, desviacion.criticidad || DEFAULT_ANSWER );
           
               let textColor = 'black';
               if (backgroundColor === 'red') {

@@ -16,29 +16,28 @@ const prioridades = [
   { valor: 'Crítico', diasFechaSolucion: 15 }
 ];
 
+
+
 export const calcularFechaSolucionProgramada = (fechaIngreso: string, criticidad: string): string => {
   const prioridad = prioridades.find(p => p.valor === criticidad);
   if (!prioridad) return fechaIngreso;
 
-  // Parse fechaIngreso in yyyy-mm-dd format
   const [yyyy, mm, dd] = fechaIngreso.split('-').map(Number);
   if (isNaN(dd) || isNaN(mm) || isNaN(yyyy)) {
     console.error('Fecha de ingreso inválida:', fechaIngreso);
     return fechaIngreso;
   }
 
-  // Create date object and add priority days
   const fecha = new Date(yyyy, mm - 1, dd);
   fecha.setDate(fecha.getDate() + prioridad.diasFechaSolucion);
 
-  // Format to yyyy-mm-dd
-  const nuevaFecha = [
+  const solucionFecha = [
     fecha.getFullYear(),
     String(fecha.getMonth() + 1).padStart(2, '0'),
     String(fecha.getDate()).padStart(2, '0')
   ].join('-');
 
-  return nuevaFecha;
+  return solucionFecha;
 };
 
 
@@ -210,7 +209,7 @@ export const crearSelectFechaIngreso = (): HTMLSelectElement => {
   return select;
 };
 
-// Import criticidad or ensure it's accessible in this file
+
 export const calcularDiasRestantes = (fechaIngreso: string, criticidadValor: string): number => {
   if (!fechaIngreso || !criticidadValor) return 0;
 
@@ -247,7 +246,6 @@ export const calcularDiasRestantes = (fechaIngreso: string, criticidadValor: str
 
   return diasRestantes > 0 ? diasRestantes : 0;
 };
-
 export const sendTableEmail = async (
   emailAudit: string,
   numeroAuditoria: string,
