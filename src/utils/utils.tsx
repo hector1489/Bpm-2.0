@@ -31,6 +31,11 @@ export const calcularCriticidadConPuntaje = (question:string) => {
   }
 }
 
+export const extractPrefix = (field3: string) => {
+  const match = field3.match(/^TRA [A-Z]+ \d+/);
+  return match ? match[0] : '';
+};
+
 
 export const calcularCriticidad = (nivelCriticidad: string): string | undefined => {
   if (!nivelCriticidad) {

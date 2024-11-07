@@ -54,7 +54,6 @@ const PhotosBackend: React.FC = () => {
     return key;
   };
 
-  console.log(photos);
 
   const extractPhotoDateFromUrl = (url: string) => {
     const regex = /X-Amz-Date=(\d{8})T/;
