@@ -15,10 +15,9 @@ const DocDesviacionesTable: React.FC = () => {
 
   return (
     <div className="control-desviaciones-container">
-      <p>DocDesviacionesTable</p>
       <DesviacionesTable />
       <div className="buttons-desviaciones">
-        <button onClick={handleGoDoc}>
+        <button onClick={handleGoDoc}> 
           <i className="fa-solid fa-arrow-left"></i>
         </button>
         <button onClick={handleGoToHome}>

@@ -12,6 +12,7 @@
   padding: 20px;
   display: flex;
   justify-content: center;
+  
 }
 
 .Resumen-form-container .pdf-card-container {
@@ -84,6 +85,13 @@
 .Resumen-form-container .btn-red:focus {
   background-color: #c82333;
   outline: none;
+}
+
+#resumenForm-buttons {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  gap: 20px;
 }
 
 /* Responsividad */

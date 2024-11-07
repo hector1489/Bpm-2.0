@@ -46,7 +46,7 @@ const ResumenForm: React.FC = () => {
   const { state } = context;
 
   const numeroRequerimiento = location.state?.numero_requerimiento || null;
-  
+
 
   const fetchPDF = async () => {
     try {
@@ -79,7 +79,7 @@ const ResumenForm: React.FC = () => {
     if (numeroRequerimiento) {
       try {
         const response: any[] = await getTablaDetailsByNumeroAuditoria(numeroRequerimiento);
-        
+
         setTablaDetails(response.length > 0 ? response[0] : null);
       } catch (error) {
         console.error('Error al obtener los detalles de la tabla:', error);
@@ -87,7 +87,7 @@ const ResumenForm: React.FC = () => {
     }
   };
 
- 
+
 
   const handleDeletePDF = async (key: string) => {
     try {
@@ -140,7 +140,7 @@ const ResumenForm: React.FC = () => {
   };
 
   const handleGoToKPI = () => {
-    
+
     navigate('/kpi', {
       state: { numero_requerimiento: numeroRequerimiento, userName: state.userName },
     });
@@ -168,7 +168,7 @@ const ResumenForm: React.FC = () => {
   const numeroAuditoria = numeroRequerimiento;
   // useEffect para filtrar los datos por numero de auditoría
   const bpmFilteredAuditSheet = () => {
-   
+
     if (numeroAuditoria && auditSheetDetails) {
       const filteredData = auditSheetDetails.find(
         (sheet) => sheet.numero_auditoria === numeroAuditoria
@@ -179,11 +179,12 @@ const ResumenForm: React.FC = () => {
 
   useEffect(() => {
     fetchAuditSheetDetails();
-  }, [context?.state?.userName]); 
+  }, [context?.state?.userName]);
 
   useEffect(() => {
     bpmFilteredAuditSheet();
   }, [auditSheetDetails, numeroAuditoria]);
+
 
   if (loading) {
     return <p>Cargando datos...</p>;
@@ -196,13 +197,13 @@ const ResumenForm: React.FC = () => {
   if (!filteredAuditSheet) {
     return <p>No se encontraron detalles para la auditoría {numeroAuditoria}</p>;
   }
-  
+
   const handleDeleteTable = async () => {
     try {
       if (numeroRequerimiento) {
         await deleteTablaDetail(numeroRequerimiento);
         console.log(`Detalles de la auditoría ${numeroRequerimiento} eliminados correctamente.`);
-  
+
         if (filteredAuditSheet) {
           await deleteAuditSheetById(filteredAuditSheet.id);
           console.log(`Registro audit_sheet con id ${filteredAuditSheet.id} eliminado correctamente.`);
@@ -215,11 +216,11 @@ const ResumenForm: React.FC = () => {
     } catch (error) {
       console.error('Error al eliminar los detalles de la tabla o audit_sheet:', error);
     }
-  
-    handleGoToDoc(); 
+
+    handleGoToDoc();
   };
-  
-  
+
+
 
   return (
     <div className="Resumen-form-container">
@@ -251,13 +252,18 @@ const ResumenForm: React.FC = () => {
           <p>Detalles de la Auditoria : {numeroRequerimiento}</p>
 
           <div className="routes-downloads">
-          <button onClick={handleGoToDDetails}>Ver Details</button>
-          <button onClick={handleGoToDBPM}>Ver BPM</button>
-          <button onClick={handleGoToDETA}>Ver ETA</button>
-          <button onClick={handleGoToDLUM}>Ver LUM</button>
-          <button onClick={handleGoToKPI}>Ver KPI</button>
+            <button onClick={handleGoToDDetails}>Ver Details</button>
+            <button onClick={handleGoToDBPM}>Ver BPM</button>
+            <button onClick={handleGoToDETA}>Ver ETA</button>
+            <button onClick={handleGoToDLUM}>Ver LUM</button>
+            <button onClick={handleGoToKPI}>Ver KPI</button>
           </div>
-          <button className='btn-red' onClick={handleDeleteTable}>Borrar Data</button>
+          
+          <div className='d-flex justify-content-center gap-2'>
+            <button className='btn-red' onClick={handleDeleteTable}>Borrar Data</button>
+            <button onClick={handleGoToDoc}>volver</button>
+          </div>
+
         </div>
       ) : (
         <p>No se encontró datos para la auditoría.</p>
