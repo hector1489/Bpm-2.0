@@ -103,7 +103,7 @@ export const cargarDesviacionesDesdeBackend = async (authToken: string) => {
         'Authorization': `Bearer ${authToken}`,
       },
     });
-
+    console.log(response.data)
     return response.data;
   } catch (error) {
     console.error('Error al recuperar las desviaciones:', error);

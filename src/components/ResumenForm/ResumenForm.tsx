@@ -259,7 +259,7 @@ const ResumenForm: React.FC = () => {
             <button onClick={handleGoToKPI}>Ver KPI</button>
           </div>
           
-          <div className='d-flex justify-content-center gap-2'>
+          <div className='d-flex justify-content-around gap-2'>
             <button className='btn-red' onClick={handleDeleteTable}>Borrar Data</button>
             <button onClick={handleGoToDoc}>volver</button>
           </div>
