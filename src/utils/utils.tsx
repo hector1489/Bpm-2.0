@@ -32,21 +32,19 @@ export const calcularCriticidadConPuntaje = (question:string) => {
 }
 
 
-export const calcularCriticidad = (nivelCriticidad: string) => {
+export const calcularCriticidad = (nivelCriticidad: string): string | undefined => {
+  if (!nivelCriticidad) {
+    return 'Nivel de criticidad no válido';
+  }
+
   const nivel = criticidad.find(c => c.valor === nivelCriticidad);
 
   if (nivel) {
-    const diasParaSolucion = nivel.dias;
-    const fechaSolucion = moment().add(diasParaSolucion, 'days').format('YYYY-MM-DD');
-
-    return {
-      nivelCriticidad: nivel.valor,
-      clase: nivel.clase,
-      fechaSolucion
-    };
+    const fechaSolucion = moment().add(nivel.dias, 'days').format('DD/MM/YYYY');
+    return fechaSolucion;
+  } else {
+    return `No se encontró el nivel de criticidad: ${nivelCriticidad}`;
   }
-
-  return { nivelCriticidad: '', clase: '', fechaSolucion: null };
 };
 
 

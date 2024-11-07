@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { getCurrentDate } from './utils';
+import { getCurrentDate, calcularCriticidad  } from './utils';
 import { DesviacionResponse } from '../interfaces/interfaces'
 
 const BASE_URL = 'https://bpm-backend.onrender.com';
@@ -52,7 +52,6 @@ export const sendEmail = async (
 
 export const enviarDatosAuditoria = async (desviaciones: any, authToken: string) => {
   const correo = 'bbpmauditorias@gmail.com';
-
   const desviacionesArray = Array.isArray(desviaciones) ? desviaciones : [desviaciones];
 
   const desviacionData = desviacionesArray.map((desviacion: any) => {
@@ -67,7 +66,7 @@ export const enviarDatosAuditoria = async (desviaciones: any, authToken: string)
       criticidad: desviacion.criticidad || '',
       accionesCorrectivas: desviacion.accionesCorrectivas || '',
       fechaRecepcionSolicitud: desviacion.fechaRecepcion || getCurrentDate() || null,
-      fechaSolucionProgramada: desviacion.solucionProgramada || null,
+      fechaSolucionProgramada: calcularCriticidad(desviacion.criticidad ) || null,
       estado: desviacion.estado || 'Abierto',
       fechaCambioEstado: desviacion.fechaCambio || null,
       contactoClientes: desviacion.contactoClientes || '',
