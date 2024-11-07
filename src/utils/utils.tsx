@@ -55,30 +55,28 @@ export const calcularCriticidad = (nivelCriticidad: string): string | undefined 
 
 
 export const calcularDiasRestantesSummary = (fechaIngreso: string, criticidadValor: string): string | null => {
-  const formatDate = (fecha: string | null) => {
-    if (!fecha) return null;
-    const dateObj = new Date(fecha);
-    return isNaN(dateObj.getTime()) ? null : dateObj.toISOString().split('T')[0];
-  };
 
   if (!fechaIngreso || !criticidadValor) return null;
 
-  const criticidadItem = prioridades.find(c => c.valor === criticidadValor);
+  const criticidadItem = criticidad.find(c => c.valor === criticidadValor);
   if (!criticidadItem) return null;
 
-  const fechaIngresoFormatted = formatDate(fechaIngreso);
+  const fechaIngresoFormatted = fechaIngreso;
   if (!fechaIngresoFormatted) return null;
 
   const fechaIngresoDate = new Date(fechaIngresoFormatted);
-  fechaIngresoDate.setDate(fechaIngresoDate.getDate() + criticidadItem.diasFechaSolucion);
+  fechaIngresoDate.setDate(fechaIngresoDate.getDate() + criticidadItem.dias);
 
   const fechaActual = new Date();
   const diferenciaEnMilisegundos = fechaIngresoDate.getTime() - fechaActual.getTime();
 
   const fechaSolucionProgramada = new Date(fechaActual.getTime() + diferenciaEnMilisegundos);
-  const fechaSolucionComoCadena = fechaSolucionProgramada.toLocaleDateString('es-CL');
+  const fechaSolucionComoCadena = fechaSolucionProgramada.toISOString().split('T')[0]; // Obtenemos la fecha en formato ISO (YYYY-MM-DD)
 
-  return fechaSolucionComoCadena;
+  const partesFecha = fechaSolucionComoCadena.split('-');
+  const fechaFormateada = `${partesFecha[0]}/${partesFecha[1]}/${partesFecha[2]}`;
+
+  return fechaFormateada;
 };
 
 
@@ -238,7 +236,7 @@ export const getGroupedData = (
 
     return {
       groupName,
-      nombreCompleto: getNombreCompleto(groupName as keyof typeof nombres), // Asegura que sea una clave válida
+      nombreCompleto: getNombreCompleto(groupName as keyof typeof nombres),
       percentage: ponderaciones[groupName.toLowerCase()] || 0,
       average,
     };

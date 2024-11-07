@@ -5,7 +5,6 @@ import { useNavigate } from 'react-router-dom';
 import { AppContext } from '../../context/GlobalState';
 import {
   extractPercentage,
-  getCurrentDate,
   calcularCriticidadConPuntaje,
   calcularDiasRestantesSummary
 } from '../../utils/utils';
@@ -117,7 +116,7 @@ const AuditSummary: React.FC = () => {
         const auditor = state.userName;
         const email = state.auditSheetData.auditorEmail;
         const criticidad = calcularCriticidadConPuntaje(hero.question ?? DEFAULT_ANSWER);
-        const fechaAudit = getCurrentDate()
+        const fechaAudit = auditSheetData.fechaAuditoria
         const solucionProgramada = calcularDiasRestantesSummary(fechaAudit , criticidad);
   
         return {
