@@ -1,4 +1,4 @@
-import { PhotoAudit, PhotosBackend } from '../../components'
+import { PhotosBackend } from '../../components'
 import { useContext } from 'react';
 import { AppContext } from '../../context/GlobalState';
 import { useNavigate } from 'react-router-dom';
@@ -13,7 +13,6 @@ const PhotoEvidence: React.FC = () => {
     throw new Error('DetailsView debe ser utilizado dentro de un AppProvider');
   }
 
-  const { state } = context;
 
 
 
@@ -24,7 +23,6 @@ const PhotoEvidence: React.FC = () => {
   return (
     <div className="panel-foto-container">
       <h3>Panel de Evidencia Fotografica</h3>
-      <PhotoAudit photos={state.photos} />
       <PhotosBackend />
       <div className="buttons-summary">
         <button onClick={handleGoToHome}>Home</button>
