@@ -54,7 +54,6 @@ const AuditSummary: React.FC = () => {
         "https://frontend-svc7.onrender.com/"
         `,
         );
-        console.log('Correo enviado exitosamente');
       } catch (error) {
         console.error('Error al enviar el correo:', error);
       }

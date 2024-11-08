@@ -45,7 +45,7 @@ export const calcularCriticidad = (nivelCriticidad: string): string | undefined 
   const nivel = criticidad.find(c => c.valor === nivelCriticidad);
 
   if (nivel) {
-    const fechaSolucion = moment().add(nivel.dias, 'days').format('DD/MM/YYYY');
+    const fechaSolucion = moment().add(nivel.dias, 'days').format('YYYY-MM-DD');
     return fechaSolucion;
   } else {
     return `No se encontró el nivel de criticidad: ${nivelCriticidad}`;

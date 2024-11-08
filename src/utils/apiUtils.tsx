@@ -13,7 +13,6 @@ export const obtenerTodasLasAccionesDesdeAPI = async (authToken: string) => {
         'Authorization': `Bearer ${authToken}`,
       },
     });
-
     return response.data;
   } catch (error) {
     console.error('Error:', error);
@@ -54,6 +53,7 @@ export const enviarDatosAuditoria = async (desviaciones: any, authToken: string)
   const correo = 'bbpmauditorias@gmail.com';
   const desviacionesArray = Array.isArray(desviaciones) ? desviaciones : [desviaciones];
 
+   
   const desviacionData = desviacionesArray.map((desviacion: any) => {
 
     return {
@@ -79,7 +79,7 @@ export const enviarDatosAuditoria = async (desviaciones: any, authToken: string)
       isNew: !('data-id' in desviacion),
     };
   });
-
+  console.log(desviacionData)
   try {
     const response = await axios.post(`${BASE_URL}/desviaciones/send-data`, desviacionData, {
       headers: {
@@ -87,6 +87,7 @@ export const enviarDatosAuditoria = async (desviaciones: any, authToken: string)
         'Authorization': `Bearer ${authToken}`,
       },
     });
+
     return response.data;
   } catch (error) {
     console.error('Error en el envío de datos al backend:', error);
@@ -103,7 +104,6 @@ export const cargarDesviacionesDesdeBackend = async (authToken: string) => {
         'Authorization': `Bearer ${authToken}`,
       },
     });
-    console.log(response.data)
     return response.data;
   } catch (error) {
     console.error('Error al recuperar las desviaciones:', error);
