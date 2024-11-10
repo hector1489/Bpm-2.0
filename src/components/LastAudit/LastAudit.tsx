@@ -33,17 +33,20 @@ const LastAudit: React.FC = () => {
           desviacionesFiltradas.map((incidencia, index) => (
             incidencia && (
               <div className="last-audit" key={index}>
-                <button
-                  onClick={() =>
-                    goToControlDesviaciones(
-                      incidencia.id,
-                      incidencia.numero_requerimiento
-                    )
-                  }
-                >
-                  <i className="fa-solid fa-pen-to-square"></i>
-                </button>
-                <span>{incidencia.numero_requerimiento || 'Sin título'}</span>
+
+                <span>Auditoría : {incidencia.numero_requerimiento || 'Sin título'}</span>
+                
+                  <button
+                    onClick={() =>
+                      goToControlDesviaciones(
+                        incidencia.id,
+                        incidencia.numero_requerimiento
+                      )
+                    }
+                  >
+                   Editar :  <i className="fa-solid fa-pen-to-square"></i>
+                  </button>
+              
               </div>
             )
           ))
