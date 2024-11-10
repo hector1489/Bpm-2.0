@@ -1,6 +1,6 @@
 import './InformeEjecutivo.css';
 import { useNavigate, useLocation } from 'react-router-dom';
-import html2canvas from 'html2canvas'; 
+import html2canvas from 'html2canvas';
 import { useRef, useEffect, useState } from 'react';
 import { getTablaDetailsByNumeroAuditoria } from '../../utils/apiDetails';
 import { IEControlCalidad, IECriticalEvaluation, IECriticalFindings, IEEficienciaOp, IEHigiene, IEIndicadoresClave, IESatisfaccion, IESeguridad, IETrazadores } from '../../components';
@@ -45,7 +45,7 @@ const InformeEjecutivo: React.FC = () => {
 
       try {
         const data = await getTablaDetailsByNumeroAuditoria(numeroAuditoria);
-        
+
         const filtrados = filtrarDetallesInferiorA100(data);
         setDetallesInferioresA100(filtrados);
         setTablaDetails(data);
@@ -68,6 +68,7 @@ const InformeEjecutivo: React.FC = () => {
     return <p>{error}</p>;
   }
 
+
   const handleGoDoc = () => {
     navigate('/documentacion');
   };
@@ -76,7 +77,7 @@ const InformeEjecutivo: React.FC = () => {
     if (!informeRef.current) return;
 
     await html2canvas(informeRef.current, {
-      scale: 2, 
+      scale: 2,
     }).then((canvas) => {
       const link = document.createElement('a');
       link.download = 'InformeEjecutivo.png';
@@ -85,9 +86,10 @@ const InformeEjecutivo: React.FC = () => {
     });
   };
 
+
   return (
     <div className="InformeEjecutivo-container" ref={informeRef}>
-       <div className="logo-fungi">
+      <div className="logo-fungi">
         <img src={logoFungi} alt="logo" />
       </div>
       <h3>Informe De Gerencia</h3>
@@ -99,41 +101,43 @@ const InformeEjecutivo: React.FC = () => {
         <p>1.- Mejora continua de sus procesos y productos, lo que se traduce en eficiencia operativa, reducción de costos y un aumento en la satisfacción del  Cliente.</p>
         <h4>Objetivo Especifico :</h4>
         <p>1.	Aseguramiento de la conformidad con estándares y regulaciones :</p>
-      
+
       </div>
 
       <h5>1.- HALLAZGOS CRITICOS/ACCIONES CORRECTIVAS</h5>
       <IECriticalFindings detallesFiltrados={detallesInferioresA100} />
- 
+
       <h5>2.- EVALUACIONES CRITICAS</h5>
       <IECriticalEvaluation tablaDetails={tablaDetails} />
 
       <h5>3. TRAZADORES ETA'S</h5>
-      <IETrazadores tablaDetails={tablaDetails}/>
+      {tablaDetails.length > 0 && (
+        <IETrazadores tablaDetails={tablaDetails} />
+      )}
 
-     <h5>4.- INDICADORES CLAVES DE GESTION (ALIMENTACION)</h5>
-      <IEIndicadoresClave tablaDetails={tablaDetails}/>
+      <h5>4.- INDICADORES CLAVES DE GESTION (ALIMENTACION)</h5>
+      <IEIndicadoresClave tablaDetails={tablaDetails} />
 
       <h5>5,. HIGIENE INSTALACIONES/ALIMENTOS</h5>
-      <IEHigiene tablaDetails={tablaDetails}/>
+      <IEHigiene tablaDetails={tablaDetails} />
 
       <h5>6. EFICIENCIA OPERACIONAL</h5>
-      <IEEficienciaOp tablaDetails={tablaDetails}/>
+      <IEEficienciaOp tablaDetails={tablaDetails} />
 
       <h5>7.- SATISFACCION AL CLIENTE</h5>
-      <IESatisfaccion tablaDetails={tablaDetails}/>
+      <IESatisfaccion tablaDetails={tablaDetails} />
 
       <h5>8. SEGURIDAD ALIMENTARIA</h5>
-      <IESeguridad tablaDetails={tablaDetails}/>
+      <IESeguridad tablaDetails={tablaDetails} />
 
       <h5>9.- CONTROL DE CALIDAD</h5>
-      <IEControlCalidad tablaDetails={tablaDetails}/>
+      <IEControlCalidad tablaDetails={tablaDetails} />
 
       <div className="ie-buttons">
         <button onClick={handleGoDoc}>volver</button>
         <button className="bg-primary" onClick={handleScreenshot}>Capturar Pantalla</button>
       </div>
-    </div>   
+    </div>
   );
 };
 

@@ -74,8 +74,7 @@ const PhotoDocSummary: React.FC<PhotoDocSummaryProps> = ({ numeroAuditoria }) =>
   };
   
 
-  
-  
+   
 
   const extractPhotoDateFromUrl = (url: string) => {
     const regex = /X-Amz-Date=(\d{8})T/;

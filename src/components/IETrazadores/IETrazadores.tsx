@@ -2,10 +2,14 @@ import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
 import Highcharts3D from 'highcharts/highcharts-3d';
 import './IETrazadores.css';
+import { extractPrefix, extractPercentage } from '../../utils/utils'
 
 Highcharts3D(Highcharts);
 
 interface TablaDetail {
+  numero_auditoria: string;
+  field1: string;
+  field2: string;
   field3: string;
   field4: string;
 }
@@ -14,12 +18,8 @@ interface IETrazadoresProps {
   tablaDetails: TablaDetail[];
 }
 
-const extractPrefix = (field3: string) => {
-  const match = field3.match(/^TRA [A-Z]+ \d+/);
-  return match ? match[0] : '';
-};
-
 const getColorByPercentageIETrazadores = (percentage: number) => {
+  
   if (percentage >= 75) {
     return '#2874a6';
   } else if (percentage >= 50) {
@@ -30,9 +30,10 @@ const getColorByPercentageIETrazadores = (percentage: number) => {
 };
 
 const IETrazadores: React.FC<IETrazadoresProps> = ({ tablaDetails }) => {
+
   if (!tablaDetails || tablaDetails.length === 0) {
-    return <div>No hay datos disponibles para mostrar.</div>;
-  }
+  return <div>No hay datos disponibles para mostrar.</div>;
+}
 
   const categories = [
     'TRA CS 17',
@@ -48,11 +49,13 @@ const IETrazadores: React.FC<IETrazadoresProps> = ({ tablaDetails }) => {
     'TRA DOC 99'
   ];
 
-  const filteredData = categories.map(category => {
+const filteredData = categories.map(category => {
     const found = tablaDetails.find(detail => extractPrefix(detail.field3) === category);
-    const value = found ? parseInt(found.field4, 10) : 0;
-    return { category, value, fullField3: found ? found.field3 : '' };
-  });
+    const percentage = extractPercentage(found?.field4 || 'N/A');
+    const value = percentage;
+
+    return { category, value, found };
+});
 
   if (filteredData.every(({ value }) => value === 0)) {
     return <div>No hay datos disponibles para mostrar.</div>;
@@ -65,9 +68,6 @@ const IETrazadores: React.FC<IETrazadoresProps> = ({ tablaDetails }) => {
     y: value,
     color: getColorByPercentageIETrazadores(value)
   }));
-
-  const plotLineValue = 90;
-  const shouldRenderPlotLine = filteredData.some(({ value }) => value > 0) && plotLineValue !== undefined;
 
   const options = {
     chart: {
@@ -92,33 +92,39 @@ const IETrazadores: React.FC<IETrazadoresProps> = ({ tablaDetails }) => {
     },
     yAxis: {
       min: 0,
+      max: 100,
       title: {
-        text: 'Porcentaje'
-      },
-      stackLabels: {
-        enabled: true,
+        text: 'Porcentaje (%)',
         style: {
+          fontSize: '14px',
           fontWeight: 'bold',
-          color: 'gray'
-        }
+          color: '#333333',
+        },
       },
-      plotLines: shouldRenderPlotLine ? [{
-        color: 'black',
-        width: 2,
-        value: plotLineValue,
-        dashStyle: 'Solid',
-        zIndex: 5,
-        label: {
-          text: `Meta ${plotLineValue}%`,
-          align: 'right',
-          verticalAlign: 'middle',
-          x: +60,
-          style: {
-            color: 'black',
-            fontWeight: 'bold'
-          }
-        }
-      }] : []
+      gridLineColor: '#e6e6e6',
+      labels: {
+        style: {
+          color: '#666666',
+        },
+      },
+      plotLines: [
+        {
+          color: 'black',
+          width: 2,
+          value: 90,
+          label: {
+            text: 'Meta 90%',
+            align: 'right',
+            verticalAlign: 'middle',
+            x: +55,
+            style: {
+              color: 'black',
+              fontWeight: 'bold',
+            },
+          },
+          zIndex: 5,
+        },
+      ],
     },
     plotOptions: {
       column: {
@@ -169,9 +175,9 @@ const IETrazadores: React.FC<IETrazadoresProps> = ({ tablaDetails }) => {
       </div>
 
       <div className="cards-trazadores">
-        {filteredData.map(({  value, fullField3 }, index) => (
+        {filteredData.map(({  value, found }, index) => (
           <div key={index} className="card-trazadores">
-            <h5>{fullField3}</h5>
+            <h5>{found?.field3}</h5>
             <p>Porcentaje: {value}%</p>
           </div>
         ))}
