@@ -7,12 +7,7 @@ interface Module {
   module: string;
 }
 
-function createModuleData(module: Module): { moduleName: string; percentage: number } {
-  return {
-    moduleName: module.module,
-    percentage: Math.floor(Math.random() * 101),
-  };
-}
+
 
 function createKPIModuleData(module: Module): { moduleName: string; question: string; answer: string; percentage: number | null } {
   return {
@@ -43,7 +38,7 @@ const ResumenEjecutivo: React.FC = () => {
     { id: 4, module: 'Módulo 4' },
   ];
 
-  const moduleData = modules.map(createModuleData);
+ 
   const kpiModuleData = modules.map(createKPIModuleData);
   const etaModuleData = modules.map(createETAModuleData);
 
@@ -60,7 +55,7 @@ const ResumenEjecutivo: React.FC = () => {
         <KPIGraph moduleData={kpiModuleData} />
       </div>
       <div id="bpm-graph">
-        <BPMGraph moduleData={moduleData} />
+        <BPMGraph  />
       </div>
       <div id="lum-graph">
         <LUMGraph/>
