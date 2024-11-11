@@ -30,16 +30,11 @@ const AuditSummary: React.FC = () => {
 
   // Estado local para controlar si las incidencias ya fueron enviadas
   const [incidenciasEnviadas, setIncidenciasEnviadas] = useState(false);
-  const [correoEnviado, setCorreoEnviado] = useState(false);
 
 
   useEffect(() => {
     const handleSendEmail = async () => {
 
-      if (correoEnviado) {
-        return;
-      }
-  
       const { auditSheetData } = state;
       const emailAudit = auditSheetData.auditorEmail;
       const numeroAuditoria = auditSheetData.numeroAuditoria;
@@ -63,15 +58,14 @@ const AuditSummary: React.FC = () => {
           Para ver más detalles, haz clic en el siguiente enlace:
           "https://frontend-svc7.onrender.com/"`
         );
-  
-        setCorreoEnviado(true);
+
       } catch (error) {
         console.error('Error al enviar el correo:', error);
       }
     };
   
     handleSendEmail();
-  }, [state, correoEnviado]);
+  }, [state]);
   
 
   const handleSendIncidencias = useCallback(async () => {
