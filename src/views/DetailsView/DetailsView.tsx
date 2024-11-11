@@ -84,9 +84,9 @@ const DetailsView: React.FC = () => {
   };
 
   const handleGoToAuditSummary = () => {
-    navigate('/resumen-auditoria');
+    navigate('/resumen-replace');
   };
-
+ 
   const handleGoToHome = () => {
     navigate('/home');
   };

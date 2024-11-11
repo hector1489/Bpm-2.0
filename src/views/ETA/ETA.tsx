@@ -47,7 +47,7 @@ const ETA: React.FC = () => {
   };
 
   const handleGoToAuditSummary = () => {
-    navigate('/resumen-auditoria');
+    navigate('/resumen-replace');
   };
 
   const handleGoToHome = () => {

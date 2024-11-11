@@ -26,7 +26,8 @@ import {
   BPMDetailsDD,
   ETADetailsDD,
   LUMDetailsDD,
-  PhotoEvidenceDD
+  PhotoEvidenceDD,
+  AuditSummaryReplace
 } from './views/index';
 
 const App: React.FC = () => {
@@ -38,6 +39,7 @@ const App: React.FC = () => {
         <Route path='/home' element={<Home />} />
         <Route path='/auditoria' element={<Auditoria />} />
         <Route path='/resumen-auditoria' element={<AuditSummary />} />
+        <Route path='/resumen-replace' element={<AuditSummaryReplace />} />
         <Route path='/resumen-detalle' element={<DetailsView />} />
         <Route path='/formulario-auditoria' element={<AuditFormView />} />
         <Route path='/luminometria' element={<Luminometry />} />

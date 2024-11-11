@@ -19,7 +19,7 @@ const Luminometry: React.FC = () => {
 
 
 
-  const handleGoToAuditSummary = () => navigate('/resumen-auditoria');
+  const handleGoToAuditSummary = () => navigate('/resumen-replace');
   const handleGoToHome = () => navigate('/home');
   const handleGoToDetails = () => navigate('/resumen-detalle');
   const handleGoToETA = () => navigate('/seremi');

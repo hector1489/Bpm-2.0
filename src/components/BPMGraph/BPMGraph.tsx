@@ -1,7 +1,7 @@
 import Highcharts from 'highcharts';
 import Highcharts3D from 'highcharts/highcharts-3d';
 import HighchartsReact from 'highcharts-react-official';
-import { useContext, useMemo, useState } from 'react';
+import { useContext, useMemo } from 'react';
 import { AppContext } from '../../context/GlobalState';
 import { getColorByPercentage } from '../../utils/utils'
 import './BPMGraph.css';
@@ -43,7 +43,7 @@ export interface Answer {
 
 const BPMGraph: React.FC = () => {
   const context = useContext(AppContext);
-  const [nonApplicableModules, setNonApplicableModules] = useState<string[]>([]);
+
 
   if (!context) {
     return <div>Error al cargar el contexto</div>;
@@ -70,12 +70,7 @@ const BPMGraph: React.FC = () => {
               return !isNaN(numValue) ? numValue : NaN;
             }
 
-            setNonApplicableModules((prev) => {
-              if (!prev.includes(IQuestion.question)) {
-                return [...prev, IQuestion.question];
-              }
-              return prev;
-            });
+          
   
             return NaN; 
           })
@@ -198,16 +193,7 @@ const BPMGraph: React.FC = () => {
         options={chartOptions}
         containerProps={{ style: { width: '100%', height: '100%' } }}
       />
-      {nonApplicableModules.length > 0 && (
-        <div className="na-modules">
-          <p>Módulos no aplicables ('N/A') o sin datos:</p>
-          <ul>
-            {nonApplicableModules.map((module, index) => (
-              <li key={index}>{module}</li>
-            ))}
-          </ul>
-        </div>
-      )}
+   
     </div>
   );
 };
