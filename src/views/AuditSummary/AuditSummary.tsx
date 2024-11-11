@@ -9,7 +9,10 @@ import {
   calcularDiasRestantesSummary
 } from '../../utils/utils';
 import { enviarDatosAuditoria, sendEmail } from '../../utils/apiUtils';
+import { createTablaDetail } from '../../utils/apiDetails';
+import { createAuditSheet } from '../../utils/apiAuditSheet';
 import logos from '../../assets/img/index';
+
 
 const DEFAULT_ANSWER = "Sin respuesta";
 const logoFungi = logos.logoBpm;
@@ -109,7 +112,9 @@ const AuditSummary: React.FC = () => {
   
     try {
       const result = await enviarDatosAuditoria(desviaciones, authToken);
-      handleSendEmailAudit();
+      await handleSendEmailAudit();
+      await handleSendAuditSheetToBackend();
+      await handleSendToBackend();
       console.log('Incidencias enviadas exitosamente:', result);
       
       setIncidenciasEnviadas(true);
@@ -117,6 +122,68 @@ const AuditSummary: React.FC = () => {
       console.error('Error al enviar las incidencias:', error);
     }
   }, [state, incidenciasEnviadas]);
+
+  const handleSendToBackend = async () => {
+    const dataToSend = state.IsHero.map((question) => {
+      const numeroAuditoria = state.auditSheetData.numeroAuditoria;
+      const currentModule = state.modules.find(module => {
+        if (!module.question) {
+          return false;
+        }
+        const moduleQuestions = Array.isArray(module.question) ? module.question : [module.question];
+        const questionText = Array.isArray(question.question) ? question.question.join(' ') : question.question;
+        return moduleQuestions.some(q => questionText.includes(q));
+      });
+
+      if (!currentModule) {
+        console.error('No se encontró el módulo correspondiente para la pregunta:', question);
+        return null;
+      }
+
+      return {
+        numero_auditoria: numeroAuditoria,
+        columna1: question.id,
+        columna2: currentModule.module || 'Unknown Module',
+        columna3: question.question,
+        columna4: question.answer || 'No answer yet'
+      };
+    }).filter(Boolean);
+
+
+    try {
+      await createTablaDetail(dataToSend);
+    } catch (error) {
+      console.error('Error al enviar los datos:', error);
+    }
+  };
+
+  const handleSendAuditSheetToBackend = async () => {
+    try {
+      // Verifica que los datos de auditoría existan en el estado
+      if (!state.auditSheetData || !state.userName) {
+        console.error('No se encontraron los datos de auditoría o el username.');
+        return;
+      }
+
+      // Construir el objeto de datos para enviar al backend
+      const dataToSendAuditSheet = {
+        username: state.userName,
+        numero_auditoria: state.auditSheetData.numeroAuditoria,
+        field1: state.auditSheetData.nombreEstablecimiento,
+        field2: state.auditSheetData.gerenteEstablecimiento,
+        field3: state.auditSheetData.administradorEstablecimiento,
+        field4: state.auditSheetData.supervisorEstablecimiento,
+        field5: state.auditSheetData.auditorEmail,
+        field6: state.auditSheetData.fechaAuditoria,
+      };
+
+
+      await createAuditSheet(dataToSendAuditSheet);
+    } catch (error) {
+      console.error('Error al enviar los datos de la auditoría al backend:', error);
+    }
+  };
+
 
   const handleGoToHome = () => {
     navigate('/home');
@@ -146,7 +213,7 @@ const AuditSummary: React.FC = () => {
         <img src={logoFungi} alt="logo" />
       </div>
       <h3 className='fw-bold'>auditoria bpm</h3>
-      <Summary />
+      <Summary /> 
       <BPMGraph />
       <AverageModules />
 
