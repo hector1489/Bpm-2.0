@@ -261,7 +261,6 @@ const DesviacionesTable: React.FC = () => {
             const value = (e.target as HTMLSelectElement).value;
             handleInputChange(rowIndex, 'criticidad', value);
 
-            // Aquí se actualiza la fecha de solución programada solo cuando cambia la criticidad
             const fechaIngreso = localDesviaciones[rowIndex].fecha_recepcion_solicitud || getCurrentDate();
             const fechaSolucionProgramada = calcularFechaSolucionProgramada(fechaIngreso, value);
             handleInputChange(rowIndex, 'fecha_solucion_programada', fechaSolucionProgramada);
