@@ -166,7 +166,7 @@ const ResumenForm: React.FC = () => {
   };
 
   const numeroAuditoria = numeroRequerimiento;
-  // useEffect para filtrar los datos por numero de auditoría
+
   const bpmFilteredAuditSheet = () => {
 
     if (numeroAuditoria && auditSheetDetails) {

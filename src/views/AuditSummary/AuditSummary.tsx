@@ -30,40 +30,49 @@ const AuditSummary: React.FC = () => {
 
   // Estado local para controlar si las incidencias ya fueron enviadas
   const [incidenciasEnviadas, setIncidenciasEnviadas] = useState(false);
+  const [correoEnviado, setCorreoEnviado] = useState(false);
+
 
   useEffect(() => {
     const handleSendEmail = async () => {
+
+      if (correoEnviado) {
+        return;
+      }
+  
       const { auditSheetData } = state;
       const emailAudit = auditSheetData.auditorEmail;
       const numeroAuditoria = auditSheetData.numeroAuditoria;
-
+  
       if (!numeroAuditoria) {
         console.error('Error: El número de auditoría es nulo.');
         return;
       }
-
+  
       if (!emailAudit) {
         console.error('Error: El correo del auditor es nulo.');
         return;
       }
-
+  
       try {
         await sendEmail(
           emailAudit,
           'Número de Auditoría',
           `Alerta CBPfood Auditoria bpm realizada:
-        Se han ingresado nuevas desviaciones correspondientes al número de auditoría: ${numeroAuditoria}.
-        Para ver más detalles, haz clic en el siguiente enlace:
-        "https://frontend-svc7.onrender.com/"
-        `,
+          Se han ingresado nuevas desviaciones correspondientes al número de auditoría: ${numeroAuditoria}.
+          Para ver más detalles, haz clic en el siguiente enlace:
+          "https://frontend-svc7.onrender.com/"`
         );
+  
+        setCorreoEnviado(true);
       } catch (error) {
         console.error('Error al enviar el correo:', error);
       }
     };
-
+  
     handleSendEmail();
-  }, [state]);
+  }, [state, correoEnviado]);
+  
 
   const handleSendIncidencias = useCallback(async () => {
     if (incidenciasEnviadas) {
@@ -117,7 +126,6 @@ const AuditSummary: React.FC = () => {
       const result = await enviarDatosAuditoria(desviaciones, authToken);
       console.log('Incidencias enviadas exitosamente:', result);
       
-      // Marcamos que las incidencias han sido enviadas
       setIncidenciasEnviadas(true);
     } catch (error) {
       console.error('Error al enviar las incidencias:', error);
