@@ -3,113 +3,168 @@ import Highcharts3D from 'highcharts/highcharts-3d';
 import HighchartsReact from 'highcharts-react-official';
 import { useContext, useMemo, useState } from 'react';
 import { AppContext } from '../../context/GlobalState';
+import { getColorByPercentage } from '../../utils/utils'
 import './BPMGraph.css';
+import {
+  questionsMA,
+  questionsDOC,
+  questionsTra,
+  questionLum,
+  infraestructuraQuestions,
+  legalesQuestions,
+  poesControlProductosQuestion,
+  poesAguaQuestion,
+  poesSuperficiesQuestions,
+  poesContaminacionCruzadaQuestions,
+  poesSustanciasAdulterantes,
+  poesHigieneEmpleadosQuestions,
+  poesControlPlagas,
+  poesInstalacionesQuestions,
+  poeRecepcionQuestions,
+  poeAlamacenaminetoQuestions,
+  poePreelaboracionesQuestions,
+  poeElaboracionesQuestions,
+  poeTransporteQuestions,
+  poeServicioQuestions,
+  poeLavadoOllasQuestions,
+  poeControlCalidadQiestions,
+  poePptQuestions,
+} from '../../utils/ConstModules'
 
-interface BPMGraphProps {
-  moduleData: { moduleName: string, percentage: number | null }[];
-}
 
 if (typeof Highcharts === 'object') {
   Highcharts3D(Highcharts);
 }
 
-const BPMGraph: React.FC<BPMGraphProps> = ({ moduleData }) => {
+export interface Answer {
+  question: string;
+  answer: string;
+}
+
+const BPMGraph: React.FC = () => {
   const context = useContext(AppContext);
   const [nonApplicableModules, setNonApplicableModules] = useState<string[]>([]);
 
   if (!context) {
     return <div>Error al cargar el contexto</div>;
   }
-  
+
   const { state } = context;
 
-  const bpmModules = ['infraestructura', 'legales'];
-  const poesModules = [
-    'poes-control-productos', 'Agua', 'poes-superficies', 'contaminacion-cruzada',
-    'poes-sustancias-adulterantes', 'poes-higiene-empleados', 'poes-control-plagas', 'poes-instalaciones'
-  ];
-  const poeModules = [
-    'poe-recepcion', 'poe-almacenamiento', 'poe-preelaboraciones', 'poe-elaboracion', 'poe-mantencion',
-    'poe-transporte', 'poe-servicio', 'poe-lavado-ollas-vajilla', 'poe-control-calidad', 'poe-ppt'
-  ];
-  const maModules = ['MA'];
-  const docModules = ['doc'];
+  if (!state) {
+    return <div>Error al cargar el contexto</div>;
+  }
 
-  const traModules = [
-    'poes-higiene-empleados', 'poe-preelaboraciones', 'poe-elaboracion',
-    'poe-mantencion', 'poe-transporte', 'poe-servicio', 'doc'
-  ];
+  const filterModuleDetails = (submoduleQuestions: string[]): number[] => {
+  
+    const filteredData = state.IsHero
+      ? state.IsHero
+          .filter((IQuestion) => submoduleQuestions.some(q => q === IQuestion.question))
+          .map((IQuestion) => {
+            const answer = IQuestion.answer?.trim() || '';
+            const match = answer.match(/^(\d+(\.\d+)?)%/);
+  
+            if (match) {
+              const numValue = parseFloat(match[1]);
 
-  const calcularPromedioGrupo = (modulos: string[]) => {
-    const modulosDelGrupo = moduleData.filter((mod) => modulos.includes(mod.moduleName));
-    
-    const nonApplicable = modulosDelGrupo
-      .filter((mod) => mod.percentage === null)
-      .map((mod) => mod.moduleName);
-    
-    if (nonApplicable.length > 0) {
-      setNonApplicableModules((prev) => [...prev, ...nonApplicable]);
-    }
+              return !isNaN(numValue) ? numValue : NaN;
+            }
 
-    const total = modulosDelGrupo.reduce((acc, curr) => acc + (curr.percentage ?? 100), 0);
-    return modulosDelGrupo.length > 0 ? total / modulosDelGrupo.length : 100;
+            setNonApplicableModules((prev) => {
+              if (!prev.includes(IQuestion.question)) {
+                return [...prev, IQuestion.question];
+              }
+              return prev;
+            });
+  
+            return NaN; 
+          })
+          .filter(value => !isNaN(value)) 
+      : [];
+
+    return filteredData;
+  };
+  
+
+
+  const calculateGeneralAverage = (percentages: number[]) => {
+    const validPercentages = percentages.filter(value => !isNaN(value));
+    const total = validPercentages.reduce((acc, percentage) => acc + percentage, 0);
+    return validPercentages.length > 0 ? (total / validPercentages.length).toFixed(2) : 'N/A';
   };
 
-  const getColorByPercentage = (percentage: number) => {
-    if (percentage >= 90) return 'green';
-    if (percentage >= 75) return 'yellow';
-    return 'red';
+
+  const calculateSubmoduleAverage = (submoduleQuestions: string[]) => {
+    const submoduleData = filterModuleDetails(submoduleQuestions);
+    return calculateGeneralAverage(submoduleData);
   };
 
-  const lumQuestion = ['LUM 21. Toma de muestra y uso de luminómetro:'];
+  const calculateBPM = () => {
+    const infraAverage = parseFloat(calculateSubmoduleAverage(infraestructuraQuestions));
+    const legalesAverage = parseFloat(calculateSubmoduleAverage(legalesQuestions));
 
-  const lumData = state.IsHero
-    .filter((question) => lumQuestion.includes(question.question))
-    .map((question) => {
-      const answer = question.answer ?? '';
-      let percentage = 0;
+    const validAverages = [infraAverage, legalesAverage].filter(avg => !isNaN(avg));
+    const total = validAverages.reduce((acc, avg) => acc + avg, 0);
+    return validAverages.length > 0 ? (total / validAverages.length).toFixed(2) : 'N/A';
+  };
 
-      if (answer !== 'N/A' && answer !== null) {
-        const percentageMatch = answer.match(/^\d+/);
-        percentage = percentageMatch ? parseInt(percentageMatch[0], 10) : 0;
-      }
+  const calculatePOES = () => {
+    const poesAverages = [
+      calculateSubmoduleAverage(poesControlProductosQuestion),
+      calculateSubmoduleAverage(poesAguaQuestion),
+      calculateSubmoduleAverage(poesSuperficiesQuestions),
+      calculateSubmoduleAverage(poesContaminacionCruzadaQuestions),
+      calculateSubmoduleAverage(poesSustanciasAdulterantes),
+      calculateSubmoduleAverage(poesHigieneEmpleadosQuestions),
+      calculateSubmoduleAverage(poesControlPlagas),
+      calculateSubmoduleAverage(poesInstalacionesQuestions),
+    ].map(avg => parseFloat(avg)).filter(avg => !isNaN(avg));
 
-      return {
-        question: question.question,
-        shortQuestion: 'LUM 21',
-        percentage,
-        isNotApplicable: answer === 'N/A' || answer === null,
-      };
-    });
+    const total = poesAverages.reduce((acc, avg) => acc + avg, 0);
+    return poesAverages.length > 0 ? (total / poesAverages.length).toFixed(2) : 'N/A';
+  };
 
-  const percentagesLum = lumData.map((data) => data.percentage);
-  const lumAverage = percentagesLum.length > 0
-    ? percentagesLum.reduce((acc, value) => acc + value, 0) / percentagesLum.length
-    : 100;
+  const calculatePOE = () => {
+    const poeAverages = [
+      calculateSubmoduleAverage(poeRecepcionQuestions),
+      calculateSubmoduleAverage(poeAlamacenaminetoQuestions),
+      calculateSubmoduleAverage(poePreelaboracionesQuestions),
+      calculateSubmoduleAverage(poeElaboracionesQuestions),
+      calculateSubmoduleAverage(poeTransporteQuestions),
+      calculateSubmoduleAverage(poeServicioQuestions),
+      calculateSubmoduleAverage(poeLavadoOllasQuestions),
+      calculateSubmoduleAverage(poeControlCalidadQiestions),
+      calculateSubmoduleAverage(poePptQuestions)
+    ].map(avg => parseFloat(avg)).filter(avg => !isNaN(avg));
 
-  const groupedData = useMemo(() => [
-    { groupName: 'BPM', average: calcularPromedioGrupo(bpmModules) },
-    { groupName: 'POES', average: calcularPromedioGrupo(poesModules) },
-    { groupName: 'POE', average: calcularPromedioGrupo(poeModules) },
-    { groupName: 'MA', average: calcularPromedioGrupo(maModules) },
-    { groupName: 'DOC', average: calcularPromedioGrupo(docModules) },
-    { groupName: 'LUM', average: lumAverage },
-    { groupName: 'TRA', average: calcularPromedioGrupo(traModules) },
-  ], [moduleData]);
+    const total = poeAverages.reduce((acc, avg) => acc + avg, 0);
+    return poeAverages.length > 0 ? (total / poeAverages.length).toFixed(2) : 'N/A';
+  };
 
-  const overallAverage = useMemo(() => {
-    const applicableModules = moduleData.filter((mod) => mod.percentage !== null);
-    return applicableModules.reduce((acc, curr) => acc + (curr.percentage ?? 100), 0) / applicableModules.length;
-  }, [moduleData]);
+  const calculateMA = () => calculateGeneralAverage(filterModuleDetails(questionsMA));
+  const calculateDOC = () => calculateGeneralAverage(filterModuleDetails(questionsDOC));
+  const calculateLUM = () => calculateGeneralAverage(filterModuleDetails(questionLum));
+  const calculateTRA = () => calculateGeneralAverage(filterModuleDetails(questionsTra));
 
-  const groupNames = groupedData.map((group) => group.groupName).concat('PROM');
-  const groupAverages = groupedData.map((group) => group.average).concat(overallAverage);
-  const barColors = groupAverages.slice(0, -1).map((avg) => getColorByPercentage(avg)).concat(getColorByPercentage(overallAverage));
+  const groupedData = [
+    { groupName: 'BPM', average: calculateBPM() },
+    { groupName: 'POES', average: calculatePOES() },
+    { groupName: 'POE', average: calculatePOE() },
+    { groupName: 'MA', average: calculateMA() },
+    { groupName: 'DOC', average: calculateDOC() },
+    { groupName: 'TRA', average: calculateTRA() },
+    { groupName: 'LUM', average: calculateLUM() },
+  ];
+
+  const finalAverage = useMemo(() => {
+    const validAverages = groupedData.map(group => parseFloat(group.average)).filter(avg => !isNaN(avg));
+    const total = validAverages.reduce((acc, avg) => acc + avg, 0);
+    return validAverages.length > 0 ? (total / validAverages.length).toFixed(2) : 'N/A';
+  }, [groupedData]);
 
   const chartOptions = {
     chart: {
       type: 'column',
-      renderTo: 'container',
       options3d: {
         enabled: true,
         alpha: 15,
@@ -119,72 +174,21 @@ const BPMGraph: React.FC<BPMGraphProps> = ({ moduleData }) => {
       },
       reflow: true,
     },
-    title: {
-      text: '',
-    },
-    xAxis: {
-      categories: groupNames,
-      title: {
-        text: '',
-      },
-    },
-    yAxis: {
-      title: {
-        text: 'Porcentaje (%)',
-      },
-    },
-    series: [
-      {
-        name: 'Promedio',
-        data: groupAverages,
-        colorByPoint: true,
-        colors: barColors,
-        dataLabels: {
-          enabled: true,
-          format: '{y:.1f}%',
-          inside: false,
-          style: {
-            fontWeight: 'bold',
-            color: 'black',
-          },
-        },
-      },
-    ],
-    plotOptions: {
-      column: {
-        depth: 25,
-      },
-      series: {
-        dataLabels: {
-          enabled: true,
-        },
-      },
-    },
-    responsive: {
-      rules: [
-        {
-          condition: {
-            maxWidth: 500,
-          },
-          chartOptions: {
-            chart: {
-              options3d: {
-                depth: 30,
-              },
-            },
-            yAxis: {
-              title: {
-                text: null,
-              },
-            },
-            legend: {
-              enabled: false,
-            },
-          },
-        },
+    title: { text: 'Promedios por Módulo' },
+    xAxis: { categories: [...groupedData.map(g => g.groupName), 'PROM'] },
+    yAxis: { title: { text: 'Porcentaje (%)' } },
+    series: [{
+      name: 'Promedio',
+      data: [...groupedData.map(g => parseFloat(g.average)), parseFloat(finalAverage)],
+      colorByPoint: true,
+      colors: [
+        ...groupedData.map(g => getColorByPercentage(parseFloat(g.average))), 
+        getColorByPercentage(parseFloat(finalAverage))
       ],
-    },
+      dataLabels: { enabled: true, format: '{y:.1f}%', style: { fontWeight: 'bold', color: 'black' } },
+    }],
   };
+  
 
   return (
     <div className="bpm-graph-container">

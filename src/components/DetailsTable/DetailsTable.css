@@ -1,11 +1,12 @@
-/* Estilos generales para la tabla */
+.table-summary-section {
+  margin-top: 20px;
+}
+
 .details-table-dt {
   width: 100%;
   border-collapse: collapse;
-  margin: 20px 0;
   font-size: 1rem;
   text-align: left;
-  overflow-x: auto;
 }
 
 .details-table-dt th,
@@ -39,16 +40,56 @@
   max-width: 200px;
 }
 
-/* Estilos para pantallas pequeñas */
+.table-summary-section h3 {
+  background-color: #007bff;
+  color: white;
+  padding: 10px;
+  margin: 0;
+  text-align: center;
+  font-size: 1.2rem;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+}
+
+.table-summary-average {
+  background-color: #f1c40f;
+  padding: 10px;
+  font-size: 1rem;
+  text-align: center;
+  font-weight: bold;
+  margin-top: 10px;
+  border-radius: 4px;
+}
+
+.table-summary-average span {
+  color: #2c3e50;
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+.table-summary-final-average {
+  background-color: #e0f7fa;
+  padding: 12px;
+  font-size: 1.2rem;
+  font-weight: bold;
+  border-top: 2px solid #00aaff;
+  margin-top: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.table-summary-final-average span {
+  color: #00aaff;
+  font-size: 1.4rem;
+  font-weight: bold;
+}
+
 @media screen and (max-width: 768px) {
-  .details-table-dt,
-  .details-table-dt thead,
-  .details-table-dt tbody,
-  .details-table-dt th,
-  .details-table-dt td,
-  .details-table-dt tr {
+  .details-table-dt {
     display: block;
     width: 100%;
+    font-size: 0.9rem;
   }
 
   .details-table-dt thead {
@@ -65,9 +106,9 @@
     justify-content: space-between;
     padding-left: 50%;
     position: relative;
+    text-align: right;
   }
 
-  
   .details-table-dt td:before {
     content: attr(data-label);
     position: absolute;
@@ -77,17 +118,32 @@
     font-weight: bold;
     text-transform: uppercase;
     color: #00aaff;
+    font-size: 1rem;
+  }
+
+ 
+  .table-summary-average,
+  .table-summary-final-average {
+    text-align: center;
   }
 }
 
-/* Estilos para pantallas muy pequeñas */
 @media screen and (max-width: 480px) {
   .details-table-dt td {
     font-size: 0.8rem;
-    padding: px;
+    padding: 6px;
   }
 
   .details-table-dt td:before {
     font-size: 0.8rem;
+  }
+  
+  .table-summary-final-average {
+    font-size: 1rem;
+    flex-direction: column;
+  }
+
+  .table-summary-final-average span {
+    font-size: 1.2rem;
   }
 }

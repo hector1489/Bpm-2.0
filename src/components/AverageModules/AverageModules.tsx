@@ -1,80 +1,150 @@
 import './Average.css'
-import { useContext, useMemo } from 'react'
+import { useContext, useMemo  } from 'react';
 import { AppContext } from '../../context/GlobalState'
+import {
+  questionsMA,
+  questionsDOC,
+  questionsTra,
+  questionLum,
+  infraestructuraQuestions,
+  legalesQuestions,
+  poesControlProductosQuestion,
+  poesAguaQuestion,
+  poesSuperficiesQuestions,
+  poesContaminacionCruzadaQuestions,
+  poesSustanciasAdulterantes,
+  poesHigieneEmpleadosQuestions,
+  poesControlPlagas,
+  poesInstalacionesQuestions,
+  poeRecepcionQuestions,
+  poeAlamacenaminetoQuestions,
+  poePreelaboracionesQuestions,
+  poeElaboracionesQuestions,
+  poeTransporteQuestions,
+  poeServicioQuestions,
+  poeLavadoOllasQuestions,
+  poeControlCalidadQiestions,
+  poePptQuestions,
+} from '../../utils/ConstModules'
+
 
 const AverageModules: React.FC = () => {
-  const { state } = useContext(AppContext) || {};
+  const context = useContext(AppContext);
+ 
+
+  if (!context) {
+    return <div>Error al cargar el contexto</div>;
+  }
+
+  const { state } = context;
 
   if (!state) {
-    return <div>Error: Context is not available.</div>;
+    return <div>Error al cargar el contexto</div>;
   }
 
-  const calculatePercentage = (moduleId: number): number => {
-    const moduleQuestions = state.IsHero.filter(question => question.id === moduleId);
-    const totalQuestions = moduleQuestions.length;
+  const filterModuleDetails = (submoduleQuestions: string[]): number[] => {
+  
+    const filteredData = state.IsHero
+      ? state.IsHero
+          .filter((IQuestion) => submoduleQuestions.some(q => q === IQuestion.question))
+          .map((IQuestion) => {
+            const answer = IQuestion.answer?.trim() || '';
+            const match = answer.match(/^(\d+(\.\d+)?)%/);
+  
+            if (match) {
+              const numValue = parseFloat(match[1]);
 
-    if (totalQuestions === 0) return 100;
+              return !isNaN(numValue) ? numValue : NaN;
+            }
 
-    const totalPercentage = moduleQuestions.reduce((acc, question) => {
-      const match = typeof question.answer === 'string' ? question.answer.match(/(\d+)%/) : null;
-      const percentage = match ? parseInt(match[1], 10) : 0;
-      return acc + percentage;
-    }, 0);
+           
+            return NaN; 
+          })
+          .filter(value => !isNaN(value)) 
+      : [];
 
-    return totalPercentage / totalQuestions;
-  }
+    return filteredData;
+  };
+  
 
-  const moduleData = state.modules.map((module) => ({
-    moduleName: module.module,
-    percentage: calculatePercentage(module.id),
-  }));
 
-  const bpmModules = ['infraestructura', 'legales'];
-  const poesModules = [
-    'poes-control-productos', 'Agua', 'poes-superficies', 'contaminacion-cruzada',
-    'poes-sustancias-adulterantes', 'poes-higiene-empleados', 'poes-control-plagas', 'poes-instalaciones'
-  ];
-  const poeModules = [
-    'poe-recepcion', 'poe-almacenamiento', 'poe-preelaboraciones', 'poe-elaboracion', 'poe-mantencion',
-    'poe-transporte', 'poe-servicio', 'poe-lavado-ollas-vajilla', 'poe-control-calidad', 'poe-ppt'
-  ];
-  const maModules = ['MA'];
-  const docModules = ['doc'];
-  const lumModules = ['LUM 21. Toma de muestra y uso de luminómetro:'];
-  const traModules = [
-    'poes-higiene-empleados', 'poe-preelaboraciones', 'poe-elaboracion',
-    'poe-mantencion', 'poe-transporte', 'poe-servicio', 'doc'
-  ];
-
-  const calcularPromedioGrupo = (modulos: string[]) => {
-    const modulosDelGrupo = moduleData.filter((mod) => modulos.includes(mod.moduleName));
-    const total = modulosDelGrupo.reduce((acc, curr) => acc + (curr.percentage ?? 100), 0);
-    return modulosDelGrupo.length > 0 ? total / modulosDelGrupo.length : 100;
+  const calculateGeneralAverage = (percentages: number[]) => {
+    const validPercentages = percentages.filter(value => !isNaN(value));
+    const total = validPercentages.reduce((acc, percentage) => acc + percentage, 0);
+    return validPercentages.length > 0 ? (total / validPercentages.length).toFixed(2) : 'N/A';
   };
 
+
+  const calculateSubmoduleAverage = (submoduleQuestions: string[]) => {
+    const submoduleData = filterModuleDetails(submoduleQuestions);
+    return calculateGeneralAverage(submoduleData);
+  };
+
+  const calculateBPM = () => {
+    const infraAverage = parseFloat(calculateSubmoduleAverage(infraestructuraQuestions));
+    const legalesAverage = parseFloat(calculateSubmoduleAverage(legalesQuestions));
+
+    const validAverages = [infraAverage, legalesAverage].filter(avg => !isNaN(avg));
+    const total = validAverages.reduce((acc, avg) => acc + avg, 0);
+    return validAverages.length > 0 ? (total / validAverages.length).toFixed(2) : 'N/A';
+  };
+
+  const calculatePOES = () => {
+    const poesAverages = [
+      calculateSubmoduleAverage(poesControlProductosQuestion),
+      calculateSubmoduleAverage(poesAguaQuestion),
+      calculateSubmoduleAverage(poesSuperficiesQuestions),
+      calculateSubmoduleAverage(poesContaminacionCruzadaQuestions),
+      calculateSubmoduleAverage(poesSustanciasAdulterantes),
+      calculateSubmoduleAverage(poesHigieneEmpleadosQuestions),
+      calculateSubmoduleAverage(poesControlPlagas),
+      calculateSubmoduleAverage(poesInstalacionesQuestions),
+    ].map(avg => parseFloat(avg)).filter(avg => !isNaN(avg));
+
+    const total = poesAverages.reduce((acc, avg) => acc + avg, 0);
+    return poesAverages.length > 0 ? (total / poesAverages.length).toFixed(2) : 'N/A';
+  };
+
+  const calculatePOE = () => {
+    const poeAverages = [
+      calculateSubmoduleAverage(poeRecepcionQuestions),
+      calculateSubmoduleAverage(poeAlamacenaminetoQuestions),
+      calculateSubmoduleAverage(poePreelaboracionesQuestions),
+      calculateSubmoduleAverage(poeElaboracionesQuestions),
+      calculateSubmoduleAverage(poeTransporteQuestions),
+      calculateSubmoduleAverage(poeServicioQuestions),
+      calculateSubmoduleAverage(poeLavadoOllasQuestions),
+      calculateSubmoduleAverage(poeControlCalidadQiestions),
+      calculateSubmoduleAverage(poePptQuestions)
+    ].map(avg => parseFloat(avg)).filter(avg => !isNaN(avg));
+
+    const total = poeAverages.reduce((acc, avg) => acc + avg, 0);
+    return poeAverages.length > 0 ? (total / poeAverages.length).toFixed(2) : 'N/A';
+  };
+
+  const calculateMA = () => calculateGeneralAverage(filterModuleDetails(questionsMA));
+  const calculateDOC = () => calculateGeneralAverage(filterModuleDetails(questionsDOC));
+  const calculateLUM = () => calculateGeneralAverage(filterModuleDetails(questionLum));
+  const calculateTRA = () => calculateGeneralAverage(filterModuleDetails(questionsTra));
+
   const groupedData = [
-    { groupName: 'BPM', aspectsEvaluated: 'INFRAESTRUCTURA Y REQUERIMIENTOS LEGALES', weighing: 4, average: calcularPromedioGrupo(bpmModules).toFixed(2) },
-    { groupName: 'POES', aspectsEvaluated: 'PROCEDIMIENTOS OP. DE SANITIZACION', weighing: 25, average: calcularPromedioGrupo(poesModules).toFixed(2) },
-    { groupName: 'POE', aspectsEvaluated: 'PROCEDIMIENTOS OP. DEL PROCESO', weighing: 25, average: calcularPromedioGrupo(poeModules).toFixed(2) },
-    { groupName: 'MA', aspectsEvaluated: 'MANEJO AMBIENTAL', weighing: 4, average: calcularPromedioGrupo(maModules).toFixed(2) },
-    { groupName: 'DOC', aspectsEvaluated: 'DOCUMENTACION', weighing: 10, average: calcularPromedioGrupo(docModules).toFixed(2) },
-    { groupName: 'TRA', aspectsEvaluated: 'LUMINOMETRIA', weighing: 10, average: calcularPromedioGrupo(traModules).toFixed(2) },
-    { groupName: 'LUM', aspectsEvaluated: 'TRAZADORES DE POSIBLE BROTE ETA', weighing: 21, average: calcularPromedioGrupo(lumModules).toFixed(2) },
+    { groupName: 'BPM', aspectsEvaluated: 'INFRAESTRUCTURA Y REQUERIMIENTOS LEGALES', weighing: 4, average: calculateBPM() },
+    { groupName: 'POES', aspectsEvaluated: 'PROCEDIMIENTOS OP. DE SANITIZACION', weighing: 25, average: calculatePOES() },
+    { groupName: 'POE', aspectsEvaluated: 'PROCEDIMIENTOS OP. DEL PROCESO', weighing: 25, average: calculatePOE() },
+    { groupName: 'MA', aspectsEvaluated: 'MANEJO AMBIENTAL', weighing: 4, average: calculateMA() },
+    { groupName: 'DOC', aspectsEvaluated: 'DOCUMENTACION', weighing: 10, average: calculateDOC() },
+    { groupName: 'LUM', aspectsEvaluated: 'TRAZADORES DE POSIBLE BROTE ETA', weighing: 21, average: calculateTRA() },
+    { groupName: 'TRA', aspectsEvaluated: 'LUMINOMETRIA', weighing: 10, average: calculateLUM() },
   ];
 
   const finalAverage = useMemo(() => {
-    // Suma total de las ponderaciones
-    const totalWeighing = groupedData.reduce((acc, group) => acc + group.weighing, 0);
-
-    // Cálculo del promedio ponderado ajustado
-    const weightedSum = groupedData.reduce(
-      (acc, group) => acc + (parseFloat(group.average) * group.weighing) / totalWeighing,
-      0
-    );
-
-    return weightedSum.toFixed(2);
+    const validAverages = groupedData.map(group => parseFloat(group.average)).filter(avg => !isNaN(avg));
+    const total = validAverages.reduce((acc, avg) => acc + avg, 0);
+    return validAverages.length > 0 ? (total / validAverages.length).toFixed(2) : 'N/A';
   }, [groupedData]);
 
+
+ 
   return (
     <div className="audit-summary">
       <div className="table-responsive-audit">
@@ -95,7 +165,7 @@ const AverageModules: React.FC = () => {
                 <td data-label="MODULO">{group.groupName}</td>
                 <td data-label="ASPECTOS EVALUADOS">{group.aspectsEvaluated}</td>
                 <td data-label="PONDERACIÓN (%)">{group.weighing}%</td>
-                <td data-label="PORCENTAJE (%)">{group.average}%</td>
+                <td data-label="PORCENTAJE (%)">{group.average}</td>
               </tr>
             ))}
           </tbody>

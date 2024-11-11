@@ -79,7 +79,7 @@ export const enviarDatosAuditoria = async (desviaciones: any, authToken: string)
       isNew: !('data-id' in desviacion),
     };
   });
-  console.log(desviacionData)
+
   try {
     const response = await axios.post(`${BASE_URL}/desviaciones/send-data`, desviacionData, {
       headers: {
