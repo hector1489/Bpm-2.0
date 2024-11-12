@@ -130,11 +130,21 @@ export const crearSelectEstado = (): HTMLSelectElement => {
   return select;
 };
 
+export const extractPrefixForTRA = (field3: string) => {
+  const match = field3.match(/^TRA [A-Z]+ \d+/);
+  return match ? match[0] : '';
+};
+
 export const crearSelectAcciones = async (authToken: string, preguntaAuditada: string): Promise<HTMLSelectElement> => {
   try {
     const acciones = await obtenerTodasLasAccionesDesdeAPI(authToken);
 
-    const obtenerPrefijo = (pregunta: string) => {
+    const obtenerPrefijo = (pregunta: string): string => {
+      const prefijoTRA = extractPrefixForTRA(pregunta);
+      if (prefijoTRA) {
+        return prefijoTRA.toLowerCase();
+      }
+      
       const match = pregunta.match(/^\w+\s*\d*\./);
       return match ? match[0].trim().toLowerCase() : '';
     };
