@@ -130,24 +130,46 @@ export const crearSelectEstado = (): HTMLSelectElement => {
   return select;
 };
 
-export const extractPrefixForTRA = (field3: string) => {
+export const extractPrefixForTRA = (field3: string): string => {
   const match = field3.match(/^TRA [A-Z]+ \d+/);
   return match ? match[0] : '';
 };
 
+export const extractPrefixForCIS = (field3: string): string => {
+  const match = field3.match(/^CIS\s?\d+/);
+  return match ? match[0] : '';
+};
+
+export const extractPrefixForELB = (field3: string): string => {
+  const match = field3.match(/^ELB \d+/);
+  return match ? match[0] : '';
+};
+
+
+
 export const crearSelectAcciones = async (authToken: string, preguntaAuditada: string): Promise<HTMLSelectElement> => {
   try {
     const acciones = await obtenerTodasLasAccionesDesdeAPI(authToken);
-
     const obtenerPrefijo = (pregunta: string): string => {
       const prefijoTRA = extractPrefixForTRA(pregunta);
       if (prefijoTRA) {
         return prefijoTRA.toLowerCase();
       }
-      
+    
+      const prefijoCIS = extractPrefixForCIS(pregunta);
+      if (prefijoCIS) {
+        return prefijoCIS.toLowerCase();
+      }
+    
+      const prefijoELB = extractPrefixForELB(pregunta);
+      if (prefijoELB) {
+        return prefijoELB.toLowerCase();
+      }
+    
       const match = pregunta.match(/^\w+\s*\d*\./);
       return match ? match[0].trim().toLowerCase() : '';
     };
+    
 
     const prefijoPreguntaAuditada = obtenerPrefijo(preguntaAuditada || '').toLowerCase();
 
