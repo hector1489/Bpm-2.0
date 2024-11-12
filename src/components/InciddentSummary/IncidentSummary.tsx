@@ -65,9 +65,6 @@ const IncidentSummary: React.FC = () => {
         const data: DesviacionResponse[] = await cargarDesviacionesDesdeBackend(authToken);
         if (data) {
           setDesviaciones(data);
-          
-          const ultimasDesviaciones = data.slice(-5);
-          setDesviaciones(ultimasDesviaciones);
   
           const responsableCountData = data.reduce((acc: Record<string, number>, item: DesviacionResponse) => {
             const responsable = item.responsable_problema;
@@ -125,6 +122,7 @@ const IncidentSummary: React.FC = () => {
     fetchDesviaciones();
   }, []);
 
+
   const totalIncidencias = desviaciones ? desviaciones.length : 0;
 
 
@@ -143,7 +141,7 @@ const IncidentSummary: React.FC = () => {
             </div>
 
             <div className="card-body">
-              <h5 className="card-title text-center"><span id="totalIncidencias">{totalIncidencias}</span></h5>
+              <h5 className="card-title text-center"><span id="totalIncidencias"> {totalIncidencias} </span></h5>
             </div>
 
           </div>
