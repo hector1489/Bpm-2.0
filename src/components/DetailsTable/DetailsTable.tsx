@@ -160,9 +160,9 @@ const DetailsTable: React.FC = () => {
             <table className='details-table-dt'>
               <thead>
                 <tr>
-                  <th>Module</th>
-                  <th>Question</th>
-                  <th>Response</th>
+                  <th>Modulo</th>
+                  <th>Pregunta</th>
+                  <th>Desviacion</th>
                 </tr>
               </thead>
               <tbody>
