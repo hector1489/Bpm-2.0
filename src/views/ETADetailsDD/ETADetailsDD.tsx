@@ -17,7 +17,7 @@ const ETADetailsDD: React.FC = () => {
   return (
     <div className="ETADetailsDD-container">
       <ETADetailsSymary numeroAuditoria={numeroAuditoria}/>
-      <button onClick={handleGoToDoc}>volver</button>
+      <button  onClick={handleGoToDoc}>Volver</button>
     </div>
   )
 }

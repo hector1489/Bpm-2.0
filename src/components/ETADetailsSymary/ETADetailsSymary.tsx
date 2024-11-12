@@ -154,7 +154,7 @@ const ETADetailsSymary: React.FC<ETADetailsSymaryProps> = ({ numeroAuditoria }) 
     return match ? match[0] : 'N/A';
   };
 
-  
+
 
   const chartOptions = {
     chart: {
@@ -259,18 +259,22 @@ const ETADetailsSymary: React.FC<ETADetailsSymaryProps> = ({ numeroAuditoria }) 
       ],
     },
   };
-  
+
 
   const parsePercentage = (field4: string) => {
     const [percentage] = field4.split(':');
-    return parseFloat(percentage.replace('%', '').trim()) || 0;
+    return parseFloat(percentage.replace('%', '').trim()) || 'N/A';
   };
 
-  // Función para calcular el promedio de los porcentajes
+  // Función para calcular el promedio de los porcentajes, excluyendo "N/A"
   const calculateGeneralAverage = () => {
-    const total = percentages.reduce((acc, percentage) => acc + percentage, 0);
-    return percentages.length > 0 ? (total / percentages.length).toFixed(2) : 'N/A';
+    const validPercentages = percentages.filter(percentage => !isNaN(percentage) && percentage !== 0);
+
+    const total = validPercentages.reduce((acc, percentage) => acc + percentage, 0);
+
+    return validPercentages.length > 0 ? (total / validPercentages.length).toFixed(2) : 'N/A';
   };
+
 
   // Calcula el promedio general una vez que `percentages` esté disponible
   const generalAverage = calculateGeneralAverage();
