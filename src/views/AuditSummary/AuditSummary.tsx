@@ -32,6 +32,7 @@ const AuditSummary: React.FC = () => {
   const { state } = context;
 
   // Estado local para controlar si las incidencias ya fueron enviadas
+  const [loading, setLoading] = useState(false);
   const [incidenciasEnviadas, setIncidenciasEnviadas] = useState(false);
   const [correoEnviado, setCorreoEnviado] = useState(false);
 
@@ -45,22 +46,22 @@ const AuditSummary: React.FC = () => {
     const numeroAuditoria = auditSheetData.numeroAuditoria;
 
     if (!numeroAuditoria || !emailAudit) {
-        console.error('Error: El número de auditoría o el correo del auditor es nulo.');
-        return;
+      console.error('Error: El número de auditoría o el correo del auditor es nulo.');
+      return;
     }
 
     try {
-        await sendEmail(
-            emailAudit,
-            'Número de Auditoría',
-            `Alerta CBPfood Auditoria bpm realizada: Se han ingresado nuevas desviaciones correspondientes al número de auditoría: ${numeroAuditoria}. Para ver más detalles, haz clic en el siguiente enlace: "https://frontend-svc7.onrender.com/"`
-        );
-        setCorreoEnviado(true);
+      await sendEmail(
+        emailAudit,
+        'Número de Auditoría',
+        `Alerta CBPfood Auditoria bpm realizada: Se han ingresado nuevas desviaciones correspondientes al número de auditoría: ${numeroAuditoria}. Para ver más detalles, haz clic en el siguiente enlace: "https://frontend-svc7.onrender.com/"`
+      );
+      setCorreoEnviado(true);
     } catch (error) {
-        console.error('Error al enviar el correo:', error);
+      console.error('Error al enviar el correo:', error);
     }
-};
-  
+  };
+
 
   const handleSendIncidencias = useCallback(async () => {
     if (incidenciasEnviadas) {
@@ -68,21 +69,24 @@ const AuditSummary: React.FC = () => {
       return;
     }
 
+    setLoading(true);
+
     const { auditSheetData, IsHero, photos, authToken } = state;
     const responsableDelProblema = auditSheetData.supervisorEstablecimiento;
-  
+
     if (!authToken) {
       console.error('No se puede enviar desviaciones: el token de autenticación es null.');
+      setLoading(false);
       return;
     }
-  
+
     const desviaciones = IsHero
       .filter((hero) => {
         const porcentaje = extractPercentage(hero.answer ?? DEFAULT_ANSWER);
         return porcentaje !== null && porcentaje < 100;
       })
       .map((hero) => {
-        
+
         const nombreDelEstablecimiento = state.auditSheetData.nombreEstablecimiento;
         const photo = photos.find(photo => photo.question === hero.question);
         const numeroAuditoria = state.auditSheetData.numeroAuditoria;
@@ -90,13 +94,13 @@ const AuditSummary: React.FC = () => {
         const email = state.auditSheetData.auditorEmail;
         const criticidad = calcularCriticidadConPuntaje(hero.question ?? DEFAULT_ANSWER);
         const fechaAudit = auditSheetData.fechaAuditoria
-        const solucionProgramada = calcularDiasRestantesSummary(fechaAudit , criticidad);
-  
+        const solucionProgramada = calcularDiasRestantesSummary(fechaAudit, criticidad);
+
         return {
           numeroRequerimiento: numeroAuditoria,
           pregunta: hero.question,
           respuesta: hero.answer ?? DEFAULT_ANSWER,
-          fecha: fechaAudit ,
+          fecha: fechaAudit,
           auditor: auditor,
           nombreEstablecimiento: nombreDelEstablecimiento,
           responsableDelProblema,
@@ -109,17 +113,19 @@ const AuditSummary: React.FC = () => {
           criticidad
         };
       });
-  
+
     try {
       const result = await enviarDatosAuditoria(desviaciones, authToken);
       await handleSendEmailAudit();
       await handleSendAuditSheetToBackend();
       await handleSendToBackend();
       console.log('Incidencias enviadas exitosamente:', result);
-      
+
       setIncidenciasEnviadas(true);
     } catch (error) {
       console.error('Error al enviar las incidencias:', error);
+    } finally {
+      setLoading(false);
     }
   }, [state, incidenciasEnviadas]);
 
@@ -209,16 +215,21 @@ const AuditSummary: React.FC = () => {
 
   return (
     <div className="summary-container">
+      {loading && (
+        <div className="loading-overlay">
+          <div className="spinner"></div>
+        </div>
+      )}
       <div className="logo-fungi">
         <img src={logoFungi} alt="logo" />
       </div>
       <h3 className='fw-bold'>auditoria bpm</h3>
-      <Summary /> 
+      <Summary />
       <BPMGraph />
       <AverageModules />
 
       <div className="buttons-summary-circle">
-        <button onClick={handleNext}>
+        <button onClick={handleNext} disabled={loading}>
           Siguiente <i className="fa-solid fa-arrow-right"></i>
         </button>
       </div>
@@ -239,6 +250,7 @@ const AuditSummary: React.FC = () => {
       </div>
     </div>
   );
+
 };
 
 export default AuditSummary;
