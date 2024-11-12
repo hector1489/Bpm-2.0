@@ -1,10 +1,9 @@
-import { ETAGraph, ETATable } from '../../components';
+import { ETAGraph, ETAHeaderSummary, ETATable } from '../../components';
 import { useNavigate } from 'react-router-dom';
 import { useContext } from 'react';
 import { AppContext } from '../../context/GlobalState';
 import './ETA.css';
 import logos from '../../assets/img/index';
-import { Summary } from '../../components/index';
 
 const logoDetails = logos.logoDetails;
 const logoHome = logos.logoHome;
@@ -66,7 +65,10 @@ const ETA: React.FC = () => {
   return (
     <div className="eta-container">
       <h3>Resumen ETA</h3>
-      <Summary />
+      <ETAHeaderSummary moduleData={state.modules.map(module => ({
+        moduleName: module.module,
+        percentage: calculatePercentage(module.id),
+      }))} />
       <ETAGraph moduleData={state.modules.map(module => ({
         moduleName: module.module,
         percentage: calculatePercentage(module.id),

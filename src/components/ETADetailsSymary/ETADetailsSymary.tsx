@@ -177,7 +177,7 @@ const ETADetailsSymary: React.FC<ETADetailsSymaryProps> = ({ numeroAuditoria }) 
         text: '',
       },
       labels: {
-        rotation: -90, // Coloca el texto en vertical
+        rotation: -90,
         style: {
           fontSize: window.innerWidth < 768 ? '10px' : '12px',
         },

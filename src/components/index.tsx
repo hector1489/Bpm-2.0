@@ -1,6 +1,7 @@
 export { default as AuditForm } from './AuditForm/AuditForm'
 export { default as DetailsTable } from './DetailsTable/DetailsTable'
 export { default as Summary } from './Summary/Summary'
+export { default as ETAHeaderSummary } from './ETAHeaderSummary/ETAHeaderSummary'
 export { default as AverageModules } from './AverageModules/AverageModules'
 export { default as BPMGraph } from './BPMGraph/BPMGraph'
 export { default as LUMGraph } from './LUMGraph/LUMGraph'
