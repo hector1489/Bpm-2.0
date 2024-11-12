@@ -4,6 +4,7 @@ import { useContext } from 'react';
 import { AppContext } from '../../context/GlobalState';
 import './ETA.css';
 import logos from '../../assets/img/index';
+import { Summary } from '../../components/index';
 
 const logoDetails = logos.logoDetails;
 const logoHome = logos.logoHome;
@@ -65,6 +66,7 @@ const ETA: React.FC = () => {
   return (
     <div className="eta-container">
       <h3>Resumen ETA</h3>
+      <Summary />
       <ETAGraph moduleData={state.modules.map(module => ({
         moduleName: module.module,
         percentage: calculatePercentage(module.id),
