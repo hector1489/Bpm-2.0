@@ -130,7 +130,7 @@ const IEHigiene: React.FC<IEHigieneProps> = ({ tablaDetails }) => {
       </div>
 
       <div className="average-higiene">
-        <p>Promedio total de los porcentajes: {average === 'NA' ? 'NA' : `${average}%`}</p>
+        <p>Promedio Total : {average === 'NA' ? 'NA' : `${average}%`}</p>
       </div>
     </div>
   );

@@ -245,7 +245,6 @@ const IEIndicadoresClave: React.FC<IEIndicadoresClaveProps> = ({ tablaDetails })
         <div className="indicadores-circular">
           {['BPM', 'MINUTA', 'EXÁMENES', 'INAPTITUD MICROBIOLOGICA', 'CAPACITACIONES'].map((label, index) => (
             <div className={`circular graph ${['black', 'green', 'red', 'yellow', 'blue'][index]}`} key={label}>
-              <p>{label}</p>
               <p>{[bpmPercentage, ser71Percentage, csh31Percentage, doc97Percentage, cap101Percentage][index] || 'NA'}%</p>
             </div>
           ))}

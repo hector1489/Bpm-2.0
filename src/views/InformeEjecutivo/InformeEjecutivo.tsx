@@ -1,6 +1,5 @@
 import './InformeEjecutivo.css';
 import { useNavigate, useLocation } from 'react-router-dom';
-import html2canvas from 'html2canvas';
 import { useRef, useEffect, useState } from 'react';
 import { getTablaDetailsByNumeroAuditoria } from '../../utils/apiDetails';
 import { IEControlCalidad, IECriticalEvaluation, IECriticalFindings, IEEficienciaOp, IEHigiene, IEIndicadoresClave, IESatisfaccion, IESeguridad, IETrazadores } from '../../components';
@@ -73,18 +72,7 @@ const InformeEjecutivo: React.FC = () => {
     navigate('/documentacion');
   };
 
-  const handleScreenshot = async () => {
-    if (!informeRef.current) return;
-
-    await html2canvas(informeRef.current, {
-      scale: 2,
-    }).then((canvas) => {
-      const link = document.createElement('a');
-      link.download = 'InformeEjecutivo.png';
-      link.href = canvas.toDataURL('image/png');
-      link.click();
-    });
-  };
+  
 
 
   return (
@@ -107,7 +95,7 @@ const InformeEjecutivo: React.FC = () => {
       <h5>1.- HALLAZGOS CRITICOS/ACCIONES CORRECTIVAS</h5>
       <IECriticalFindings detallesFiltrados={detallesInferioresA100} />
 
-      <h5>2.- EVALUACIONES CRITICAS</h5>
+      <h5>2.- EVALUACIONES CRITICAS DEL CONTRATO</h5>
       <IECriticalEvaluation tablaDetails={tablaDetails} />
 
       <h5>3. TRAZADORES ETA'S</h5>
@@ -118,7 +106,7 @@ const InformeEjecutivo: React.FC = () => {
       <h5>4.- INDICADORES CLAVES DE GESTION (ALIMENTACION)</h5>
       <IEIndicadoresClave tablaDetails={tablaDetails} />
 
-      <h5>5,. HIGIENE INSTALACIONES/ALIMENTOS</h5>
+      <h5>5. HIGIENE INSTALACIONES/ALIMENTOS</h5>
       <IEHigiene tablaDetails={tablaDetails} />
 
       <h5>6. EFICIENCIA OPERACIONAL</h5>
@@ -135,7 +123,7 @@ const InformeEjecutivo: React.FC = () => {
 
       <div className="ie-buttons">
         <button onClick={handleGoDoc}>volver</button>
-        <button className="bg-primary" onClick={handleScreenshot}>Capturar Pantalla</button>
+
       </div>
     </div>
   );

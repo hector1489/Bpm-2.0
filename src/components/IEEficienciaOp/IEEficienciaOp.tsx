@@ -3,6 +3,7 @@ import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
 import Highcharts3D from 'highcharts/highcharts-3d';
 import './IEEficienciaOp.css';
+import {  extractPrefix } from '../../utils/utils'
 
 Highcharts3D(Highcharts);
 
@@ -14,11 +15,6 @@ interface TablaDetail {
 interface IEEficienciaOpProps {
   tablaDetails: TablaDetail[];
 }
-
-const extractPrefix = (field3: string) => {
-  const match = field3.match(/^TRA [A-Z]+ \d+/);
-  return match ? match[0] : '';
-};
 
 const IEEficienciaOp: React.FC<IEEficienciaOpProps> = ({ tablaDetails }) => {
   const [chartWidth, setChartWidth] = useState(window.innerWidth * 0.8);
@@ -64,6 +60,8 @@ const IEEficienciaOp: React.FC<IEEficienciaOpProps> = ({ tablaDetails }) => {
   const validData = filteredData.filter(value => typeof value === 'number') as number[];
   const total = validData.reduce((sum, value) => sum + value, 0);
   const average = validData.length > 0 ? (total / validData.length).toFixed(2) : 'N/A';
+  
+  
 
   const options = {
     chart: {
@@ -82,7 +80,7 @@ const IEEficienciaOp: React.FC<IEEficienciaOpProps> = ({ tablaDetails }) => {
       text: '',
     },
     xAxis: {
-      categories: categories.map(category => category.split(' ')[0]),
+      categories: categories.map(category => category.split('.')[0]),
       title: {
         text: null
       }

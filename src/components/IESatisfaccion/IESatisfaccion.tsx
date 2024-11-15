@@ -28,7 +28,7 @@ const extractPrefix = (field3: string) => {
 
 const extractPercentage = (field4: string) => {
   const match = field4.match(/^(\d+)%/);
-  return match ? match[1] : '';
+  return match ? match[1] : 'N/A'; 
 };
 
 const IESatisfaccion: React.FC<IESatisfaccionProps> = ({ tablaDetails }) => {
@@ -59,6 +59,7 @@ const IESatisfaccion: React.FC<IESatisfaccionProps> = ({ tablaDetails }) => {
     }
   ];
 
+  // Actualización de los datos de las tarjetas con los porcentajes extraídos
   const updatedCardsData = cardsData.map(card => {
     const prefix = extractPrefix(card.text);
     const found = tablaDetails.find(detail => extractPrefix(detail.field3) === prefix);
@@ -70,18 +71,24 @@ const IESatisfaccion: React.FC<IESatisfaccionProps> = ({ tablaDetails }) => {
     };
   });
 
+  // Cálculo del promedio
   const calculateAverage = () => {
     const percentages = updatedCardsData
-      .map(card => parseInt(card.percentage))
-      .filter(value => !isNaN(value));
+      .map(card => card.percentage)
+      .filter(percentage => percentage !== 'N/A')
+      .map(percentage => parseInt(percentage));
+
+    if (percentages.length === 0) return '0.00';
+
     const total = percentages.reduce((acc, value) => acc + value, 0);
-    const average = percentages.length > 0 ? total / percentages.length : 0;
+    const average = total / percentages.length;
     return average.toFixed(2);
   };
 
-  // Definir colores basados en las clases de color de las tarjetas
+  // Colores para las tarjetas
   const colors = ['#1E90FF', '#FF4500', '#FFD700', '#808080'];
 
+  // Opciones del gráfico
   const chartOptions = {
     chart: {
       type: 'pie',
@@ -112,14 +119,14 @@ const IESatisfaccion: React.FC<IESatisfaccionProps> = ({ tablaDetails }) => {
     },
     series: [{
       name: 'Satisfacción',
-      colors, // Asignar los colores definidos
+      colors,
       data: updatedCardsData
         .map((card, index) => ({
           name: card.text,
           y: card.percentage === 'N/A' ? 0 : parseInt(card.percentage),
           color: colors[index]
         }))
-        .filter(point => !isNaN(point.y) && point.y > 0)
+        .filter(point => point.y > 0)
     }]
   };
 
@@ -145,5 +152,3 @@ const IESatisfaccion: React.FC<IESatisfaccionProps> = ({ tablaDetails }) => {
 };
 
 export default IESatisfaccion;
-
-
