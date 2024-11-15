@@ -29,6 +29,8 @@ const DesviacionesTable: React.FC = () => {
   const { id, numero_requerimiento } = location.state || {};
   const { desviaciones, loading, error } = useDesviaciones();
   const { actualizarDesviaciones, isLoading, error: updateError } = useUpdateDesviaciones();
+  const [loadingEdit, setLoadingEdit] = useState(false);
+  const [loadingEditSend, setLoadingEditSend] = useState(false);
 
   const [localDesviaciones, setLocalDesviaciones] = useState<DesviacionResponse[]>([]);
   const [reloadData, setReloadData] = useState(false);
@@ -181,11 +183,15 @@ const DesviacionesTable: React.FC = () => {
   };
   
 
+
   const handleSaveChanges = async () => {
+    setLoadingEditSend(true)
+
     const authToken = context.state.authToken ?? '';
 
     if (localDesviaciones.length === 0) {
       alert("No hay desviaciones para actualizar.");
+      setLoadingEditSend(false)
       return;
     }
 
@@ -217,6 +223,7 @@ const DesviacionesTable: React.FC = () => {
       await actualizarDesviaciones(updatedDesviaciones, authToken);
       alert("Cambios guardados exitosamente.");
       setReloadData(true);
+      setLoadingEditSend(false);
       handleGoToHome();
     } catch (error) {
       console.error('Error al guardar los cambios:', error);
@@ -236,9 +243,15 @@ const DesviacionesTable: React.FC = () => {
   };
 
   const handleEditTable = async () => {
+    setLoadingEdit(true)
+
     const authToken = context.state.authToken ?? '';
     const tableBody = document.querySelector('#tabla-desviaciones tbody');
-    if (!tableBody) return;
+
+    if (!tableBody) {
+      setLoadingEdit(false);
+      return;
+    }
 
     tableBody.querySelectorAll('tr').forEach(async (row, rowIndex) => {
       row.querySelectorAll('td').forEach(async (cell, cellIndex) => {
@@ -313,6 +326,8 @@ const DesviacionesTable: React.FC = () => {
         }
       });
     });
+
+    setLoadingEdit(false);
   };
 
   const desviacionesSendEmail = () => {
@@ -365,6 +380,16 @@ const DesviacionesTable: React.FC = () => {
       {error && <p className="error">{error}</p>}
       {isLoading && <p>Guardando cambios...</p>}
       {updateError && <p className="error">{updateError}</p>}
+      {loadingEdit && (
+        <div className="loading-overlay">
+          <div className="spinner"></div>
+        </div>
+      )}
+      {loadingEditSend && (
+        <div className="loading-overlay">
+          <div className="spinner"></div>
+        </div>
+      )}
 
       <div className="desviaciones-table-buttons">
         <button className='btn-desviaciones-table' onClick={handleEditTable}>

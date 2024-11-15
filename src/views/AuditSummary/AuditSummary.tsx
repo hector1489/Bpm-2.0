@@ -220,9 +220,11 @@ const AuditSummary: React.FC = () => {
           <div className="spinner"></div>
         </div>
       )}
+
       <div className="logo-fungi">
         <img src={logoFungi} alt="logo" />
       </div>
+
       <h3 className='fw-bold'>auditoria bpm</h3>
       <Summary />
       <BPMGraph />
@@ -235,6 +237,7 @@ const AuditSummary: React.FC = () => {
       </div>
 
       <div className="buttons-summary-logo">
+
         <div className="btn">
           <img src={logoDetails} alt="details" onClick={handleGoToDetails} title='Details' />
         </div>
@@ -247,7 +250,9 @@ const AuditSummary: React.FC = () => {
         <div className="btn">
           <img src={logoHome} alt="home" onClick={handleGoToHome} title='Home' />
         </div>
+        
       </div>
+
     </div>
   );
 
