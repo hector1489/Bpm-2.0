@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './RegisterForm.css';
 
-const registerUrl = 'https://bpm-backend.onrender.com/register';
+const registerUrl = 'https://bpm-backend.onrender.com/user/register';
 
 const RegisterForm: React.FC = () => {
   const [formData, setFormData] = useState({
