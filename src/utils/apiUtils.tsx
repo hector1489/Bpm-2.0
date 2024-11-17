@@ -48,6 +48,36 @@ export const sendEmail = async (
   }
 };
 
+export const sendEmailWithExcel = async (
+  toEmail: string, 
+  subject: string, 
+  text: string,
+  data: any[][]
+) => {
+  try {
+    if (!toEmail || !subject || !text || !data || !Array.isArray(data) || data.length === 0) {
+      console.error('Faltan parámetros requeridos o los datos del Excel no son válidos');
+      return;
+    }
+
+    // Hacer la solicitud POST al servidor con los datos necesarios
+    const response = await axios.post(`${BASE_URL}/email/send-excel`, {
+      toEmail,
+      subject,
+      text,
+      data,
+    });
+
+    if (response.status === 200) {
+      console.log('Correo enviado exitosamente');
+    } else {
+      console.error('Error al enviar el correo');
+    }
+  } catch (error: any) {
+    console.error('Error al enviar el correo:', error.message);
+  }
+};
+
 
 export const enviarDatosAuditoria = async (desviaciones: any, authToken: string) => {
   const correo = 'bbpmauditorias@gmail.com';
