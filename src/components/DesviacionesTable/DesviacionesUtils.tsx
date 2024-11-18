@@ -1,7 +1,7 @@
 import { DesviacionResponse } from '../../interfaces/interfaces';
 import { obtenerTodasLasAccionesDesdeAPI } from '../../utils/apiUtils';
 import { getCurrentDate } from '../../utils/utils';
-import { sendEmail } from '../../utils/apiUtils';
+import { sendEmail, sendEmailWithExcel } from '../../utils/apiUtils';
 import html2canvas from 'html2canvas';
 import {
   calcularPuntaje,
@@ -367,7 +367,60 @@ export function obtenerNivelCriticidad(probabilidad: Probabilidad, consecuencia:
   return criticidad.nivel;
 }
 
+const DEFAULT_ANSWER = "Sin respuesta";
 
+export const desviacionesSendEmail = (localDesviaciones: DesviacionResponse[], emailDestino: string) => {
+    
+  if (localDesviaciones.length === 0) {
+    alert("No hay desviaciones para enviar.");
+    return;
+  }
+
+  const email = emailDestino || localDesviaciones[0].correo || DEFAULT_ANSWER;
+  const numeroAuditoria = localDesviaciones[0].numero_requerimiento || DEFAULT_ANSWER;
+
+  // Encabezados de la tabla (puedes personalizarlos si es necesario)
+  const headers = [
+    'Numero Requerimiento', 'Preguntas Auditadas', 'Criterio', 'Responsable',
+    'Establecimiento', 'Criticidad', 'Acciones Correctivas', 'Fecha Ingreso',
+    'Fecha Solución Programada', 'Estado', 'Contacto Clientes',
+    'Evidencia Fotográfica', 'Auditor', 'Correo', 'Días Restantes'
+  ];
+
+  // Convertir los datos a un formato bidimensional
+  const tableData = localDesviaciones.map(desviacion => [
+    desviacion.numero_requerimiento || DEFAULT_ANSWER,
+    desviacion.preguntas_auditadas || DEFAULT_ANSWER,
+    desviacion.desviacion_o_criterio || DEFAULT_ANSWER,
+    desviacion.responsable_problema || DEFAULT_ANSWER,
+    desviacion.local || DEFAULT_ANSWER,
+    desviacion.criticidad || DEFAULT_ANSWER,
+    desviacion.acciones_correctivas || DEFAULT_ANSWER,
+    desviacion.fecha_recepcion_solicitud || DEFAULT_ANSWER,
+    desviacion.fecha_solucion_programada || DEFAULT_ANSWER,
+    desviacion.estado || DEFAULT_ANSWER,
+    desviacion.contacto_clientes || DEFAULT_ANSWER,
+    desviacion.evidencia_fotografica || DEFAULT_ANSWER,
+    desviacion.auditor || DEFAULT_ANSWER,
+    desviacion.correo || DEFAULT_ANSWER,
+    calcularDiasRestantes(desviacion.fecha_recepcion_solicitud || DEFAULT_ANSWER, desviacion.criticidad || DEFAULT_ANSWER).toString(),
+  ]);
+
+  // Agregar los encabezados a los datos (opcional, si quieres que la tabla tenga una fila de encabezado)
+  const finalTableData = [headers, ...tableData];
+
+  // Asignar el asunto y el texto del correo
+  const subject = `Reporte de Desviaciones - ${numeroAuditoria}`;
+  const text = `Se adjunta el reporte de desviaciones correspondiente a la auditoría ${numeroAuditoria}.`;
+
+  // Llamar a la función que envía el correo
+  sendEmailWithExcel(email, subject, text, finalTableData)
+    .then(() => alert("Email enviado exitosamente."))
+    .catch(error => {
+      console.error('Error al enviar el email:', error);
+      alert('Hubo un error al enviar el email. Por favor, inténtalo de nuevo.');
+    });
+};
 
 
 

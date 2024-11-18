@@ -3,7 +3,7 @@ import { useContext, useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { AppContext } from '../../context/GlobalState';
 import { useDesviaciones, useUpdateDesviaciones } from '../../hooks/useDesviaciones';
-import { desviacionDelete, sendEmailWithExcel } from '../../utils/apiUtils';
+import { desviacionDelete } from '../../utils/apiUtils';
 import { DesviacionResponse } from '../../interfaces/interfaces';
 import { useNavigate } from 'react-router-dom';
 import { getCurrentDate } from '../../utils/utils';
@@ -17,6 +17,7 @@ import {
   calcularDiasRestantes,
   calcularFechaSolucionProgramada,
   formatDate,
+  desviacionesSendEmail
 } from './DesviacionesUtils'
 
 const DEFAULT_ANSWER = "Sin respuesta";
@@ -44,14 +45,16 @@ const DesviacionesTable: React.FC = () => {
   const [estadoFilter, setEstadoFilter] = useState('');
   const [auditorFilter, setAuditorFilter] = useState('');
   const [emailDestino, setEmailDestino] = useState('');
-  
+  const [fechaIngresoFilter, setFechaIngresoFilter] = useState('');
+
+
   if (!context) {
     return <div>Error: Context is not available.</div>;
   }
 
   useEffect(() => {
     if (desviaciones) {
-   
+
       const filteredDesviaciones = desviaciones.map(desviacion => ({
         ...desviacion,
         fecha_recepcion_solicitud: formatDate(desviacion.fecha_recepcion_solicitud),
@@ -66,11 +69,14 @@ const DesviacionesTable: React.FC = () => {
         const isEstablecimientoMatch = establecimientoFilter ? desviacion.local?.toLowerCase().includes(establecimientoFilter.toLowerCase()) : true;
         const isCriticidadMatch = criticidadFilter ? desviacion.criticidad?.toLowerCase().includes(criticidadFilter.toLowerCase()) : true;
         const isEstadoMatch = estadoFilter ? desviacion.estado?.toLowerCase().includes(estadoFilter.toLowerCase()) : true;
-        const isAuditoresMatch = auditorFilter? desviacion.auditor?.toLowerCase().includes(auditorFilter.toLowerCase()) : true;
+        const isAuditoresMatch = auditorFilter ? desviacion.auditor?.toLowerCase().includes(auditorFilter.toLowerCase()) : true;
+        const isFechaIngresoMatch = fechaIngresoFilter
+          ? formatDate(desviacion.fecha_recepcion_solicitud) === fechaIngresoFilter
+          : true;
 
-        return isAuditorMatch && isRequirementMatch && isResponsableMatch && isCriterioMatch &&  isAuditoriaMatch && isPreguntaMatch && isEstablecimientoMatch && isCriticidadMatch && isEstadoMatch && isAuditoresMatch;
+        return isAuditorMatch && isRequirementMatch && isResponsableMatch && isCriterioMatch && isAuditoriaMatch && isPreguntaMatch && isEstablecimientoMatch && isCriticidadMatch && isEstadoMatch && isAuditoresMatch && isFechaIngresoMatch;
       });
-  
+
       setLocalDesviaciones(filteredDesviaciones);
     }
   }, [
@@ -85,7 +91,8 @@ const DesviacionesTable: React.FC = () => {
     establecimientoFilter,
     criticidadFilter,
     estadoFilter,
-    auditorFilter
+    auditorFilter,
+    fechaIngresoFilter,
   ]);
 
 
@@ -97,11 +104,11 @@ const DesviacionesTable: React.FC = () => {
   const handlePreguntaFilterChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPreguntasFilter(e.target.value);
   };
-  
+
   const handleCriterioFilterChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setCriterioFilter(e.target.value);
   };
-  
+
   const handleAuditoriaFilterChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setAuditoriaFilter(value ? parseInt(value) : null);
@@ -118,11 +125,15 @@ const DesviacionesTable: React.FC = () => {
   const handleEstadoFilterChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEstadoFilter(e.target.value);
   };
-  
+
   const handleAuditoresFilterChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setAuditorFilter(e.target.value);
   };
-  
+
+  const handleFechaIngresoFilterChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFechaIngresoFilter(e.target.value);
+  };
+
 
   const eliminarFila = async (id: number) => {
     const confirmDelete = window.confirm("¿Estás seguro de que deseas eliminar esta fila?");
@@ -136,15 +147,15 @@ const DesviacionesTable: React.FC = () => {
       }
     }
   };
-  
+
   const toggleSelectRow = (id: number) => {
-    setSelectedIds(prevSelectedIds => 
-      prevSelectedIds.includes(id) 
-        ? prevSelectedIds.filter(selectedId => selectedId !== id) 
+    setSelectedIds(prevSelectedIds =>
+      prevSelectedIds.includes(id)
+        ? prevSelectedIds.filter(selectedId => selectedId !== id)
         : [...prevSelectedIds, id]
     );
   };
-  
+
   const toggleSelectAllRows = () => {
     if (allSelected) {
       setSelectedIds([]);
@@ -159,20 +170,20 @@ const DesviacionesTable: React.FC = () => {
       alert("No hay filas seleccionadas para eliminar.");
       return;
     }
-  
+
     const confirmDelete = window.confirm("¿Estás seguro de que deseas eliminar las filas seleccionadas?");
-    
+
     if (confirmDelete && context.state.authToken) {
       try {
-  
+
         await Promise.all(
           selectedIds.map(id => desviacionDelete(id, context.state.authToken as string))
         );
-  
-    
+
+
         setLocalDesviaciones(prevDesviaciones => prevDesviaciones.filter(desviacion => !selectedIds.includes(desviacion.id)));
         setSelectedIds([]);
-  
+
         alert("Filas seleccionadas eliminadas correctamente.");
       } catch (error) {
         console.error('Error eliminando las desviaciones:', error);
@@ -180,7 +191,7 @@ const DesviacionesTable: React.FC = () => {
       }
     }
   };
-  
+
 
 
   const handleSaveChanges = async () => {
@@ -329,59 +340,7 @@ const DesviacionesTable: React.FC = () => {
     setLoadingEdit(false);
   };
 
-  const desviacionesSendEmail = () => {
-    if (localDesviaciones.length === 0) {
-      alert("No hay desviaciones para enviar.");
-      return;
-    }
-  
-    const email = emailDestino || localDesviaciones[0].correo || DEFAULT_ANSWER;
-    const numeroAuditoria = localDesviaciones[0].numero_requerimiento || DEFAULT_ANSWER;
-  
-    // Encabezados de la tabla (puedes personalizarlos si es necesario)
-    const headers = [
-      'Numero Requerimiento', 'Preguntas Auditadas', 'Criterio', 'Responsable', 
-      'Establecimiento', 'Criticidad', 'Acciones Correctivas', 'Fecha Ingreso', 
-      'Fecha Solución Programada', 'Estado', 'Contacto Clientes', 
-      'Evidencia Fotográfica', 'Auditor', 'Correo', 'Días Restantes'
-    ];
-  
-    // Convertir los datos a un formato bidimensional
-    const tableData = localDesviaciones.map(desviacion => [
-      desviacion.numero_requerimiento || DEFAULT_ANSWER,
-      desviacion.preguntas_auditadas || DEFAULT_ANSWER,
-      desviacion.desviacion_o_criterio || DEFAULT_ANSWER,
-      desviacion.responsable_problema || DEFAULT_ANSWER,
-      desviacion.local || DEFAULT_ANSWER,
-      desviacion.criticidad || DEFAULT_ANSWER,
-      desviacion.acciones_correctivas || DEFAULT_ANSWER,
-      desviacion.fecha_recepcion_solicitud || DEFAULT_ANSWER,
-      desviacion.fecha_solucion_programada || DEFAULT_ANSWER,
-      desviacion.estado || DEFAULT_ANSWER,
-      desviacion.contacto_clientes || DEFAULT_ANSWER,
-      desviacion.evidencia_fotografica || DEFAULT_ANSWER,
-      desviacion.auditor || DEFAULT_ANSWER,
-      desviacion.correo || DEFAULT_ANSWER,
-      calcularDiasRestantes(desviacion.fecha_recepcion_solicitud || DEFAULT_ANSWER, desviacion.criticidad || DEFAULT_ANSWER).toString(),
-    ]);
-  
-    // Agregar los encabezados a los datos (opcional, si quieres que la tabla tenga una fila de encabezado)
-    const finalTableData = [headers, ...tableData];
-  
-    // Asignar el asunto y el texto del correo
-    const subject = `Reporte de Desviaciones - ${numeroAuditoria}`;
-    const text = `Se adjunta el reporte de desviaciones correspondiente a la auditoría ${numeroAuditoria}.`;
-  
-    // Llamar a la función que envía el correo
-    sendEmailWithExcel(email, subject, text, finalTableData)
-      .then(() => alert("Email enviado exitosamente."))
-      .catch(error => {
-        console.error('Error al enviar el email:', error);
-        alert('Hubo un error al enviar el email. Por favor, inténtalo de nuevo.');
-      });
-  };
-  
-  
+
 
   const handleGoToHome = () => {
     navigate('/home');
@@ -414,15 +373,15 @@ const DesviacionesTable: React.FC = () => {
           <i className="fa-solid fa-envelopes-bulk"></i> Guardar Cambios
         </button>
         <div className="desviaciones-table-email">
-        <input
-          type="email"
-          placeholder="Ingrese email de destino"
-          value={emailDestino}
-          onChange={(e) => setEmailDestino(e.target.value)}
-        />
-        <button className='btn-desviaciones-table' onClick={desviacionesSendEmail}>
-        <i className="fa-regular fa-envelope"></i> Enviar Tabla
-        </button>
+          <input
+            type="email"
+            placeholder="Ingrese email de destino"
+            value={emailDestino}
+            onChange={(e) => setEmailDestino(e.target.value)}
+          />
+          <button className='btn-desviaciones-table' onClick={() => desviacionesSendEmail(localDesviaciones, emailDestino)}>
+            <i className="fa-regular fa-envelope"></i> Enviar Tabla
+          </button>
         </div>
       </div>
 
@@ -472,7 +431,7 @@ const DesviacionesTable: React.FC = () => {
                 type="text"
                 placeholder="Filtrar por Establecimiento"
                 value={establecimientoFilter}
-                onChange={handleEstablecimientoFilterChange }
+                onChange={handleEstablecimientoFilterChange}
               />
             </th>
             <th>
@@ -481,11 +440,20 @@ const DesviacionesTable: React.FC = () => {
                 type="text"
                 placeholder="Filtrar por Criticidad"
                 value={criticidadFilter}
-                onChange={handleCriticidadFilterChange }
+                onChange={handleCriticidadFilterChange}
               />
             </th>
             <th>ACCIONES CORRECTIVAS</th>
-            <th>FECHA DE INGRESO</th>
+            <th>
+              FECHA DE INGRESO
+              <input
+                type="date"
+                placeholder="Filtrar por Fecha de Ingreso"
+                value={fechaIngresoFilter}
+                onChange={handleFechaIngresoFilterChange}
+              />
+            </th>
+
             <th>SOLUCION PROGRAMADA</th>
             <th>
               ESTADO
@@ -493,7 +461,7 @@ const DesviacionesTable: React.FC = () => {
                 type="text"
                 placeholder="Filtrar por Estado"
                 value={estadoFilter}
-                onChange={handleEstadoFilterChange }
+                onChange={handleEstadoFilterChange}
               />
             </th>
             <th>CONTACTO CLIENTE</th>
@@ -511,20 +479,20 @@ const DesviacionesTable: React.FC = () => {
             <th>DÍAS RESTANTES</th>
             <th>ELIMINAR FILA</th>
             <th>
-            <button onClick={toggleSelectAllRows}>
+              <button onClick={toggleSelectAllRows}>
                 {allSelected ? "Deseleccionar Todas" : "Seleccionar Todas"}
               </button>
               <button className='bg-danger' onClick={() => eliminarFilasSeleccionadas()}>Eliminar</button>
             </th>
           </tr>
-        </thead> 
+        </thead>
         <tbody>
           {localDesviaciones.length > 0 ? (
             localDesviaciones.map((desviacion, index) => {
               const backgroundColor = getColorByCriticidad(desviacion.criticidad || DEFAULT_ANSWER);
               const fechaSolucion = desviacion.fecha_recepcion_solicitud || DEFAULT_ANSWER;
-              const diasRestantes = calcularDiasRestantes( fechaSolucion, desviacion.criticidad || DEFAULT_ANSWER );
-          
+              const diasRestantes = calcularDiasRestantes(fechaSolucion, desviacion.criticidad || DEFAULT_ANSWER);
+
               let textColor = 'black';
               if (backgroundColor === 'red') {
                 textColor = 'white';
@@ -555,13 +523,13 @@ const DesviacionesTable: React.FC = () => {
                     </p>
                   </td>
                   <td>
-                  <button onClick={() => eliminarFila(desviacion.id)}>Eliminar</button>
+                    <button onClick={() => eliminarFila(desviacion.id)}>Eliminar</button>
                   </td>
                   <td>
-                    <input 
-                      type="checkbox" 
+                    <input
+                      type="checkbox"
                       checked={selectedIds.includes(desviacion.id)}
-                      onChange={() => toggleSelectRow(desviacion.id)} 
+                      onChange={() => toggleSelectRow(desviacion.id)}
                     />
                   </td>
                 </tr>

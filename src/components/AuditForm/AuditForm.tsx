@@ -20,7 +20,7 @@ const AuditForm: React.FC = () => {
     return <div>Error: El contexto no está disponible.</div>;
   }
 
-  const { state, addAnswers, addPhoto } = context;
+  const { state, addAnswers } = context;
   const currentQuestion = state.IsHero[currentQuestionIndex];
 
   const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -112,7 +112,7 @@ const AuditForm: React.FC = () => {
         const sanitizedQuestion = questionText.replace(/\s+/g, '_').toLowerCase();
         const fileName = `${numeroAuditoria}_${sanitizedQuestion}.png`;
 
-        addPhoto(currentQuestion?.question || '', photoUrl);
+
 
         try {
 
