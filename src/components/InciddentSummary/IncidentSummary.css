@@ -11,6 +11,11 @@
   margin-bottom: 20px;
 }
 
+.incident-filter-responsable {
+  width: 100%;
+  margin: 20px 0px;
+}
+
 .resumen-grid {
   display: flex;
   flex-wrap: wrap;
