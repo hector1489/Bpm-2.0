@@ -1,5 +1,6 @@
 import { useContext, useMemo } from 'react';
 import { AppContext } from '../../context/GlobalState';
+import { getColorByPercentageFilas } from '../../utils/utils'
 
 interface ETAHeaderSummaryProps {
   moduleData: {
@@ -67,6 +68,23 @@ const { etaData } = useMemo(() => {
   const validQuestionsCount = percentages.filter((percentage) => percentage !== 0).length;
   const averagePercentage = validQuestionsCount > 0 ? totalPercentage / validQuestionsCount : 0;
 
+  const finalAverage = averagePercentage.toFixed(2);
+
+  const finalAverageNumber = finalAverage !== 'N/A' ? parseFloat(finalAverage) : NaN;
+
+  const backgroundColor = !isNaN(finalAverageNumber) ? getColorByPercentageFilas(finalAverageNumber) : 'gray';
+
+
+  let textColor = 'black';
+  if (backgroundColor === 'red') {
+    textColor = 'white';
+  } else if (backgroundColor === 'yellow') {
+    textColor = 'black';
+  } else if (backgroundColor === 'green') {
+    textColor = 'white';
+  }
+
+
   return (
     <div className="ficha-resumen-container">
       <div className="ficha-resumen-table">
@@ -133,7 +151,7 @@ const { etaData } = useMemo(() => {
       </div>
 
       <div className="puntaje-ponderado">
-        <h4 className="puntaje-promedio">
+        <h4 className="puntaje-promedio"  style={{ backgroundColor, color: textColor }}>
           Promedio General : <span id="promedio-general">{averagePercentage.toFixed(2)}%</span>
         </h4>
         <div className="indicadores">
