@@ -21,7 +21,6 @@ interface DesviacionResponse {
   auditor: string;
   correo: string;
 }
-
 const IncidentSummary: React.FC = () => {
   const context = useContext(AppContext);
 
@@ -64,7 +63,8 @@ const IncidentSummary: React.FC = () => {
         const data: DesviacionResponse[] = await cargarDesviacionesDesdeBackend(authToken);
         if (data) {
           setDesviaciones(data);
-
+          
+          // Calcular los responsables
           const responsableCountData = data.reduce((acc: Record<string, number>, item: DesviacionResponse) => {
             const responsable = item.responsable_problema;
             if (responsable) {
@@ -73,33 +73,6 @@ const IncidentSummary: React.FC = () => {
             return acc;
           }, {} as Record<string, number>);
           setResponsableCount(responsableCountData);
-
-          const statusCountsData = data.reduce((acc, item) => {
-            const criticidadLower = item.criticidad.normalize('NFD').replace(/[\u0300-\u036f]/g, "").toLowerCase();
-            if (criticidadLower === 'leve') acc.leve++;
-            else if (criticidadLower === 'moderado') acc.moderado++;
-            else if (criticidadLower === 'critico') acc.critico++;
-            return acc;
-          }, { leve: 0, moderado: 0, critico: 0 });
-          setStatusCounts(statusCountsData);
-
-          const statusEstadosData = data.reduce((acc, item) => {
-            const estadosLower = item.estado.toLowerCase();
-            if (estadosLower === 'abierto') acc.abierto++;
-            else if (estadosLower === 'en progreso') acc.enProgreso++;
-            else if (estadosLower === 'cerrado') acc.cerrado++;
-            return acc;
-          }, { abierto: 0, enProgreso: 0, cerrado: 0 });
-          setStatusCountsEstados(statusEstadosData);
-
-          const fueraDePlazoCount = data.reduce((acc, item) => {
-            if (isFechaFueraDePlazo(item.fecha_solucion_programada)) {
-              acc++;
-            }
-            return acc;
-          }, 0);
-
-          setFueraDePlazoCount(fueraDePlazoCount);
         } else {
           console.error('No se recibieron datos de desviaciones.');
           setError('No se pudieron cargar las desviaciones.');
@@ -126,6 +99,43 @@ const IncidentSummary: React.FC = () => {
     : desviaciones;
 
   const totalIncidencias = filteredDesviaciones ? filteredDesviaciones.length : 0;
+
+  // Recalcular los contadores de criticidad y estado basados en las desviaciones filtradas
+  useEffect(() => {
+    if (filteredDesviaciones) {
+      // Calcular los contadores de criticidad
+      const statusCountsData = filteredDesviaciones.reduce((acc, item) => {
+        const criticidadLower = item.criticidad.normalize('NFD').replace(/[\u0300-\u036f]/g, "").toLowerCase();
+        if (criticidadLower === 'leve') acc.leve++;
+        else if (criticidadLower === 'moderado') acc.moderado++;
+        else if (criticidadLower === 'critico') acc.critico++;
+        return acc;
+      }, { leve: 0, moderado: 0, critico: 0 });
+
+      setStatusCounts(statusCountsData);
+
+      // Calcular los contadores de estado
+      const statusEstadosData = filteredDesviaciones.reduce((acc, item) => {
+        const estadosLower = item.estado.toLowerCase();
+        if (estadosLower === 'abierto') acc.abierto++;
+        else if (estadosLower === 'en progreso') acc.enProgreso++;
+        else if (estadosLower === 'cerrado') acc.cerrado++;
+        return acc;
+      }, { abierto: 0, enProgreso: 0, cerrado: 0 });
+
+      setStatusCountsEstados(statusEstadosData);
+
+      // Calcular el número de desviaciones fuera de plazo
+      const fueraDePlazoCount = filteredDesviaciones.reduce((acc, item) => {
+        if (isFechaFueraDePlazo(item.fecha_solucion_programada)) {
+          acc++;
+        }
+        return acc;
+      }, 0);
+
+      setFueraDePlazoCount(fueraDePlazoCount);
+    }
+  }, [filteredDesviaciones]);
 
   return (
     <div className="incident-summary-container">
@@ -173,7 +183,7 @@ const IncidentSummary: React.FC = () => {
 
         <div className="summary-card animate__fadeInUp bordered-box responsables">
           <div className="card-header bg-info text-white text-center">
-            <i className="fas fa-users text-light"></i> Responsables y Total Cerrados
+            <i className="fas fa-users text-light"></i> Responsables y total de desviaciones ingresadas
           </div>
           <div className="card-body">
             <table className="table table-hover">
@@ -237,7 +247,7 @@ const IncidentSummary: React.FC = () => {
             </div>
           </div>
 
-          <div className="card bg-red  bordered-box">
+          <div className="card bg-red bordered-box">
             <div className="card-body">
               <h5><span id="fueraDePlazo">{fueraDePlazoCount}</span></h5>
               <p>Fuera de plazo</p>
