@@ -1,6 +1,7 @@
 import { useContext, useMemo } from 'react'
 import './Summary.css'
 import { AppContext } from '../../context/GlobalState'
+import { getColorByPercentageFilas } from '../../utils/utils'
 import {
   questionsMA,
   questionsDOC,
@@ -38,30 +39,30 @@ const Summary: React.FC = () => {
   const { auditSheetData } = state;
 
   const filterModuleDetails = (submoduleQuestions: string[]): number[] => {
-  
+
     const filteredData = state.IsHero
       ? state.IsHero
-          .filter((IQuestion) => submoduleQuestions.some(q => q === IQuestion.question))
-          .map((IQuestion) => {
-            const answer = IQuestion.answer?.trim() || '';
-            const match = answer.match(/^(\d+(\.\d+)?)%/);
-  
-            if (match) {
-              const numValue = parseFloat(match[1]);
+        .filter((IQuestion) => submoduleQuestions.some(q => q === IQuestion.question))
+        .map((IQuestion) => {
+          const answer = IQuestion.answer?.trim() || '';
+          const match = answer.match(/^(\d+(\.\d+)?)%/);
 
-              return !isNaN(numValue) ? numValue : NaN;
-            }
+          if (match) {
+            const numValue = parseFloat(match[1]);
 
-          
-  
-            return NaN; 
-          })
-          .filter(value => !isNaN(value)) 
+            return !isNaN(numValue) ? numValue : NaN;
+          }
+
+
+
+          return NaN;
+        })
+        .filter(value => !isNaN(value))
       : [];
 
     return filteredData;
   };
-  
+
 
 
   const calculateGeneralAverage = (percentages: number[]) => {
@@ -133,12 +134,26 @@ const Summary: React.FC = () => {
     { groupName: 'LUM', average: calculateLUM() },
   ];
 
-  
+
   const finalAverage = useMemo(() => {
     const validAverages = groupedData.map(group => parseFloat(group.average)).filter(avg => !isNaN(avg));
     const total = validAverages.reduce((acc, avg) => acc + avg, 0);
     return validAverages.length > 0 ? (total / validAverages.length).toFixed(2) : 'N/A';
   }, [groupedData]);
+
+
+  const finalAverageNumber = finalAverage !== 'N/A' ? parseFloat(finalAverage) : NaN;
+
+  const backgroundColor = !isNaN(finalAverageNumber) ? getColorByPercentageFilas(finalAverageNumber) : 'gray';
+
+  let textColor = 'black';
+  if (backgroundColor === 'red') {
+    textColor = 'white';
+  } else if (backgroundColor === 'yellow') {
+    textColor = 'black';
+  } else if (backgroundColor === 'green') {
+    textColor = 'white';
+  }
 
 
   return (
@@ -207,7 +222,7 @@ const Summary: React.FC = () => {
       </div>
 
       <div className="puntaje-ponderado">
-        <h4 className="puntaje-promedio">
+        <h4 className="puntaje-promedio" style={{ backgroundColor, color: textColor }}>
           Promedio General : <span id="promedio-general">{finalAverage}%</span>
         </h4>
         <div className="indicadores">
