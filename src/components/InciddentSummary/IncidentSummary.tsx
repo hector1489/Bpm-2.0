@@ -102,40 +102,55 @@ const IncidentSummary: React.FC = () => {
 
   // Recalcular los contadores de criticidad y estado basados en las desviaciones filtradas
   useEffect(() => {
-    if (filteredDesviaciones) {
-      // Calcular los contadores de criticidad
-      const statusCountsData = filteredDesviaciones.reduce((acc, item) => {
-        const criticidadLower = item.criticidad.normalize('NFD').replace(/[\u0300-\u036f]/g, "").toLowerCase();
-        if (criticidadLower === 'leve') acc.leve++;
-        else if (criticidadLower === 'moderado') acc.moderado++;
-        else if (criticidadLower === 'critico') acc.critico++;
-        return acc;
-      }, { leve: 0, moderado: 0, critico: 0 });
-
-      setStatusCounts(statusCountsData);
-
-      // Calcular los contadores de estado
-      const statusEstadosData = filteredDesviaciones.reduce((acc, item) => {
-        const estadosLower = item.estado.toLowerCase();
-        if (estadosLower === 'abierto') acc.abierto++;
-        else if (estadosLower === 'en progreso') acc.enProgreso++;
-        else if (estadosLower === 'cerrado') acc.cerrado++;
-        return acc;
-      }, { abierto: 0, enProgreso: 0, cerrado: 0 });
-
-      setStatusCountsEstados(statusEstadosData);
-
-      // Calcular el número de desviaciones fuera de plazo
-      const fueraDePlazoCount = filteredDesviaciones.reduce((acc, item) => {
-        if (isFechaFueraDePlazo(item.fecha_solucion_programada)) {
-          acc++;
-        }
-        return acc;
-      }, 0);
-
-      setFueraDePlazoCount(fueraDePlazoCount);
-    }
-  }, [filteredDesviaciones]);
+    if (!filteredDesviaciones) return;
+  
+    const newStatusCounts = filteredDesviaciones.reduce((acc, item) => {
+      const criticidadLower = item.criticidad.normalize('NFD').replace(/[\u0300-\u036f]/g, "").toLowerCase();
+      if (criticidadLower === 'leve') acc.leve++;
+      else if (criticidadLower === 'moderado') acc.moderado++;
+      else if (criticidadLower === 'critico') acc.critico++;
+      return acc;
+    }, { leve: 0, moderado: 0, critico: 0 });
+  
+    const newStatusCountsEstados = filteredDesviaciones.reduce((acc, item) => {
+      const estadosLower = item.estado.toLowerCase();
+      if (estadosLower === 'abierto') acc.abierto++;
+      else if (estadosLower === 'en progreso') acc.enProgreso++;
+      else if (estadosLower === 'cerrado') acc.cerrado++;
+      return acc;
+    }, { abierto: 0, enProgreso: 0, cerrado: 0 });
+  
+    const newFueraDePlazoCount = filteredDesviaciones.reduce((acc, item) => {
+      if (isFechaFueraDePlazo(item.fecha_solucion_programada)) {
+        acc++;
+      }
+      return acc;
+    }, 0);
+  
+    // Solo actualizar el estado si los valores realmente han cambiado
+    setStatusCounts((prevStatusCounts) => {
+      if (JSON.stringify(prevStatusCounts) !== JSON.stringify(newStatusCounts)) {
+        return newStatusCounts;
+      }
+      return prevStatusCounts;
+    });
+  
+    setStatusCountsEstados((prevStatusCountsEstados) => {
+      if (JSON.stringify(prevStatusCountsEstados) !== JSON.stringify(newStatusCountsEstados)) {
+        return newStatusCountsEstados;
+      }
+      return prevStatusCountsEstados;
+    });
+  
+    setFueraDePlazoCount((prevCount) => {
+      if (prevCount !== newFueraDePlazoCount) {
+        return newFueraDePlazoCount;
+      }
+      return prevCount;
+    });
+  
+  }, [filteredDesviaciones]); // Solo recalcula cuando `filteredDesviaciones` cambia
+  
 
   return (
     <div className="incident-summary-container">
