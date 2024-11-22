@@ -106,8 +106,6 @@ const Chatbot: React.FC = () => {
           position: 'fixed',
           bottom: '20px',
           right: '20px',
-          backgroundColor: '#0f4b5c',
-          color: '#fff',
           borderRadius: '50%',
           padding: '10px',
           fontSize: '20px',

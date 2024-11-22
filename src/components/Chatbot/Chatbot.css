@@ -62,7 +62,7 @@
 .input-container button {
   margin-left: 10px;
   padding: 8px;
-  background-color: #0f4b5c;
+  background-color: #0056b3;
   color: white;
   border: none;
   border-radius: 5px;
@@ -70,7 +70,7 @@
 }
 
 .chatbot-icon {
-  background-color: #0f4b5c;
+  background-color: #0056b3;
   color: white;
   font-size: 24px;
   border-radius: 50%;
