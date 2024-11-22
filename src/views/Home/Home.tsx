@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { useContext } from 'react'
 import logoFungi from '../../assets/img/logo.jpg'
 import { AppContext } from '../../context/GlobalState'
+import { Chatbot } from '../../components'
 
 
 const Home: React.FC = () => {
@@ -110,7 +111,8 @@ const Home: React.FC = () => {
 
 
       </div>
-
+      
+      <Chatbot />
       
 
       <div className="left-icons">

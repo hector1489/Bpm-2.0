@@ -1,0 +1,14 @@
+[
+  {
+    "question": "¿Cómo puedo registrarme?",
+    "answer": "Para registrarte, haz clic en 'Registrar Usuario' en el panel de control."
+  },
+  {
+    "question": "¿Dónde puedo ver los análisis?",
+    "answer": "Puedes ver los análisis haciendo clic en el botón 'Análisis' en el panel de control."
+  },
+  {
+    "question": "¿Cómo puedo salir?",
+    "answer": "Haz clic en el icono de 'Cerrar sesión' en la parte inferior izquierda."
+  }
+]
