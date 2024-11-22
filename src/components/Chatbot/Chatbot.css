@@ -115,7 +115,6 @@
   background-color: #0056b3;
 }
 
-/* Optional: Add smooth scrolling for messages */
 .chatbot-body {
   scroll-behavior: smooth;
 }

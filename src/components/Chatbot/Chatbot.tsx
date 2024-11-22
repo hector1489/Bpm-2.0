@@ -13,7 +13,6 @@ const Chatbot: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
-    // Mensaje inicial del chatbot
     setMessages([
       { user: false, text: '¡Hola! ¿En qué puedo ayudarte hoy?' }
     ]);
