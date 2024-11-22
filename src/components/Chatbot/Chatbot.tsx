@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import chatbotData from '../../chatbotData.json';
+import './Chatbot.css'
 
 interface ChatMessage {
   user: boolean;
@@ -58,21 +59,12 @@ const Chatbot: React.FC = () => {
     <div>
       <div
         className={`chatbot-container ${isOpen ? 'open' : ''}`}
-        style={{
-          position: 'fixed',
-          bottom: '20px',
-          right: '20px',
-          zIndex: 1000,
-          width: '300px',
-          backgroundColor: '#fff',
-          borderRadius: '8px',
-          boxShadow: '0 4px 10px rgba(0, 0, 0, 0.1)',
-        }}
       >
         {isOpen && (
           <div className='chatbot-form'>
             <div className="chatbot-header">
               <span>CBP-bot</span>
+              <i className="fa-solid fa-robot"></i>
             </div>
             <div className="chatbot-body">
               <div className="messages">
@@ -85,7 +77,7 @@ const Chatbot: React.FC = () => {
                   </div>
                 ))}
               </div>
-              <div className="input-container">
+              <div className="chatbot-input-container">
                 <input
                   type="text"
                   value={input}
@@ -102,16 +94,6 @@ const Chatbot: React.FC = () => {
       <button
         className="chatbot-icon"
         onClick={toggleChatbot}
-        style={{
-          position: 'fixed',
-          bottom: '20px',
-          right: '20px',
-          borderRadius: '50%',
-          padding: '10px',
-          fontSize: '20px',
-          cursor: 'pointer',
-          zIndex: 2000,
-        }}
       >
         <i className="fas fa-comments"></i>
       </button>
