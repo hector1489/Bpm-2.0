@@ -2,7 +2,7 @@ import './Analysis.css'
 import { useNavigate } from 'react-router-dom'
 import { useContext } from 'react'
 import { AppContext } from '../../context/GlobalState'
-import { IncidentSummary, LastAudit } from '../../components'
+import { Chatbot, IncidentSummary, LastAudit } from '../../components'
 import logoFungi from '../../assets/img/logo.jpg'
 
 const Analysis: React.FC = () => {
@@ -27,6 +27,9 @@ const Analysis: React.FC = () => {
       <h3>total incidencias</h3>
       <IncidentSummary/>
       <LastAudit />
+
+      <Chatbot />
+
       <div className="buttons-analysis">
         <button onClick={handleGoToHome}>Home</button>
       </div>

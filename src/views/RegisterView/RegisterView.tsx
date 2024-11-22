@@ -1,4 +1,4 @@
-import { RegisterForm } from '../../components'
+import { Chatbot, RegisterForm } from '../../components'
 import { useNavigate } from 'react-router-dom'
 import './RegisterView.css'
 
@@ -13,6 +13,8 @@ const RegisterView: React.FC = () => {
 
     <div className="register-view-container">
       <RegisterForm />
+
+      <Chatbot />
 
       <button onClick={handleGoToHome}>
           <i className="fa-solid fa-house-chimney"></i>

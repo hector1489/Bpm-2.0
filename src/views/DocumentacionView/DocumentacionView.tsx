@@ -4,6 +4,7 @@ import { AppContext } from '../../context/GlobalState';
 import { getAllTablaDetailsNumbersAudit } from '../../utils/apiDetails';
 import logo from '../../assets/img/logo.jpg';
 import './DocumentacionView.css';
+import { Chatbot } from '../../components';
 
 interface TablaDetail {
   numero_auditoria: string;
@@ -125,6 +126,8 @@ const DocumentacionView: React.FC = () => {
           )}
         </div>
       )}
+
+      <Chatbot />
 
       <div className="buttons-summary">
         <button onClick={handleGoToHome}>
