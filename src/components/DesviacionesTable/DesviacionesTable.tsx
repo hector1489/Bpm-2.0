@@ -320,6 +320,7 @@ const DesviacionesTable: React.FC = () => {
           const input = document.createElement('input');
           input.type = 'text';
           input.placeholder = 'Text ...';
+          input.style.width = '200px';
 
           const currentValue = localDesviaciones[rowIndex][field];
           input.value = currentValue !== undefined && currentValue !== null ? String(currentValue) : '';
@@ -333,7 +334,23 @@ const DesviacionesTable: React.FC = () => {
 
           cell.innerHTML = '';
           cell.appendChild(input);
+        } else if (cellIndex === 11) {
+          const input = document.createElement('input');
+          input.type = 'text';
+          input.placeholder = 'Contacto Cliente...';
+
+          const currentValue = localDesviaciones[rowIndex].contacto_clientes;
+          input.value = currentValue !== undefined && currentValue !== null ? String(currentValue) : '';
+
+          input.onblur = (e) => {
+            const value = (e.target as HTMLInputElement).value;
+            handleInputChange(rowIndex, 'contacto_clientes', value);
+          };
+
+          cell.innerHTML = '';
+          cell.appendChild(input);
         }
+
       });
     });
 

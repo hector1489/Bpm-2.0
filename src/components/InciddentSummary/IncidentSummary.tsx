@@ -149,7 +149,7 @@ const IncidentSummary: React.FC = () => {
       return prevCount;
     });
   
-  }, [filteredDesviaciones]); // Solo recalcula cuando `filteredDesviaciones` cambia
+  }, [filteredDesviaciones]);
   
 
   return (

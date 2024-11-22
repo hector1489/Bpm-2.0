@@ -83,6 +83,7 @@
   max-height: 70px;
 }
 
+
 @media (max-width: 768px) {
   #tabla-desviaciones {
     font-size: 12px;
