@@ -55,7 +55,7 @@ const Chatbot: React.FC = () => {
   };
 
   return (
-    <div>
+    <div className='chatbot-component'>
       <div
         className={`chatbot-container ${isOpen ? 'open' : ''}`}
       >
