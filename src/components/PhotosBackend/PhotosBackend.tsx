@@ -20,7 +20,7 @@ const PhotosBackend: React.FC = () => {
       const data = await obtenerFotos();
       const allPhotos = data.filter((item: Photo) => item.key.startsWith('photos/'));
       setPhotos(allPhotos);
-      groupPhotosByAuditNumber(allPhotos); // Agrupar las fotos por número de auditoría
+      groupPhotosByAuditNumber(allPhotos);
     } catch (error) {
       console.error('Error al obtener las fotos:', error);
       setErrorMessage('Error al cargar las fotos.');
@@ -47,7 +47,7 @@ const PhotosBackend: React.FC = () => {
     try {
       await eliminarFoto(key);
       setPhotos((prevPhotos) => prevPhotos.filter((photo) => photo.key !== key));
-      groupPhotosByAuditNumber(photos.filter((photo) => photo.key !== key)); // Reagrupamos las fotos después de la eliminación
+      groupPhotosByAuditNumber(photos.filter((photo) => photo.key !== key));
     } catch (error) {
       console.error('Error al eliminar la foto:', error);
       setErrorMessage('Error al eliminar la foto.');
@@ -73,7 +73,7 @@ const PhotosBackend: React.FC = () => {
     return key;
   };
 
-  // Extraer la fecha de la foto desde la URL
+  // Extraer la fecha de la foto desde la URL 
   const extractPhotoDateFromUrl = (url: string) => {
     const regex = /X-Amz-Date=(\d{8})T/;
     const match = url.match(regex);

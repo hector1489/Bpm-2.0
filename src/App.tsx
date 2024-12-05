@@ -27,7 +27,8 @@ import {
   ETADetailsDD,
   LUMDetailsDD,
   PhotoEvidenceDD,
-  AuditSummaryReplace
+  AuditSummaryReplace,
+  SecurityView
 } from './views/index';
 
 const App: React.FC = () => {
@@ -63,6 +64,8 @@ const App: React.FC = () => {
         <Route path='/download-eta' element={<ETADetailsDD/>} />
         <Route path='/download-lum' element={<LUMDetailsDD/>} />
         <Route path='/photos-auditoria' element={<PhotoEvidenceDD/>} />
+        <Route path='/security' element={<SecurityView/>} />
+        
       </Routes>
       </ErrorBoundary>
     </BrowserRouter>
