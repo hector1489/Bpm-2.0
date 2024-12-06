@@ -1,3 +1,4 @@
+import { PhotosBackend } from '../../components'
 import './Security.css'
 
 const SecurityView: React.FC = () => {
@@ -7,7 +8,10 @@ const SecurityView: React.FC = () => {
         <div className='securityView-container'>
         <h3>Security</h3>
         <div className="security-img">
-            <p>imagenes backend</p>
+            <div className="security-img-buttons">
+                <button>Editar</button>
+            </div>
+            <PhotosBackend/>
         </div>
         </div>
     )
