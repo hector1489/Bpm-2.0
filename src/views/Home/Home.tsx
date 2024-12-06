@@ -49,8 +49,8 @@ const Home: React.FC = () => {
     navigate('/register');
   }
 
-  const handleGoToDeafult = () => {
-    navigate('/default');
+  const handleGoToSecurity = () => {
+    navigate('/security');
   }
 
 
@@ -101,7 +101,7 @@ const Home: React.FC = () => {
             </div>
             <div className="card-title">Panel de Incidencias Fotograficas</div>
           </button>
-          <button className="card card-none" onClick={handleGoToDeafult}>
+          <button className="card card-none" onClick={handleGoToSecurity}>
             <div className="card-icon">
               <i className="fas fa-shield-alt"></i>
             </div>

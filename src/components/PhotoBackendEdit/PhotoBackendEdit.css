@@ -1,0 +1,13 @@
+.photosBackendEdit-container {
+  width: 100%;
+  padding: 20px;
+}
+
+.photosBackendEdit-header {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+}
+

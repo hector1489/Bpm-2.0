@@ -1,7 +1,6 @@
 import './PhotoBackendEdit.css'
 import { useEffect, useState } from 'react';
 import { obtenerFotos, eliminarFoto } from '../../utils/apiPhotosUtils';
-import './PhotosBackend.css';
 
 interface Photo {
   key: string;
@@ -93,13 +92,21 @@ const PhotoBackendEdit: React.FC = () => {
 
 
   return (
-    <div className="photos-backend-container">
-      <h4>
-        Incidencias Guardadas{' '}
-        <span className="text-info">
-          <i className="fa-solid fa-database"></i>
-        </span>
-      </h4>
+    <div className="photosBackendEdit-container">
+      <div className="photosBackendEdit-header">
+        
+        <h4>
+          Incidencias Guardadas{' '}
+          <span className="text-info">
+            <i className="fa-solid fa-database"></i>
+          </span>
+        </h4>
+
+        <button>Editar</button>
+        
+      </div>
+
+
       {errorMessage && <p className="error-message">{errorMessage}</p>}
 
       {/* Mostrar las fotos agrupadas por número de auditoría */}
