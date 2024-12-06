@@ -53,6 +53,15 @@ const PhotoBackendEdit: React.FC = () => {
     }
   };
 
+  const handleEditPhoto = async (key: string) => {
+    const photoToEdit = photos.find(photo => photo.key === key);
+    if (photoToEdit) {
+ 
+      console.log('Editando foto:', photoToEdit);
+     
+    }
+  }
+
   // Extraer número de auditoría desde la key
   const extractAuditNumber = (key: string) => {
     const regex = /photos\/[^_]+_([^_]+)_/;
@@ -94,7 +103,7 @@ const PhotoBackendEdit: React.FC = () => {
   return (
     <div className="photosBackendEdit-container">
       <div className="photosBackendEdit-header">
-        
+
         <h4>
           Incidencias Guardadas{' '}
           <span className="text-info">
@@ -102,14 +111,11 @@ const PhotoBackendEdit: React.FC = () => {
           </span>
         </h4>
 
-        <button>Editar</button>
-        
       </div>
 
 
       {errorMessage && <p className="error-message">{errorMessage}</p>}
 
-      {/* Mostrar las fotos agrupadas por número de auditoría */}
       {Array.from(groupedPhotos.keys()).map((auditNumber) => (
         <div key={auditNumber} className="audit-group">
           <h5>Número de Auditoría: {auditNumber}</h5>
@@ -121,12 +127,20 @@ const PhotoBackendEdit: React.FC = () => {
                 <p>Fecha: {extractPhotoDateFromUrl(photo.url)}</p>
                 <p>Pregunta: {extractPhotoName(photo.key)}</p>
 
-                <button
-                  className="delete-photo-button"
-                  onClick={() => handleDelete(photo.key)}
-                >
-                  Eliminar
-                </button>
+                <div className="photo-actions">
+                  <button
+                    className="edit-photo-button"
+                    onClick={() => handleEditPhoto(photo.key)}
+                  >
+                    Editar
+                  </button>
+                  <button
+                    className="delete-photo-button"
+                    onClick={() => handleDelete(photo.key)}
+                  >
+                    Eliminar
+                  </button>
+                </div>
               </div>
             ))}
           </div>
