@@ -12,8 +12,6 @@ const PhotoBackendEdit: React.FC = () => {
   const [photos, setPhotos] = useState<Photo[]>([]);
   const [errorMessage, setErrorMessage] = useState<string>('');
   const [groupedPhotos, setGroupedPhotos] = useState<Map<string, Photo[]>>(new Map());
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const [selectedPhotoKey, setSelectedPhotoKey] = useState<string | null>(null);
 
   const fetchIncidencias = async () => {
     try {
@@ -56,8 +54,8 @@ const PhotoBackendEdit: React.FC = () => {
 
   // Función para manejar la edición de la foto
   const handleEditPhoto = async (key: string) => {
-    setSelectedPhotoKey(key);
     const photoToEdit = photos.find(photo => photo.key === key);
+  
     if (!photoToEdit) {
       console.error('Foto no encontrada para editar.');
       return;
@@ -68,37 +66,47 @@ const PhotoBackendEdit: React.FC = () => {
     newFileInput.accept = 'image/*';
     newFileInput.onchange = async (event) => {
       const file = (event.target as HTMLInputElement).files?.[0];
+  
       if (!file) {
         console.warn('No se seleccionó ningún archivo.');
         return;
       }
   
-      setSelectedFile(file);
+      try {
+        // Extraer los datos necesarios (photoName)
+        const photoName = extractPhotoName(photoToEdit.key);
   
-     /* try {
-        // Primero eliminamos la foto original
-        await eliminarFoto(photoToEdit.key);
-        console.log('Foto eliminada con éxito:', photoToEdit.key);
+        // Convertir el archivo seleccionado a Base64
+        const reader = new FileReader();
+        reader.onloadend = async () => {
+          const base64Image = reader.result as string;
+          
+          // Primero, eliminamos la foto original del servidor
+          await eliminarFoto(photoToEdit.key);
   
-        // Subimos la nueva foto con la misma key
-        const responseUrl = await subirFoto(file, photoToEdit.key);
-        if (responseUrl) {
-          console.log('Foto subida al backend con éxito:', responseUrl);
+          // Subimos la nueva imagen al servidor (en Base64)
+          const responseUrl = await subirFoto(base64Image, photoName);
   
-          // Volver a cargar las fotos
-          fetchIncidencias();
-        } else {
-          console.warn('No se pudo subir la foto al backend.');
-        }
+          if (responseUrl) {
+            console.log('Foto subida al backend con éxito:', responseUrl);
+  
+            // Actualizar la lista de fotos después de la subida
+            fetchIncidencias();
+          } else {
+            console.warn('No se pudo subir la foto al backend.');
+          }
+        };
+        
+        // Leer el archivo como una cadena Base64
+        reader.readAsDataURL(file);
       } catch (error) {
         console.error('Error al editar la foto:', error);
         setErrorMessage('Error al editar la foto.');
-      }*/
+      }
     };
-    
+  
     newFileInput.click();
   };
-  
   
 
   // Extraer número de auditoría desde la key  
