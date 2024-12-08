@@ -165,13 +165,12 @@ const AuditSummary: React.FC = () => {
 
   const handleSendAuditSheetToBackend = async () => {
     try {
-      // Verifica que los datos de auditoría existan en el estado
+
       if (!state.auditSheetData || !state.userName) {
         console.error('No se encontraron los datos de auditoría o el username.');
         return;
       }
 
-      // Construir el objeto de datos para enviar al backend
       const dataToSendAuditSheet = {
         username: state.userName,
         numero_auditoria: state.auditSheetData.numeroAuditoria,

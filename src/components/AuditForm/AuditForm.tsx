@@ -110,7 +110,8 @@ const AuditForm: React.FC = () => {
 
         const questionText = currentQuestion?.question || 'sin_pregunta';
         const sanitizedQuestion = questionText.replace(/\s+/g, '_').toLowerCase();
-        const fileName = `${numeroAuditoria}_${sanitizedQuestion}.png`;
+        const auditDate = state.auditSheetData.fechaAuditoria;
+        const fileName = `${numeroAuditoria}_${sanitizedQuestion}_${auditDate}.png`;
 
 
 
