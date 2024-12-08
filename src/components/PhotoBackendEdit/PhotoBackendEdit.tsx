@@ -1,6 +1,7 @@
-import './PhotoBackendEdit.css'
+import './PhotoBackendEdit.css';
 import { useEffect, useState } from 'react';
 import { obtenerFotos, eliminarFoto } from '../../utils/apiPhotosUtils';
+import { subirFoto } from '../../utils/apiPhotosUtils';
 
 interface Photo {
   key: string;
@@ -10,8 +11,9 @@ interface Photo {
 const PhotoBackendEdit: React.FC = () => {
   const [photos, setPhotos] = useState<Photo[]>([]);
   const [errorMessage, setErrorMessage] = useState<string>('');
-
   const [groupedPhotos, setGroupedPhotos] = useState<Map<string, Photo[]>>(new Map());
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [selectedPhotoKey, setSelectedPhotoKey] = useState<string | null>(null);
 
   const fetchIncidencias = async () => {
     try {
@@ -52,14 +54,54 @@ const PhotoBackendEdit: React.FC = () => {
     }
   };
 
+  // Función para manejar la edición de la foto
   const handleEditPhoto = async (key: string) => {
+    setSelectedPhotoKey(key);
     const photoToEdit = photos.find(photo => photo.key === key);
-    if (photoToEdit) {
-      console.log('Editando foto:', photoToEdit);
+    if (!photoToEdit) {
+      console.error('Foto no encontrada para editar.');
+      return;
     }
+  
+    const newFileInput = document.createElement('input');
+    newFileInput.type = 'file';
+    newFileInput.accept = 'image/*';
+    newFileInput.onchange = async (event) => {
+      const file = (event.target as HTMLInputElement).files?.[0];
+      if (!file) {
+        console.warn('No se seleccionó ningún archivo.');
+        return;
+      }
+  
+      setSelectedFile(file);
+  
+     /* try {
+        // Primero eliminamos la foto original
+        await eliminarFoto(photoToEdit.key);
+        console.log('Foto eliminada con éxito:', photoToEdit.key);
+  
+        // Subimos la nueva foto con la misma key
+        const responseUrl = await subirFoto(file, photoToEdit.key);
+        if (responseUrl) {
+          console.log('Foto subida al backend con éxito:', responseUrl);
+  
+          // Volver a cargar las fotos
+          fetchIncidencias();
+        } else {
+          console.warn('No se pudo subir la foto al backend.');
+        }
+      } catch (error) {
+        console.error('Error al editar la foto:', error);
+        setErrorMessage('Error al editar la foto.');
+      }*/
+    };
+    
+    newFileInput.click();
   };
+  
+  
 
-  // Extraer número de auditoría desde la key 
+  // Extraer número de auditoría desde la key  
   const extractAuditNumber = (key: string) => {
     const regex = /photos\/([^_]+)_/;
     const match = key.match(regex);
