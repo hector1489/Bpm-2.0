@@ -7,7 +7,6 @@ interface Photo {
   url: string;
 }
 
-
 const PhotoBackendEdit: React.FC = () => {
   const [photos, setPhotos] = useState<Photo[]>([]);
   const [errorMessage, setErrorMessage] = useState<string>('');
@@ -56,35 +55,28 @@ const PhotoBackendEdit: React.FC = () => {
   const handleEditPhoto = async (key: string) => {
     const photoToEdit = photos.find(photo => photo.key === key);
     if (photoToEdit) {
- 
       console.log('Editando foto:', photoToEdit);
-     
     }
-  }
+  };
 
-  // Extraer número de auditoría desde la key
+  // Extraer número de auditoría desde la key 
   const extractAuditNumber = (key: string) => {
-    const regex = /photos\/[^_]+_([^_]+)_/;
+    const regex = /photos\/([^_]+)_/;
     const match = key.match(regex);
     return match ? match[1] : 'N/A';
   };
 
-  // Extraer el nombre de la foto desde la key
+  // Extraer el nombre de la foto desde la key 
   const extractPhotoName = (key: string) => {
-    const regex = /photos\/[^_]+_[^_]+_(.+)\.png$/;
+    const regex = /photos\/[^_]+_([^_]+)_[^_]+\.png$/;
     const match = key.match(regex);
-    if (match) {
-      const fullText = match[1].replace(/_/g, ' ');
-      const truncatedText = fullText.split(' ').slice(0, 2).join(' ');
-      return truncatedText;
-    }
-    return key;
+    return match ? match[1].replace(/_/g, ' ') : 'Nombre desconocido';
   };
 
-  // Extraer la fecha de la foto desde la URL 
-  const extractPhotoDateFromUrl = (url: string) => {
-    const regex = /X-Amz-Date=(\d{8})T/;
-    const match = url.match(regex);
+  // Extraer la fecha de la foto desde la key 
+  const extractPhotoDateFromUrl = (key: string) => {
+    const regex = /photos\/[^_]+_[^_]+_(\d{8})\.png$/;
+    const match = key.match(regex);
     if (match) {
       const dateStr = match[1];
       const year = dateStr.substring(0, 4);
@@ -99,20 +91,16 @@ const PhotoBackendEdit: React.FC = () => {
     fetchIncidencias();
   }, []);
 
-
   return (
     <div className="photosBackendEdit-container">
       <div className="photosBackendEdit-header">
-
         <h4>
           Incidencias Guardadas{' '}
           <span className="text-info">
             <i className="fa-solid fa-database"></i>
           </span>
         </h4>
-
       </div>
-
 
       {errorMessage && <p className="error-message">{errorMessage}</p>}
 
@@ -124,7 +112,7 @@ const PhotoBackendEdit: React.FC = () => {
               <div className="photo-item" key={photo.key}>
                 <img src={photo.url} alt="Imagen de Incidencia" />
                 <p>Número de Auditoría: {extractAuditNumber(photo.key)}</p>
-                <p>Fecha: {extractPhotoDateFromUrl(photo.url)}</p>
+                <p>Fecha: {extractPhotoDateFromUrl(photo.key)}</p>
                 <p>Pregunta: {extractPhotoName(photo.key)}</p>
 
                 <div className="photo-actions">
@@ -147,9 +135,7 @@ const PhotoBackendEdit: React.FC = () => {
         </div>
       ))}
     </div>
-  )
-}
+  );
+};
 
-export default PhotoBackendEdit
-
-
+export default PhotoBackendEdit;
