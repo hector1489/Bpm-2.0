@@ -54,29 +54,24 @@ const PhotosBackend: React.FC = () => {
     }
   };
 
-  // Extraer número de auditoría desde la key
+  // Extraer número de auditoría desde la key 
   const extractAuditNumber = (key: string) => {
-    const regex = /photos\/[^_]+_([^_]+)_/;
+    const regex = /photos\/([^_]+)_/;
     const match = key.match(regex);
     return match ? match[1] : 'N/A';
   };
 
-  // Extraer el nombre de la foto desde la key
+  // Extraer el nombre de la foto desde la key 
   const extractPhotoName = (key: string) => {
-    const regex = /photos\/[^_]+_[^_]+_(.+)\.png$/;
+    const regex = /photos\/[^_]+_([^_]+)_[^_]+\.png$/;
     const match = key.match(regex);
-    if (match) {
-      const fullText = match[1].replace(/_/g, ' ');
-      const truncatedText = fullText.split(' ').slice(0, 2).join(' ');
-      return truncatedText;
-    }
-    return key;
+    return match ? match[1].replace(/_/g, ' ') : 'Nombre desconocido';
   };
 
-  // Extraer la fecha de la foto desde la URL 
-  const extractPhotoDateFromUrl = (url: string) => {
-    const regex = /X-Amz-Date=(\d{8})T/;
-    const match = url.match(regex);
+  // Extraer la fecha de la foto desde la key 
+  const extractPhotoDateFromUrl = (key: string) => {
+    const regex = /photos\/[^_]+_[^_]+_(\d{8})\.png$/;
+    const match = key.match(regex);
     if (match) {
       const dateStr = match[1];
       const year = dateStr.substring(0, 4);
@@ -86,6 +81,7 @@ const PhotosBackend: React.FC = () => {
     }
     return 'Fecha desconocida';
   };
+
 
   useEffect(() => {
     fetchIncidencias();
